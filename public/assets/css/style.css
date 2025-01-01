@@ -12,6 +12,10 @@ a[href*="froala.com"] {
     display: none;
 }
 
+a[href*="https://www.froala.com/wysiwyg-editor?k=u"] {
+    display: none;
+}
+
 
 a {
     text-decoration: none;
