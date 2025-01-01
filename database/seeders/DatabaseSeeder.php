@@ -28,6 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MenuSeeder::class);
         $this->call(MedicalFieldsTableSeeder::class);
         $this->call(AccessRoleSeeder::class);
-        $this->call(PermissionAccessRole::class);
+        $this->call(AccessRoleMenuSeeder::class);
     }
 }
