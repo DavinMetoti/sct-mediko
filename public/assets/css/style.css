@@ -8,6 +8,11 @@
 }
 
 
+a[href*="froala.com"] {
+    display: none;
+}
+
+
 a {
     text-decoration: none;
     color: var(--text-color);
