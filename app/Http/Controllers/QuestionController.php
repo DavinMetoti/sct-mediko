@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Storage;
+
 
 class QuestionController extends Controller
 {
@@ -160,6 +162,16 @@ class QuestionController extends Controller
                 }
 
                 $actions .= '
+                    <a href="' . route("question-detail.show", $question->id) . '"
+                        class="btn btn-sm btn-info show-btn"
+                        data-id="' . $question->id . '"
+                        data-bs-toggle="tooltip"
+                        title="Lihat Soal">
+                            <i class="fas fa-eye"></i>
+                    </a>
+                ';
+
+                $actions .= '
                     <button class="btn btn-sm btn-success edit-btn" data-id="' . $question->id . '" data-bs-toggle="tooltip" title="Edit">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -210,6 +222,25 @@ class QuestionController extends Controller
 
         return view('admin.preview_question',compact('question','questionDetail'));
 
+    }
+
+    public function uploadImage(Request $request)
+    {
+        try {
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $path = $file->store('uploads/images', 'public');
+
+                // Froala expects the URL of the uploaded image in a JSON response
+                return response()->json([
+                    'link' => asset('storage/' . $path),
+                ]);
+            } else {
+                return response()->json(['error' => 'No file uploaded'], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
 

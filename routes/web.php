@@ -49,6 +49,7 @@ Route::middleware('auth')->post('admin/list-student', [ListStudentController::cl
 Route::middleware('auth')->post('admin/broadcast/table', [BroadcastController::class, 'getNotificationData'])->name('admin.broadcast.table');
 Route::middleware('auth')->post('broadcast/read/', [BroadcastController::class, 'readNotification'])->name('broadcast.read');
 Route::middleware('auth')->post('admin/question/table', [QuestionController::class, 'getQuestionData'])->name('question.table');
+Route::middleware('auth')->post('admin/question/upload_image', [QuestionController::class, 'uploadImage'])->name('admin.question.upload_image');
 Route::middleware('auth')->post('admin/question/dropdown', [QuestionController::class, 'getQuestionByName'])->name('question.get-questions');
 Route::middleware('auth')->post('admin/medical-fields/table', [MedicalFieldController::class, 'getMedicalFields'])->name('admin.medical-fields.table');
 Route::middleware('auth')->post('admin/medical-fields/dropdown', [MedicalFieldController::class, 'getMedicalFieldByName'])->name('admin.medical-fields.dropdown');

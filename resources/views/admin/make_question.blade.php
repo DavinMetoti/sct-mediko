@@ -88,7 +88,7 @@
                                     <th class="text-white">Status</th>
                                     <th class="text-white">Rilis</th>
                                     <th class="text-white">Tanggal Rilis</th>
-                                    <th class="text-white">Tanggal Expired</th>
+                                    <th class="text-white">Expired</th>
                                     <th class="text-white">Aksi</th>
                                 </tr>
                             </thead>
@@ -132,14 +132,29 @@
 
         let description = new FroalaEditor('div#froala-editor', {
             fileUploadURL: '/upload_file',
-            imageUploadURL: '/upload_image',
+            imageUploadURL: '{{ route('admin.question.upload_image') }}',
             videoUploadURL: '/upload_video',
+            requestHeaders: {
+                'X-CSRF-TOKEN':  '{{ csrf_token() }}',
+            },
             events: {
                 'file.uploaded': function (response) {
                     console.log('File uploaded successfully:', response);
                 },
                 'file.error': function (error) {
                     console.error('File upload error:', error);
+                },
+                'image.uploaded': function (response) {
+                    console.log('Image uploaded successfully:', response);
+                },
+                'image.error': function (error) {
+                    console.error('Image upload error:', error);
+                },
+                'video.uploaded': function (response) {
+                    console.log('Video uploaded successfully:', response);
+                },
+                'video.error': function (error) {
+                    console.error('Video upload error:', error);
                 },
             },
         });
@@ -212,8 +227,8 @@
                 { width: '5%', targets: 3 },
                 { width: '5%', targets: 4 },
                 { width: '15%', targets: 5 },
-                { width: '15%', targets: 6 },
-                { width: '15%', targets: 7 }
+                { width: '10%', targets: 6 },
+                { width: '20%', targets: 7 }
             ],
             order: [[0, 'asc']],
             pageLength: 5,
