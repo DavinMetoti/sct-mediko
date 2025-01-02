@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
+use App\Models\QuestionDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,12 @@ class AdminController extends Controller
     {
         $this->authorize('viewAny', [User::class, 'dashboard.index']);
 
-        return view('admin.dashboard');
+        $question_total = QuestionDetail::count();
+        $questionActive_total = Question::where('status','active')->count();
+        $student_total = User::whereHas('accessRole', function ($query) {
+            $query->where('access', 'public');
+        })->count();
+        return view('admin.dashboard',compact('question_total','student_total','questionActive_total'));
     }
 
     /**

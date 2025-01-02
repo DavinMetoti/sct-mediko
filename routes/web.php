@@ -39,7 +39,8 @@ Route::middleware('auth')->get('admin/get/public', [AccessRoleController::class,
 Route::middleware('auth')->get('admin/get/menus', [AccessRoleController::class, 'menuData'])->name('admin.access-role.menus');
 Route::middleware('auth')->get('admin/get/permission/{id}', [AccessRoleController::class, 'permissionData'])->name('admin.access-role.get.permission');
 Route::middleware('auth')->get('broadcast/data/{id}', [BroadcastController::class, 'getNotificationDataSendToUser'])->name('broadcast.data');
-Route::middleware('auth')->get('admin/questions/list', [QuestionController::class, 'showQuestion'])->name('admin.question-list.index');
+Route::middleware('auth')->get('questions/list', [QuestionController::class, 'showQuestion'])->name('question-list.index');
+Route::middleware('auth')->get('questions/preview/{id}', [QuestionController::class, 'showQuestionPreview'])->name('question.preview');
 
 Route::middleware('auth')->post('admin/access-role/data', [AccessRoleController::class, 'getAccessRoleData'])->name('admin.access-role.data');
 Route::middleware('auth')->post('admin/access-role/save/permission', [AccessRoleController::class, 'saveOrUpdatePermission'])->name('admin.access-role.permission');

@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                             <p class="mt-3">{{ $question->thumbnail == null ? 'Thumbnail belum ditentukan' : $question->thumbnail }}</p>
-                            <button class="btn btn-primary text-white fw-bold" style="margin-top: auto;">Mulai Mengerjakan</button>
+                            <a href="{{ route('question.preview', $question->id) }}" class="btn btn-primary text-white fw-bold" style="margin-top: auto;">Mulai Mengerjakan</a>
                         </div>
                     </div>
                 </div>

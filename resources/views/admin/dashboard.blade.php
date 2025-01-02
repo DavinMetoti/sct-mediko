@@ -9,7 +9,7 @@
     <div class="content" id="content">
         <div class="px-3">
             <div class="row">
-                <div class="col-md-4 mb-2">
+                <div class="col-md-4 mb-3">
                     <div class="bg-white overflow-hidden shadow rounded-lg">
                         <div class="p-2">
                             <div class="flex items-center">
@@ -26,14 +26,14 @@
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
                                         <dt class="text-sm font-medium text-gray-500 truncate">Total Soal</dt>
-                                        <dd class="text-lg font-semibold text-gray-900">150</dd>
+                                        <dd class="text-lg font-semibold text-gray-900">{{ $question_total }}</dd>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-2">
+                <div class="col-md-4 mb-3">
                     <div class="bg-white overflow-hidden shadow rounded-lg">
                         <div class="p-2">
                             <div class="flex items-center">
@@ -48,14 +48,14 @@
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
                                         <dt class="text-sm font-medium text-gray-500 truncate">Total Peserta</dt>
-                                        <dd class="text-lg font-semibold text-gray-900">1,234</dd>
+                                        <dd class="text-lg font-semibold text-gray-900">{{ $student_total }}</dd>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-2">
+                <div class="col-md-4 mb-3">
                     <div class="bg-white overflow-hidden shadow rounded-lg">
                         <div class="p-2">
                             <div class="flex items-center">
@@ -67,19 +67,49 @@
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
                                         <dt class="text-sm font-medium text-gray-500 truncate">Ujian Aktif</dt>
-                                        <dd class="text-lg font-semibold text-gray-900">3</dd>
+                                        <dd class="text-lg font-semibold text-gray-900">{{ $questionActive_total }}</dd>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="myChart" class="w-full"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
-
 @endsection
 
 @include('partials.script')
+
+<script>
+    $(document).ready(function () {
+        const ctx = $('#myChart')[0].getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>

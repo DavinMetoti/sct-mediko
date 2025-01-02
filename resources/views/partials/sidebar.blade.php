@@ -34,9 +34,9 @@
             </a>
         </div>
         @endcan
-        @can('viewAny', [App\Models\User::class,'admin.question-list.index'])
+        @can('viewAny', [App\Models\User::class,'question-list.index'])
         <div class="w-full menu-title">
-            <a href="{{ route('admin.question-list.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('admin.question-list.index') ? 'active' : '' }}">
+            <a href="{{ route('question-list.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-list.index') ? 'active' : '' }}">
                 <i class="fas fa-list me-3" style="width: 24px;text-align:center;"></i>
                 <span>Daftar Soal</span>
             </a>

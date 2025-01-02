@@ -197,9 +197,17 @@ class QuestionController extends Controller
     {
         $questions = Question::where('is_public', 1)->get();
 
-        $this->authorize('viewAny', [User::class, 'admin.question-list.index']);
+        $this->authorize('viewAny', [User::class, 'question-list.index']);
 
         return view('admin.list_questions', compact('questions'));
+    }
+
+    public function showQuestionPreview($id)
+    {
+        $question = Question::findOrFail($id);
+
+        return view('admin.preview_question',compact('question'));
+
     }
 
 
