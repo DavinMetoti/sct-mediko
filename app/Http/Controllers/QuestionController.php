@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
 use App\Models\Question;
+use App\Models\QuestionDetail;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -205,8 +206,9 @@ class QuestionController extends Controller
     public function showQuestionPreview($id)
     {
         $question = Question::findOrFail($id);
+        $questionDetail = QuestionDetail::where('id_question',$id)->count();
 
-        return view('admin.preview_question',compact('question'));
+        return view('admin.preview_question',compact('question','questionDetail'));
 
     }
 
