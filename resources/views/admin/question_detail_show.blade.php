@@ -52,8 +52,8 @@
                                     <td>{{ $panelistScores['2'] ?? 0 }}</td>
                                     <td>
                                         <div class="flex justify-content-center gap-2">
-                                            <button class="btn btn-warning" data-id="{{ $question->id }}" id="btn-edit" ><i class="fas fa-edit"></i></button>
-                                            <button class="btn btn-danger" data-id="{{ $question->id }}" id="btn-delete" ><i class="fas fa-trash"></i></button>
+                                            <a class="btn btn-warning" href="{{ route('question-detail.detail.edit', $detail->id) }}" data-id="{{ $detail->id }}" id="btn-edit"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-danger" data-id="{{ $detail->id }}" id="btn-delete" ><i class="fas fa-trash"></i></button>
                                         </div>
                                     </td>
                                 </tr>

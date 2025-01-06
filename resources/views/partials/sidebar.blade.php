@@ -86,6 +86,12 @@
             </a>
         </div>
         @endif
+        <div class="w-full menu-title">
+            <a href="{{ route('sub-topic.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('sub-topic.index') ? 'active' : '' }}">
+                <i class="fas fa-book-medical me-3" style="width: 24px;text-align:center;"></i>
+                <span>Sub Topik</span>
+            </a>
+        </div>
         @can('viewAny', [App\Models\User::class,'user-management.index'])
         <div class="w-full menu-title">
             <a href="{{ route('user-management.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('user-management.index') ? 'active' : '' }}">

@@ -8,6 +8,8 @@ use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionDetailController;
+use App\Http\Controllers\SubTopicController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +33,8 @@ Route::middleware('auth')->resource('admin/broadcast', BroadcastController::clas
 Route::middleware('auth')->resource('admin/question', QuestionController::class);
 Route::middleware('auth')->resource('admin/medical-field', MedicalFieldController::class);
 Route::middleware('auth')->resource('admin/question-detail', QuestionDetailController::class);
+Route::middleware('auth')->resource('admin/sub-topic', SubTopicController::class);
+Route::middleware('auth')->resource('admin/topic', TopicController::class);
 
 
 
@@ -41,6 +45,7 @@ Route::middleware('auth')->get('admin/get/permission/{id}', [AccessRoleControlle
 Route::middleware('auth')->get('broadcast/data/{id}', [BroadcastController::class, 'getNotificationDataSendToUser'])->name('broadcast.data');
 Route::middleware('auth')->get('questions/list', [QuestionController::class, 'showQuestion'])->name('question-list.index');
 Route::middleware('auth')->get('questions/preview/{id}', [QuestionController::class, 'showQuestionPreview'])->name('question.preview');
+Route::middleware('auth')->get('questions/detail/edit/{id}', [QuestionDetailController::class, 'getQuestionDetailById'])->name('question-detail.detail.edit');
 
 Route::middleware('auth')->post('admin/access-role/data', [AccessRoleController::class, 'getAccessRoleData'])->name('admin.access-role.data');
 Route::middleware('auth')->post('admin/access-role/save/permission', [AccessRoleController::class, 'saveOrUpdatePermission'])->name('admin.access-role.permission');
@@ -53,6 +58,7 @@ Route::middleware('auth')->post('admin/question/upload_image', [QuestionControll
 Route::middleware('auth')->post('admin/question/dropdown', [QuestionController::class, 'getQuestionByName'])->name('question.get-questions');
 Route::middleware('auth')->post('admin/medical-fields/table', [MedicalFieldController::class, 'getMedicalFields'])->name('admin.medical-fields.table');
 Route::middleware('auth')->post('admin/medical-fields/dropdown', [MedicalFieldController::class, 'getMedicalFieldByName'])->name('admin.medical-fields.dropdown');
+Route::middleware('auth')->post('admin/topic/table', [TopicController::class, 'getTopicTable'])->name('admin.topic.table');
 
 // Route for the public access
 

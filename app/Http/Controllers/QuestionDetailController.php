@@ -6,6 +6,7 @@ use App\Models\Question;
 use App\Models\QuestionDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class QuestionDetailController extends Controller
 {
@@ -122,4 +123,14 @@ class QuestionDetailController extends Controller
             ], 422);
         }
     }
+
+    public function getQuestionDetailById($id)
+    {
+        $questionDetail = QuestionDetail::findOrFail($id);
+
+        // Mengirim variabel ke view
+        return view('admin.question_detail_edit', compact('questionDetail'));
+    }
+
+
 }
