@@ -59,8 +59,9 @@
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'question.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'question-detail.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'medical-field.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'sub-topic.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'question-detail-type.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'user-management.index']) ||
-            Auth::user()->can('viewAny', [App\Models\User::class,'access-role.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']))
             <div class="header-menu mt-2">
                 <div class="header-menu-title mb-2">
@@ -92,18 +93,22 @@
             </a>
         </div>
         @endif
+        @can('viewAny', [App\Models\User::class,'sub-topic.index'])
         <div class="w-full menu-title">
             <a href="{{ route('sub-topic.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('sub-topic.index') ? 'active' : '' }}">
                 <i class="fas fa-book-medical me-3" style="width: 24px;text-align:center;"></i>
                 <span>Sub Topik</span>
             </a>
         </div>
+        @endcan
+        @can('viewAny', [App\Models\User::class,'question-detail-type.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-detail-type.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-detail-type.index') ? 'active' : '' }}">
                 <i class="fas fa-file-medical me-3" style="width: 24px;text-align:center;"></i>
                 <span>Tipe Soal</span>
             </a>
         </div>
+        @endcan
         @can('viewAny', [App\Models\User::class,'user-management.index'])
         <div class="w-full menu-title">
             <a href="{{ route('user-management.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('user-management.index') ? 'active' : '' }}">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\QuestionDetailType;
+use App\Models\User;
 
 class QuestionDetailTypeController extends Controller
 {
@@ -12,6 +13,8 @@ class QuestionDetailTypeController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', [User::class, 'question-detail-type.index']);
+
         if ($request->ajax()) {
             $data = QuestionDetailType::all();
 

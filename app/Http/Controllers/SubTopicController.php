@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SubTopic;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SubTopicController extends Controller
@@ -12,6 +13,8 @@ class SubTopicController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', [User::class, 'sub-topic.index']);
+
         return view('admin.sub_topic');
     }
 

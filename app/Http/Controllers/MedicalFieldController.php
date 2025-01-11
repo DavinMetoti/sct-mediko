@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MedicalField;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,6 +14,8 @@ class MedicalFieldController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', [User::class, 'medical-field.index']);
+
         return view('admin.medical_field');
     }
 
