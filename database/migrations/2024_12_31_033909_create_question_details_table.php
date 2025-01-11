@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('question_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_question'); // Foreign key ke tabel questions
-            $table->unsignedBigInteger('id_medical_field'); // Foreign key ke tabel medical_fields
-            $table->text('clinical_case')->nullable(); // Kasus Klinis
-            $table->text('initial_hypothesis')->nullable(); // Hipotesis Awal
-            $table->text('new_information')->nullable(); // Informasi Baru
-            $table->longText('discussion_image')->nullable(); // Gambar Pembahasan (Base64)
-            $table->json('panelist_answers_distribution')->nullable(); // Distribusi Jawaban Panelis (dalam JSON)
+            $table->unsignedBigInteger('id_question');
+            $table->unsignedBigInteger('id_medical_field');
+            $table->text('clinical_case')->nullable();
+            $table->text('initial_hypothesis')->nullable();
+            $table->text('new_information')->nullable();
+            $table->longText('discussion_image')->nullable();
+            $table->json('panelist_answers_distribution')->nullable();
             $table->timestamps();
 
             // Tambahkan foreign key constraints
