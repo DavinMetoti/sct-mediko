@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionDetailController;
 use App\Http\Controllers\QuestionDetailTypeController;
@@ -26,6 +27,7 @@ Route::post('register/store', [LoginController::class, 'registerStore'])->name('
 Route::post('logout', [LoginController::class, 'logout'])->name('login.logout');
 
 // Route for the private access
+Route::middleware('auth')->resource('profile', ProfileController::class);
 Route::middleware('auth')->resource('admin/dashboard', AdminController::class);
 Route::middleware('auth')->resource('admin/access-role', AccessRoleController::class);
 Route::middleware('auth')->resource('admin/user-management', UserManagementController::class);

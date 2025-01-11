@@ -340,3 +340,14 @@ a {
     font-size: 14px;
     padding: 8px;
 }
+
+.bg-cover-profile {
+    background: linear-gradient(161deg, rgba(43,123,211,1) 0%, rgba(43,123,211,1) 26%, rgba(108,188,84,1) 100%);
+    width: 100%;
+    min-height: 160px;
+}
+
+.image-profile {
+    transform: translate(10px, -70px);
+}
+

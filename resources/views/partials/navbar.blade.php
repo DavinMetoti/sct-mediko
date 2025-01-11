@@ -34,7 +34,7 @@
                     {{ Auth::user()->name }}
                 </button>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="/profile" class="dropdown-item">Profile</a>
+                    <a href="{{ route('profile.index', ['id' => auth()->id()]) }}" class="dropdown-item">Profile</a>
                     <a href="#" id="logout-button" class="dropdown-item">Log Out</a>
                 </div>
             </div>
