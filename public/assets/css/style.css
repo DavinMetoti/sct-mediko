@@ -22,6 +22,11 @@ a {
     color: var(--text-color);
 }
 
+.bg-blue {
+    background-color: #4cc9fe7e !important;
+}
+
+
 .flex-grow-1 {
     flex-grow: 1;
 }
@@ -288,4 +293,50 @@ a {
         left: 0;
         width: 100vw;
     }
+}
+
+.dropzone {
+    border: 2px dashed #4CC9FE;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.dropzone:hover {
+    background-color: #e6f7ff;
+}
+
+.dropzone.dragover {
+    background-color: #d4f0ff;
+    border-color: #2b98d9;
+}
+
+.dropzone p {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.progress {
+    margin-top: 10px;
+    height: 5px;
+}
+.progress-bar {
+    background-color: #4CC9FE; /* Sesuaikan warna */
+}
+
+
+
+.list-group-item .label {
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+}
+.list-group-item {
+    font-size: 14px;
+    padding: 8px;
 }

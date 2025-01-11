@@ -7,13 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class HeaderSubTopic extends Model
 {
     /**
-     * Tabel yang digunakan oleh model ini.
-     *
-     * @var string
-     */
-    protected $table = 'header_sub_topics';
-
-    /**
      * Kolom yang dapat diisi (mass assignable).
      *
      * @var array

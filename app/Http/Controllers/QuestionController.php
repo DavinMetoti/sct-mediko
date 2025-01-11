@@ -243,5 +243,23 @@ class QuestionController extends Controller
         }
     }
 
+    public function uploadFile(Request $request)
+    {
+        try {
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $path = $file->store('uploads/file', 'public');
+
+                // Froala expects the URL of the uploaded image in a JSON response
+                return response()->json([
+                    'link' => asset('storage/' . $path),
+                ]);
+            } else {
+                return response()->json(['error' => 'No file uploaded'], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
 }

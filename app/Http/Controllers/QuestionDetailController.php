@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HeaderSubTopic;
+use App\Models\MedicalField;
 use App\Models\Question;
 use App\Models\QuestionDetail;
 use App\Models\User;
@@ -16,8 +18,9 @@ class QuestionDetailController extends Controller
     public function index()
     {
         $this->authorize('viewAny', [User::class, 'question-detail.index']);
+        $topics = HeaderSubTopic::with('subTopics')->get();
 
-        return view('admin.question_detail');
+        return view('admin.question_detail', compact(['topics']));
     }
 
     /**
@@ -36,7 +39,9 @@ class QuestionDetailController extends Controller
         try {
             $validated = $request->validate([
                 'id_question' => 'required|integer',
-                'id_medical_field' => 'required|string',
+                'id_medical_field' => 'required|integer',
+                'id_question_type' => 'required|integer',
+                'id_sub_topic' => 'required|integer',
                 'clinical_case' => 'required|string',
                 'new_information' => 'required|string',
                 'initial_hypothesis' => 'required|string',
@@ -100,8 +105,39 @@ class QuestionDetailController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'id_question' => 'required|integer',
+                'id_medical_field' => 'required|integer',
+                'id_question_type' => 'required|integer',
+                'id_sub_topic' => 'required|integer',
+                'clinical_case' => 'required|string',
+                'new_information' => 'required|string',
+                'initial_hypothesis' => 'required|string',
+                'discussion_image' => 'nullable|string',
+                'panelist_answers_distribution' => 'required|json',
+            ]);
+
+            $questionDetail = QuestionDetail::findOrFail($id);
+
+            if (is_null($validated['discussion_image'])) {
+                unset($validated['discussion_image']);
+            }
+
+            $questionDetail->update($validated);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Detail pertanyaan berhasil diperbarui',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -126,10 +162,15 @@ class QuestionDetailController extends Controller
 
     public function getQuestionDetailById($id)
     {
-        $questionDetail = QuestionDetail::findOrFail($id);
+        $questions = Question::all();
 
-        // Mengirim variabel ke view
-        return view('admin.question_detail_edit', compact('questionDetail'));
+        $medicalFields = MedicalField::all();
+
+        $questionDetail = QuestionDetail::with(['question','medicalField','subTopic','questionType'])->findOrFail($id);
+
+        $topics = HeaderSubTopic::with(['subTopics'])->get();
+
+        return view('admin.question_detail_edit', compact('questionDetail','topics','questions','medicalFields'));
     }
 
 

@@ -2,6 +2,15 @@
 
 @section('title', 'Admin Dashboard')
 
+@php
+$questionDetailPanelis = json_decode($questionDetail->panelist_answers_distribution, true);
+
+$questionDetailPanelis = array_combine(
+    array_map(fn($key) => (string) $key, array_keys($questionDetailPanelis)),
+    array_values($questionDetailPanelis)
+);
+@endphp
+
 @section('content')
 <div class="min-h-screen bg-gray-100">
     @include('partials.sidebar')
@@ -22,38 +31,66 @@
                 <div id="card-form" class="card mb-3">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="id-question">Paket</label>
                                     <select name="id_question" id="id-question" class="form-control">
-                                        <option value="">Pilih Paket</option>
+                                        @foreach($questions as $question)
+                                            <option value="{{ $question->id }}" {{ $questionDetail->id_question == $question->id ? 'selected' : '' }}>{{ $question->question }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="medical-field">Bidang</label>
                                     <select name="medical_field" id="medical-field" class="form-control">
-                                        <option value="">Pilih Bidang</option>
+                                        @foreach($medicalFields as $item)
+                                            <option value="{{ $item->id }}" {{ $questionDetail->id_medical_field == $item->id ? 'selected' : '' }}>{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="questionType">Tipe Soal</label>
+                                    <select name="questionType" id="questionType" class="form-control">
+                                        <option value="">Pilih tipe soal</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label for="clinical-case">Kasus Klinik</label>
-                                    <textarea name="clinical_case" id="clinical-case" class="form-control" rows="5" placeholder="Masukkan kasus klinis di sini"></textarea>
+                                    <textarea name="clinical_case" id="clinical-case" class="form-control" rows="5" placeholder="Masukkan kasus klinis di sini">{{ $questionDetail->clinical_case }}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label for="initial-hypothesis">Hipotesis Awal</label>
-                                    <input type="text" class="form-control" id="initial-hypothesis" name="initial_hypothesis" placeholder="Masukan hipotesis awal">
+                                    <input type="text" class="form-control" id="initial-hypothesis" name="initial_hypothesis" placeholder="Masukan hipotesis awal" value="{{ $questionDetail->initial_hypothesis }}">
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label for="new-information">Informasi Baru</label>
-                                    <textarea name="new_information" id="new-information" class="form-control" rows="2" placeholder="Masukkan informasi baru di sini"></textarea>
+                                    <textarea name="new_information" id="new-information" class="form-control" rows="2" placeholder="Masukkan informasi baru di sini">{{ $questionDetail->new_information }}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="sub-topic-dropdown">Sub Topik</label>
+                                    <select name="sub-topic-dropdown" id="sub-topic-dropdown" class="form-control">
+                                        <option value="">Pilih Sub Topik</option>
+                                        @foreach($topics as $topic)
+                                            <optgroup label="{{ $topic->name }}">
+                                                @foreach($topic->subTopics as $subTopic)
+                                                    <option value="{{ $subTopic->id }}" {{ $questionDetail->id_sub_topic == $subTopic->id ? 'selected' : '' }}>{{ $subTopic->name }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
@@ -77,55 +114,55 @@
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">-2</span>
-                                                    <span>Sangat tidak mungkin</span>
+                                                    <span id="minus_two_title">Sangat tidak mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[-2] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">-1</span>
-                                                    <span>Tidak mungkin</span>
+                                                    <span id="minus_one_title">Tidak mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[-1] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">0</span>
-                                                    <span>Tidak mendukung ataupun menyikirkan</span>
+                                                    <span id="zero_title">Tidak mendukung ataupun menyikirkan</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[0] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">1</span>
-                                                    <span>Mungkin</span>
+                                                    <span id="one_title">Mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[1] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center" style="padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">2</span>
-                                                    <span>Sangat mungkin</span>
+                                                    <span id="two_title">Sangat mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[2] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
@@ -139,8 +176,7 @@
             </div>
             <div class="card mb-3">
                 <div class="card-body">
-                    <div class="flex justify-content-between">
-                        <button type="button" class="btn btn-outline-secondary" id="add-form"><i class="fas fa-plus me-2"></i><span>Tambah</span></button>
+                    <div class="flex justify-content-end">
                         <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-upload me-2"></i><span>Simpan</span></button>
                     </div>
                 </div>
@@ -155,69 +191,103 @@
 
     $(document).ready(function() {
 
-        function initSelect2(question, medicalField) {
+        function initSelect2(question, medicalField, subTopic) {
             console.log('Initializing Select2 for', question, medicalField);
 
             $(question).select2({
                 placeholder: 'Pilih Paket',
                 theme: 'bootstrap-5',
-                minimumInputLength: 3,
-                ajax: {
-                    url: '{{ route('question.get-questions') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    type: 'POST',
-                    data: function (params) {
-                        return {
-                            search: params.term,
-                            _token: "{{ csrf_token() }}"
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data.data, function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.question
-                                };
-                            })
-                        };
-                    },
-                    cache: true
-                }
             });
 
             $(medicalField).select2({
                 placeholder: 'Pilih Bidang',
                 theme: 'bootstrap-5',
-                minimumInputLength: 3,
-                ajax: {
-                    url: '{{ route('admin.medical-fields.dropdown') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    type: 'POST',
-                    data: function (params) {
-                        return {
-                            search: params.term,
-                            _token: "{{ csrf_token() }}"
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data.data, function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name
-                                };
-                            })
-                        };
-                    },
-                    cache: true
-                }
+            });
+
+            $(subTopic).select2({
+                placeholder: 'Pilih Sub Topik',
+                theme: 'bootstrap-5',
             });
         }
 
-        initSelect2('#id-question', '#medical-field');
+        $.ajax({
+            url: "{{ route('question-detail-type.index') }}",
+            method: "GET",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function (response) {
+                if (response.success) {
+                    const data = response.data.map(item => ({
+                        id: item.id,
+                        text: item.name
+                    }));
+
+                    // Initialize select2
+                    $('#questionType').select2({
+                        placeholder: 'Pilih tipe soal',
+                        theme: 'bootstrap-5',
+                        data: data,
+                    });
+
+                    // Check if there is a predefined value to select
+                    const predefinedValue = "{{ $questionDetail->id_question_type }}";
+                    if (predefinedValue) {
+                        $('#questionType').val(predefinedValue).trigger('change');
+                        $.ajax({
+                            url: "{{ route('question-detail-type.show', ':id') }}".replace(':id', predefinedValue),
+                            method: "GET",
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                $('#minus_two_title').text(response.data.minus_two);
+                                $('#minus_one_title').text(response.data.minus_one);
+                                $('#zero_title').text(response.data.zero);
+                                $('#one_title').text(response.data.one);
+                                $('#two_title').text(response.data.two);
+                            },
+                            error: function() {
+                                toastError('Failed to load data.');
+                            }
+                        });
+
+                    }
+
+                    // Handle change event
+                    $('#questionType').on('change', function () {
+                        const selectedValue = $(this).val();
+                        const selectedText = $(this).find('option:selected').text();
+
+                        $.ajax({
+                            url: "{{ route('question-detail-type.show', ':id') }}".replace(':id', selectedValue),
+                            method: "GET",
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                $('#minus_two_title').text(response.data.minus_two);
+                                $('#minus_one_title').text(response.data.minus_one);
+                                $('#zero_title').text(response.data.zero);
+                                $('#one_title').text(response.data.one);
+                                $('#two_title').text(response.data.two);
+                            },
+                            error: function() {
+                                toastError('Failed to load data.');
+                            }
+                        });
+                    });
+                } else {
+                    toastError('Failed to load data.');
+                }
+            },
+            error: function () {
+                toastError('Failed to fetch data from the server.');
+            }
+        });
+
+
+        initSelect2('#id-question', '#medical-field', '#sub-topic-dropdown');
 
         const maxPanelists = 10;
         const remainingPanelists = document.getElementById("remaining-panelists");
@@ -260,6 +330,8 @@
         $('#btn-save').click(async function () {
             const idQuestion = $('#id-question').val();
             const medicalField = $('#medical-field').val();
+            const questionType = $('#questionType').val();
+            const subTopic = $('#sub-topic-dropdown').val();
             const clinicalCase = $('#clinical-case').val();
             const initialHypothesis = $('#initial-hypothesis').val();
             const newInformation = $('#new-information').val();
@@ -283,6 +355,8 @@
                 _token: '{{ csrf_token() }}',
                 id_question: idQuestion,
                 id_medical_field: medicalField,
+                id_question_type: questionType,
+                id_sub_topic: subTopic,
                 clinical_case: clinicalCase,
                 new_information: newInformation,
                 initial_hypothesis: initialHypothesis,
@@ -291,15 +365,32 @@
             };
 
             console.log(data);
+            var currentUrl = window.location.href;
+            var id = currentUrl.split('/').pop();
 
             $.ajax({
-                url: '{{ route('question-detail.store') }}',
-                type: 'POST',
+                url: '{{ route('question-detail.update', ':id') }}'.replace(':id', id),
+                type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (response) {
                     console.log('Success:', response);
                     toastSuccess(response.message);
+                    const clinicalCase = $('#clinical-case').val('');
+                    const initialHypothesis = $('#initial-hypothesis').val('');
+                    const newInformation = $('#new-information').val('');
+                    const panelistDistribution = Array.from(distribution).map(input => input.value);
+                    const panelistJSON = {
+                        '-2': panelistDistribution[0],
+                        '-1': panelistDistribution[1],
+                        '0': panelistDistribution[2],
+                        '1': panelistDistribution[3],
+                        '2': panelistDistribution[4]
+                    };
+
+
+                    const discussionImageFile = $('#discussion-image')[0].files[0];
+
                 },
                 error: function (error) {
                     console.error('Error:', error);

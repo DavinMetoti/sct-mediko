@@ -22,7 +22,7 @@
                 <div id="card-form" class="card mb-3">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="id-question">Paket</label>
                                     <select name="id_question" id="id-question" class="form-control">
@@ -30,11 +30,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <div class="form-group">
                                     <label for="medical-field">Bidang</label>
                                     <select name="medical_field" id="medical-field" class="form-control">
                                         <option value="">Pilih Bidang</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label for="questionType">Tipe Soal</label>
+                                    <select name="questionType" id="questionType" class="form-control">
+                                        <option value="">Pilih tipe soal</option>
                                     </select>
                                 </div>
                             </div>
@@ -58,6 +66,22 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
+                                    <label for="sub-topic-dropdown">Sub Topik</label>
+                                    <select name="sub-topic-dropdown" id="sub-topic-dropdown" class="form-control">
+                                        <option value="">Pilih Sub Topik</option>
+                                        @foreach($topics as $topic)
+                                            <optgroup label="{{ $topic->name }}">
+                                                @foreach($topic->subTopics as $subTopic)
+                                                    <option value="{{ $subTopic->id }}">{{ $subTopic->name }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
                                     <label for="discussion-image">Gambar Pembahasan (opsional)</label>
                                     <input type="file" name="discussion_image" id="discussion-image" class="form-control" accept="image/*">
                                 </div>
@@ -77,55 +101,55 @@
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">-2</span>
-                                                    <span>Sangat tidak mungkin</span>
+                                                    <span id="minus_two_title">Sangat tidak mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">-1</span>
-                                                    <span>Tidak mungkin</span>
+                                                    <span id="minus_one_title">Tidak mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">0</span>
-                                                    <span>Tidak mendukung ataupun menyikirkan</span>
+                                                    <span id="zero_title">Tidak mendukung ataupun menyikirkan</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">1</span>
-                                                    <span>Mungkin</span>
+                                                    <span id="one_title">Mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center" style="padding-bottom:15px;padding-top:10px;">
                                                 <div>
                                                     <span class="badge bg-secondary text-white" style="width: 30px;padding:8px;border-radius: 50%">2</span>
-                                                    <span>Sangat mungkin</span>
+                                                    <span id="two_title">Sangat mungkin</span>
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="1" min="0" max="10" readonly>
+                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
@@ -155,7 +179,7 @@
 
     $(document).ready(function() {
 
-        function initSelect2(question, medicalField) {
+        function initSelect2(question, medicalField, subTopic) {
             console.log('Initializing Select2 for', question, medicalField);
 
             $(question).select2({
@@ -215,9 +239,66 @@
                     cache: true
                 }
             });
+
+            $(subTopic).select2({
+                placeholder: 'Pilih Sub Topik',
+                theme: 'bootstrap-5',
+            });
         }
 
-        initSelect2('#id-question', '#medical-field');
+        $.ajax({
+            url: "{{ route('question-detail-type.index') }}",
+            method: "GET",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function (response) {
+                if (response.success) {
+                    const data = response.data.map(item => ({
+                        id: item.id,
+                        text: item.name
+                    }));
+
+                    $('#questionType').select2({
+                        placeholder: 'Pilih tipe soal',
+                        theme: 'bootstrap-5',
+                        data: data,
+                    });
+
+                    $('#questionType').on('change', function () {
+                        const selectedValue = $(this).val();
+                        const selectedText = $(this).find('option:selected').text();
+
+                        $.ajax({
+                            url: "{{ route('question-detail-type.show', ':id') }}".replace(':id', selectedValue),
+                            method: "GET",
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                $('#minus_two_title').text(response.data.minus_two);
+                                $('#minus_one_title').text(response.data.minus_one);
+                                $('#zero_title').text(response.data.zero);
+                                $('#one_title').text(response.data.one);
+                                $('#two_title').text(response.data.two);
+                            },
+                            error: function() {
+                                toastError('Failed to load data.');
+                            }
+                        });
+
+
+                    });
+                } else {
+                    toastError('Failed to load data.');
+                }
+            },
+            error: function () {
+                toastError('Failed to fetch data from the server.');
+            }
+        });
+
+        initSelect2('#id-question', '#medical-field', '#sub-topic-dropdown');
 
         const maxPanelists = 10;
         const remainingPanelists = document.getElementById("remaining-panelists");
@@ -260,6 +341,8 @@
         $('#btn-save').click(async function () {
             const idQuestion = $('#id-question').val();
             const medicalField = $('#medical-field').val();
+            const questionType = $('#questionType').val();
+            const subTopic = $('#sub-topic-dropdown').val();
             const clinicalCase = $('#clinical-case').val();
             const initialHypothesis = $('#initial-hypothesis').val();
             const newInformation = $('#new-information').val();
@@ -283,6 +366,8 @@
                 _token: '{{ csrf_token() }}',
                 id_question: idQuestion,
                 id_medical_field: medicalField,
+                id_question_type: questionType,
+                id_sub_topic: subTopic,
                 clinical_case: clinicalCase,
                 new_information: newInformation,
                 initial_hypothesis: initialHypothesis,
@@ -300,6 +385,21 @@
                 success: function (response) {
                     console.log('Success:', response);
                     toastSuccess(response.message);
+                    const clinicalCase = $('#clinical-case').val('');
+                    const initialHypothesis = $('#initial-hypothesis').val('');
+                    const newInformation = $('#new-information').val('');
+                    const panelistDistribution = Array.from(distribution).map(input => input.value);
+                    const panelistJSON = {
+                        '-2': panelistDistribution[0],
+                        '-1': panelistDistribution[1],
+                        '0': panelistDistribution[2],
+                        '1': panelistDistribution[3],
+                        '2': panelistDistribution[4]
+                    };
+
+
+                    const discussionImageFile = $('#discussion-image')[0].files[0];
+
                 },
                 error: function (error) {
                     console.error('Error:', error);

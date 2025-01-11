@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_header_sub_topic');
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('path');
             $table->timestamps();
 

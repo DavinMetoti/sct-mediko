@@ -10,7 +10,7 @@
         <div class="px-3">
             <div class="row">
                 @foreach ($questions as $question)
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <div class="bg-white p-3 rounded-lg shadow-md mb-3 align-items-stretch" style="height: 100%;">
                         <div class="flex justify-start flex-column" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
                             <div

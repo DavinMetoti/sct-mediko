@@ -131,7 +131,7 @@
         });
 
         let description = new FroalaEditor('div#froala-editor', {
-            fileUploadURL: '/upload_file',
+            fileUploadURL: '{{ route('admin.question.upload_file') }}',
             imageUploadURL: '{{ route('admin.question.upload_image') }}',
             videoUploadURL: '/upload_video',
             requestHeaders: {

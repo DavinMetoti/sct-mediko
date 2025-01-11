@@ -16,8 +16,10 @@ class QuestionDetail extends Model
 
     protected $fillable = [
         'id_question',
-        'id_medical_field',
         'clinical_case',
+        'id_medical_field',
+        'id_question_type',
+        'id_sub_topic',
         'initial_hypothesis',
         'new_information',
         'discussion_image',
@@ -40,5 +42,21 @@ class QuestionDetail extends Model
     public function medicalField()
     {
         return $this->belongsTo(MedicalField::class, 'id_medical_field', 'id');
+    }
+
+    /**
+     * Relasi ke model MedicalField (many-to-one)
+     */
+    public function subTopic()
+    {
+        return $this->belongsTo(subTopic::class, 'id_sub_topic', 'id');
+    }
+
+    /**
+     * Relasi ke model MedicalField (many-to-one)
+     */
+    public function questionType()
+    {
+        return $this->belongsTo(QuestionDetailType::class, 'id_question_type', 'id');
     }
 }
