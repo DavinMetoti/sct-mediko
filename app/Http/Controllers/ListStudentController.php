@@ -44,8 +44,17 @@ class ListStudentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $users = User::with(['accessRole','userDetail'])
+            ->where('id', $id)
+            ->whereHas('accessRole', function ($query) {
+                $query->where('access', 'public');
+            })
+            ->first();
+
+        return response()->json($users);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -81,9 +90,10 @@ class ListStudentController extends Controller
             return DataTables::of($users)
                 ->addIndexColumn()
                 ->addColumn('action', function($row) {
-                    return '<button class="btn btn-sm btn-danger delete-button" data-id="'.$row->id.'"><i class="fas fa-trash"></i></button>';
-                    // return '<button class="btn btn-sm btn-primary edit-button" data-id="'.$row->id.'"><i class="fas fa-edit"></i></button>
-                    //         <button class="btn btn-sm btn-danger delete-button" data-id="'.$row->id.'"><i class="fas fa-trash"></i></button>';
+                    // return '<button class="btn btn-sm btn-danger delete-button" data-id="'.$row->id.'"><i class="fas fa-trash"></i></button>';
+                    return '<button class="btn btn-sm text-success package-button" data-id="'.$row->id.'"><i class="fas fa-book"></i></button>
+                            <button class="btn btn-sm text-primary show-button" data-id="'.$row->id.'"><i class="fas fa-user"></i></button>
+                            <button class="btn btn-sm text-danger delete-button" data-id="'.$row->id.'"><i class="fas fa-trash"></i></button>';
                 })
                 ->addColumn('access_role', function($row) {
                     return $row->accessRole->name;

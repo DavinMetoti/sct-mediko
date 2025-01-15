@@ -22,6 +22,17 @@ a {
     color: var(--text-color);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .bg-blue {
     background-color: #4cc9fe7e !important;
 }
@@ -42,6 +53,7 @@ a {
     box-shadow: var(--shadow-color) 0px 3px 8px;
     transition: transform 0.5s ease-out;
     z-index: 100;
+    overflow: scroll;
 }
 
 .sidebar.hide {
@@ -54,6 +66,7 @@ a {
 
 .sidebar .menu {
     padding: 0 20px;
+    overflow: scroll !important;
 }
 
 .sidebar .header-menu h5 {

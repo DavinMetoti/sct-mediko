@@ -40,50 +40,104 @@
 </div>
 
 <!-- Add Access Role Modal -->
-<div class="modal fade" id="addAccessRoleModal" tabindex="-1" aria-labelledby="addAccessRoleModalLabel" aria-hidden="true">
+<div class="modal fade" id="userDetailModal" tabindex="-1" aria-labelledby="userDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addAccessRoleModalLabel">Tambah User</h5>
+                <h5 class="modal-title" id="userDetailModalLabel">Detail</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="form-group mb-3">
-                    <label for="name" class="form-label text-black fw-medium">Nama</label>
-                    <input required type="text" class="form-control rounded px-3 py-2" id="name" name="name"
-                        placeholder="Enter your name" required>
+                <div class="text-md fw-bold mb-2">User</div>
+                <table class="w-100">
+                    <tbody>
+                        <tr>
+                            <td class="text-sm" style="width: 30%;">Nama</td>
+                            <td class="text-sm" style="width: 5%;">:</td>
+                            <td class="text-sm" style="width: 65%;" id="fullname"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-sm" style="width: 30%;">Username</td>
+                            <td class="text-sm" style="width: 5%;">:</td>
+                            <td class="text-sm" style="width: 65%;" id="username"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-sm" style="width: 30%;">Email</td>
+                            <td class="text-sm" style="width: 5%;">:</td>
+                            <td class="text-sm" style="width: 65%;" id="email"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-sm" style="width: 30%;">No telp</td>
+                            <td class="text-sm" style="width: 5%;">:</td>
+                            <td class="text-sm" style="width: 65%;" id="phone"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-sm" style="width: 30%;">Status</td>
+                            <td class="text-sm" style="width: 5%;">:</td>
+                            <td class="text-sm" style="width: 65%;" id="is_actived"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" id="allertuser" hidden>
+                                <div class="alert alert-warning my-2" role="alert">
+                                    User belum mengisi data diri lengkap!
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div id="detail_user" hidden>
+                    <div class="text-md fw-bold mb-2 mt-3">Data Diri</div>
+                    <table class="w-100">
+                        <tbody>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Jenis Kelamin</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="gender"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Alamat</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="address"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Tanggal Lahir</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="dob"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Umur</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="age"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-md fw-bold mb-2 mt-3">Pendidikan</div>
+                    <table class="w-100">
+                        <tbody>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Universitas</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="univ"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Jurusan</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="major"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Prodi</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="study_programs"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-sm" style="width: 30%;">Tingkat</td>
+                                <td class="text-sm" style="width: 5%;">:</td>
+                                <td class="text-sm" style="width: 65%;" id="grade"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="username" class="form-label text-black fw-medium">Username</label>
-                    <input required type="text" class="form-control rounded px-3 py-2" id="username" name="username"
-                        placeholder="Enter your username" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="email" class="form-label text-black fw-medium">Email</label>
-                    <input required type="email" class="form-control rounded px-3 py-2" id="email" name="email"
-                        placeholder="Enter your email" required>
-                </div>
-                <div class="form-group mb-3" id="password-group">
-                    <label for="password" class="form-label text-black fw-medium">Password</label>
-                    <input required type="password" class="form-control rounded px-3 py-2" id="password" name="password"
-                        placeholder="Enter your password" required>
-                </div>
-                <div class="form-group mb-3" id="password-confirmation-group">
-                    <label for="password_confirmation" class="form-label text-black fw-medium">Konfirmasi Password</label>
-                    <input required type="password" class="form-control rounded px-3 py-2" id="password_confirmation"
-                        name="password_confirmation" placeholder="Konfirmasi password Anda" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="access_role" class="form-label text-black fw-medium">Akses</label>
-                    <select id="access_role" name="access_role" class="form-control rounded px-3 py-2" required>
-                        <option value="" disabled>Pilih Akses</option>
-                        <!-- Options will be loaded dynamically -->
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" id="save-button">Simpan</button>
             </div>
         </div>
     </div>
@@ -140,168 +194,57 @@
             ]
         });
 
-        $('#access_role').select2({
-            placeholder: 'Pilih Akses',
-            allowClear: true,
-            dropdownParent: $('#addAccessRoleModal'),
-            theme:'bootstrap-5'
-        });
-
-        $.ajax({
-            url: '{{ route("admin.access-role.private") }}',
-            method: 'GET',
-            success: function(response) {
-                let options = '<option value="">Pilih Akses</option>';
-                response.data.forEach(function(role) {
-                    options += `<option value="${role.id}">${role.name}</option>`;
-                });
-                $('#access_role').html(options).trigger('change');
-            },
-            error: function(xhr) {
-                console.error('Error fetching access roles:', xhr.responseText);
-                alert('Gagal memuat data akses!');
-            }
-        });
-
-        $('#save-button').on('click', function() {
-            const name = $('#name').val().trim();
-            const username = $('#username').val().trim();
-            const email = $('#email').val().trim();
-            const password = $('#password').val().trim();
-            const confirmPassword = $('#password_confirmation').val().trim();
-            const idAccessRole = $('#access_role').val().trim();
-
-            if (!username || !email || !password || !confirmPassword) {
-                toastError('Semua kolom wajib diisi.');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                toastError('Password dan Konfirmasi Password tidak cocok.');
-                return;
-            }
-
-
-            $('#save-button').attr('disabled', true);
-
-
-            $.ajax({
-                url: "{{ route('register.store') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    name: name,
-                    username: username,
-                    email: email,
-                    password: password,
-                    password_confirmation: confirmPassword,
-                    id_access_role:idAccessRole
-                },
-                success: function (response) {
-
-                    table.ajax.reload();
-                    toastSuccess('User berhasil ditambahkan!');
-                    $('#addAccessRoleModal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    $('body').removeClass('modal-open');
-                    $('#name').val('');
-                    $('#username').val('');
-                    $('#email').val('');
-                    $('#password').val('');
-                    $('#password_confirmation').val('');
-                    $('#access_role').val('');
-                },
-                error: function (xhr) {
-
-                    if (xhr.status === 422) {
-                        const errors = xhr.responseJSON.errors;
-                        let errorMessage = 'User gagal ditambahkan. Harap perbaiki kesalahan:';
-                        for (const field in errors) {
-                            errorMessage += `${errors[field][0]}`;
-                        }
-                        toastError(errorMessage);
-                    } else {
-                        toastError('Terjadi kesalahan yang tidak terduga. Silakan coba lagi.');
-                    }
-                },
-                complete: function () {
-
-                    $('#save-button').attr('disabled', false);
-                }
-            });
-        });
-
-
-        $(document).on('click', '.edit-button', function() {
+        $(document).on('click', '.show-button', function () {
             const id = $(this).data('id');
-            const csrfToken = '{{ csrf_token() }}';
-            console.log('Edit button clicked');
-
 
             $.ajax({
-                url: `{{ url('admin/user-management') }}/${id}`,
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                success: function(response) {
-                    $('#name').val(response.data.name);
-                    $('#username').val(response.data.username);
-                    $('#email').val(response.data.email);
-                    $('#password-group').attr('hidden', true);;
-                    $('#password-confirmation-group').attr('hidden', true);;
-                    $('#access_role').val(response.data.id_access_role).trigger('change');
-                    $('#addAccessRoleModal').modal('show');
+                url: '{{ route('list-students.show', ":id") }}'.replace(':id', id),
+                type: 'GET',
+                success: function (response) {
+                    const date = new Date(response.created_at);
+                    const formattedDate = date.toLocaleDateString('id-ID');
 
+                    $('#fullname').text(response.name);
+                    $('#username').text(response.username);
+                    $('#email').text(response.email);
+                    $('#phone').text(response.phone??'-');
+                    const isActiveBadge = response.is_actived == 1
+                        ? `<span class="badge bg-success">Active | ${formattedDate}</span>`
+                        : `<span class="badge bg-danger">Inactive</span>`;
+                    $('#is_actived').html(isActiveBadge);
+                    console.log(response);
 
-                    $('#save-button').off('click').on('click', function() {
-                        const name = $('#name').val();
-                        const username = $('#username').val();
-                        const email = $('#email').val();
-                        const id_access_role = $('#access_role').val();
+                    if (response.user_detail == null) {
+                        $('#allertuser').removeAttr('hidden');
+                        $('#detail_user').attr('hidden', 'hidden');
+                    } else {
+                        $('#allertuser').attr('hidden', 'hidden');
+                        $('#detail_user').removeAttr('hidden');
+                        $('#gender').text(response.user_detail.gender);
+                        $('#address').text(response.user_detail.address);
+                        $('#univ').text(response.user_detail.univ);
+                        $('#major').text(response.user_detail.major??'-');
+                        $('#study_programs').text(response.user_detail.study_programs??'-');
+                        $('#grade').text(response.user_detail.grade);
+                        $('#dob').text(new Date(response.user_detail.dob).toLocaleDateString('id-ID'));
 
-                        if (!username) {
-                            toastWarning('Username wajib diisi!');
-                            return;
+                        const dob = new Date(response.user_detail.dob);
+                        const currentDate = new Date();
+                        let age = currentDate.getFullYear() - dob.getFullYear();
+                        const month = currentDate.getMonth() - dob.getMonth();
+                        if (month < 0 || (month === 0 && currentDate.getDate() < dob.getDate())) {
+                            age--;
                         }
+                        $('#age').text(age + ' Tahun');
+                    }
 
-                        $.ajax({
-                            url: `{{ url('admin/user-management') }}/${id}`,
-                            method: 'PUT',
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken
-                            },
-                            data: {
-                                name: name,
-                                username: username,
-                                email: email,
-                                id_access_role: id_access_role
-                            },
-                            success: function(response) {
-                                $('#addAccessRoleModal').modal('hide');
-                                $('.modal-backdrop').remove();
-                                $('body').removeClass('modal-open');
-                                $('#name').val('');
-                                $('#username').val('');
-                                $('#email').val('');
-                                $('#access_role').val('');
-                                $('#password-group').attr('hidden', false);;
-                                $('#password-confirmation-group').attr('hidden', false);;
 
-                                table.ajax.reload();
 
-                                toastSuccess(response.message);
-                            },
-                            error: function(xhr) {
-                                console.error(xhr.responseText);
-                                toastError('Terjadi kesalahan saat menyimpan data!');
-                            }
-                        });
-                    });
+                    $('#userDetailModal').modal('show');
                 },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                    toastError('Gagal mengambil data untuk edit!');
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Failed to fetch user details. Please try again.');
                 }
             });
         });
@@ -310,7 +253,6 @@
         $(document).on('click', '.delete-button', function() {
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
-            console.log('Delete button clicked');
 
 
             confirmationModal.open({
@@ -334,7 +276,6 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Penghapusan dibatalkan');
                 }
             });
         });

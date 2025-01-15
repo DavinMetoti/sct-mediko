@@ -1,18 +1,8 @@
 <div class="sidebar" id="sidebar">
     <div class="flex justify-content-center mb-3 header-icon w-full h-full py-2">
         <a class="flex items-center">
-            <div class="flex items-center gap-2 p-2 rounded-lg bg-white shadow-md">
-                <svg viewBox="0 0 100 100" class="h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M30 70C30 45 45 40 45 40H55C55 40 70 45 70 70" stroke="#7AB929" stroke-width="6"
-                        stroke-linecap="round"></path>
-                    <circle cx="50" cy="35" r="15" stroke="#00A0DC" stroke-width="6"></circle>
-                    <path d="M20 50L35 50L40 35L50 65L60 50L80 50" stroke="#00A0DC" stroke-width="4" stroke-linecap="round">
-                    </path>
-                </svg>
-                <span class="text-2xl font-bold">
-                    <span class="text-[#7AB929]">MEDIKO</span>
-                    <span class="text-[#00A0DC]">.ID</span>
-                </span>
+            <div class="flex justify-content-center gap-2 p-2 rounded-lg bg-white shadow-md">
+                <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="63%">
             </div>
         </a>
     </div>
@@ -38,7 +28,7 @@
         <div class="w-full menu-title">
             <a href="{{ route('question-list.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-list.index') ? 'active' : '' }}">
                 <i class="fas fa-list me-3" style="width: 24px;text-align:center;"></i>
-                <span>Daftar Soal</span>
+                <span>Daftar Paket</span>
             </a>
         </div>
         @endcan
@@ -60,27 +50,25 @@
             Auth::user()->can('viewAny', [App\Models\User::class,'question-detail.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'medical-field.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'sub-topic.index']) ||
-            Auth::user()->can('viewAny', [App\Models\User::class,'question-detail-type.index']) ||
-            Auth::user()->can('viewAny', [App\Models\User::class,'user-management.index']) ||
-            Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']))
+            Auth::user()->can('viewAny', [App\Models\User::class,'question-detail-type.index']))
             <div class="header-menu mt-2">
                 <div class="header-menu-title mb-2">
-                    <h5>Konfigurasi</h5>
+                    <h5>Tryout</h5>
                 </div>
             </div>
         @endif
         @can('viewAny', [App\Models\User::class,'question.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question.index') ? 'active' : '' }}">
-                <i class="fas fa-file-pen me-3" style="width: 24px;text-align:center;"></i>
-                <span>Buat Paket</span>
+                <i class="fas fa-file-invoice me-3" style="width: 24px;text-align:center;"></i>
+                <span>Buat Tryout</span>
             </a>
         </div>
         @endif
         @can('viewAny', [App\Models\User::class,'question-detail.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-detail.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-detail.index') ? 'active' : '' }}">
-                <i class="fas fa-sticky-note me-3" style="width: 24px;text-align:center;"></i>
+                <i class="fas fa-file me-3" style="width: 24px;text-align:center;"></i>
                 <span>Tambah Soal</span>
             </a>
         </div>
@@ -109,6 +97,14 @@
             </a>
         </div>
         @endcan
+        @if (Auth::user()->can('viewAny', [App\Models\User::class,'user-management.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']))
+            <div class="header-menu mt-2">
+                <div class="header-menu-title mb-2">
+                    <h5>Administrasi</h5>
+                </div>
+            </div>
+        @endif
         @can('viewAny', [App\Models\User::class,'user-management.index'])
         <div class="w-full menu-title">
             <a href="{{ route('user-management.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('user-management.index') ? 'active' : '' }}">

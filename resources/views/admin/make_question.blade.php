@@ -34,8 +34,8 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
-                                <label for="time">Waktu Pengerjaan</label>
-                                <input type="time" class="form-control" id="time">
+                                <label for="time">Waktu Pengerjaan (Menit)</label>
+                                <input type="number" class="form-control" id="time">
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -251,10 +251,18 @@
                 success: function(response) {
                     if (response.data) {
                         const questionData = response.data;
+                        const timeString = questionData.time;
+
+                        const [hours, minutes, seconds] = timeString.split(':').map(Number);
+
+                        const totalMinutes = (hours * 60) + minutes;
+
+
+                        $('#time').val(totalMinutes);
 
                         $('#question_name').val(questionData.question);
                         $('#thumbnail').val(questionData.thumbnail);
-                        $('#time').val(questionData.time);
+                        $('#time').val(totalMinutes);
                         $('#release_date').val(questionData.start_time.split(' ')[0]);
                         $('#expired_date').val(questionData.end_time.split(' ')[0]);
                         description.html.set(questionData.description);
@@ -383,6 +391,12 @@
             const releaseDate = $('#release_date').val();
             const expiredDate = $('#expired_date').val();
             const time = $('#time').val();
+            const minutes = parseInt(time, 10);
+            const hours = Math.floor(minutes / 60);
+            const remainingMinutes = minutes % 60;
+
+            const formattedTime = `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}`;
+
             const isPublic = $('#is-public').is(':checked') ? 1 : 0;
 
             if (!questionName || !releaseDate || !expiredDate) {
@@ -396,7 +410,7 @@
                 start_time: releaseDate,
                 end_time: expiredDate,
                 description: description.html.get(),
-                time: time,
+                time: formattedTime,
                 is_public: isPublic,
                 status: 'active',
                 _token: '{{ csrf_token() }}'
@@ -448,6 +462,11 @@
             const releaseDate = $('#release_date').val();
             const expiredDate = $('#expired_date').val();
             const time = $('#time').val();
+            const minutes = parseInt(time, 10);
+            const hours = Math.floor(minutes / 60);
+            const remainingMinutes = minutes % 60;
+
+            const formattedTime = `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}`;
             const isPublic = $('#is-public').is(':checked') ? 1 : 0;
 
 
@@ -460,7 +479,7 @@
                     start_time: releaseDate,
                     end_time: expiredDate,
                     description: description.html.get(),
-                    time: time,
+                    time: formattedTime,
                     is_public: isPublic,
                     status: 'active',
                     _token: '{{ csrf_token() }}'
