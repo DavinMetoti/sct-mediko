@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionDetailController;
 use App\Http\Controllers\QuestionDetailTypeController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubTopicController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserManagementController;
@@ -38,6 +39,7 @@ Route::middleware('auth')->resource('admin/medical-field', MedicalFieldControlle
 Route::middleware('auth')->resource('admin/question-detail', QuestionDetailController::class);
 Route::middleware('auth')->resource('admin/sub-topic', SubTopicController::class);
 Route::middleware('auth')->resource('admin/topic', TopicController::class);
+Route::middleware('auth')->resource('admin/setting', SettingController::class);
 Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetailTypeController::class);
 
 
@@ -67,6 +69,9 @@ Route::middleware('auth')->post('admin/medical-fields/dropdown', [MedicalFieldCo
 Route::middleware('auth')->post('admin/topic/table', [TopicController::class, 'getTopicTable'])->name('admin.topic.table');
 Route::middleware('auth')->post('admin/topic/data', [TopicController::class, 'getTopicData'])->name('admin.topic.data');
 Route::middleware('auth')->post('admin/sub-topic/table', [SubTopicController::class, 'getSubTopicTable'])->name('admin.sub-topic.table');
+Route::middleware('auth')->post('/update-password/{id}', [ProfileController::class, 'updatePassword'])->name('update.password');
+
+
 
 // Route for the public access
 

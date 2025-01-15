@@ -133,6 +133,12 @@
             </a>
         </div>
         @endcan
+        <div class="w-full menu-title">
+            <a href="{{ route('setting.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('setting.index') ? 'active' : '' }}">
+                <i class="fas fa-gear me-3" style="width: 24px;text-align:center;"></i>
+                <span>Setting</span>
+            </a>
+        </div>
     </div>
 
     <div class="footer">

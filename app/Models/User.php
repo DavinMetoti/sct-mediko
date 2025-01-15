@@ -95,4 +95,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(AccessRole::class, 'id_access_role');
     }
+
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class, 'id_users', 'id');
+    }
+
 }
