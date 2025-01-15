@@ -148,6 +148,8 @@
 
 <script>
     $(document).ready(function() {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+
         const table = $('#userPublicTable').DataTable({
             processing: true,
             serverSide: true,
@@ -190,7 +192,7 @@
             columnDefs: [
                 { targets: 0, width: '5%', className: 'text-center' },
                 { targets: 4, width: '10%' },
-                { targets: 5, className: 'text-center' }
+                { targets: 5, width: '12%', className: 'text-center' }
             ]
         });
 
@@ -249,7 +251,6 @@
             });
         });
 
-
         $(document).on('click', '.delete-button', function() {
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
@@ -279,5 +280,52 @@
                 }
             });
         });
+
+        $(document).on('click', '.deactivate-button', function () {
+            const id = $(this).data('id');
+
+            $.ajax({
+                url: '{{ route('list-students.update', ":id") }}'.replace(':id', id),
+                type: 'PUT',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    is_actived: 0,
+                },
+                success: function (response) {
+
+                    toastSuccess('User has been deactivated!');
+                    table.ajax.reload();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    toastError('Failed to deactivate the user. Please try again.');
+                }
+            });
+        });
+
+        $(document).on('click', '.activate-button', function () {
+            const id = $(this).data('id');
+
+            $.ajax({
+                url: '{{ route('list-students.update', ":id") }}'.replace(':id', id),
+                type: 'PUT',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    is_actived: 1,
+                },
+                success: function (response) {
+
+                    toastSuccess('User has been actived!');
+                    table.ajax.reload();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    toastError('Failed to actived the user. Please try again.');
+                }
+            });
+        });
+
     });
 </script>

@@ -69,8 +69,19 @@ class ListStudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->is_actived = $request->is_actived;
+
+        $user->save();
+
+        return response()->json(['message' => 'User has been deactivated'], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -90,10 +101,20 @@ class ListStudentController extends Controller
             return DataTables::of($users)
                 ->addIndexColumn()
                 ->addColumn('action', function($row) {
-                    // return '<button class="btn btn-sm btn-danger delete-button" data-id="'.$row->id.'"><i class="fas fa-trash"></i></button>';
-                    return '<button class="btn btn-sm text-success package-button" data-id="'.$row->id.'"><i class="fas fa-book"></i></button>
-                            <button class="btn btn-sm text-primary show-button" data-id="'.$row->id.'"><i class="fas fa-user"></i></button>
-                            <button class="btn btn-sm text-danger delete-button" data-id="'.$row->id.'"><i class="fas fa-trash"></i></button>';
+                    $isActived = $row->is_actived == 1;
+
+                    return '
+                        <button class="btn btn-sm text-success package-button" data-id="'.$row->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Paket"><i class="fas fa-book"></i></button>
+                        <button class="btn btn-sm text-primary show-button" data-id="'.$row->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Detail User"><i class="fas fa-user"></i></button>
+
+                        '.($isActived ? '
+                        <button class="btn btn-sm text-warning deactivate-button" data-id="'.$row->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Non-aktifkan Pengguna"><i class="fas fa-ban"></i></button>
+                        ' : '
+                        <button class="btn btn-sm text-success activate-button" data-id="'.$row->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Aktifkan Pengguna"><i class="fas fa-check"></i></button>
+                        ').'
+
+                        <button class="btn btn-sm text-danger delete-button" data-id="'.$row->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Pengguna"><i class="fas fa-trash"></i></button>
+                    ';
                 })
                 ->addColumn('access_role', function($row) {
                     return $row->accessRole->name;
