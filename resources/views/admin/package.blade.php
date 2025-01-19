@@ -125,7 +125,7 @@
                 <h5 class="modal-title" id="mappingPackageModalLabel">Tambah Tryout Ke Paket</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editPackageForm">
+            <form id="mappingPackageForm">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -133,7 +133,7 @@
                     <div class="mb-3 p-2">
                         <label for="question" class="form-label">Tryout</label>
                         <div class="input-group">
-                            <select class="form-control select2" id="question" name="question[]" multiple="multiple">
+                            <select class="form-control" id="question" name="question[]" multiple="multiple">
                             </select>
                             <button class="btn btn-primary btn-sm" type="button" id="addQuestion">
                                 <i class="fas fa-refresh"></i>
@@ -157,6 +157,36 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userPackageModal" tabindex="-1" aria-labelledby="userPackageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userPackageModalLabel">Tambah User Ke Paket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="packageUserId">
+                <div class="table-responsive">
+                    <table id="userTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="w-5"><input type="checkbox" class="form-check-input" id="select-all" /></th> <!-- Checkbox for "select all" -->
+                                <th class="w-50">Nama</th>
+                                <th class="w-25">Universitas</th>
+                                <th class="w-20">Email</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary"  id="update_user_package"><i class="fas fa-refresh me-2"></i><span>Simpan Perubahan</span></button>
+            </div>
         </div>
     </div>
 </div>
@@ -245,17 +275,17 @@
                 url: '{{ route("package.getSelectedQuestions", ":id") }}'.replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-                    const selectedQuestions = response.selectedQuestions.map(question => {
-                        const questionOption = new Option(question.text, question.id, true, true);
-                        $('#question').append(questionOption);
-                        return question.id;
-                    });
-
-
-                    $('#question').val(selectedQuestions).trigger('change');
 
 
                     if (!$('#question').data('select2')) {
+                        const selectedQuestions = response.selectedQuestions.map(question => {
+                            const questionOption = new Option(question.text, question.id, true, true);
+                            $('#question').append(questionOption);
+                            return question.id;
+                        });
+
+
+                        $('#question').val(selectedQuestions).trigger('change');
                         $('#question').select2({
                             placeholder: 'Search and select a tryout',
                             theme: 'bootstrap-5',
@@ -302,7 +332,8 @@
                 $.ajax({
                     url: '{{ route("package.update", ":id") }}'.replace(':id', packageId),
                     type: 'PUT',
-                    data: data,
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
                     success: function (response) {
                         if (response.success) {
                             toastSuccess(response.message);
@@ -316,6 +347,129 @@
             });
         });
 
+        $(document).on('click', '.user-package', function (event) {
+            var button = $(this);
+            var id = button.data('id');
+
+            $('#packageUserId').val(id);
+
+            const packageUserId = $('#packageUserId').val();
+
+            $('#userPackageModal').modal('show');
+
+
+            let registeredUsers = @json($registeredUsers);
+            let package = registeredUsers.find(pkg => pkg.id === parseInt(packageUserId));
+            let totalChecked = 0;
+            let totalUser = 0;
+
+            for (let i = 0; i < package.users.length; i++) {
+                totalChecked++
+            }
+
+            if ($.fn.DataTable.isDataTable('#userTable')) {
+                $('#userTable').DataTable().destroy();
+            }
+
+            let user_table = $('#userTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('admin.list-student.public') }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                },
+                drawCallback: function(settings) {
+                    totalUser = settings.aoData.length;
+                    if (totalChecked == totalUser) {
+                        $('#select-all').prop('checked', true);
+                    }
+
+                },
+                columns: [
+                    {
+                        data: 'id',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row, meta) {
+                            const isChecked = package && package.users.some(user => user.id === data) ? 'checked' : '';
+                            return `<input type="checkbox" class="user-checkbox form-check-input" value="${data}" ${isChecked} />`;
+                        }
+                    },
+                    { data: 'name', name: 'name' },
+                    {
+                        data: 'user_detail',
+                        name: 'user_detail.univ',
+                        render: function(data, type, row) {
+                            return data && data.univ ? data.univ : 'Belum ditentukan';
+                        }
+                    },
+                    { data: 'email', name: 'name' },
+                ],
+                columnDefs: [
+                    { targets: 0, width: '5%' },
+                ],
+                language: {
+                    emptyTable: "Belum ada user",
+                    lengthMenu: '_MENU_',
+                    info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                    infoEmpty: 'No entries to show',
+                    search: 'Search:'
+                },
+                responsive: true
+            });
+
+            $('.user-checkbox').each(function() {
+                if (registeredUsers.includes($(this).val())) {
+                    $(this).prop('checked', true);
+                }
+            });
+
+            $('#select-all').on('change', function() {
+                const isChecked = $(this).prop('checked');
+                $('.user-checkbox').prop('checked', isChecked);
+            });
+
+            $(document).on('change', '.user-checkbox', function () {
+                const allChecked = $('.user-checkbox').length === $('.user-checkbox:checked').length;
+                $('#select-all').prop('checked', allChecked);
+            });
+
+            $(document).on('click', '#update_user_package', function () {
+                const selectedUsers = [];
+
+                $('.user-checkbox:checked').each(function () {
+                    selectedUsers.push($(this).val());
+                });
+
+                const data = {
+                    _token: '{{ csrf_token() }}',
+                    users: selectedUsers.length === 0 ? [] : selectedUsers
+                };
+
+                $.ajax({
+                    url: '{{ route("package.update", ":id") }}'.replace(':id', packageUserId),
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.success) {
+                            toastSuccess(response.message);
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        toastError('Something went wrong!');
+                    }
+                });
+            });
+
+        });
 
         $(document).on('click', '.delete-package', function (event) {
             var button = $(this);

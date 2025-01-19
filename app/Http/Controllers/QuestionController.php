@@ -211,11 +211,15 @@ class QuestionController extends Controller
     {
         $questions = Question::where('is_public', 1)->get();
 
-        $packages = Package::with('questions')->get();
+        $packages = User::where('id', auth()->id())
+            ->with(['packages' => function ($query) {
+                $query->with('questions');
+            }])
+            ->first();
 
         $this->authorize('viewAny', [User::class, 'question-list.index']);
 
-        return view('admin.list_questions', compact('questions'));
+        return view('admin.list_questions', compact(['questions','packages']));
     }
 
     public function showQuestionPreview($id)

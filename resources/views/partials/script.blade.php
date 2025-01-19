@@ -10,6 +10,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/select/3.0.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/3.0.0/js/select.dataTables.js"></script>
 
 
 
@@ -193,7 +195,7 @@
                 return;
             }
 
-            Toastify({
+            const toast = Toastify({
                 text: text,
                 duration: 3000,
                 close: false,
@@ -209,9 +211,11 @@
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                 },
                 onClick: function() {
-                    console.log("Toast clicked!");
+                    toast.hideToast(); // Menutup toast saat diklik
                 },
-            }).showToast();
+            });
+
+            toast.showToast();
         }
 
         function toastError(text) {
@@ -220,7 +224,7 @@
                 return;
             }
 
-            Toastify({
+            const toast = Toastify({
                 text: text,
                 duration: 3000,
                 close: false,
@@ -236,9 +240,11 @@
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                 },
                 onClick: function() {
-                    console.log("Toast clicked!");
+                    toast.hideToast(); // Menutup toast saat diklik
                 },
-            }).showToast();
+            });
+
+            toast.showToast();
         }
 
         function toastWarning(text) {
@@ -247,7 +253,7 @@
                 return;
             }
 
-            Toastify({
+            const toast = Toastify({
                 text: text,
                 duration: 3000,
                 close: false,
@@ -263,9 +269,12 @@
                     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
                 },
                 onClick: function() {
-                    console.log("Toast clicked!");
+                    toast.hideToast(); // Menutup toast saat diklik
                 },
-            }).showToast();
+            });
+
+            toast.showToast();
         }
+
 
     </script>

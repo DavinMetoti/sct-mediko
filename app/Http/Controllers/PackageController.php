@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Package;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -14,28 +15,38 @@ class PackageController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $packages = Package::all();
+        $this->authorize('viewAny', [User::class, 'package.index']);
 
+        $packages = Package::with('users')->get();
+
+        if ($request->ajax()) {
             return DataTables::of($packages)
                 ->addColumn('action', function ($package) {
                     return '
-                    <button class="btn btn-md edit-package" data-id="' . $package->id . '">
-                        <i class="fas text-primary fa-pencil-alt"></i>
-                    </button>
-                    <button class="btn btn-md delete-package" data-id="' . $package->id . '">
-                        <i class="fas text-danger fa-trash"></i>
-                    </button>
-                    <button class="btn btn-md question-package" data-id="' . $package->id . '">
-                        <i class="fas text-success fa-question-circle"></i>
-                    </button>
-                ';
-             })
+                        <button class="btn btn-md edit-package" data-id="' . $package->id . '">
+                            <i class="fas text-primary fa-pencil-alt"></i>
+                        </button>
+                        <button class="btn btn-md question-package" data-id="' . $package->id . '">
+                            <i class="fas text-success fa-question-circle"></i>
+                        </button>
+                        <button class="btn btn-md user-package" data-id="' . $package->id . '">
+                            <i class="fas text-warning fa-user"></i>
+                        </button>
+                        <button class="btn btn-md delete-package" data-id="' . $package->id . '">
+                            <i class="fas text-danger fa-trash"></i>
+                        </button>
+                    ';
+                })
                 ->make(true);
         }
 
-        return view('admin.package');
+        $registeredUsers = $packages;
+
+
+
+        return view('admin.package', compact('registeredUsers'));
     }
+
 
     public function create(Request $request)
     {
@@ -114,7 +125,8 @@ class PackageController extends Controller
             'price' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'expires_at' => 'sometimes|date',
-            'questions' => 'sometimes|array',
+            'questions' => 'array',
+            'users' => 'array',
         ]);
 
         $package = Package::findOrFail($id);
@@ -128,7 +140,20 @@ class PackageController extends Controller
         $package->save();
 
         if (isset($validated['questions'])) {
-            $package->questions()->sync($validated['questions']);
+            if (empty($validated['questions'])) {
+                $package->questions()->detach();
+            } else {
+                $package->questions()->sync($validated['questions']);
+            }
+        }
+
+
+        if (isset($validated['users'])) {
+            if (empty($validated['users'])) {
+                $package->users()->detach();
+            } else {
+                $package->users()->sync($validated['users']);
+            }
         }
 
         return response()->json([

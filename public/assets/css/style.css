@@ -72,6 +72,7 @@ input[type=number] {
 .sidebar .header-menu h5 {
     color: var(--primary-color);
     font-weight: bold;
+    font-size: 16px;
 }
 
 .sidebar .menu-title {
@@ -83,14 +84,14 @@ input[type=number] {
 .sidebar .menu-title a {
     display: flex;
     align-items: center;
-    font-size: 1rem;
-    padding: 10px 20px;
+    font-size: 14;
+    padding: 10px;
     border-radius: 8px;
     transition: all 0.3s ease-in-out;
 }
 
 .sidebar .menu-title a i {
-    font-size: 1.2rem;
+    font-size: 15px;
     margin-right: 12px;
 }
 
@@ -364,11 +365,12 @@ input[type=number] {
     transform: translate(10px, -70px);
 }
 
-
+table{
+    border-radius: 8px !important;
+}
 
 table.dataTable {
     width: 100%;
-    border-radius: 8px;
     margin-bottom: 1rem;
     border-collapse: collapse;
     font-size: 15px;
@@ -383,7 +385,7 @@ table.dataTable {
 
 
 table.dataTable thead {
-    border-top-left-radius: 8px;
+    border-top-left-radius: 8px !important;
     border-top-right-radius: 8px;
 }
 
@@ -531,9 +533,29 @@ table.dataTable tbody tr:hover {
     padding: 2px;
     font-size: 10px !important;
     font-weight: bold;
-    margin: 3px;
     transition: background-color 0.3s, transform 0.2s ease-in-out;
 }
+
+.select2-selection.select2-selection--multiple{
+    display: flex;
+    gap: 2;
+}
+
+.select2-search.select2-search--inline {
+    width: auto !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.select2-selection__rendered {
+    width: auto !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 .select2-selection__choice:hover {
     background-color: #0056b3;

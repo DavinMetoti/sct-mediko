@@ -8,8 +8,7 @@
     </div>
     <div class="menu">
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'dashboard.index']) ||
-            Auth::user()->can('viewAny', [App\Models\User::class,'admin.question-list.index']) ||
-            Auth::user()->can('viewAny', [App\Models\User::class,'list-studentsindex']))
+            Auth::user()->can('viewAny', [App\Models\User::class,'question-list.index']))
         <div class="header-menu mt-2">
             <div class="header-menu-title mb-2">
                 <h5>Beranda</h5>
@@ -32,21 +31,8 @@
             </a>
         </div>
         @endcan
-        @can('viewAny', [App\Models\User::class,'list-students.index'])
-        <div class="w-full menu-title">
-            <a href="{{ route('list-students.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('list-students.index') ? 'active' : '' }}">
-                <i class="fas fa-users me-3" style="width: 24px;text-align:center;"></i>
-                <span>Daftar Siswa</span>
-            </a>
-        </div>
-        @endcan
-        <div class="w-full menu-title">
-            <a href="{{ route('dashboard.index') }}" class="flex align-items-center justify-content-start">
-                <i class="fas fa-refresh me-3" style="width: 24px;text-align:center;"></i>
-                <span>Riwayat Tryout</span>
-            </a>
-        </div>
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'question.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'package.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'question-detail.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'medical-field.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'sub-topic.index']) ||
@@ -57,12 +43,14 @@
                 </div>
             </div>
         @endif
+        @can('viewAny', [App\Models\User::class,'package.index'])
         <div class="w-full menu-title">
             <a href="{{ route('package.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('package.index') ? 'active' : '' }}">
                 <i class="fas fa-box me-3" style="width: 24px;text-align:center;"></i>
                 <span>Buat Paket</span>
             </a>
         </div>
+        @endcan
         @can('viewAny', [App\Models\User::class,'question.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question.index') ? 'active' : '' }}">
@@ -104,13 +92,23 @@
         </div>
         @endcan
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'user-management.index']) ||
-            Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']))
+            Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'setting.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'list-studentsindex']))
             <div class="header-menu mt-2">
                 <div class="header-menu-title mb-2">
                     <h5>Administrasi</h5>
                 </div>
             </div>
         @endif
+        @can('viewAny', [App\Models\User::class,'list-students.index'])
+        <div class="w-full menu-title">
+            <a href="{{ route('list-students.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('list-students.index') ? 'active' : '' }}">
+                <i class="fas fa-users me-3" style="width: 24px;text-align:center;"></i>
+                <span>Daftar Siswa</span>
+            </a>
+        </div>
+        @endcan
         @can('viewAny', [App\Models\User::class,'user-management.index'])
         <div class="w-full menu-title">
             <a href="{{ route('user-management.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('user-management.index') ? 'active' : '' }}">
@@ -135,12 +133,14 @@
             </a>
         </div>
         @endcan
+        @can('viewAny', [App\Models\User::class,'setting.index'])
         <div class="w-full menu-title">
             <a href="{{ route('setting.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('setting.index') ? 'active' : '' }}">
                 <i class="fas fa-gear me-3" style="width: 24px;text-align:center;"></i>
                 <span>Setting</span>
             </a>
         </div>
+        @endcan
     </div>
 
     <div class="footer">
