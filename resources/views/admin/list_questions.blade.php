@@ -9,6 +9,7 @@
     <div class="content" id="content">
         <div class="px-3">
             <div class="row">
+                <h3 class="fw-bold">Gratis</h3>
                 @foreach ($questions as $question)
                 <div class="col-md-3 mb-3">
                     <div class="bg-white p-3 rounded-lg shadow-md mb-3 align-items-stretch" style="height: 100%;">
@@ -27,6 +28,8 @@
                     </div>
                 </div>
                 @endforeach
+                <h3 class="fw-bold"></h3>
+
             </div>
         </div>
     </div>

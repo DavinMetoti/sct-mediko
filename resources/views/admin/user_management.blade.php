@@ -20,7 +20,7 @@
                         </button>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered" id="userPrivateTable">
+                        <table class="table table-striped " id="userPrivateTable">
                             <thead class="bg-secondary">
                                 <tr>
                                     <th class=text-white>No</th>
@@ -138,6 +138,12 @@
                     className: 'text-center'
                 }
             ],
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
         });
 
         $('#access_role').select2({

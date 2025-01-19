@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
+use App\Models\Package;
 use App\Models\Question;
 use App\Models\QuestionDetail;
 use App\Models\User;
@@ -209,6 +210,8 @@ class QuestionController extends Controller
     public function showQuestion()
     {
         $questions = Question::where('is_public', 1)->get();
+
+        $packages = Package::with('questions')->get();
 
         $this->authorize('viewAny', [User::class, 'question-list.index']);
 

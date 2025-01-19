@@ -10,15 +10,21 @@
         <div class="px-3">
             <div class="card mb-2">
                 <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
+                    <div class="d-flex justify-content-between mb-3">
                         <div>
-                            <h5 class="mb-0">Tambah Paket</h5>
+                            <h5 class="mb-0">Tambah Tryout</h5>
                             <small>Buat paket sebelum menambahkan soal</small>
                         </div>
-                        <div class="flex gap-2">
-                            <button class="btn btn-success" id="save-button"><i class="fas fa-save me-2"></i><span>Simpan</span></button>
-                            <button class="btn btn-warning" hidden id="update-button"><i class="fas fa-refresh me-2"></i><span>Update</span></button>
-                            <button class="btn btn-danger" hidden id="cancel-button"><i class="fas fa-times me-2"></i><span>Cancel</span></button>
+                        <div class="d-flex gap-2">
+                            <div>
+                                <button class="btn btn-primary" id="save-button"><i class="fas fa-save me-2"></i><span>Tambah Tryout</span></button>
+                            </div>
+                            <div>
+                                <button class="btn btn-warning" hidden id="update-button"><i class="fas fa-refresh me-2"></i><span>Update</span></button>
+                            </div>
+                            <div>
+                                <button class="btn btn-danger" hidden id="cancel-button"><i class="fas fa-times me-2"></i><span>Cancel</span></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,7 +85,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-stripped" id="questions-table">
+                        <table class="table table-stripped" id="questions-table">
                             <thead class="bg-secondary text-center">
                                 <tr>
                                     <th class="text-white">No</th>
@@ -233,6 +239,13 @@
             order: [[0, 'asc']],
             pageLength: 5,
             lengthMenu: [ [5, 10, 25], [5, 10, 25] ],
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
+
         });
 
         $('[data-bs-toggle="tooltip"]').tooltip();

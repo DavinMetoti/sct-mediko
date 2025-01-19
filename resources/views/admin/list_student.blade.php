@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered" id="userPublicTable">
+                        <table class="table table-striped " id="userPublicTable">
                             <thead class="bg-secondary">
                                 <tr>
                                     <th class="text-white">No</th>
@@ -192,8 +192,14 @@
             columnDefs: [
                 { targets: 0, width: '5%', className: 'text-center' },
                 { targets: 4, width: '10%' },
-                { targets: 5, width: '12%', className: 'text-center' }
-            ]
+                { targets: 5, width: '15%', className: 'text-center' }
+            ],
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
         });
 
         $(document).on('click', '.show-button', function () {

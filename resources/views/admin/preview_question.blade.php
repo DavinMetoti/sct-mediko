@@ -24,7 +24,7 @@
                         {!! $question->description !!}
                     </div>
                     <h5 class="font-weight-bold text-primary mb-3">Detail Informasi</h5>
-                    <table class="table table-hover table-bordered">
+                    <table class="table ">
                         <tbody>
                             <tr>
                                 <td class="font-weight-bold text-secondary w-25">Jumlah Soal</td>

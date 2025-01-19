@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionDetailController;
@@ -40,6 +41,7 @@ Route::middleware('auth')->resource('admin/question-detail', QuestionDetailContr
 Route::middleware('auth')->resource('admin/sub-topic', SubTopicController::class);
 Route::middleware('auth')->resource('admin/topic', TopicController::class);
 Route::middleware('auth')->resource('admin/setting', SettingController::class);
+Route::middleware('auth')->resource('admin/package', PackageController::class);
 Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetailTypeController::class);
 
 
@@ -52,6 +54,8 @@ Route::middleware('auth')->get('broadcast/data/{id}', [BroadcastController::clas
 Route::middleware('auth')->get('questions/list', [QuestionController::class, 'showQuestion'])->name('question-list.index');
 Route::middleware('auth')->get('questions/preview/{id}', [QuestionController::class, 'showQuestionPreview'])->name('question.preview');
 Route::middleware('auth')->get('questions/detail/edit/{id}', [QuestionDetailController::class, 'getQuestionDetailById'])->name('question-detail.detail.edit');
+Route::middleware('auth')->get('/package/search/question', [PackageController::class, 'searchQuestions'])->name('package.search.question');
+Route::middleware('auth')->get('package/{id}/selected-questions', [PackageController::class, 'getSelectedQuestions'])->name('package.getSelectedQuestions');
 
 
 Route::middleware('auth')->post('admin/access-role/data', [AccessRoleController::class, 'getAccessRoleData'])->name('admin.access-role.data');
@@ -71,6 +75,8 @@ Route::middleware('auth')->post('admin/topic/data', [TopicController::class, 'ge
 Route::middleware('auth')->post('admin/sub-topic/table', [SubTopicController::class, 'getSubTopicTable'])->name('admin.sub-topic.table');
 Route::middleware('auth')->post('/update-password/{id}', [ProfileController::class, 'updatePassword'])->name('update.password');
 
+Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])
+    ->name('package.question.destroy');
 
 
 // Route for the public access

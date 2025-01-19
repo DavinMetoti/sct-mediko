@@ -15,12 +15,14 @@
                             <h5 class="mb-0">Bidang</h5>
                             <small>Daftar bidang dan manajemen bidang</small>
                         </div>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#medicalFieldModal" onclick="clearModal()">
-                            <i class="fas fa-plus me-2"></i><span>Tambah</span>
-                        </button>
+                        <div>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#medicalFieldModal" onclick="clearModal()">
+                                <i class="fas fa-plus me-2"></i><span>Tambah</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered" id="medicalFieldTable">
+                        <table class="table table-striped " id="medicalFieldTable">
                             <thead class="bg-secondary">
                                 <tr>
                                     <th class=text-white>No</th>
@@ -97,7 +99,13 @@
                 { width: '5%', targets: 0 },
                 { width: '85%', targets: 1 },
                 { width: '10%', targets: 2 }
-            ]
+            ],
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
 
         });
 

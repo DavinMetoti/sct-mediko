@@ -101,4 +101,8 @@ class User extends Authenticatable
         return $this->hasOne(UserDetail::class, 'id_users', 'id');
     }
 
+    public function packages()
+    {
+        return $this->belongsToMany(Package::class, 'package_user', 'user_id', 'package_id');
+    }
 }

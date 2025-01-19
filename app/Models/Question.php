@@ -31,4 +31,9 @@ class Question extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function packages()
+    {
+        return $this->belongsToMany(Package::class, 'packages_questions_pivot');
+    }
 }

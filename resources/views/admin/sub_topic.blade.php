@@ -19,7 +19,7 @@
                                 </button>
                             </div>
                             <div class="table-responsive mt-3">
-                                <table class="table table-bordered table-stripped" id="table-topic">
+                                <table class="table table-stripped" id="table-topic">
                                     <thead>
                                         <tr>
                                             <th class="text-center w-5">No</th>
@@ -42,7 +42,7 @@
                                 </button>
                             </div>
                             <div class="table-responsive mt-3">
-                                <table class="table table-bordered" id="table-sub-topic">
+                                <table class="table striped" id="table-sub-topic">
                                     <thead>
                                         <tr>
                                             <th class="text-center">No</th>
@@ -144,14 +144,18 @@
                 { data: 'actions', name: 'actions', orderable: false, searchable: false }
             ],
             columnDefs: [
-                {
-                    targets: 2,
-                    width: '20%',
-                    className: 'text-center'
-                }
+                { targets: 0, width: '5%' },
+                { targets: 1, width: '70%' },
+                { targets: 2, width: '25%' },
             ],
             responsive: true,
-            autoWidth: false
+            autoWidth: false,
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
         });
 
         $('#add-subtopic-btn').on('click', function() {
@@ -373,7 +377,13 @@
                     },
                 ],
                 responsive: true,
-                autoWidth: false
+                autoWidth: false,
+                language: {
+                    lengthMenu: '_MENU_',
+                    info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                    infoEmpty: 'No entries to show',
+                    search: 'Search:'
+                }
             });
 
         });

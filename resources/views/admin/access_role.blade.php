@@ -20,7 +20,7 @@
                         </button>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover table-bordered" id="accessRoleTable">
+                        <table class="table table-striped " id="accessRoleTable">
                             <thead class="bg-secondary">
                                 <tr>
                                     <th class="text-white">No</th>
@@ -140,7 +140,13 @@
                 { width: "30%", targets: 1 },
                 { width: "44%", targets: 2 },
                 { width: "15%", targets: 4 }
-            ]
+            ],
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
         });
 
         $('#save-button').on('click', function() {

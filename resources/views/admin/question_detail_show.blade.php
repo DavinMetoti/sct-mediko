@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="question-detail-table">
+                        <table class="table table-striped" id="question-detail-table">
                             <thead class="bg-secondary">
                                 <tr>
                                     <th class="text-white text-center align-items-center" rowspan="2">No</th>
@@ -86,7 +86,13 @@
                     "targets": 9,
                     "orderable": false
                 }
-            ]
+            ],
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
         });
 
         $('#btn-delete').on('click', function () {

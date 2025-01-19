@@ -20,7 +20,7 @@
                         </button>
                     </div>
                     <!-- Tabel untuk menampilkan Data -->
-                    <table id="broadcast-table" class="table table-bordered table-striped">
+                    <table id="broadcast-table" class="table table-striped">
                         <thead class="bg-secondary">
                             <tr>
                                 <th class="text-white">Judul</th>
@@ -89,7 +89,13 @@
             ],
             columnDefs: [
                 { targets: -1, width: '5%' }
-            ]
+            ],
+            language: {
+                lengthMenu: '_MENU_',
+                info: 'Showing _START_ to _END_ of _TOTAL_ entries',
+                infoEmpty: 'No entries to show',
+                search: 'Search:'
+            }
         });
 
         $('#broadcast-table').on('click', '#delete-btn', function() {

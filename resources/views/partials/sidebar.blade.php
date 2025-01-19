@@ -57,6 +57,12 @@
                 </div>
             </div>
         @endif
+        <div class="w-full menu-title">
+            <a href="{{ route('package.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('package.index') ? 'active' : '' }}">
+                <i class="fas fa-box me-3" style="width: 24px;text-align:center;"></i>
+                <span>Buat Paket</span>
+            </a>
+        </div>
         @can('viewAny', [App\Models\User::class,'question.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question.index') ? 'active' : '' }}">
