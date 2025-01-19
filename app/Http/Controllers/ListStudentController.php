@@ -104,7 +104,6 @@ class ListStudentController extends Controller
                     $isActived = $row->is_actived == 1;
 
                     return '
-                        <button class="btn text-success package-button" data-id="'.$row->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Paket"><i class="fas fa-book"></i></button>
                         <button class="btn text-primary show-button" data-id="'.$row->id.'" data-bs-toggle="tooltip" data-bs-placement="top" title="Lihat Detail User"><i class="fas fa-user"></i></button>
 
                         '.($isActived ? '
