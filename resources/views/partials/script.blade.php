@@ -142,6 +142,8 @@
                 }
             }
 
+            document.querySelector('[data-f-id="pbf"]').style.display = 'none';
+
             $('#hamburger-button').click(function () {
                 toggleSidebar();
             });
