@@ -616,4 +616,11 @@ table.dataTable tbody tr:hover {
     font-style: normal;
 }
 
+#imageModal {
+    display: none;
+}
+
+#imageModal.active {
+    display: flex;
+}
 

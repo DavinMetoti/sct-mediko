@@ -101,6 +101,8 @@ class ProfileController extends Controller
                     'address' => $validatedData['address'] ?? null,
                     'dob' => $validatedData['dob'] ?? null,
                     'univ' => $validatedData['univ'] ?? null,
+                    'major' => $validatedData['major'] ?? null,
+                    'study_programs' => $validatedData['study_programs'] ?? null,
                     'grade' => $validatedData['grade'] ?? null,
                 ]);
             }

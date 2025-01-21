@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class LoginController extends Controller
 {
@@ -29,18 +31,17 @@ class LoginController extends Controller
         ]);
 
         try {
-            // Find user by username using findOrFail
+
             $user = User::where('username', $validate['username'])->firstOrFail();
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Handle the case where the user is not found
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Username tidak ditemukan.'
             ]);
         }
 
-        // Check if the password is correct
         if (!Hash::check($validate['password'], $user->password)) {
             return response()->json([
                 'status' => 'error',
@@ -48,7 +49,6 @@ class LoginController extends Controller
             ]);
         }
 
-        // Check if the account is active
         if ($user->is_actived == 0) {
             return response()->json([
                 'status' => 'error',
@@ -56,8 +56,14 @@ class LoginController extends Controller
             ]);
         }
 
-        // Log the user in
         Auth::login($user);
+
+        $sessionToken = Str::uuid()->toString();
+
+        $user->session_token = $sessionToken;
+        $user->save();
+
+        session(['session_token' => $sessionToken]);
 
         return response()->json([
             'status' => 'success',
@@ -65,8 +71,6 @@ class LoginController extends Controller
             'redirect' => route('dashboard.index')
         ]);
     }
-
-
 
     /**
      * Display a listing of the register.

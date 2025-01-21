@@ -211,16 +211,24 @@ class QuestionController extends Controller
     {
         $questions = Question::where('is_public', 1)->get();
 
-        $packages = User::where('id', auth()->id())
-            ->with(['packages' => function ($query) {
-                $query->with('questions');
-            }])
-            ->first();
+        $user = auth()->user();
+
+        if ($user->id_access_role == 1) {
+            $packages = Package::with(['questions.questionDetail'])->get();
+
+        } else {
+            $userPackages = User::where('id', $user->id)
+                ->with(['packages.questions.questionDetail'])
+                ->first();
+
+            $packages = $userPackages->packages;
+        }
 
         $this->authorize('viewAny', [User::class, 'question-list.index']);
 
-        return view('admin.list_questions', compact(['questions','packages']));
+        return view('admin.list_questions', compact('questions', 'packages'));
     }
+
 
     public function showQuestionPreview($id)
     {

@@ -12,8 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.datatables.net/select/3.0.0/js/dataTables.select.js"></script>
     <script src="https://cdn.datatables.net/select/3.0.0/js/select.dataTables.js"></script>
-
-
+    <script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
 
     <script>
 

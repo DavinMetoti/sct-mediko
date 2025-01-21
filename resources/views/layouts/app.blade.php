@@ -19,18 +19,12 @@
     <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://cdn.datatables.net/select/3.0.0/css/select.dataTables.css" rel="stylesheet">
-
-
-
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <link href="{{ secure_asset('assets/bootstrap-5.0.2-dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ secure_asset('assets/css/style.css') }}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
     @endif
 </head>
 

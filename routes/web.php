@@ -14,6 +14,7 @@ use App\Http\Controllers\QuestionDetailTypeController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubTopicController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\TryoutController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,7 @@ Route::post('logout', [LoginController::class, 'logout'])->name('login.logout');
 
 // Route for the private access
 Route::middleware('auth')->resource('profile', ProfileController::class);
+Route::middleware('auth')->resource('tryout', TryoutController::class);
 Route::middleware('auth')->resource('admin/dashboard', AdminController::class);
 Route::middleware('auth')->resource('admin/access-role', AccessRoleController::class);
 Route::middleware('auth')->resource('admin/user-management', UserManagementController::class);
@@ -44,7 +46,7 @@ Route::middleware('auth')->resource('admin/setting', SettingController::class);
 Route::middleware('auth')->resource('admin/package', PackageController::class);
 Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetailTypeController::class);
 
-
+Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
 
 Route::middleware('auth')->get('admin/get/private', [AccessRoleController::class, 'getPrivateAccessRoleData'])->name('admin.access-role.private');
 Route::middleware('auth')->get('admin/get/public', [AccessRoleController::class, 'getPublicAccessRoleData'])->name('admin.access-role.public');
@@ -77,8 +79,5 @@ Route::middleware('auth')->post('/update-password/{id}', [ProfileController::cla
 
 Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])
     ->name('package.question.destroy');
-
-
-// Route for the public access
 
 

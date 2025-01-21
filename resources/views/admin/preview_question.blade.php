@@ -14,9 +14,10 @@
                         <h3 class="mb-1 font-bold">{{ $question->question }}</h3>
                         <small class="text-light font-italic">{{ $question->thumbnail }}</small>
                     </div>
-                    <button class="btn btn-success font-weight-bold px-4 py-2">
+                    <a href="{{ route('tryout.question.detail', ['idQuestion' => $question->id, 'token' => auth()->user()->session_token]) }}" class="btn btn-success font-weight-bold px-4 py-2 {{ $questionDetail == 0 ? 'disabled' : '' }}">
                         <i class="fas fa-play-circle me-2"></i> Mulai Mengerjakan
-                    </button>
+                    </a>
+
                 </div>
                 <div class="card-body bg-white">
                     <h5 class="font-weight-bold text-primary mb-3">Deskripsi Materi</h5>

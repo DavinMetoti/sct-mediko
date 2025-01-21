@@ -27,6 +27,11 @@ class Question extends Model
         'deleted_at',
     ];
 
+    public function questionDetail()
+    {
+        return $this->hasMany(QuestionDetail::class,'id_question');
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
