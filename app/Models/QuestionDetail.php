@@ -49,7 +49,7 @@ class QuestionDetail extends Model
      */
     public function subTopic()
     {
-        return $this->belongsTo(subTopic::class, 'id_sub_topic', 'id');
+        return $this->belongsTo(SubTopic::class, 'id_sub_topic', 'id');
     }
 
     /**
