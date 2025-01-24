@@ -138,13 +138,6 @@ $(document).ready(function () {
             var tableData = api.rows().data();
             const similarityThreshold = 80;
 
-            if (tableData.length > 0) {
-                var firstRowData = tableData[0];
-                chatContainer.attr('hidden', false);
-            } else {
-                chatContainer.attr('hidden', true);
-            }
-
             const labels = [];
             const labels_bank = [];
             const data = [];
@@ -188,32 +181,35 @@ $(document).ready(function () {
                 }
             });
 
-            console.log("Questions:", similarQuestions);
-            console.log("Similar Questions:");
-
-            if (similarQuestions.length > 0) {
-                let alertHTML = `
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Peringatan:</strong> Ditemukan soal yang memiliki kemiripan!
-                        <ul>
-                            ${similarQuestions.map(question => `
-                                <li class="mb-2">
-                                    <strong>Soal 1:</strong> ${question.case1}<br>
-                                    <strong>Soal 2:</strong> ${question.case2}<br>
-                                    <strong>Persentase Kemiripan:</strong> ${question.similarity.toFixed(2)}%
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-                $('#alert-question-match').html(alertHTML);
+            if (tableData.length > 0) {
+                var firstRowData = tableData[0];
+                chatContainer.attr('hidden', false);
+                if (similarQuestions.length > 0) {
+                    let alertHTML = `
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Peringatan:</strong> Ditemukan soal yang memiliki kemiripan!
+                            <ul>
+                                ${similarQuestions.map(question => `
+                                    <li class="mb-2">
+                                        <strong>Soal 1:</strong> ${question.case1}<br>
+                                        <strong>Soal 2:</strong> ${question.case2}<br>
+                                        <strong>Persentase Kemiripan:</strong> ${question.similarity.toFixed(2)}%
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    $('#alert-question-match').html(alertHTML);
+                } else {
+                    let alertSuccessHTML = `
+                        <div class="alert alert-success" role="alert">
+                            <strong>Berhasil:</strong> Tidak ditemukan soal yang memiliki kemiripan.
+                        </div>
+                    `;
+                    $('#alert-question-match').html(alertSuccessHTML);
+                }
             } else {
-                let alertSuccessHTML = `
-                    <div class="alert alert-success" role="alert">
-                        <strong>Berhasil:</strong> Tidak ditemukan soal yang memiliki kemiripan.
-                    </div>
-                `;
-                $('#alert-question-match').html(alertSuccessHTML);
+                chatContainer.attr('hidden', true);
             }
 
             if (window.myChart) {
