@@ -8,6 +8,7 @@ use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionDetailController;
 use App\Http\Controllers\QuestionDetailTypeController;
@@ -45,6 +46,7 @@ Route::middleware('auth')->resource('admin/topic', TopicController::class);
 Route::middleware('auth')->resource('admin/setting', SettingController::class);
 Route::middleware('auth')->resource('admin/package', PackageController::class);
 Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetailTypeController::class);
+Route::middleware('auth')->resource('admin/question-bank', QuestionBankController::class);
 
 Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
 
@@ -58,6 +60,7 @@ Route::middleware('auth')->get('questions/preview/{id}', [QuestionController::cl
 Route::middleware('auth')->get('questions/detail/edit/{id}', [QuestionDetailController::class, 'getQuestionDetailById'])->name('question-detail.detail.edit');
 Route::middleware('auth')->get('/package/search/question', [PackageController::class, 'searchQuestions'])->name('package.search.question');
 Route::middleware('auth')->get('package/{id}/selected-questions', [PackageController::class, 'getSelectedQuestions'])->name('package.getSelectedQuestions');
+Route::middleware('auth')->get('/admin/search-question-bank', [QuestionBankController::class, 'searchQuestionBank'])->name('admin.searchQuestionBank');
 
 
 Route::middleware('auth')->post('admin/access-role/data', [AccessRoleController::class, 'getAccessRoleData'])->name('admin.access-role.data');
@@ -70,6 +73,8 @@ Route::middleware('auth')->post('admin/question/table', [QuestionController::cla
 Route::middleware('auth')->post('admin/question/upload_image', [QuestionController::class, 'uploadImage'])->name('admin.question.upload_image');
 Route::middleware('auth')->post('admin/question/upload_file', [QuestionController::class, 'uploadFile'])->name('admin.question.upload_file');
 Route::middleware('auth')->post('admin/question/dropdown', [QuestionController::class, 'getQuestionByName'])->name('question.get-questions');
+Route::middleware('auth')->post('admin/question/attach-question-detail', [QuestionController::class, 'attachQuestionDetails'])->name('question.attach-question-detail');
+Route::middleware('auth')->post('admin/question/detach-question-detail', [QuestionController::class, 'detachQuestionDetails'])->name('question.detach-question-detail');
 Route::middleware('auth')->post('admin/medical-fields/table', [MedicalFieldController::class, 'getMedicalFields'])->name('admin.medical-fields.table');
 Route::middleware('auth')->post('admin/medical-fields/dropdown', [MedicalFieldController::class, 'getMedicalFieldByName'])->name('admin.medical-fields.dropdown');
 Route::middleware('auth')->post('admin/topic/table', [TopicController::class, 'getTopicTable'])->name('admin.topic.table');

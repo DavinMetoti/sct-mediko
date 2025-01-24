@@ -142,8 +142,10 @@
                 }
             }
 
-            document.querySelector('[data-f-id="pbf"]').style.display = 'none';
-
+            const element = document.querySelector('[data-f-id="pbf"]');
+            if (element) {
+                element.style.display = 'none';
+            }
             $('#hamburger-button').click(function () {
                 toggleSidebar();
             });
@@ -155,6 +157,8 @@
             });
 
             $('#dropdown-button').click(function (event) {
+                console.log('running');
+
                 event.stopPropagation();
                 $('#dropdown-profile .dropdown-menu').toggleClass('show');
                 $('#dropdown-notifications .dropdown-menu').removeClass('show');
@@ -166,7 +170,6 @@
                 $('#dropdown-profile .dropdown-menu').removeClass('show')
             });
 
-            // Click outside the dropdowns to close them
             $(document).click(function (event) {
                 if (!$(event.target).closest('.dropdown').length) {
                     $('.dropdown-menu').removeClass('show');

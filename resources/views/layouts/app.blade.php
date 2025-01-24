@@ -23,9 +23,9 @@
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @endif
     <link href="{{ secure_asset('assets/bootstrap-5.0.2-dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ secure_asset('assets/css/style.css') }}" rel="stylesheet">
-    @endif
 </head>
 
 <body cz-shortcut-listen="true">

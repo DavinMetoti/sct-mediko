@@ -402,7 +402,6 @@ table.dataTable thead th {
 }
 
 table.dataTable tbody td {
-    border-radius: 7px !important;
     border-bottom: 0.5px solid gray;
 
 }
@@ -622,5 +621,11 @@ table.dataTable tbody tr:hover {
 
 #imageModal.active {
     display: flex;
+}
+
+#medicalFieldChart,
+#questionBankChart {
+    width:100% !important;
+    height:300px !important;
 }
 

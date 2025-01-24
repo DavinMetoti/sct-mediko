@@ -15,11 +15,11 @@ class QuestionDetail extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'id_question',
         'clinical_case',
         'id_medical_field',
         'id_question_type',
         'id_sub_topic',
+        'question_bank_id',
         'initial_hypothesis',
         'new_information',
         'discussion_image',
@@ -33,7 +33,12 @@ class QuestionDetail extends Model
      */
     public function question()
     {
-        return $this->belongsTo(Question::class, 'id_question', 'id');
+        return $this->belongsToMany(Question::class, 'question_question_detail_pivot', 'question_detail_id', 'question_id');
+    }
+
+    public function questionBank()
+    {
+        return $this->belongsTo(QuestionBank::class, 'question_bank_id');
     }
 
     /**

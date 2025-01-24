@@ -29,7 +29,7 @@ class Question extends Model
 
     public function questionDetail()
     {
-        return $this->hasMany(QuestionDetail::class,'id_question');
+        return $this->belongsToMany(QuestionDetail::class, 'question_question_detail_pivot', 'question_id', 'question_detail_id');
     }
 
     public function creator()

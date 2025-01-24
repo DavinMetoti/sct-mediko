@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HeaderSubTopic;
 use App\Models\MedicalField;
 use App\Models\Question;
+use App\Models\QuestionBank;
 use App\Models\QuestionDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,8 +20,9 @@ class QuestionDetailController extends Controller
     {
         $this->authorize('viewAny', [User::class, 'question-detail.index']);
         $topics = HeaderSubTopic::with('subTopics')->get();
+        $questionBank = QuestionBank::all();
 
-        return view('admin.question_detail', compact(['topics']));
+        return view('admin.question_detail', compact(['topics', 'questionBank']));
     }
 
     /**
@@ -38,7 +40,7 @@ class QuestionDetailController extends Controller
     {
         try {
             $validated = $request->validate([
-                'id_question' => 'required|integer',
+                'question_bank_id' => 'required|integer',
                 'id_medical_field' => 'required|integer',
                 'id_question_type' => 'required|integer',
                 'id_sub_topic' => 'required|integer',
@@ -69,7 +71,7 @@ class QuestionDetailController extends Controller
     public function show(string $id)
     {
         try {
-            $questionDetail = QuestionDetail::with('medicalField')->where('id_question', $id)->get();
+            $questionDetail = QuestionDetail::with('medicalField')->where('question_bank_id', $id)->get();
             $question = Question::findOrFail($id);
 
             if (!$questionDetail) {

@@ -93,6 +93,39 @@ class QuestionController extends Controller
         }
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
+    {
+        $id_question = $request->query('question');
+
+        if ($request->ajax()) {
+            // Fetch the question with its related details
+            $question = Question::with(['questionDetail.medicalField', 'questionDetail.subTopic', 'questionDetail.questionType','questionDetail.questionBank'])
+                ->findOrFail($id_question);
+
+            // Return the related question details for DataTables
+            return datatables()->of($question->questionDetail)
+                ->addIndexColumn()
+                ->addColumn('actions', function ($row) {
+                    return '
+                        <button type="button" class="btn text-gray btn-swap" data-id="' . $row->id . '">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                    ';
+                })
+                ->rawColumns(['actions'])
+                ->make(true);
+        }
+
+        return view('admin.question_bank_mapping', [
+            'id_question' => $id_question
+        ]);
+    }
+
+
+
     public function getQuestionByName(Request $request)
     {
         try {
@@ -132,63 +165,60 @@ class QuestionController extends Controller
     public function getQuestionData()
     {
         $questions = Question::with('creator')->get();
-
         return datatables()->of($questions)
-            ->addIndexColumn()
-            ->addColumn('actions', function ($question) {
-                $actions = '';
-
-                if ($question->status != 'active') {
-                    $actions .= '
-                        <button class="btn btn-sm btn-primary active-btn" data-id="' . $question->id . '" data-bs-toggle="tooltip" title="Edit">
-                            <i class="fas fa-check"></i>
-                        </button>
-                    ';
-                }
-
-                if ($question->status != 'archived') {
-                    $actions .= '
-                        <button class="btn btn-sm btn-warning archive-btn" data-id="' . $question->id . '" data-bs-toggle="tooltip" title="Archive">
-                            <i class="fas fa-archive"></i>
-                        </button>
-                    ';
-                }
-
-                if ($question->status != 'inactive') {
-                    $actions .= '
-                        <button class="btn btn-sm btn-secondary nonactive-btn" data-id="' . $question->id . '" data-bs-toggle="tooltip" title="Non-active">
-                            <i class="fas fa-ban"></i>
-                        </button>
-                    ';
-                }
-
-                $actions .= '
-                    <a href="' . route("question-detail.show", $question->id) . '"
-                        class="btn btn-sm btn-info show-btn"
-                        data-id="' . $question->id . '"
-                        data-bs-toggle="tooltip"
-                        title="Lihat Soal">
-                            <i class="fas fa-eye"></i>
-                    </a>
-                ';
-
-                $actions .= '
-                    <button class="btn btn-sm btn-success edit-btn" data-id="' . $question->id . '" data-bs-toggle="tooltip" title="Edit">
-                        <i class="fas fa-edit"></i>
+        ->addIndexColumn()
+        ->addColumn('actions', function ($question) {
+            return '
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light text-dark dropdown-toggle" type="button" id="dropdownMenuButton' . $question->id . '" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis"></i>
                     </button>
-                ';
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $question->id . '">
+                        <li>
+                            <a href="' . route('question.create', ['question' => $question->id]) . '" class="dropdown-item">
+                                <i class="fas fa-bank text-dark"></i> Bank Soal
+                            </a>
+                        </li>
+            ' .
+            ($question->status != 'active' ? '
+                        <li>
+                            <button class="dropdown-item active-btn" data-id="' . $question->id . '">
+                                <i class="fas fa-check text-primary"></i> Activate
+                            </button>
+                        </li>
+            ' : '') .
+            ($question->status != 'archived' ? '
+                        <li>
+                            <button class="dropdown-item archive-btn" data-id="' . $question->id . '">
+                                <i class="fas fa-archive text-warning"></i> Archive
+                            </button>
+                        </li>
+            ' : '') .
+            ($question->status != 'inactive' ? '
+                        <li>
+                            <button class="dropdown-item nonactive-btn" data-id="' . $question->id . '">
+                                <i class="fas fa-ban text-secondary"></i> Deactivate
+                            </button>
+                        </li>
+            ' : '') . '
+                        <li>
+                            <button class="dropdown-item edit-btn" data-id="' . $question->id . '">
+                                <i class="fas fa-edit text-success"></i> Edit
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item delete-btn" data-id="' . $question->id . '">
+                                <i class="fas fa-trash text-danger"></i> Delete
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            ';
+        })
+        ->rawColumns(['actions'])
+        ->make(true);
 
-                $actions .= '
-                    <button class="btn btn-sm btn-danger delete-btn" data-id="' . $question->id . '" data-bs-toggle="tooltip" title="Delete">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                ';
-
-                return $actions;
-            })
-            ->rawColumns(['actions'])
-            ->make(true);
-    }
+   }
 
     public function destroy($id)
     {
@@ -228,7 +258,6 @@ class QuestionController extends Controller
 
         return view('admin.list_questions', compact('questions', 'packages'));
     }
-
 
     public function showQuestionPreview($id)
     {
@@ -276,5 +305,54 @@ class QuestionController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function attachQuestionDetails(Request $request)
+    {
+        $validatedData = $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'question_detail_ids' => 'required|array',
+            'question_detail_ids.*' => 'exists:question_details,id',
+        ]);
+
+        $question = Question::findOrFail($validatedData['question_id']);
+
+        $existingDetails = $question->questionDetail->pluck('id')->toArray();
+        $newDetails = array_diff($validatedData['question_detail_ids'], $existingDetails);
+
+        if (count($newDetails) > 0) {
+            $question->questionDetail()->attach($newDetails);
+        }
+
+        return response()->json([
+            'message' => 'Question details attached successfully.',
+            'attached_question_details' => $newDetails,
+        ]);
+    }
+
+    public function detachQuestionDetails(Request $request)
+    {
+        $validatedData = $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'question_detail_ids' => 'required|array',
+            'question_detail_ids.*' => 'exists:question_details,id',
+        ]);
+
+        $question = Question::findOrFail($validatedData['question_id']);
+
+        $existingDetails = $question->questionDetail->pluck('id')->toArray();
+
+        $detailsToDetach = array_intersect($validatedData['question_detail_ids'], $existingDetails);
+
+        if (count($detailsToDetach) > 0) {
+            $question->questionDetail()->detach($detailsToDetach);
+        }
+
+        return response()->json([
+            'message' => 'Question details detached successfully.',
+            'detached_question_details' => $detailsToDetach,
+        ]);
+    }
+
+
 
 }

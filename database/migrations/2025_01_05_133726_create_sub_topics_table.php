@@ -13,12 +13,19 @@ return new class extends Migration
     {
         Schema::create('sub_topics', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('id_header_sub_topic');
             $table->string('name');
-            $table->string('description');
-            $table->string('path-pdf');
+            $table->string('description')->nullable();
+            $table->string('path');
+            $table->timestamps();
+
+            $table->foreign('id_header_sub_topic')
+                ->references('id')
+                ->on('header_sub_topics')
+                ->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

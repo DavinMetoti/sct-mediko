@@ -3,102 +3,101 @@
 @section('title', 'Admin Hak Akses')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen bg-light">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
-            <div class="card mb-2">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Tambah Tryout</h5>
-                            <small>Buat paket sebelum menambahkan soal</small>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <div>
-                                <button class="btn btn-primary" id="save-button"><i class="fas fa-save me-2"></i><span>Tambah Tryout</span></button>
-                            </div>
-                            <div>
-                                <button class="btn btn-warning" hidden id="update-button"><i class="fas fa-refresh me-2"></i><span>Update</span></button>
-                            </div>
-                            <div>
-                                <button class="btn btn-danger" hidden id="cancel-button"><i class="fas fa-times me-2"></i><span>Cancel</span></button>
-                            </div>
-                        </div>
+        <div class="px-3 py-4">
+            <!-- Header Section -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">Tambah Tryout</h5>
+                        <small class="text-muted">Buat paket sebelum menambahkan soal</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" id="save-button" data-bs-toggle="tooltip" title="Simpan paket">
+                            <i class="fas fa-save me-2"></i> Tambah Tryout
+                        </button>
+                        <button class="btn btn-warning" hidden id="update-button" data-bs-toggle="tooltip" title="Perbarui paket">
+                            <i class="fas fa-sync-alt me-2"></i> Update
+                        </button>
+                        <button class="btn btn-danger" hidden id="cancel-button" data-bs-toggle="tooltip" title="Batalkan">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="card mb-3">
+
+            <!-- Form Section -->
+            <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="row g-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="question_name">Nama Paket</label>
-                                <input type="text" class="form-control" id="question_name">
+                                <label for="question_name" class="form-label">Nama Paket</label>
+                                <input type="text" class="form-control" id="question_name" placeholder="Masukkan nama paket">
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="time">Waktu Pengerjaan (Menit)</label>
-                                <input type="number" class="form-control" id="time">
+                                <label for="time" class="form-label">Waktu Pengerjaan (Menit)</label>
+                                <input type="number" class="form-control" id="time" placeholder="Masukkan waktu dalam menit">
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="release_date">Tanggal Rilis</label>
-                                <input type="text" class="form-control" id="release_date">
+                                <label for="release_date" class="form-label">Tanggal Rilis</label>
+                                <input type="date" class="form-control" id="release_date">
                             </div>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="expired_date">Tanggal Berakhir</label>
-                                <input type="text" class="form-control" id="expired_date">
+                                <label for="expired_date" class="form-label">Tanggal Berakhir</label>
+                                <input type="date" class="form-control" id="expired_date">
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label for="froala-editor">Deskripsi</label>
-                            <div id="froala-editor"> </div>
+                        <div class="col-12">
+                            <label for="froala-editor" class="form-label">Deskripsi</label>
+                            <div id="froala-editor" class="border rounded px-3 py-2 bg-white" contenteditable="true" placeholder="Tulis deskripsi..."></div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-12">
                             <div class="form-group">
-                                <label for="thumbnail">Thumbnail</label>
-                                <input type="text" class="form-control" id="thumbnail">
+                                <label for="thumbnail" class="form-label">Thumbnail</label>
+                                <input type="text" class="form-control" id="thumbnail" placeholder="Masukkan URL thumbnail">
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <div class="col-12">
                             <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    value="1"
-                                    id="is-public"
-                                    aria-label="Rilis untuk publik">
-                                <label class="form-check-label" for="is-public">
-                                    Rilis untuk publik
-                                </label>
+                                <input class="form-check-input" type="checkbox" value="1" id="is-public">
+                                <label class="form-check-label" for="is-public">Rilis untuk publik</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card">
+
+            <!-- Table Section -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Daftar Paket Tryout</h5>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-stripped" id="questions-table">
-                            <thead class="bg-secondary text-center">
+                        <table class="table table-striped table-hover align-middle" id="questions-table">
+                            <thead class="table-light text-center">
                                 <tr>
-                                    <th class="text-white">No</th>
-                                    <th class="text-white">Nama Paket</th>
-                                    <th class="text-white">Waktu</th>
-                                    <th class="text-white">Status</th>
-                                    <th class="text-white">Rilis</th>
-                                    <th class="text-white">Tanggal Rilis</th>
-                                    <th class="text-white">Expired</th>
-                                    <th class="text-white">Aksi</th>
+                                    <th>No</th>
+                                    <th>Nama Paket</th>
+                                    <th>Waktu</th>
+                                    <th>Status</th>
+                                    <th>Rilis</th>
+                                    <th>Tanggal Rilis</th>
+                                    <th>Expired</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody class="text-center"></tbody>
                         </table>
                     </div>
                 </div>
@@ -106,6 +105,7 @@
         </div>
     </div>
 </div>
+
 
 @endsection
 
@@ -228,13 +228,15 @@
             columnDefs: [
                 { className: 'text-center', targets: '_all' },
                 { width: '5%', targets: 0 },
-                { width: '30%', targets: 1 },
+                { width: '45%', targets: 1 },
                 { width: '10%', targets: 2 },
                 { width: '5%', targets: 3 },
                 { width: '5%', targets: 4 },
                 { width: '15%', targets: 5 },
                 { width: '10%', targets: 6 },
-                { width: '20%', targets: 7 }
+                { width: '5%', targets: 7, createdCell: function (td, cellData, rowData, row, col) {
+                    $(td).addClass('text-center');
+                } }
             ],
             order: [[0, 'asc']],
             pageLength: 5,

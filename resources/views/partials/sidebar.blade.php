@@ -59,6 +59,12 @@
             </a>
         </div>
         @endif
+        <div class="w-full menu-title">
+            <a href="{{ route('question-bank.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-bank.index') ? 'active' : '' }}">
+                <i class="fas fa-bank me-3" style="width: 24px;text-align:center;"></i>
+                <span>Bank Soal</span>
+            </a>
+        </div>
         @can('viewAny', [App\Models\User::class,'question-detail.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-detail.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-detail.index') ? 'active' : '' }}">

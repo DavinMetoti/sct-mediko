@@ -24,9 +24,12 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
-                                    <label for="id-question">Paket</label>
-                                    <select name="id_question" id="id-question" class="form-control">
-                                        <option value="">Pilih Paket</option>
+                                    <label for="id-question">Bank Soal</label>
+                                    <select name="id_question_bank" id="id-question-bank" class="form-select">
+                                        <option value="">Pilih Bank Soal</option>
+                                        @foreach ($questionBank as $bank)
+                                            <option value="{{ $bank->id }}">{{ $bank->bank_name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -180,35 +183,10 @@
     $(document).ready(function() {
 
         function initSelect2(question, medicalField, subTopic) {
-            console.log('Initializing Select2 for', question, medicalField);
-
             $(question).select2({
-                placeholder: 'Pilih Paket',
+                placeholder: 'Pilih Bank Soal',
                 theme: 'bootstrap-5',
-                minimumInputLength: 3,
-                ajax: {
-                    url: '{{ route('question.get-questions') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    type: 'POST',
-                    data: function (params) {
-                        return {
-                            search: params.term,
-                            _token: "{{ csrf_token() }}"
-                        };
-                    },
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data.data, function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.question
-                                };
-                            })
-                        };
-                    },
-                    cache: true
-                }
+                minimumResultsForSearch: -1
             });
 
             $(medicalField).select2({
@@ -298,7 +276,7 @@
             }
         });
 
-        initSelect2('#id-question', '#medical-field', '#sub-topic-dropdown');
+        initSelect2('#id-question-bank', '#medical-field', '#sub-topic-dropdown');
 
         const maxPanelists = 10;
         const remainingPanelists = document.getElementById("remaining-panelists");
@@ -339,7 +317,7 @@
         updateRemaining();
 
         $('#btn-save').click(async function () {
-            const idQuestion = $('#id-question').val();
+            const idQuestionBank = $('#id-question-bank').val();
             const medicalField = $('#medical-field').val();
             const questionType = $('#questionType').val();
             const subTopic = $('#sub-topic-dropdown').val();
@@ -364,7 +342,7 @@
 
             const data = {
                 _token: '{{ csrf_token() }}',
-                id_question: idQuestion,
+                question_bank_id: idQuestionBank,
                 id_medical_field: medicalField,
                 id_question_type: questionType,
                 id_sub_topic: subTopic,
