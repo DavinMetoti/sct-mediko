@@ -261,12 +261,12 @@ class QuestionController extends Controller
 
     public function showQuestionPreview($id)
     {
-        $question = Question::findOrFail($id);
-        $questionDetail = QuestionDetail::where('id_question',$id)->count();
+        $question = Question::with('questionDetail')->findOrFail($id);
+        $questionDetail = $question->questionDetail->count();
 
-        return view('admin.preview_question',compact('question','questionDetail'));
-
+        return view('admin.preview_question', compact('question', 'questionDetail'));
     }
+
 
     public function uploadImage(Request $request)
     {
@@ -352,7 +352,5 @@ class QuestionController extends Controller
             'detached_question_details' => $detailsToDetach,
         ]);
     }
-
-
 
 }

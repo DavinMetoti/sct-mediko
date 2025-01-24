@@ -18,7 +18,13 @@ class TryoutController extends Controller
             abort(403, 'Mohon maaf sesi ini tidak valid');
         }
 
-        $question = Question::with(['questionDetail.medicalField','questionDetail.subTopic','questionDetail.questionType'])->findOrFail($idQuestion);
+        $question = Question::with([
+            'questionDetail.medicalField',
+            'questionDetail.subTopic',
+            'questionDetail.questionType'
+        ])
+        ->where('id', $idQuestion)
+        ->first();
         $user = User::with('userDetail')->findOrFail(auth()->id());
 
         return view('public.tryout', compact(['question','user']));
