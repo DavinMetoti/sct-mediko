@@ -68,7 +68,7 @@ class LoginController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Login berhasil!',
-            'redirect' => route('dashboard.index')
+            'redirect' => $user->id_access_role == 1 ? route('dashboard.index') : route('student.index')
         ]);
     }
 

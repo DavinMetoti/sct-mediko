@@ -4,6 +4,7 @@ use App\Http\Controllers\AccessRoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BroadcastController;
+use App\Http\Controllers\ColumnTitleController;
 use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
 use App\Http\Controllers\PackageController;
@@ -13,7 +14,9 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionDetailController;
 use App\Http\Controllers\QuestionDetailTypeController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubTopicController;
+use App\Http\Controllers\TaskHistoryController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TryoutController;
 use App\Http\Controllers\UserManagementController;
@@ -33,7 +36,9 @@ Route::post('logout', [LoginController::class, 'logout'])->name('login.logout');
 // Route for the private access
 Route::middleware('auth')->resource('profile', ProfileController::class);
 Route::middleware('auth')->resource('tryout', TryoutController::class);
+Route::middleware('auth')->resource('task-history', TaskHistoryController::class);
 Route::middleware('auth')->resource('admin/dashboard', AdminController::class);
+Route::middleware('auth')->resource('dashboard/student', StudentController::class);
 Route::middleware('auth')->resource('admin/access-role', AccessRoleController::class);
 Route::middleware('auth')->resource('admin/user-management', UserManagementController::class);
 Route::middleware('auth')->resource('admin/list-students', ListStudentController::class);
@@ -47,6 +52,7 @@ Route::middleware('auth')->resource('admin/setting', SettingController::class);
 Route::middleware('auth')->resource('admin/package', PackageController::class);
 Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetailTypeController::class);
 Route::middleware('auth')->resource('admin/question-bank', QuestionBankController::class);
+Route::middleware('auth')->resource('admin/column-title', ColumnTitleController::class);
 
 Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
 
@@ -81,6 +87,8 @@ Route::middleware('auth')->post('admin/topic/table', [TopicController::class, 'g
 Route::middleware('auth')->post('admin/topic/data', [TopicController::class, 'getTopicData'])->name('admin.topic.data');
 Route::middleware('auth')->post('admin/sub-topic/table', [SubTopicController::class, 'getSubTopicTable'])->name('admin.sub-topic.table');
 Route::middleware('auth')->post('/update-password/{id}', [ProfileController::class, 'updatePassword'])->name('update.password');
+Route::middleware('auth')->post('tryout/history/answer', [TryoutController::class, 'getHistoryAnswer'])->name('tryout.history.answer');
+
 
 Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])
     ->name('package.question.destroy');

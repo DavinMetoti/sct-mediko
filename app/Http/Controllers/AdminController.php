@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Package;
 use App\Models\Question;
 use App\Models\QuestionDetail;
 use App\Models\User;
@@ -21,7 +22,12 @@ class AdminController extends Controller
         $student_total = User::whereHas('accessRole', function ($query) {
             $query->where('access', 'public');
         })->count();
-        return view('admin.dashboard',compact('question_total','student_total','questionActive_total'));
+        $student = User::whereHas('accessRole', function ($query) {
+            $query->where('access', 'public');
+        })->get();
+
+        $package = Package::with('users')->get();
+        return view('admin.dashboard',compact('question_total','student_total','questionActive_total','package','student'));
     }
 
     /**

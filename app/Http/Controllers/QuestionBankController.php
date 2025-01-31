@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\QuestionBank;
+use App\Models\User;
 
 class QuestionBankController extends Controller
 {
@@ -12,6 +13,8 @@ class QuestionBankController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', [User::class, 'question-bank.index']);
+
         if ($request->ajax()) {
             $questionBanks = QuestionBank::all();
 

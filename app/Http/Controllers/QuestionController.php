@@ -6,6 +6,7 @@ use App\Http\Requests\StoreQuestionRequest;
 use App\Models\Package;
 use App\Models\Question;
 use App\Models\QuestionDetail;
+use App\Models\TaskHistory;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -124,8 +125,6 @@ class QuestionController extends Controller
         ]);
     }
 
-
-
     public function getQuestionByName(Request $request)
     {
         try {
@@ -218,7 +217,7 @@ class QuestionController extends Controller
         ->rawColumns(['actions'])
         ->make(true);
 
-   }
+    }
 
     public function destroy($id)
     {
@@ -262,10 +261,18 @@ class QuestionController extends Controller
     public function showQuestionPreview($id)
     {
         $question = Question::with('questionDetail')->findOrFail($id);
+
         $questionDetail = $question->questionDetail->count();
 
-        return view('admin.preview_question', compact('question', 'questionDetail'));
+        $checkTryout = TaskHistory::where('question_id', $id)
+                                ->where('user_id', auth()->id())
+                                ->first();
+
+        unset($question->questionDetail);
+
+        return view('admin.preview_question', compact('question', 'questionDetail','checkTryout'));
     }
+
 
 
     public function uploadImage(Request $request)

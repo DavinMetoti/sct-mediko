@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ColumnTitle;
 use App\Models\HeaderSubTopic;
 use App\Models\MedicalField;
 use App\Models\Question;
@@ -21,8 +22,9 @@ class QuestionDetailController extends Controller
         $this->authorize('viewAny', [User::class, 'question-detail.index']);
         $topics = HeaderSubTopic::with('subTopics')->get();
         $questionBank = QuestionBank::all();
+        $columnTitle = ColumnTitle::all();
 
-        return view('admin.question_detail', compact(['topics', 'questionBank']));
+        return view('admin.question_detail', compact(['topics', 'questionBank','columnTitle']));
     }
 
     /**
@@ -44,6 +46,7 @@ class QuestionDetailController extends Controller
                 'id_medical_field' => 'required|integer',
                 'id_question_type' => 'required|integer',
                 'id_sub_topic' => 'required|integer',
+                'column_title_id' => 'required|integer',
                 'clinical_case' => 'required|string',
                 'new_information' => 'required|string',
                 'initial_hypothesis' => 'required|string',

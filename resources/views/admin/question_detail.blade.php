@@ -67,7 +67,7 @@
                                     <textarea name="new_information" id="new-information" class="form-control" rows="2" placeholder="Masukkan informasi baru di sini"></textarea>
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="sub-topic-dropdown">Sub Topik</label>
                                     <select name="sub-topic-dropdown" id="sub-topic-dropdown" class="form-control">
@@ -79,7 +79,17 @@
                                                 @endforeach
                                             </optgroup>
                                         @endforeach
-
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="column-title-dropdown">Judul Kolom</label>
+                                    <select name="column-title-dropdown" id="column-title-dropdown" class="form-control">
+                                        <option value="">Pilih Judul Kolom</option>
+                                        @foreach($columnTitle as $column)
+                                            <option value="{{ $column->id }}">{{ $column->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -222,6 +232,11 @@
                 placeholder: 'Pilih Sub Topik',
                 theme: 'bootstrap-5',
             });
+
+            $('#column-title-dropdown').select2({
+                placeholder: 'Pilih Judul Kolom',
+                theme: 'bootstrap-5',
+            });
         }
 
         $.ajax({
@@ -321,6 +336,7 @@
             const medicalField = $('#medical-field').val();
             const questionType = $('#questionType').val();
             const subTopic = $('#sub-topic-dropdown').val();
+            const columnTitle = $('#column-title-dropdown').val();
             const clinicalCase = $('#clinical-case').val();
             const initialHypothesis = $('#initial-hypothesis').val();
             const newInformation = $('#new-information').val();
@@ -346,6 +362,7 @@
                 id_medical_field: medicalField,
                 id_question_type: questionType,
                 id_sub_topic: subTopic,
+                column_title_id: columnTitle,
                 clinical_case: clinicalCase,
                 new_information: newInformation,
                 initial_hypothesis: initialHypothesis,

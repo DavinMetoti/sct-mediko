@@ -7,7 +7,9 @@
         </a>
     </div>
     <div class="menu">
-        @if (Auth::user()->can('viewAny', [App\Models\User::class,'dashboard.index']) ||
+        @if (
+            Auth::user()->can('viewAny', [App\Models\User::class,'dashboard.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'student.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'question-list.index']))
         <div class="header-menu mt-2">
             <div class="header-menu-title mb-2">
@@ -18,6 +20,14 @@
         @can('viewAny', [App\Models\User::class,'dashboard.index'])
         <div class="w-full menu-title">
             <a href="{{ route('dashboard.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('dashboard.index') ? 'active' : '' }}">
+                <i class="fas fa-home me-3" style="width: 24px;text-align:center;"></i>
+                <span>Dashboard</span>
+            </a>
+        </div>
+        @endcan
+        @can('viewAny', [App\Models\User::class,'student.index'])
+        <div class="w-full menu-title">
+            <a href="{{ route('student.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('student.index') ? 'active' : '' }}">
                 <i class="fas fa-home me-3" style="width: 24px;text-align:center;"></i>
                 <span>Dashboard</span>
             </a>
@@ -34,8 +44,10 @@
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'question.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'package.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'question-detail.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'question-bank.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'medical-field.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'sub-topic.index']) ||
+            Auth::user()->can('viewAny', [App\Models\User::class,'column-title.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'question-detail-type.index']))
             <div class="header-menu mt-2">
                 <div class="header-menu-title mb-2">
@@ -59,12 +71,14 @@
             </a>
         </div>
         @endif
+        @can('viewAny', [App\Models\User::class,'question-bank.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-bank.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-bank.index') ? 'active' : '' }}">
                 <i class="fas fa-bank me-3" style="width: 24px;text-align:center;"></i>
                 <span>Bank Soal</span>
             </a>
         </div>
+        @endif
         @can('viewAny', [App\Models\User::class,'question-detail.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-detail.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-detail.index') ? 'active' : '' }}">
@@ -97,6 +111,14 @@
             </a>
         </div>
         @endcan
+        @can('viewAny', [App\Models\User::class,'column-title.index'])
+        <div class="w-full menu-title">
+            <a href="{{ route('column-title.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('column-title.index') ? 'active' : '' }}">
+                <i class="fas fa-table me-3" style="width: 24px;text-align:center;"></i>
+                <span>Judul Kolom</span>
+            </a>
+        </div>
+        @endif
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'user-management.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'setting.index']) ||

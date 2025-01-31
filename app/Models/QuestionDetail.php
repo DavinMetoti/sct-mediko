@@ -24,6 +24,7 @@ class QuestionDetail extends Model
         'new_information',
         'discussion_image',
         'panelist_answers_distribution',
+        'column_title_id',
     ];
 
     public $timestamps = true;
@@ -64,4 +65,15 @@ class QuestionDetail extends Model
     {
         return $this->belongsTo(QuestionDetailType::class, 'id_question_type', 'id');
     }
+
+    public function columnTitle()
+    {
+        return $this->belongsTo(ColumnTitle::class);
+    }
+
+    public function historyAnswer()
+    {
+        return $this->belongsTo(QuestionDetail::class);
+    }
+
 }
