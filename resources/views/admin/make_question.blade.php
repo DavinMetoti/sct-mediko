@@ -59,9 +59,9 @@
                         </div>
                         <div class="col-12">
                             <label for="froala-editor" class="form-label">Deskripsi</label>
-                            <div id="froala-editor" class="border rounded px-3 py-2 bg-white" contenteditable="true" placeholder="Tulis deskripsi..."></div>
+                            <div id="editor"></div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12" style="margin-top: 6rem;">
                             <div class="form-group">
                                 <label for="thumbnail" class="form-label">Thumbnail</label>
                                 <input type="text" class="form-control" id="thumbnail" placeholder="Masukkan URL thumbnail">
@@ -114,6 +114,26 @@
 <script>
     $(document).ready(function () {
 
+        let quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    [{ font: [] }, { size: [] }], // Font dan ukuran teks
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Heading
+                    ['bold', 'italic', 'underline', 'strike'], // Format teks
+                    [{ color: [] }, { background: [] }], // Warna teks & latar
+                    [{ script: 'sub' }, { script: 'super' }], // Subscript & superscript
+                    [{ list: 'ordered' }, { list: 'bullet' }], // List
+                    [{ indent: '-1' }, { indent: '+1' }], // Indentasi
+                    [{ align: [] }], // Align teks
+                    ['blockquote', 'code-block'], // Blockquote & Code Block
+                    ['link', 'image', 'video'], // Media
+                    ['clean'] // Hapus format
+                ]
+            },
+            placeholder: 'Please write something',
+            theme: 'snow'
+        });
+
         const today = new Date();
         const sevenDaysFromNow = new Date();
         sevenDaysFromNow.setDate(today.getDate() + 7);
@@ -136,33 +156,10 @@
             defaultDate: sevenDaysFromNow
         });
 
-        let description = new FroalaEditor('div#froala-editor', {
-            fileUploadURL: '{{ route('admin.question.upload_file') }}',
-            imageUploadURL: '{{ route('admin.question.upload_image') }}',
-            videoUploadURL: '/upload_video',
-            requestHeaders: {
-                'X-CSRF-TOKEN':  '{{ csrf_token() }}',
-            },
-            events: {
-                'file.uploaded': function (response) {
-                    console.log('File uploaded successfully:', response);
-                },
-                'file.error': function (error) {
-                    console.error('File upload error:', error);
-                },
-                'image.uploaded': function (response) {
-                    console.log('Image uploaded successfully:', response);
-                },
-                'image.error': function (error) {
-                    console.error('Image upload error:', error);
-                },
-                'video.uploaded': function (response) {
-                    console.log('Video uploaded successfully:', response);
-                },
-                'video.error': function (error) {
-                    console.error('Video upload error:', error);
-                },
-            },
+        let description = '';
+
+        quill.on('text-change', function() {
+            description = quill.root.innerHTML;
         });
 
         const questionsTable = $('#questions-table').DataTable({
@@ -419,12 +416,15 @@
                 return;
             }
 
+            console.log(description);
+
+
             const formData = {
                 question: questionName,
                 thumbnail: thumbnail,
                 start_time: releaseDate,
                 end_time: expiredDate,
-                description: description.html.get(),
+                description: description,
                 time: formattedTime,
                 is_public: isPublic,
                 status: 'active',
@@ -443,11 +443,9 @@
 
                     $('#question_name').val('');
                     $('#thumbnail').val('');
-                    $('#release_date').flatpickr().clear();
-                    $('#expired_date').flatpickr().clear();
                     $('#time').val('');
                     $('#is-public').prop('checked', false);
-                    description.html.set('');
+                    quill.root.innerHTML = '';
                 },
                 error: function (xhr) {
                     toastError('Terjadi kesalahan saat menyimpan data.');

@@ -73,26 +73,19 @@ class QuestionDetailController extends Controller
      */
     public function show(string $id)
     {
-        try {
-            $questionDetail = QuestionDetail::with('medicalField')->where('question_bank_id', $id)->get();
-            $question = Question::findOrFail($id);
+        $questionDetail = QuestionDetail::with('medicalField')->where('question_bank_id', $id)->get();
+        $question = QuestionBank::findOrFail($id);
 
-            if (!$questionDetail) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Detail pertanyaan tidak ditemukan',
-                ], 404);
-            }
-
-            return view('admin.question_detail_show',compact('question') ,[
-                'questionDetail' => $questionDetail,
-            ]);
-        } catch (\Exception $e) {
+        if (!$questionDetail) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+                'message' => 'Detail pertanyaan tidak ditemukan',
+            ], 404);
         }
+
+        return view('admin.question_detail_show',compact('question') ,[
+            'questionDetail' => $questionDetail,
+        ]);
     }
 
 

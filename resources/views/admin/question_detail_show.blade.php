@@ -13,7 +13,7 @@
                     <div class="flex justify-content-between mb-3">
                         <div>
                             <h5 class="mb-0">Daftar Soal</h5>
-                            <small>Daftar Soal Untuk Paket : {{ $question->question }}</small>
+                            <small>Daftar Soal Untuk Bank Soal : {{ $question->bank_name }}</small>
                         </div>
                     </div>
                     <div class="table-responsive">
