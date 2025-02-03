@@ -102,11 +102,11 @@ class QuestionController extends Controller
         $id_question = $request->query('question');
 
         if ($request->ajax()) {
-            // Fetch the question with its related details
+
             $question = Question::with(['questionDetail.medicalField', 'questionDetail.subTopic', 'questionDetail.questionType','questionDetail.questionBank'])
                 ->findOrFail($id_question);
 
-            // Return the related question details for DataTables
+
             return datatables()->of($question->questionDetail)
                 ->addIndexColumn()
                 ->addColumn('actions', function ($row) {
@@ -128,15 +128,15 @@ class QuestionController extends Controller
     public function getQuestionByName(Request $request)
     {
         try {
-            // Ambil parameter pencarian dari request
+
             $search = $request->input('search');
 
-            // Cari pertanyaan yang sesuai dengan query pencarian
+
             $questions = Question::where('question', 'like', "%{$search}%")
                 ->limit(10)
                 ->get();
 
-            // Periksa apakah data ditemukan
+
             if ($questions->isEmpty()) {
                 return response()->json([
                     'message' => 'Data tidak ditemukan',
@@ -236,27 +236,43 @@ class QuestionController extends Controller
         }
     }
 
-    public function showQuestion()
+    public function showQuestion(Request $request)
     {
-        $questions = Question::where('is_public', 1)->get();
+        $searchQuery = $request->input('search');
+
+        $questions = Question::where('is_public', 1)
+            ->when($searchQuery, function ($query, $searchQuery) {
+                return $query->where('question', 'like', "%{$searchQuery}%");
+            })
+            ->get();
 
         $user = auth()->user();
 
         if ($user->id_access_role == 1) {
+            // Admin: Retrieve all packages with associated questions and details
             $packages = Package::with(['questions.questionDetail'])->get();
-
         } else {
             $userPackages = User::where('id', $user->id)
-                ->with(['packages.questions.questionDetail'])
+                ->with(['packages.questions' => function($query) {
+                }])
                 ->first();
 
-            $packages = $userPackages->packages;
+                $packages = $userPackages->packages->filter(function ($package) use ($searchQuery) {
+                    $package->questions = $package->questions->filter(function ($question) use ($searchQuery) {
+                        // Pastikan searchQuery ada di dalam question
+                        return stripos($question->question, $searchQuery) !== false;
+                    });
+
+                    return $package->questions->isNotEmpty();
+                });
+
         }
 
         $this->authorize('viewAny', [User::class, 'question-list.index']);
 
-        return view('admin.list_questions', compact('questions', 'packages'));
+        return view('admin.list_questions', compact('questions', 'packages', 'searchQuery'));
     }
+
 
     public function showQuestionPreview($id)
     {
@@ -282,7 +298,7 @@ class QuestionController extends Controller
                 $file = $request->file('file');
                 $path = $file->store('uploads/images', 'public');
 
-                // Froala expects the URL of the uploaded image in a JSON response
+
                 return response()->json([
                     'link' => asset('storage/' . $path),
                 ]);
@@ -301,7 +317,7 @@ class QuestionController extends Controller
                 $file = $request->file('file');
                 $path = $file->store('uploads/file', 'public');
 
-                // Froala expects the URL of the uploaded image in a JSON response
+
                 return response()->json([
                     'link' => asset('storage/' . $path),
                 ]);

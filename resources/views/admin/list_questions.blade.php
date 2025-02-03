@@ -9,7 +9,19 @@
     <div class="content" id="content">
         <div class="container card">
             <div class="card-body row">
+                <form method="GET" action="{{ route('question-list.index') }}" class="mb-4 w-100">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Cari Tryout..."
+                               value="{{ request('search') }}">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </form>
                 <h4 class="fw-bold">Paket Gratis</h4>
+
+                <!-- Search Form -->
+
                 @foreach ($questions as $question)
                     <div class="col-md-4 col-sm-6 mb-4">
                         <div class="card shadow-sm border-0 h-100">

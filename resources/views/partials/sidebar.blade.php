@@ -37,7 +37,7 @@
         <div class="w-full menu-title">
             <a href="{{ route('question-list.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-list.index') ? 'active' : '' }}">
                 <i class="fas fa-list me-3" style="width: 24px;text-align:center;"></i>
-                <span>Daftar Paket</span>
+                <span>Daftar Tryout</span>
             </a>
         </div>
         @endcan
