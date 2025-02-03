@@ -52,6 +52,7 @@ class QuestionDetailController extends Controller
                 'initial_hypothesis' => 'required|string',
                 'discussion_image' => 'nullable|string',
                 'panelist_answers_distribution' => 'required|json',
+                'rationale' => 'required|string',
             ]);
 
             QuestionDetail::create($validated);

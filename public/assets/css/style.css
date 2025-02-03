@@ -66,7 +66,8 @@ input[type=number] {
 
 .sidebar .menu {
     padding: 0 20px;
-    overflow: scroll !important;
+    max-height: calc(100vh - 150px);
+    overflow-y: scroll !important;
 }
 
 .sidebar .header-menu h5 {

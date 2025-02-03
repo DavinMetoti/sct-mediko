@@ -89,6 +89,8 @@
                             </div>
                         </div>
                     </div>
+                    <h6 class="fw-bold">Penjelasan Rationale</h6>
+                    <p id="rationale" class="text-sm"></p>
                     <h6 class="fw-bold">Rationale dan Skor Likert</h6>
                     <div class="table-responsive">
                         <table class="table table-bordered border-collapse border border-gray-200">
@@ -367,6 +369,7 @@
                 $('#column_2').text(question_tryout.column_title.column_2);
                 $('#column_3').text(question_tryout.column_title.column_3);
                 $('#category').text(question_tryout.medical_field.name);
+                $('#rationale').html(question_tryout.rationale);
                 $('#clinic-case').text(question_tryout.clinical_case);
                 $('#initial_hypothesis').text(question_tryout.initial_hypothesis);
                 $('#new_information').text(question_tryout.new_information);

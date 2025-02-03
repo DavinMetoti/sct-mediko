@@ -101,6 +101,12 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
+                                    <label for="froala-editor" class="form-label">Rationale</label>
+                                    <div id="editor"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3" style="margin-top: 5rem;">
+                                <div class="form-group">
                                     <label for="discussion-image" class="flex justify-content-between">
                                         <div>Distribusi Jawaban Panelis</div>
                                         <div>Sisa panelis: <span id="remaining-panelists">10</span></div>
@@ -191,6 +197,32 @@
 <script>
 
     $(document).ready(function() {
+
+        let quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    [{ font: [] }, { size: [] }], // Font dan ukuran teks
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Heading
+                    ['bold', 'italic', 'underline', 'strike'], // Format teks
+                    [{ color: [] }, { background: [] }], // Warna teks & latar
+                    [{ script: 'sub' }, { script: 'super' }], // Subscript & superscript
+                    [{ list: 'ordered' }, { list: 'bullet' }], // List
+                    [{ indent: '-1' }, { indent: '+1' }], // Indentasi
+                    [{ align: [] }], // Align teks
+                    ['blockquote', 'code-block'], // Blockquote & Code Block
+                    ['link', 'image', 'video'], // Media
+                    ['clean'] // Hapus format
+                ]
+            },
+            placeholder: 'Please write something',
+            theme: 'snow'
+        });
+
+        let rationale = '';
+
+        quill.on('text-change', function() {
+            rationale = quill.root.innerHTML;
+        });
 
         function initSelect2(question, medicalField, subTopic) {
             $(question).select2({
@@ -367,6 +399,7 @@
                 new_information: newInformation,
                 initial_hypothesis: initialHypothesis,
                 discussion_image: discussionImageBase64,
+                rationale: rationale,
                 panelist_answers_distribution: JSON.stringify(panelistJSON)
             };
 

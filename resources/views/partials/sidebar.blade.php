@@ -36,15 +36,21 @@
         @can('viewAny', [App\Models\User::class,'question-list.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-list.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-list.index') ? 'active' : '' }}">
-                <i class="fas fa-list me-3" style="width: 24px;text-align:center;"></i>
-                <span>Daftar Tryout</span>
+                <i class="fas fa-file-alt me-3" style="width: 24px;text-align:center;"></i>
+                <span>Tryout</span>
             </a>
         </div>
         @endcan
         <div class="w-full menu-title">
-        <a href="{{ route('tryout-archive.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('tryout-archive.index') ? 'active' : '' }}">
-            <i class="fas fa-refresh me-3" style="width: 24px;text-align:center;"></i>
+            <a href="{{ route('tryout-archive.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('tryout-archive.index') ? 'active' : '' }}">
+                <i class="fas fa-clock me-3" style="width: 24px;text-align:center;"></i>
                 <span>Riwayat Tryout</span>
+            </a>
+        </div>
+        <div class="w-full menu-title">
+            <a href="{{ route('list-package.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('list-package.index') ? 'active' : '' }}">
+                <i class="fas fa-cubes me-3" style="width: 24px;text-align:center;"></i>
+                <span>Paket Tryout</span>
             </a>
         </div>
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'question.index']) ||

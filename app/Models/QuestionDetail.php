@@ -25,6 +25,7 @@ class QuestionDetail extends Model
         'discussion_image',
         'panelist_answers_distribution',
         'column_title_id',
+        'rationale',
     ];
 
     public $timestamps = true;
