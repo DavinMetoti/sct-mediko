@@ -41,6 +41,12 @@
             </a>
         </div>
         @endcan
+        <div class="w-full menu-title">
+        <a href="{{ route('tryout-archive.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('tryout-archive.index') ? 'active' : '' }}">
+            <i class="fas fa-refresh me-3" style="width: 24px;text-align:center;"></i>
+                <span>Riwayat Tryout</span>
+            </a>
+        </div>
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'question.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'package.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'question-detail.index']) ||
