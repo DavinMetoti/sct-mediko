@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Package;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,18 +15,26 @@ class ListPakcageController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', [User::class, 'list-invoice.index']);
+
         $userId = auth()->id();
 
         $packages = Package::with(['questions'])
-            ->leftJoin('invoices', 'invoices.package_id', '=', 'packages.id')
-            ->where(function ($query) use ($userId) {
-                $query->where('invoices.user_id', $userId)
-                      ->orWhereNull('invoices.package_id'); // Cek paket yang belum ada di invoice
+            ->leftJoin('invoices', function ($join) use ($userId) {
+                $join->on('invoices.package_id', '=', 'packages.id')
+                    ->where('invoices.user_id', '=', $userId);
             })
-            ->select('packages.*',
-                     'invoices.status as invoice_status',
-                     DB::raw('IFNULL(invoices.status, "Unpurchased") as final_status')) // Menambahkan status 'bebas' jika null
+            ->whereDate('packages.expires_at', '>=', now()) // Hanya tampilkan yang masih berlaku
+            ->select(
+                'packages.*',
+                'invoices.status as invoice_status',
+                DB::raw('COALESCE(invoices.status, "Unpurchased") as final_status')
+            )
             ->get();
+
+
+        // $packages = Package::with(['questions'])
+        //     ->get();
 
         return view('public.list_package', [
             "packages" => $packages

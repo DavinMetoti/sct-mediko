@@ -41,18 +41,31 @@
             </a>
         </div>
         @endcan
+        @can('viewAny', [App\Models\User::class,'tryout-archive.index'])
         <div class="w-full menu-title">
             <a href="{{ route('tryout-archive.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('tryout-archive.index') ? 'active' : '' }}">
                 <i class="fas fa-clock me-3" style="width: 24px;text-align:center;"></i>
                 <span>Riwayat Tryout</span>
             </a>
         </div>
+        @endcan
+        @can('viewAny', [App\Models\User::class,'list-package.index'])
         <div class="w-full menu-title">
             <a href="{{ route('list-package.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('list-package.index') ? 'active' : '' }}">
                 <i class="fas fa-cubes me-3" style="width: 24px;text-align:center;"></i>
                 <span>Paket Tryout</span>
             </a>
         </div>
+        @endcan
+        @can('viewAny', [App\Models\User::class,'payment-histories.index'])
+        <div class="w-full menu-title">
+            <a href="{{ route('payment-histories.index') }}"
+            class="flex items-center justify-start {{ request()->routeIs('payment-histories.index') ? 'active' : '' }}">
+                <i class="fas fa-cart-shopping me-3 w-6 text-center"></i>
+                <span>Riwayat Pembelian</span>
+            </a>
+        </div>
+        @endcan
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'question.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'package.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'question-detail.index']) ||
@@ -82,7 +95,7 @@
                 <span>Buat Tryout</span>
             </a>
         </div>
-        @endif
+        @endcan
         @can('viewAny', [App\Models\User::class,'question-bank.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-bank.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-bank.index') ? 'active' : '' }}">
@@ -90,7 +103,7 @@
                 <span>Bank Soal</span>
             </a>
         </div>
-        @endif
+        @endcan
         @can('viewAny', [App\Models\User::class,'question-detail.index'])
         <div class="w-full menu-title">
             <a href="{{ route('question-detail.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('question-detail.index') ? 'active' : '' }}">
@@ -98,7 +111,7 @@
                 <span>Tambah Soal</span>
             </a>
         </div>
-        @endif
+        @endcan
         @can('viewAny', [App\Models\User::class,'medical-field.index'])
         <div class="w-full menu-title">
             <a href="{{ route('medical-field.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('medical-field.index') ? 'active' : '' }}">
@@ -106,7 +119,7 @@
                 <span>Bidang</span>
             </a>
         </div>
-        @endif
+        @endcan
         @can('viewAny', [App\Models\User::class,'sub-topic.index'])
         <div class="w-full menu-title">
             <a href="{{ route('sub-topic.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('sub-topic.index') ? 'active' : '' }}">
@@ -130,13 +143,15 @@
                 <span>Judul Kolom</span>
             </a>
         </div>
+        @endcan
+        @can('viewAny', [App\Models\User::class,'list-invoice.index'])
         <div class="w-full menu-title">
             <a href="{{ route('list-invoice.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('list-invoice.index') ? 'active' : '' }}">
                 <i class="fas fa-file-invoice me-3" style="width: 24px;text-align:center;"></i>
                 <span>Daftar Pembayaran</span>
             </a>
         </div>
-        @endif
+        @endcan
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'user-management.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'setting.index']) ||

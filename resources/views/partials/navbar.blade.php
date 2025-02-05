@@ -90,7 +90,6 @@
         });
     });
 
-    // Function to get the total number of notifications and update the badge
     function getTotalLength() {
         const userId = '{{ Auth::user()->id }}';
 
@@ -100,7 +99,6 @@
                 const badge = document.querySelector('#notification-button .badge');
                 const notificationBadge = document.getElementById('notification-badge');
 
-                // Update badge count and visibility
                 if (data.length > 0) {
                     notificationBadge.style.display = 'inline-block';
                     notificationBadge.textContent = data.length;
@@ -114,10 +112,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-            getTotalLength();  // Call the function once on page load
+            getTotalLength();
 
-            // Set an interval to call getTotalLength every 5 seconds
-            setInterval(getTotalLength, 5000); // 5000ms = 5 seconds
+            setInterval(getTotalLength, 5000);
         });
 
         document.getElementById('notification-button').addEventListener('click', () => {

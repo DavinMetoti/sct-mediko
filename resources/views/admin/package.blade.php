@@ -106,7 +106,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit_expired_date" class="form-label">Tanggal Kadaluarsa</label>
-                        <input type="date" class="form-control" id="edit_expired_date" name="expired_date">
+                        <input type="date" class="form-control" id="edit_expired_date" name="expires_at">
                     </div>
                 </div>
                 <div class="modal-footer">

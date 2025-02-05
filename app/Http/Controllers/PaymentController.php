@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Package;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 
 class PaymentController extends Controller
 {
@@ -34,19 +37,62 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
-        //
+
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        // Show payment details here
+        $histories = Invoice::with('package')->where('user_id',auth()->id())->get();
+
+        if ($request->ajax()) {
+            $histories = Invoice::with('package')->where('user_id',auth()->id())->get();
+
+            return DataTables::of($histories)
+            ->addColumn('formatted_id', function ($row) {
+                $formattedDate = Carbon::parse($row->created_at)->format('YmdHi');
+                return $formattedDate.'000'.$row->id;
+            })
+            ->addColumn('status', function ($row) {
+                switch ($row->status) {
+                    case 'paid':
+                        return '<span class="badge bg-success">Dibayar</span>';
+                    case 'pending':
+                        return '<span class="badge bg-warning text-dark">Menunggu</span>';
+                    case 'cancel':
+                        return '<span class="badge bg-danger">Dibatalkan</span>';
+                    case 'verification':
+                        return '<span class="badge bg-primary">Verifikasi</span>';
+                    default:
+                        return '<span class="badge bg-secondary">Tidak Diketahui</span>';
+                }
+            })
+            ->editColumn('created_at', function ($row) {
+                return Carbon::parse($row->created_at)->translatedFormat('d F Y H:i');
+            })
+            ->addColumn('action', function ($row) {
+                $invoiceButton = ($row->status == 'paid' || $row->status == 'verification') ?
+                    '<a href="' . route('payment.edit', $row->id) . '" class="btn btn-sm btn-primary ' . ($row->status == 'verification' ? 'disabled' : '') . '">
+                        <i class="fas fa-file-invoice"></i>
+                    </a>' : '';
+
+                $deleteButton = ($row->status != 'paid' && $row->status != 'verification') ?
+                    '<button type="button" class="btn btn-sm btn-danger delete-btn" data-id="' . $row->id . '">
+                        <i class="fas fa-times"></i>
+                    </button>' : '';
+
+                return $invoiceButton . $deleteButton;
+            })
+            ->rawColumns(['status','action'])
+            ->make(true);
+        }
+
     }
 
     public function update(Request $request, $id)
     {
         try {
             $request->validate([
-                'payment_proof' => 'required|string', // Pastikan input berupa string base64
+                'payment_proof' => 'required|string',
             ]);
 
             $invoice = Invoice::findOrFail($id);
@@ -55,7 +101,7 @@ class PaymentController extends Controller
                 $base64String = $request->payment_proof;
 
                 $fileSizeInBytes = (strlen($base64String) * 3) / 4;
-                if ($fileSizeInBytes > 2097152) { // 2MB limit
+                if ($fileSizeInBytes > 2097152) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Ukuran file terlalu besar. Maksimal 2MB.'
@@ -104,6 +150,28 @@ class PaymentController extends Controller
 
     public function destroy($id)
     {
-        // Destroy payment details here
+        try {
+            $invoice = Invoice::findOrFail($id);
+
+            $invoice->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Invoice deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete invoice. ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function showPaymentHistory()
+    {
+        $this->authorize('viewAny', [User::class, 'payment-histories.index']);
+
+        return view('public.payment_history');
     }
 }

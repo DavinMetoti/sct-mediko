@@ -70,6 +70,7 @@ Route::middleware('auth')->get('admin/get/menus', [AccessRoleController::class, 
 Route::middleware('auth')->get('admin/get/permission/{id}', [AccessRoleController::class, 'permissionData'])->name('admin.access-role.get.permission');
 Route::middleware('auth')->get('broadcast/data/{id}', [BroadcastController::class, 'getNotificationDataSendToUser'])->name('broadcast.data');
 Route::middleware('auth')->get('questions/list', [QuestionController::class, 'showQuestion'])->name('question-list.index');
+Route::middleware('auth')->get('payment-histories', [PaymentController::class, 'showPaymentHistory'])->name('payment-histories.index');
 Route::middleware('auth')->get('questions/preview/{id}', [QuestionController::class, 'showQuestionPreview'])->name('question.preview');
 Route::middleware('auth')->get('questions/detail/edit/{id}', [QuestionDetailController::class, 'getQuestionDetailById'])->name('question-detail.detail.edit');
 Route::middleware('auth')->get('/package/search/question', [PackageController::class, 'searchQuestions'])->name('package.search.question');

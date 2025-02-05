@@ -258,15 +258,16 @@ class QuestionController extends Controller
                 ->first();
 
                 $packages = $userPackages->packages->filter(function ($package) use ($searchQuery) {
-                    $package->questions = $package->questions->filter(function ($question) use ($searchQuery) {
-                        // Pastikan searchQuery ada di dalam question
-                        return stripos($question->question, $searchQuery) !== false;
-                    });
+                    if ($package->questions->isNotEmpty()) {
+                        $package->questions = $package->questions->filter(function ($question) use ($searchQuery) {
+                            return stripos($question->question, $searchQuery) !== false;
+                        });
+                    }
 
-                    return $package->questions->isNotEmpty();
+                    return $package->questions;
                 });
-
         }
+
 
         $this->authorize('viewAny', [User::class, 'question-list.index']);
 

@@ -18,7 +18,9 @@
                         </button>
                     </div>
                 </form>
+                @if($questions->isNotEmpty())
                 <h4 class="fw-bold">Paket Gratis</h4>
+                @endif
 
                 <!-- Search Form -->
 

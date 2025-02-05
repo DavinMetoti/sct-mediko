@@ -35,33 +35,36 @@
                                     </div>
                                 </div>
                                 <div class="card-body text-left flex-grow-1">
-                                    <p>
-                                        <span class="badge
-                                            @if($package->final_status == 'paid')
-                                                bg-success
-                                            @elseif($package->final_status == 'pending')
-                                                bg-warning
-                                            @elseif($package->final_status == 'Unpurchased')
-                                                bg-danger
-                                            @elseif($package->final_status == 'verification')
-                                                bg-primary
-                                            @else
-                                                bg-secondary
-                                            @endif
-                                        ">
-                                            @if($package->final_status == 'paid')
-                                                Berhasil
-                                            @elseif($package->final_status == 'pending')
-                                                Menunggu Pembayaran
-                                            @elseif($package->final_status == 'Unpurchased')
-                                                Belum Dibeli
-                                            @elseif($package->final_status == 'verification')
-                                                Dalam Verifikasi
-                                            @else
-                                                Status Tidak Diketahui
-                                            @endif
-                                        </span>
-                                    </p>
+                                    <div class="flex justify-content-between">
+                                        <p>
+                                            <span class="badge
+                                                @if($package->final_status == 'paid')
+                                                    bg-success
+                                                @elseif($package->final_status == 'pending')
+                                                    bg-warning
+                                                @elseif($package->final_status == 'Unpurchased')
+                                                    bg-danger
+                                                @elseif($package->final_status == 'verification')
+                                                    bg-primary
+                                                @else
+                                                    bg-secondary
+                                                @endif
+                                            ">
+                                                @if($package->final_status == 'paid')
+                                                    Berhasil
+                                                @elseif($package->final_status == 'pending')
+                                                    Menunggu Pembayaran
+                                                @elseif($package->final_status == 'Unpurchased')
+                                                    Belum Dibeli
+                                                @elseif($package->final_status == 'verification')
+                                                    Dalam Verifikasi
+                                                @else
+                                                    Status Tidak Diketahui
+                                                @endif
+                                            </span>
+                                        </p>
+                                        <p>Exp : {{ \Carbon\Carbon::parse($package->expires_at)->translatedFormat('d F Y') }}</p>
+                                        </div>
                                     <p>{{$package->description}}</p>
                                 </div>
                                 <div class="card-footer text-center bg-white border-0 d-flex justify-content-between">
