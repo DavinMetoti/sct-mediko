@@ -513,6 +513,7 @@ table.dataTable tbody tr:hover {
 .btn-info:hover {
     background-color: #138496;
     transform: scale(1.05);
+    color: white;
 }
 
 .btn-info:active {

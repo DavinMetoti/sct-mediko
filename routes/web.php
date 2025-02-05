@@ -6,10 +6,12 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\ColumnTitleController;
 use App\Http\Controllers\HistoryTryoutController;
+use App\Http\Controllers\ListInvoiceController;
 use App\Http\Controllers\ListPakcageController;
 use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\QuestionController;
@@ -41,6 +43,7 @@ Route::middleware('auth')->resource('tryout', TryoutController::class);
 Route::middleware('auth')->resource('task-history', TaskHistoryController::class);
 Route::middleware('auth')->resource('tryout-archive', HistoryTryoutController::class);
 Route::middleware('auth')->resource('list-package', ListPakcageController::class);
+Route::middleware('auth')->resource('payment', PaymentController::class);
 Route::middleware('auth')->resource('admin/dashboard', AdminController::class);
 Route::middleware('auth')->resource('dashboard/student', StudentController::class);
 Route::middleware('auth')->resource('admin/access-role', AccessRoleController::class);
@@ -57,6 +60,7 @@ Route::middleware('auth')->resource('admin/package', PackageController::class);
 Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetailTypeController::class);
 Route::middleware('auth')->resource('admin/question-bank', QuestionBankController::class);
 Route::middleware('auth')->resource('admin/column-title', ColumnTitleController::class);
+Route::middleware('auth')->resource('admin/list-invoice', ListInvoiceController::class);
 
 Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
 

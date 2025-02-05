@@ -2,38 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invoice;
-use App\Models\Package;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class ListPakcageController extends Controller
+class ListInvoiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $userId = auth()->id();
-
-        $packages = Package::with(['questions'])
-            ->leftJoin('invoices', 'invoices.package_id', '=', 'packages.id')
-            ->where(function ($query) use ($userId) {
-                $query->where('invoices.user_id', $userId)
-                      ->orWhereNull('invoices.package_id'); // Cek paket yang belum ada di invoice
-            })
-            ->select('packages.*',
-                     'invoices.status as invoice_status',
-                     DB::raw('IFNULL(invoices.status, "Unpurchased") as final_status')) // Menambahkan status 'bebas' jika null
-            ->get();
-
-        return view('public.list_package', [
-            "packages" => $packages
-        ]);
+        return view('admin.list_invoices');
     }
-
-
-
 
     /**
      * Show the form for creating a new resource.

@@ -130,6 +130,12 @@
                 <span>Judul Kolom</span>
             </a>
         </div>
+        <div class="w-full menu-title">
+            <a href="{{ route('list-invoice.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('list-invoice.index') ? 'active' : '' }}">
+                <i class="fas fa-file-invoice me-3" style="width: 24px;text-align:center;"></i>
+                <span>Daftar Pembayaran</span>
+            </a>
+        </div>
         @endif
         @if (Auth::user()->can('viewAny', [App\Models\User::class,'user-management.index']) ||
             Auth::user()->can('viewAny', [App\Models\User::class,'broadcast.index']) ||
