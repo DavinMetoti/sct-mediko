@@ -1,23 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'Question Bank')
+@section('title', config('app.name') . ' | Bank Soal')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen Bank Soal</h3>
+                    <p class="text-subtitle text-muted">Kelola kumpulan soal dengan mudah untuk pengalaman belajar yang lebih baik.</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" onclick="openCreateModal()">
+                       <i class="fas fa-plus me-2"></i>Tambah Bank Soal
+                    </button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Type Soal</h5>
-                        </div>
-                        <button class="btn btn-outline-primary" onclick="openCreateModal()">
-                            Tambah Bank Soal
-                        </button>
-                    </div>
                     <table id="questionBankTable" class="table table-striped">
                         <thead>
                             <tr>
@@ -27,7 +30,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- DataTables akan mengisi data di sini -->
                         </tbody>
                     </table>
                 </div>
@@ -36,7 +38,6 @@
     </div>
 </div>
 
-<!-- Modal for Create -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createForm">
@@ -59,7 +60,6 @@
     </div>
 </div>
 
-<!-- Modal for Edit -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="editForm">
@@ -136,7 +136,7 @@
                 success: function (response) {
                     $('#editModal').modal('hide');
 
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
 
                     toastSuccess(response.message);
                 },
@@ -161,7 +161,7 @@
                 success: function (response) {
                     $('#createModal').modal('hide');
 
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
 
                     toastSuccess(response.message);
                 },
@@ -189,7 +189,7 @@
                     },
                     success: function (response) {
                         toastSuccess(response.message);
-                        $('#questionBankTable').DataTable().ajax.reload();
+                        $('#questionBankTable').DataTable().ajax.reload(null, false);
                     },
                     error: function (xhr) {
                         toastError('Gagal menghapus bank soal. Silakan coba lagi.');

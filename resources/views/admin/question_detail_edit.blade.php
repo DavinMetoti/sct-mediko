@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Edit Pertanyaan')
 
 @php
 $questionDetailPanelis = json_decode($questionDetail->panelist_answers_distribution, true);
@@ -12,7 +12,7 @@ $questionDetailPanelis = array_combine(
 @endphp
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
@@ -33,10 +33,11 @@ $questionDetailPanelis = array_combine(
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <div class="form-group">
-                                    <label for="id-question">Paket</label>
-                                    <select name="id_question" id="id-question" class="form-control">
-                                        @foreach($questions as $question)
-                                            <option value="{{ $question->id }}" {{ $questionDetail->id_question == $question->id ? 'selected' : '' }}>{{ $question->question }}</option>
+                                    <label for="id-question">Bank Soal</label>
+                                    <select name="id_question_bank" id="id-question-bank" class="form-select">
+                                        <option value="">Pilih Bank Soal</option>
+                                        @foreach ($questionBank as $bank)
+                                            <option value="{{ $bank->id }}" {{ $questionDetail->question_bank_id == $bank->id ? 'selected' : '' }}>{{ $bank->bank_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -77,7 +78,7 @@ $questionDetailPanelis = array_combine(
                                     <textarea name="new_information" id="new-information" class="form-control" rows="2" placeholder="Masukkan informasi baru di sini">{{ $questionDetail->new_information }}</textarea>
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <div class="form-group">
                                     <label for="sub-topic-dropdown">Sub Topik</label>
                                     <select name="sub-topic-dropdown" id="sub-topic-dropdown" class="form-control">
@@ -93,6 +94,17 @@ $questionDetailPanelis = array_combine(
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="column-title-dropdown">Judul Kolom</label>
+                                    <select name="column-title-dropdown" id="column-title-dropdown" class="form-control">
+                                        <option value="">Pilih Judul Kolom</option>
+                                        @foreach($columnTitle as $column)
+                                            <option value="{{ $column->id }}" {{ $questionDetail->column_title_id == $column->id ? 'selected' : '' }}>{{ $column->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
                                     <label for="discussion-image">Gambar Pembahasan (opsional)</label>
@@ -100,6 +112,14 @@ $questionDetailPanelis = array_combine(
                                 </div>
                             </div>
                             <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="froala-editor" class="form-label">Rationale</label>
+                                    <div id="editor">
+                                        {!! $questionDetail->rationale !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3" style="margin-top: 5rem;">
                                 <div class="form-group">
                                     <label for="discussion-image" class="flex justify-content-between">
                                         <div>Distribusi Jawaban Panelis</div>
@@ -190,6 +210,32 @@ $questionDetailPanelis = array_combine(
 <script>
 
     $(document).ready(function() {
+
+        let quill = new Quill('#editor', {
+            modules: {
+                toolbar: [
+                    [{ font: [] }, { size: [] }],
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ color: [] }, { background: [] }],
+                    [{ script: 'sub' }, { script: 'super' }],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{ indent: '-1' }, { indent: '+1' }],
+                    [{ align: [] }],
+                    ['blockquote', 'code-block'],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            },
+            placeholder: 'Please write something',
+            theme: 'snow'
+        });
+
+        let rationale = @json($questionDetail->rationale);
+
+        quill.on('text-change', function() {
+            rationale = quill.root.innerHTML;
+        });
 
         function initSelect2(question, medicalField, subTopic) {
             console.log('Initializing Select2 for', question, medicalField);
@@ -328,10 +374,11 @@ $questionDetailPanelis = array_combine(
         updateRemaining();
 
         $('#btn-save').click(async function () {
-            const idQuestion = $('#id-question').val();
+            const idQuestionBank = $('#id-question-bank').val();
             const medicalField = $('#medical-field').val();
             const questionType = $('#questionType').val();
             const subTopic = $('#sub-topic-dropdown').val();
+            const columnTitle = $('#column-title-dropdown').val();
             const clinicalCase = $('#clinical-case').val();
             const initialHypothesis = $('#initial-hypothesis').val();
             const newInformation = $('#new-information').val();
@@ -353,20 +400,21 @@ $questionDetailPanelis = array_combine(
 
             const data = {
                 _token: '{{ csrf_token() }}',
-                id_question: idQuestion,
+                question_bank_id: idQuestionBank,
                 id_medical_field: medicalField,
                 id_question_type: questionType,
                 id_sub_topic: subTopic,
+                column_title_id: columnTitle,
                 clinical_case: clinicalCase,
                 new_information: newInformation,
                 initial_hypothesis: initialHypothesis,
                 discussion_image: discussionImageBase64,
+                rationale: rationale,
                 panelist_answers_distribution: JSON.stringify(panelistJSON)
             };
 
-            console.log(data);
-            var currentUrl = window.location.href;
-            var id = currentUrl.split('/').pop();
+            const currentUrl = window.location.href;
+            const id = currentUrl.split('/').pop();
 
             $.ajax({
                 url: '{{ route('question-detail.update', ':id') }}'.replace(':id', id),
@@ -374,22 +422,10 @@ $questionDetailPanelis = array_combine(
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (response) {
-                    console.log('Success:', response);
                     toastSuccess(response.message);
-                    const clinicalCase = $('#clinical-case').val('');
-                    const initialHypothesis = $('#initial-hypothesis').val('');
-                    const newInformation = $('#new-information').val('');
-                    const panelistDistribution = Array.from(distribution).map(input => input.value);
-                    const panelistJSON = {
-                        '-2': panelistDistribution[0],
-                        '-1': panelistDistribution[1],
-                        '0': panelistDistribution[2],
-                        '1': panelistDistribution[3],
-                        '2': panelistDistribution[4]
-                    };
-
-
-                    const discussionImageFile = $('#discussion-image')[0].files[0];
+                    setTimeout(function() {
+                        window.history.back();
+                    }, 1500);
 
                 },
                 error: function (error) {

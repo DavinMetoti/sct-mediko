@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Exam')
+@section('title', config('app.name') . ' | Tryout')
 
 @section('content')
-<div class="min-h-screen bg-gray-100 p-3">
+<div class="min-h-screen p-3">
     <div class="row">
         <div class="col-md-3">
             <div class="card">
@@ -302,7 +302,7 @@
             success: function(response) {
                 let question_tryout = response.data;
 
-                const defaultImage = 'https://dummyimage.com/100/fff/0011ff.png&text=Image+Not+Found';
+                const defaultImage = '{{ secure_asset('assets/images/No_Image_Available.jpg') }}';
                 const imageSrc = question_tryout.discussion_image || defaultImage;
                 const selectedRadio = $('input[name="question-1-1"]:checked');
 

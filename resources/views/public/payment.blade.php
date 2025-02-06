@@ -4,10 +4,10 @@
 
 @extends('layouts.app')
 
-@section('title', 'Daftar Paket')
+@section('title', config('app.name') . ' | Pembayaran')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">

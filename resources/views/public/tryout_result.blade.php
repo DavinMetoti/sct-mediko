@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Exam')
+@section('title', config('app.name') . ' | Hasil Tryout')
 
 @section('content')
-<div class="min-h-screen bg-gray-100 p-3">
+<div class="min-h-screen p-3">
     <div class="row">
         <div class="col-md-3">
             <div class="card">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    <h6 class="fw-bold">Penjelasan Rationale</h6>
+                    <h6 class="fw-bold mt-5">Penjelasan Rationale</h6>
                     <p id="rationale" class="text-sm"></p>
                     <h6 class="fw-bold">Rationale dan Skor Likert</h6>
                     <div class="table-responsive">
@@ -184,6 +184,7 @@
                     <p id="clinic-case" class="text-sm"></p>
                     <div class="text-md fw-bold text-muted">Hipotesis Awal</div>
                     <p id="initial_hypothesis" class="text-sm"></p>
+                    <img id="img_initial_hypothesis" class="mb-3"></img>
                     <div class="text-md fw-bold text-muted">Informasi Baru</div>
                     <p id="new_information" class="text-sm"></p>
                     <div class="text-md fw-bold text-muted">Pembahasan</div>
@@ -346,7 +347,9 @@
 
                 $('#your_answer').text(currentAnswer?.value ?? "-");
                 $('#your_score').text(
-                    currentAnswer?.value && panel_distribution[currentAnswer.value] && maxValue
+                    typeof currentAnswer?.value !== 'undefined' &&
+                    panel_distribution[currentAnswer.value] !== undefined &&
+                    maxValue
                         ? panel_distribution[currentAnswer.value] / maxValue
                         : "-"
                 );
@@ -372,6 +375,11 @@
                 $('#rationale').html(question_tryout.rationale);
                 $('#clinic-case').text(question_tryout.clinical_case);
                 $('#initial_hypothesis').text(question_tryout.initial_hypothesis);
+                $('#img_initial_hypothesis').attr('src',
+                    question_tryout.discussion_image
+                        ? question_tryout.discussion_image
+                        : "{{ secure_asset('assets/images/No_Image_Available.jpg') }}"
+                );
                 $('#new_information').text(question_tryout.new_information);
                 $('#discussion_image').attr('src', imageSrc);
                 $('#minus_one').text(question_tryout.question_type.minus_one);

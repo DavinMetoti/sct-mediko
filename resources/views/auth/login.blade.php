@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Login Page')
+@section('title', config('app.name') . ' | Login')
 
 @section('content')
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+<div class="d-flex justify-content-center align-items-center vh-100 ">
+    <div class="bg-overlay"></div>
     <div class="card shadow-lg rounded" style="width: 28rem;">
         <div class="card-body p-4">
             <div class="flex justify-content-center mb-3">
@@ -58,9 +59,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#button-login').click(function (event) {
-            event.preventDefault(); // Mencegah form submit secara default
-
+        function login() {
             const username = $('#username').val().trim();
             const password = $('#password').val().trim();
             const remember = $('#remember').is(':checked');
@@ -77,9 +76,9 @@
                 type: "POST",
                 data: {
                     _token: "{{ csrf_token() }}",
-                    username: username,
-                    password: password,
-                    remember: remember
+                    username,
+                    password,
+                    remember
                 },
                 success: function (response) {
                     if (response.status === 'success') {
@@ -107,6 +106,17 @@
                     $('#button-login').attr('disabled', false);
                 }
             });
+        }
+
+        // Klik tombol login
+        $('#button-login').click(login);
+
+        // Tekan Enter di input password
+        $('#password').keypress(function (event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                login();
+            }
         });
     });
 </script>

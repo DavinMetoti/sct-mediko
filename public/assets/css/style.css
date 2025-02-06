@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
+
 :root {
     --primary-color: #2663EB;
     --background-color: #ffffff;
@@ -7,6 +9,12 @@
     --sidebar-width: 16rem;
 }
 
+body{
+    background-color: #f2f7ff !important;
+    font-family: 'Nunito', sans-serif !important;
+
+}
+
 
 a[href*="froala.com"] {
     display: none;
@@ -14,6 +22,19 @@ a[href*="froala.com"] {
 
 a[href*="https://www.froala.com/wysiwyg-editor?k=u"] {
     display: none !important;
+}
+
+.bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/images/bg-pattern.jpg'); /* Gunakan path relatif */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2; /* Atur nilai opacity sesuai kebutuhan */
+    z-index: -1;
 }
 
 
@@ -149,6 +170,7 @@ input[type=number] {
     width: calc(100vw - var(--sidebar-width));
     padding: 20px 0;
     transition: all 0.5s ease-out;
+    background-color: #f2f7ff;
 }
 
 .content.expanded {
@@ -420,63 +442,23 @@ table.dataTable tbody tr:hover {
 }
 
 
-.dataTables_paginate {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
-}
-
-.dataTables_paginate .paginate_button {
-    background-color: #007bff;
-    color: white;
-    padding: 6px 12px;
-    margin-left: 4px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.dataTables_paginate .paginate_button:hover {
-    background-color: #0056b3;
-}
-
-.dataTables_paginate .paginate_button.current {
-    background-color: #0056b3;
-    border-color: #0056b3;
-}
-
-.dataTables_paginate .paginate_button.disabled {
-    background-color: #f1f1f1;
-    color: #ccc;
-    cursor: not-allowed;
-}
-
-
-.dataTables_filter input {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 200px;
-    margin-right: 10px;
-}
-
-.dataTables_info {
-    font-size: 14px;
-    margin-top: 1rem;
-}
-
-
 .table-responsive {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-.dataTables_length select {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.dt-info {
+    color: #6c757d;
+    font-size: 12px;
 }
 
+.dt-paging .pagination {
+    gap: 0.5rem !important;
+}
+
+.dt-paging .pagination .dt-paging-button .page-link {
+    border-radius: 7px;
+}
 
 .btn-sm {
     padding: 5px 10px;

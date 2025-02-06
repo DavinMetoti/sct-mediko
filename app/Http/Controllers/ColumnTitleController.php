@@ -22,13 +22,17 @@ class ColumnTitleController extends Controller
             return DataTables::of($data)
                 ->addColumn('actions', function ($row) {
                     return '
-                        <button class="btn btn-sm btn-warning edit-btn" data-id="' . $row->id . '"
-                            data-name="' . $row->name . '" data-column_1="' . $row->column_1 . '"
-                            data-column_2="' . $row->column_2 . '" data-column_3="' . $row->column_3 . '">
-                            Edit
+                        <button class="btn btn-sm btn-warning edit-btn"
+                            data-id="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '"
+                            data-name="' . htmlspecialchars($row->name, ENT_QUOTES, 'UTF-8') . '"
+                            data-column_1="' . htmlspecialchars($row->column_1, ENT_QUOTES, 'UTF-8') . '"
+                            data-column_2="' . htmlspecialchars($row->column_2, ENT_QUOTES, 'UTF-8') . '"
+                            data-column_3="' . htmlspecialchars($row->column_3, ENT_QUOTES, 'UTF-8') . '">
+                            <i class="fas fa-pencil-alt"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger delete-btn" data-id="' . $row->id . '">
-                            Hapus
+                        <button class="btn btn-sm btn-danger delete-btn"
+                            data-id="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">
+                            <i class="fas fa-trash"></i>
                         </button>
                     ';
                 })

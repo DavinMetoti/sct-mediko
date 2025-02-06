@@ -1,33 +1,33 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen User')
+@section('title', config('app.name') . ' | Bidang')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen Bidang</h3>
+                    <p class="text-subtitle text-muted">Kelola dan sesuaikan bidang keilmuan dengan mudah dan terstruktur.</p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#medicalFieldModal" onclick="clearModal()">
+                        <i class="fas fa-plus me-2"></i><span>Tambah</span>
+                    </button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Bidang</h5>
-                            <small>Daftar bidang dan manajemen bidang</small>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#medicalFieldModal" onclick="clearModal()">
-                                <i class="fas fa-plus me-2"></i><span>Tambah</span>
-                            </button>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped " id="medicalFieldTable">
-                            <thead class="bg-secondary">
+                            <thead>
                                 <tr>
-                                    <th class=text-white>No</th>
-                                    <th class=text-white>Nama</th>
-                                    <th class=text-white></th>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -127,7 +127,7 @@
                     $('#medicalFieldModal').modal('hide');
                     $('.modal-backdrop').remove();
                     $('body').removeClass('modal-open');
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
                 },
                 error: function(xhr) {
                     console.error(xhr.responseText);
@@ -162,7 +162,7 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            table.ajax.reload();
+                            table.ajax.reload(null, false);
                         },
                         error: function(xhr) {
                             console.error(xhr.responseText);

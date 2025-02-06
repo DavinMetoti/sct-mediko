@@ -1,19 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Daftar Pembayaran')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Riwayat Pembelian</h3>
+                    <p class="text-subtitle text-muted">Temukan daftar pembelian Anda dan pastikan semua transaksi berjalan lancar!</p>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <h5 class="mb-0">Riwayat Pembelian</h5>
-                    </div>
-
                     <table id="historyTable" class="table table-striped">
                         <thead>
                             <tr>
@@ -24,7 +26,6 @@
                             </tr>
                         </thead>
                     </table>
-
                 </div>
             </div>
         </div>
@@ -65,7 +66,7 @@
                 success: (response) => {
                     toastSuccess('Berhasil membatalkan pembayaran');
                     // Optionally, remove the row or refresh the table
-                    $('#historyTable').DataTable().ajax.reload();
+                    $('#historyTable').DataTable().ajax.reload(null, false);
                 },
                 error: () => {
                     toastError('Gagal membatalkan pembayaran');

@@ -1,26 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'Dasbor Admin')
+@section('title', config('app.name') . ' | Daftar Paket')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen Paket</h3>
+                    <p class="text-subtitle text-muted">Atur dan kelola paket pengguna dengan mudah dan efisien.</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createPackageModal">
+                        <i class="fas fa-plus"></i> Tambah Paket
+                    </button>
+                </div>
+            </div>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-4">
-                        <div>
-                            <h5 class="mb-0">Daftar Paket</h5>
-                            <p class="text-muted">Melihat paket yang tersedia untuk pengguna.</p>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createPackageModal">
-                                <i class="fas fa-plus"></i> Tambah Paket
-                            </button>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table id="packageTable" class="table table-striped ">
                             <thead class="">
@@ -29,7 +29,7 @@
                                     <th>Nama Paket</th>
                                     <th class="text-left">Harga</th>
                                     <th>Deskripsi</th>
-                                    <th>Tanggal Kadaluarsa</th>
+                                    <th>Kadaluarsa</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -203,12 +203,16 @@
             serverSide: true,
             ajax: '{{ route('package.index') }}',
             columns: [
-                { data: 'id', name: 'id', className: 'text-center' },
-                { data: 'name', name: 'name', className: 'text-center' },
+                {
+                    data: null,
+                    render: (data, type, row, meta) => meta.row + 1,
+                    className: 'text-center'
+                },
+                { data: 'name', name: 'name', className: 'text-left' },
                 { data: 'price', name: 'price', className: 'text-center',render: function(data, type, row) {
                     return 'Rp ' + data.toLocaleString('id-ID');
                 } },
-                { data: 'description', name: 'description', className: 'text-center' },
+                { data: 'description', name: 'description', className: 'text-left' },
                 { data: 'expires_at', name: 'expires_at', className: 'text-center' },
                 { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
             ],
@@ -223,8 +227,8 @@
                 { targets: 1, width: '20%' },
                 { targets: 2, width: '15%' },
                 { targets: 3, width: '30%' },
-                { targets: 4, width: '15%' },
-                { targets: 5, width: '15%' }
+                { targets: 4, width: '10%' },
+                { targets: 5, width: '20%' }
             ]
         });
 
@@ -337,7 +341,7 @@
                     success: function (response) {
                         if (response.success) {
                             toastSuccess(response.message);
-                            questionTable.ajax.reload();
+                            questionTable.ajax.reload(null, false);
                         }
                     },
                     error: function (xhr, status, error) {
@@ -485,7 +489,7 @@
                             _token:'{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            packagetable.ajax.reload();
+                            packagetable.ajax.reload(null, false);
                             toastSuccess(response.message)
                         },
                         error: function(xhr, status, error) {
@@ -537,7 +541,7 @@
                 data: formData,
                 success: function(response) {
                     $('#editPackageModal').modal('hide');
-                    packagetable.ajax.reload();
+                    packagetable.ajax.reload(null, false);
                     toastSuccess(response.message);
                 },
                 error: function(xhr, status, error) {
@@ -564,7 +568,7 @@
                         success: function(response) {
                             if (response.success) {
                                 alert(response.message);
-                                table.ajax.reload();
+                                table.ajax.reload(null, false);
                             } else {
                                 alert('Failed to delete question.');
                             }
@@ -602,7 +606,7 @@
 
                         toastSuccess(response.message);
 
-                        packagetable.ajax.reload();
+                        packagetable.ajax.reload(null, false);
                     }
                 },
                 error: function(xhr) {

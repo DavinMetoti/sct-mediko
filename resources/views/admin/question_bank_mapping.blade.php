@@ -1,13 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Manajemen Tryout')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Tambah Soal Ke Tryout</h3>
+                    <p class="text-subtitle text-muted">Atur dan tambahkan soal ke tryout dengan cepat untuk pengalaman belajar yang lebih optimal!</p>
+                </div>
+            </div>
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
@@ -121,8 +127,9 @@ $(document).ready(function () {
             { data: 'medical_field.name', className: 'text-left', width: '15%' },
             {
                 data: 'id',
-                render: (data) => `
-                    <button type="button" class="btn text-secondary edit-btn" data-id="${data}">
+                render: (data, type, row) => `
+                    <button type="button" class="btn text-secondary edit-btn" id="btn-swap"
+                        data-id="${data}" data-bank-id="${row.question_bank?.id}">
                         <img src="{{ asset('assets/images/up-down.png') }}" alt="Up-Down" width="15">
                     </button>
                     <button type="button" class="btn text-danger delete-btn" id="btn-detach" data-id="${data}">
@@ -358,6 +365,50 @@ $(document).ready(function () {
             }
         });
     });
+    $('#check-bank').on('click', function () {
+        const idBank = $('#bank-soal-select').val();
+
+        if (!idBank) {
+            toastWarning('Please select a Bank Soal first.');
+            return;
+        }
+
+        $.ajax({
+            url: `{{ route('question-bank.show', ':id') }}`.replace(':id', idBank),
+            method: 'GET',
+            success: (response) => {
+                    $('#questionDetailsModal').modal('show');
+                    if ($.fn.DataTable.isDataTable('#questions-list-table')) {
+                        $('#questions-list-table').DataTable().clear().destroy();
+                    }
+
+                    questionTable = $('#questions-list-table').DataTable({
+                    responsive: true,
+                    pageLength: 10,
+                    destroy: true,
+                    data: response.data.question_details,
+                    columns: [
+                        { data: 'clinical_case' },
+                        { data: 'medical_field.name' },
+                        { data: 'question_type.name' },
+                        {
+                            data: 'question',
+                            render: (data) => {
+                                if (Array.isArray(data)) {
+                                    return data.map(item => `<span class="badge bg-success mr-1 mb-1">${$('<div>').text(item.question).html()}</span>`).join(' ');
+                                }
+                                return data;
+                            }
+                        }
+                    ]
+                });
+            },
+            error: (xhr, status, error) => {
+                toastError('Failed to load questions. Please try again later.');
+                console.error('Error:', error);
+            }
+        });
+    });
 
     $('#button-save-import').on('click', function () {
         const selectedData = $('#questions-list-table').DataTable().rows('.selected').data();
@@ -383,7 +434,7 @@ $(document).ready(function () {
             }),
             success: (response) => {
                 toastSuccess('Successfully attached question details.');
-                table.ajax.reload();
+                table.ajax.reload(null, false);
                 $('#questionDetailsModal').modal('hide');
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open');
@@ -415,13 +466,53 @@ $(document).ready(function () {
             }),
             success: (response) => {
                 toastSuccess('Successfully detached question details.');
-                table.ajax.reload();
+                table.ajax.reload(null, false);
                 $('#questionDetailsModal').modal('hide');
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open');
             },
             error: (xhr, status, error) => {
                 toastError('Failed to detach question details. Please try again.');
+                console.error('Error:', error);
+            }
+        });
+    });
+
+    $('#table-check-import').on('click', '#btn-swap', function(){
+        const id = $(this).data('bank-id');
+
+        $.ajax({
+            url: `{{ route('question-bank.show', ':id') }}`.replace(':id', id),
+            method: 'GET',
+            success: (response) => {
+                    $('#questionDetailsModal').modal('show');
+                    if ($.fn.DataTable.isDataTable('#questions-list-table')) {
+                        $('#questions-list-table').DataTable().clear().destroy();
+                    }
+
+                    questionTable = $('#questions-list-table').DataTable({
+                    responsive: true,
+                    pageLength: 10,
+                    destroy: true,
+                    data: response.data.question_details,
+                    columns: [
+                        { data: 'clinical_case' },
+                        { data: 'medical_field.name' },
+                        { data: 'question_type.name' },
+                        {
+                            data: 'question',
+                            render: (data) => {
+                                if (Array.isArray(data)) {
+                                    return data.map(item => `<span class="badge bg-success mr-1 mb-1">${$('<div>').text(item.question).html()}</span>`).join(' ');
+                                }
+                                return data;
+                            }
+                        }
+                    ]
+                });
+            },
+            error: (xhr, status, error) => {
+                toastError('Failed to load questions. Please try again later.');
                 console.error('Error:', error);
             }
         });
@@ -446,15 +537,15 @@ function calculateSimilarity(string1, string2) {
     const distance = levenshteinDistance(string1, string2);
     const maxLength = Math.max(length1, length2);
 
-    // Persentase kemiripan
+
     return ((maxLength - distance) / maxLength) * 100;
 }
 
-// Fungsi untuk menghitung jarak Levenshtein
+
 function levenshteinDistance(a, b) {
     const matrix = [];
 
-    // Inisialisasi matriks
+
     for (let i = 0; i <= b.length; i++) {
         matrix[i] = [i];
     }
@@ -462,16 +553,16 @@ function levenshteinDistance(a, b) {
         matrix[0][j] = j;
     }
 
-    // Hitung jarak
+
     for (let i = 1; i <= b.length; i++) {
         for (let j = 1; j <= a.length; j++) {
             if (b.charAt(i - 1) === a.charAt(j - 1)) {
                 matrix[i][j] = matrix[i - 1][j - 1];
             } else {
                 matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1, // Substitusi
-                    Math.min(matrix[i][j - 1] + 1, // Insert
-                        matrix[i - 1][j] + 1) // Delete
+                    matrix[i - 1][j - 1] + 1,
+                    Math.min(matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1)
                 );
             }
         }

@@ -1,29 +1,33 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Daftar Pertanyaan')
 
 @section('content')
 <div class="min-h-screen bg-light">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="container card">
-            <div class="card-body row">
-                <form method="GET" action="{{ route('question-list.index') }}" class="mb-4 w-100">
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Cari Tryout..."
-                               value="{{ request('search') }}">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Search
-                        </button>
-                    </div>
-                </form>
-                @if($questions->isNotEmpty())
-                <h4 class="fw-bold">Paket Gratis</h4>
-                @endif
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Daftar Tryout</h3>
+                    <p class="text-subtitle text-muted">Temukan tryout yang dapat menunjang belajar anda</p>
+                </div>
+            </div>
+            <form method="GET" action="{{ route('question-list.index') }}" class="mb-4 w-100">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Cari Tryout..."
+                            value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+            @if($questions->isNotEmpty())
+            <h4 class="fw-bold">Tryout Gratis</h4>
+            @endif
 
-                <!-- Search Form -->
-
+            <div class="row">
                 @foreach ($questions as $question)
                     <div class="col-md-4 col-sm-6 mb-4">
                         <div class="card shadow-sm border-0 h-100">
@@ -73,22 +77,24 @@
                         </div>
                     </div>
                 @endforeach
+            </div>
 
-                <hr>
+            <hr>
 
-                @if($packages->isNotEmpty())
-                    @php
-                        $displayedPackages = [];
-                    @endphp
+            @if($packages->isNotEmpty())
+                @php
+                    $displayedPackages = [];
+                @endphp
 
-                    @foreach($packages as $package)
-                        @if(!in_array($package->name, $displayedPackages))
-                            @php
-                                $displayedPackages[] = $package->name;
-                            @endphp
-                            <h4 class="fw-bold">{{ $package->name }}</h4>
-                        @endif
+                @foreach($packages as $package)
+                    @if(!in_array($package->name, $displayedPackages))
+                        @php
+                            $displayedPackages[] = $package->name;
+                        @endphp
+                        <h4 class="fw-bold">{{ $package->name }}</h4>
+                    @endif
 
+                    <div class="row">
                         @if($package->questions->isEmpty())
                             <div class="col-12">
                                 <div class="alert alert-warning">
@@ -146,14 +152,13 @@
                                 </div>
                             @endforeach
                         @endif
+                    </div>
 
-                        <hr>
-                    @endforeach
-                @else
-                    <p>Tidak ada paket tersedia.</p>
-                @endif
-
-            </div>
+                    <hr>
+                @endforeach
+            @else
+                <p>Tidak ada paket tersedia.</p>
+            @endif
         </div>
     </div>
 </div>

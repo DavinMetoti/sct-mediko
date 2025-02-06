@@ -1,24 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Hak Akses')
+@section('title', config('app.name') . ' | Hak Akses')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Hak Akses</h3>
+                    <p class="text-subtitle text-muted">Atur hak akses untuk membatasi aktivitas admin.</p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccessRoleModal">
+                        <i class="fas fa-plus me-2"></i><span>Tambah</span>
+                    </button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Daftar Hak Akses</h5>
-                            <small>Tambah hak akses dan pengaturan akses menu</small>
-                        </div>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccessRoleModal">
-                            <i class="fas fa-plus me-2"></i><span>Tambah</span>
-                        </button>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped " id="accessRoleTable">
                             <thead class="bg-secondary">
@@ -173,7 +175,7 @@
                     $('body').removeClass('modal-open');
                     $('#name').val('');
                     $('#description').val('');
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
                     toastSuccess(response.message);
                 },
                 error: function(xhr) {
@@ -222,7 +224,7 @@
                                 $('body').removeClass('modal-open');
                                 $('#name').val('');
                                 $('#description').val('');
-                                table.ajax.reload();
+                                table.ajax.reload(null, false);
                                 toastSuccess(response.message);
                             },
                             error: function(xhr) {
@@ -255,7 +257,7 @@
                             _token: csrfToken
                         },
                         success: function(response) {
-                            table.ajax.reload();
+                            table.ajax.reload(null, false);
                             toastSuccess(response.message);
                         },
                         error: function(xhr) {

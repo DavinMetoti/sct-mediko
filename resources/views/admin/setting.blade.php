@@ -1,20 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Setting')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Setting</h3>
+                    <p class="text-subtitle text-muted">Kelola pengaturan lebih mudah.</p>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Pengaturan</h5>
-                        </div>
-                    </div>
                     @foreach($settings as $setting)
                     <form action="{{ route('setting.update', $setting->id) }}" method="POST">
                         @csrf

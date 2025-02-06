@@ -106,15 +106,17 @@ class QuestionDetailController extends Controller
     {
         try {
             $validated = $request->validate([
-                'id_question' => 'required|integer',
+                'question_bank_id' => 'required|integer',
                 'id_medical_field' => 'required|integer',
                 'id_question_type' => 'required|integer',
                 'id_sub_topic' => 'required|integer',
+                'column_title_id' => 'required|integer',
                 'clinical_case' => 'required|string',
                 'new_information' => 'required|string',
                 'initial_hypothesis' => 'required|string',
                 'discussion_image' => 'nullable|string',
                 'panelist_answers_distribution' => 'required|json',
+                'rationale' => 'required|string',
             ]);
 
             $questionDetail = QuestionDetail::findOrFail($id);
@@ -161,15 +163,17 @@ class QuestionDetailController extends Controller
 
     public function getQuestionDetailById($id)
     {
-        $questions = Question::all();
+        $questionBank = QuestionBank::all();
 
         $medicalFields = MedicalField::all();
 
         $questionDetail = QuestionDetail::with(['question','medicalField','subTopic','questionType'])->findOrFail($id);
 
+        $columnTitle = ColumnTitle::all();
+
         $topics = HeaderSubTopic::with(['subTopics'])->get();
 
-        return view('admin.question_detail_edit', compact('questionDetail','topics','questions','medicalFields'));
+        return view('admin.question_detail_edit', compact('questionDetail','topics','questionBank','medicalFields','columnTitle'));
     }
 
 

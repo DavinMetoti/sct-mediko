@@ -1,13 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Broadcast')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Broadcast</h3>
+                    <p class="text-subtitle text-muted">Tambahkan broadcast untuk memberikan pengumuman lebih cepat.</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#broadcastModal">
+                        <i class="fas fa-plus me-2"></i>Tambah Broadcast
+                    </button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
                     <div class="flex justify-content-between mb-3">
@@ -15,9 +26,7 @@
                             <h5 class="mb-0">Broadcast Notifikasi</h5>
                             <small>Kirim pesan pengumuman kepada setiap user</small>
                         </div>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#broadcastModal">
-                            Tambah Broadcast
-                        </button>
+
                     </div>
                     <!-- Tabel untuk menampilkan Data -->
                     <table id="broadcast-table" class="table table-striped">
@@ -119,7 +128,7 @@
                                 toastError(response.message || 'Gagal menghapus notifikasi');
                             }
 
-                            table.ajax.reload();
+                            table.ajax.reload(null, false);
                         },
                         error: function() {
                             alert('Terjadi kesalahan');
@@ -152,7 +161,7 @@
                         $('body').removeClass('modal-open');
                         toastSuccess(response.message || 'Notifikasi berhasil ditambahkan');
 
-                        table.ajax.reload();
+                        table.ajax.reload(null, false);
                     } else {
                         toastError(response.message || 'Gagal menambahkan notifikasi');
                     }

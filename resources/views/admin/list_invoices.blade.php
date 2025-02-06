@@ -1,21 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Daftar Invoice')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
 
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Daftar Invoice</h3>
+                    <p class="text-subtitle text-muted">Respon dengan cepat setiap invoice, agar pengguna tidak menunggu!</p>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <h5 class="mb-0">Daftar Pembayaran</h5>
-                    </div>
-
-                    <!-- Tab Navigation -->
                     <ul class="nav nav-tabs" id="paymentTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" id="verification-tab" data-bs-toggle="tab" href="#verification" role="tab" aria-controls="verification" aria-selected="true">Verification</a>

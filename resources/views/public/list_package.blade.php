@@ -1,15 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Paket')
+@section('title', config('app.name') . ' | Daftar Paket')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
-            <h4 class="mb-4 font-weight-bold text-primary">📦 Daftar Paket Tryout</h4>
-
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Daftar Paket</h3>
+                    <p class="text-subtitle text-muted">Pilih paket belajar terbaik untuk anda!</p>
+                </div>
+            </div>
             @if($packages->isEmpty())
                 <div class="alert alert-warning text-center">🚫 Tidak ada paket tersedia.</div>
             @else
@@ -68,14 +72,14 @@
                                     <p>{{$package->description}}</p>
                                 </div>
                                 <div class="card-footer text-center bg-white border-0 d-flex justify-content-between">
-                                    <button class="btn btn-warning btn-lg font-weight-bold px-4 shadow-sm"
+                                    <button class="btn btn-warning btn font-weight-bold px-4 shadow-sm"
                                         data-bs-toggle="modal"
                                         data-bs-target="#detailModal"
                                         onclick="showDetails({{ json_encode($package) }})">
                                         📖 Detail
                                     </button>
                                     <a href="{{ route('payment.index', ['id' => $package->id]) }}"
-                                        class="btn btn-primary btn-lg font-weight-bold px-4 shadow-sm @if($package->final_status == 'paid')
+                                        class="btn btn-primary btn font-weight-bold px-4 shadow-sm @if($package->final_status == 'paid')
                                             disabled
                                         @endif"
                                         >

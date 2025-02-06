@@ -1,20 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Hak Akses')
+@section('title', config('app.name') . ' | Buat Tryout')
 
 @section('content')
 <div class="min-h-screen bg-light">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3 py-4">
-            <!-- Header Section -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-0">Tambah Tryout</h5>
-                        <small class="text-muted">Buat paket sebelum menambahkan soal</small>
-                    </div>
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen Tryout</h3>
+                    <p class="text-subtitle text-muted">Buat, kelola, dan sesuaikan tryout sesuai kebutuhan pengguna!</p>
+                </div>
+                <div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-primary" id="save-button" data-bs-toggle="tooltip" title="Simpan paket">
                             <i class="fas fa-save me-2"></i> Tambah Tryout
@@ -28,7 +27,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Form Section -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
@@ -77,11 +75,12 @@
                 </div>
             </div>
 
-            <!-- Table Section -->
+            <div>
+                <h3 class="fw-bold">Daftar Tryout</h3>
+                <p class="text-subtitle text-muted">Kelola dan sesuaikan tryout sesuai kebutuhan pengguna!</p>
+            </div>
+
             <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Daftar Paket Tryout</h5>
-                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle" id="questions-table">
@@ -117,17 +116,17 @@
         let quill = new Quill('#editor', {
             modules: {
                 toolbar: [
-                    [{ font: [] }, { size: [] }], // Font dan ukuran teks
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Heading
-                    ['bold', 'italic', 'underline', 'strike'], // Format teks
-                    [{ color: [] }, { background: [] }], // Warna teks & latar
-                    [{ script: 'sub' }, { script: 'super' }], // Subscript & superscript
-                    [{ list: 'ordered' }, { list: 'bullet' }], // List
-                    [{ indent: '-1' }, { indent: '+1' }], // Indentasi
-                    [{ align: [] }], // Align teks
-                    ['blockquote', 'code-block'], // Blockquote & Code Block
-                    ['link', 'image', 'video'], // Media
-                    ['clean'] // Hapus format
+                    [{ font: [] }, { size: [] }],
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ color: [] }, { background: [] }],
+                    [{ script: 'sub' }, { script: 'super' }],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{ indent: '-1' }, { indent: '+1' }],
+                    [{ align: [] }],
+                    ['blockquote', 'code-block'],
+                    ['link', 'image', 'video'],
+                    ['clean']
                 ]
             },
             placeholder: 'Please write something',
@@ -143,7 +142,6 @@
             altInput: true,
             altFormat: "H:i F j, Y",
             dateFormat: "Y-m-d H:i",
-            minDate: "today",
             defaultDate: today
         });
 
@@ -305,14 +303,13 @@
                 },
                 success: function (response) {
                     toastSuccess(response.message);
-                    $('#questions-table').DataTable().ajax.reload();
+                    $('#questions-table').DataTable().ajax.reload(null, false);
                 },
                 error: function (xhr) {
                     alert(xhr.responseJSON.message || 'Failed to delete the question.');
                 },
             });
         });
-
 
         $('#questions-table').on('click', '.archive-btn', function () {
             const id = $(this).data('id');
@@ -333,7 +330,7 @@
                 },
                 success: function (response) {
                     toastSuccess(response.message);
-                    questionsTable.ajax.reload();
+                    questionsTable.ajax.reload(null, false);
                 },
                 error: function (xhr) {
                     alert(xhr.responseJSON.message || 'Failed to update question.');
@@ -360,7 +357,7 @@
                 },
                 success: function (response) {
                     toastSuccess(response.message);
-                    questionsTable.ajax.reload();
+                    questionsTable.ajax.reload(null, false);
                 },
                 error: function (xhr) {
                     alert(xhr.responseJSON.message || 'Failed to update question.');
@@ -387,7 +384,7 @@
                 },
                 success: function (response) {
                     toastSuccess(response.message);
-                    questionsTable.ajax.reload();
+                    questionsTable.ajax.reload(null, false);
                 },
                 error: function (xhr) {
                     alert(xhr.responseJSON.message || 'Failed to update question.');
@@ -438,7 +435,7 @@
                 success: function (response) {
                     toastSuccess('Paket berhasil disimpan!');
 
-                    questionsTable.ajax.reload();
+                    questionsTable.ajax.reload(null, false);
                     console.log(response);
 
                     $('#question_name').val('');
@@ -502,7 +499,7 @@
                 },
                 success: function (response) {
                     toastSuccess(response.message);
-                    questionsTable.ajax.reload();
+                    questionsTable.ajax.reload(null, false);
                     $('#question_name').val('');
                     $('#thumbnail').val('');
                     $('#release_date').flatpickr().clear();

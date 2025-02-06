@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Register Page')
+@section('title', config('app.name') . ' | Register')
 
 @section('content')
 <div class="d-flex justify-content-center align-items-center vh-100 bg-light">

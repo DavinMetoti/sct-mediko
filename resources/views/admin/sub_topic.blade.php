@@ -1,23 +1,28 @@
 @extends('layouts.app')
 
-@section('title', 'Sub Topic')
+@section('title', config('app.name') . ' | Sub Topik')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
+                    <div class="flex justify-content-between">
+                        <div>
+                            <h3 class="fw-bold">Topik</h3>
+                            <p class="text-subtitle text-muted">Kelola topik yang relevan untuk pengalaman belajar lebih baik!</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" id="add-topic-btn">
+                                <i class="fas fa-plus me-2"></i> <span>Tambah</span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-body">
-                            <div class="flex justify-content-between align-items-center">
-                                <h3>Topik</h3>
-                                <button class="btn btn-success" id="add-topic-btn">
-                                    <i class="fas fa-plus me-2"></i> <span>Tambah</span>
-                                </button>
-                            </div>
                             <div class="table-responsive mt-3">
                                 <table class="table table-stripped" id="table-topic">
                                     <thead>
@@ -33,14 +38,19 @@
                     </div>
                 </div>
                 <div id="card-sub-topic" class="col-6 hidden">
+                    <div class="flex justify-content-between">
+                        <div>
+                            <h3 class="fw-bold">Sub Topik</h3>
+                            <p class="text-subtitle text-muted">Kelola sub topik untuk memberikan pemahaman!</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" id="add-subtopic-btn">
+                                <i class="fas fa-plus me-2"></i> <span>Tambah</span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-body">
-                            <div class="flex justify-content-between align-items-center">
-                                <h3>Sub Topik</h3>
-                                <button class="btn btn-success" id="add-subtopic-btn">
-                                    <i class="fas fa-plus me-2"></i> <span>Tambah</span>
-                                </button>
-                            </div>
                             <div class="table-responsive mt-3">
                                 <table class="table striped" id="table-sub-topic">
                                     <thead>
@@ -202,7 +212,7 @@
                     success: function(response) {
                         toastSuccess('Topik berhasil ditambahkan!');
                         $('#topicModal').modal('hide');
-                        tableTopic.ajax.reload();
+                        tableTopic.ajax.reload(null, false);
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
@@ -218,7 +228,7 @@
                     success: function(response) {
                         toastSuccess('Topic berhasil diperbarui!');
                         $('#topicModal').modal('hide');
-                        tableTopic.ajax.reload();
+                        tableTopic.ajax.reload(null, false);
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
@@ -255,7 +265,7 @@
                         $('#sub-topic-description').val('');
                         pathPdf = "";
                         dropzoneText.textContent = 'Drag & drop a file here or click to upload'
-                        subTopicTable.ajax.reload();
+                        subTopicTable.ajax.reload(null, false);
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
@@ -281,7 +291,7 @@
                         $('#sub-topic-description').val('');
                         pathPdf = "";
                         dropzoneText.textContent = 'Drag & drop a file here or click to upload'
-                        subTopicTable.ajax.reload();
+                        subTopicTable.ajax.reload(null, false);
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
@@ -404,7 +414,7 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            tableTopic.ajax.reload();
+                            tableTopic.ajax.reload(null, false);
                             toastSuccess(response.message || 'Topik berhasil dihapus!');
 
                             subTopicCard.addClass('hidden');
@@ -436,7 +446,7 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            subTopicTable.ajax.reload();
+                            subTopicTable.ajax.reload(null, false);
                             toastSuccess(response.message || 'Sub topik berhasil dihapus!');
                         },
                         error: function(xhr) {

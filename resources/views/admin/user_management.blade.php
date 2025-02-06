@@ -1,35 +1,37 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen User')
+@section('title', config('app.name') . ' | Manajemen User')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen Admin</h3>
+                    <p class="text-subtitle text-muted">Tambahkan dan kelola admin untuk mempermudah pekerjaan.</p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAccessRoleModal">
+                        <i class="fas fa-plus me-2"></i><span>Tambah</span>
+                    </button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Daftar Admin</h5>
-                            <small>Daftar admin dan manajemen admin</small>
-                        </div>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccessRoleModal">
-                            <i class="fas fa-plus me-2"></i><span>Tambah</span>
-                        </button>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped " id="userPrivateTable">
-                            <thead class="bg-secondary">
+                            <thead>
                                 <tr>
-                                    <th class=text-white>No</th>
-                                    <th class=text-white>Nama</th>
-                                    <th class=text-white>Username</th>
-                                    <th class=text-white>Email</th>
-                                    <th class=text-white>Akses</th>
-                                    <th class=text-white>Status</th>
-                                    <th class=text-white></th>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Akses</th>
+                                    <th>Status</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -205,7 +207,7 @@
                 },
                 success: function (response) {
 
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
                     toastSuccess('User berhasil ditambahkan!');
                     $('#addAccessRoleModal').modal('hide');
                     $('.modal-backdrop').remove();
@@ -294,7 +296,7 @@
                                 $('#password-group').attr('hidden', false);;
                                 $('#password-confirmation-group').attr('hidden', false);;
 
-                                table.ajax.reload();
+                                table.ajax.reload(null, false);
 
                                 toastSuccess(response.message);
                             },
@@ -330,7 +332,7 @@
                             _token: csrfToken
                         },
                         success: function(response) {
-                            table.ajax.reload();
+                            table.ajax.reload(null, false);
                             toastSuccess(response.message);
                         },
                         error: function(xhr) {

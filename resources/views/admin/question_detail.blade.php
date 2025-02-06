@@ -1,21 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', config('app.name') . ' | Buat Soal Baru')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Buat Soal Baru</h5>
-                            <small>Masukkan soal dalam bentuk teks dan gambar (opsional)</small>
-                        </div>
-                    </div>
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Buat Soal Tryout</h3>
+                    <p class="text-subtitle text-muted">Rancang dan sesuaikan soal sesuai kebutuhan peserta ujian!</p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-upload me-2"></i><span>Simpan Soal</span></button>
                 </div>
             </div>
             <div id="formComponent">
@@ -124,7 +123,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
+                                                    <input type="text" id="input-panelis-1" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
@@ -135,7 +134,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
+                                                    <input type="text" id="input-panelis-2" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
@@ -146,7 +145,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
+                                                    <input type="text" id="input-panelis-3" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
@@ -157,7 +156,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
+                                                    <input type="text" id="input-panelis-4" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
@@ -168,7 +167,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center">
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
-                                                    <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
+                                                    <input type="text" id="input-panelis-5" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
                                                 </div>
                                             </div>
@@ -177,14 +176,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="flex justify-content-between">
-                        <button type="button" class="btn btn-outline-secondary" id="add-form"><i class="fas fa-plus me-2"></i><span>Tambah</span></button>
-                        <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-upload me-2"></i><span>Simpan</span></button>
                     </div>
                 </div>
             </div>
@@ -201,17 +192,17 @@
         let quill = new Quill('#editor', {
             modules: {
                 toolbar: [
-                    [{ font: [] }, { size: [] }], // Font dan ukuran teks
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Heading
-                    ['bold', 'italic', 'underline', 'strike'], // Format teks
-                    [{ color: [] }, { background: [] }], // Warna teks & latar
-                    [{ script: 'sub' }, { script: 'super' }], // Subscript & superscript
-                    [{ list: 'ordered' }, { list: 'bullet' }], // List
-                    [{ indent: '-1' }, { indent: '+1' }], // Indentasi
-                    [{ align: [] }], // Align teks
-                    ['blockquote', 'code-block'], // Blockquote & Code Block
-                    ['link', 'image', 'video'], // Media
-                    ['clean'] // Hapus format
+                    [{ font: [] }, { size: [] }],
+                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ color: [] }, { background: [] }],
+                    [{ script: 'sub' }, { script: 'super' }],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{ indent: '-1' }, { indent: '+1' }],
+                    [{ align: [] }],
+                    ['blockquote', 'code-block'],
+                    ['link', 'image', 'video'],
+                    ['clean']
                 ]
             },
             placeholder: 'Please write something',
@@ -411,22 +402,20 @@
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (response) {
-                    console.log('Success:', response);
                     toastSuccess(response.message);
-                    const clinicalCase = $('#clinical-case').val('');
-                    const initialHypothesis = $('#initial-hypothesis').val('');
-                    const newInformation = $('#new-information').val('');
-                    const panelistDistribution = Array.from(distribution).map(input => input.value);
-                    const panelistJSON = {
-                        '-2': panelistDistribution[0],
-                        '-1': panelistDistribution[1],
-                        '0': panelistDistribution[2],
-                        '1': panelistDistribution[3],
-                        '2': panelistDistribution[4]
-                    };
-
-
-                    const discussionImageFile = $('#discussion-image')[0].files[0];
+                    $('#clinical-case').val('');
+                    $('#initial-hypothesis').val('');
+                    $('#new-information').val('');
+                    $('#input-panelis-1').val(0);
+                    $('#input-panelis-2').val(0);
+                    $('#input-panelis-3').val(0);
+                    $('#input-panelis-4').val(0);
+                    $('#input-panelis-5').val(0);
+                    $('#questionType').val('').trigger('change');
+                    $('#column-title-dropdown').val('').trigger('change');
+                    $('#sub-topic-dropdown').val('').trigger('change');
+                    quill.root.innerHTML = "";
+                    $('#discussion-image')[0].files[0];
 
                 },
                 error: function (error) {

@@ -1,34 +1,31 @@
 @extends('layouts.app')
 
-@section('title', 'Question Detail Type')
+@section('title', config('app.name') . ' | Tipe Soal')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Type Soal</h5>
-                            <small>Manajemen type soal untuk menentukan keterangan panelis</small>
-                        </div>
-                        <button class="btn btn-outline-primary" onclick="openModal()">
-                            Tambah Tipe Soal
-                        </button>
-                    </div>
-                    <div id="detailQuestionType">
-
-                    </div>
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen Tipe Soal</h3>
+                    <p class="text-subtitle text-muted">Atur dan kelola berbagai tipe soal untuk pengalaman belajar yang lebih terstruktur.</p>
                 </div>
+                <div>
+                    <button class="btn btn-primary" onclick="openModal()">
+                        <i class="fas fa-plus me-2"></i> <span>Tambah Tipe Soal</span>
+                    </button>
+                </div>
+            </div>
+            <div id="detailQuestionType">
+
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal Tambah Broadcast -->
 <div class="modal fade" id="QuestionTypeModal" tabindex="-1" aria-labelledby="QuestionTypeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -144,12 +141,12 @@
                     response.data.forEach(function(item) {
                         htmlContent += `
                             <div class="card mb-3">
-                                <div class="card-header flex justify-content-between">
-                                    <h5 class="card-title">${item.name}</h5>
-                                    <div class="d-flex">
+                                <div class="card-header flex justify-content-between align-items-center" style="background-color:#D0E2FF;">
+                                    <h5 class="fw-bold">${item.name}</h5>
+                                    <div class="flex">
                                         <!-- Tombol Edit -->
                                         <button class="btn" onclick="editItem(${item.id})">
-                                            <i class="bi bi-pencil text-blue-600"></i> <!-- Gunakan icon pencil -->
+                                            <i class="bi bi-pencil text-green-600"></i> <!-- Gunakan icon pencil -->
                                         </button>
                                         <!-- Tombol Delete -->
                                         <button class="btn" onclick="deleteItem(${item.id})">
@@ -157,7 +154,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body p-0">
                                     <ul class="list-group">
                                         <li class="list-group-item">
                                             <span class="label"><strong>-2</strong></span>: ${item.minus_two}

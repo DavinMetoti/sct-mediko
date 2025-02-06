@@ -1,19 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Judul Kolom')
+@section('title', config('app.name') . ' | Judul Kolom')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen Judul Kolom</h3>
+                    <p class="text-subtitle text-muted">Atur judul kolom sesuai kebutuhan untuk tampilan data yang lebih rapi dan efisien.</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fa fas-plus me-2"></i>Tambah Kolom</button>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <h5 class="mb-0">Judul Kolom</h5>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Kolom</button>
-                    </div>
                     <div class="table-responsive">
                         <table id="columnTable" class="table table-striped">
                             <thead>
@@ -115,31 +120,32 @@
 <script>
     $(document).ready(function () {
         const table = $('#columnTable').DataTable({
-            processing: true, // Show processing indicator
-            serverSide: true, // Enable server-side processing
+            processing: true,
+            serverSide: true,
             ajax: {
-                url: "{{ route('column-title.index') }}", // Backend route for fetching data
-                type: "GET", // HTTP method for the request
+                url: "{{ route('column-title.index') }}",
+                type: "GET",
             },
             columns: [
-                { data: 'name', name: 'name', className: 'text-left' },
-                { data: 'column_1', name: 'column_1', className: 'text-center' },
-                { data: 'column_2', name: 'column_2', className: 'text-right' },
-                { data: 'column_3', name: 'column_3' },
+                { data: 'name', name: 'name', className: 'text-left', width: '15%' },
+                { data: 'column_1', name: 'column_1', className: 'text-left', width: '25%' },
+                { data: 'column_2', name: 'column_2', className: 'text-center', width: '25%' },
+                { data: 'column_3', name: 'column_3', className: 'text-right', width: '25%' },
                 {
                     data: 'actions',
                     name: 'actions',
                     orderable: false,
                     searchable: false,
                     className: 'text-center',
+                    width: '10%',
                 },
             ],
-
-            order: [[0, 'asc']], // Default order by the first column (ID)
+            autoWidth: false,
+            order: [[0, 'asc']],
         });
 
 
-        // Add data
+
         $('#addForm').submit(function (e) {
             e.preventDefault();
             $.ajax({
@@ -150,8 +156,12 @@
                     $('#addModal').modal('hide');
                     $('.modal-backdrop').remove();
                     $('body').removeClass('modal-open');
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
                     toastSuccess('Data berhasil ditambahkan!');
+                    $('#name').val('');
+                    $('#column_1').val('');
+                    $('#column_2').val('');
+                    $('#column_3').val('');
                 },
                 error: function () {
                     toastError('Gagal menambah data!');
@@ -159,7 +169,6 @@
             });
         });
 
-        // Edit button handler
         $('#columnTable').on('click', '.edit-btn', function () {
             const id = $(this).data('id');
             const name = $(this).data('name');
@@ -175,7 +184,6 @@
             $('#editModal').modal('show');
         });
 
-        // Save edited data
         $('#editForm').submit(function (e) {
             e.preventDefault();
             const id = $('#edit_id').val();
@@ -187,7 +195,7 @@
                     $('#editModal').modal('hide');
                     $('.modal-backdrop').remove();
                     $('body').removeClass('modal-open');
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
                     toastSuccess('Data berhasil diperbarui!');
                 },
                 error: function () {
@@ -196,25 +204,31 @@
             });
         });
 
-        // Delete data
         $('#columnTable').on('click', '.delete-btn', function () {
             const id = $(this).data('id');
-            if (confirm('Yakin ingin menghapus data ini?')) {
-                $.ajax({
-                    url: `{{ route('column-title.destroy',':id') }}`.replace(':id',id),
-                    method: 'DELETE',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function (response) {
-                        table.ajax.reload();
-                        toastSuccess('Data berhasil dihapus!');
-                    },
-                    error: function () {
-                        toastError('Gagal menghapus data!');
-                    }
-                });
-            }
+            confirmationModal.open({
+                message: 'Apakah anda yakin ingin menghapus data ini? Semua soal akan terpengaruh',
+                severity: 'warn',
+                onAccept: () => {
+                    $.ajax({
+                        url: `{{ route('column-title.destroy',':id') }}`.replace(':id',id),
+                        method: 'DELETE',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                        },
+                        success: function (response) {
+                            table.ajax.reload(null, false);
+                            toastSuccess('Data berhasil dihapus!');
+                        },
+                        error: function () {
+                            toastError('Gagal menghapus data!');
+                        }
+                    });
+                },
+                onReject: () => {
+                    console.log('Rejected!');
+                },
+            });
         });
     });
 </script>

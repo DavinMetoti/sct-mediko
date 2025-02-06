@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen User')
+@section('title', config('app.name') . ' | Manajemen User')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Manajemen User</h3>
+                    <p class="text-subtitle text-muted">Pantau pengguna baru dan lama melalui halaman ini.</p>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Daftar Siswa</h5>
-                            <small>Daftar siswa terdaftar dan manajemen siswa</small>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped " id="userPublicTable">
                             <thead class="bg-secondary">
@@ -273,7 +273,7 @@
                             _token: csrfToken
                         },
                         success: function(response) {
-                            table.ajax.reload();
+                            table.ajax.reload(null, false);
                             toastSuccess(response.message);
                         },
                         error: function(xhr) {
@@ -300,7 +300,7 @@
                 success: function (response) {
 
                     toastSuccess('User has been deactivated!');
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
 
                 },
                 error: function (xhr, status, error) {
@@ -323,7 +323,7 @@
                 success: function (response) {
 
                     toastSuccess('User has been actived!');
-                    table.ajax.reload();
+                    table.ajax.reload(null, false);
 
                 },
                 error: function (xhr, status, error) {

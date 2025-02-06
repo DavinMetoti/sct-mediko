@@ -1,38 +1,38 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen User')
+@section('title', config('app.name') . ' | Daftar Soal')
 
 @section('content')
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen">
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Daftar Soal : {{ strtoupper($question->bank_name) }}</h3>
+                    <p class="text-subtitle text-muted">Edit dan hapus soal yang sudah dibuat agar lebih optimal</p>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Daftar Soal</h5>
-                            <small>Daftar Soal Untuk Bank Soal : {{ $question->bank_name }}</small>
-                        </div>
-                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped" id="question-detail-table">
-                            <thead class="bg-secondary">
+                            <thead>
                                 <tr>
-                                    <th class="text-white text-center align-items-center" rowspan="2">No</th>
-                                    <th class="text-white text-center align-items-center" rowspan="2">Bidang</th>
-                                    <th class="text-white text-center align-items-center" rowspan="2">Kasus Klinik</th>
-                                    <th class="text-white text-center align-items-center" rowspan="2">Hipotesis Baru</th>
-                                    <th class="text-white text-center align-items-center" colspan="5">Skor Panelis</th>
-                                    <th class="text-white text-center align-items-center" rowspan="2"></th>
+                                    <th class="text-center align-items-center" rowspan="2">No</th>
+                                    <th class="text-center align-items-center" rowspan="2">Bidang</th>
+                                    <th class="text-center align-items-center" rowspan="2">Kasus Klinik</th>
+                                    <th class="text-center align-items-center" rowspan="2">Hipotesis Baru</th>
+                                    <th class="text-center align-items-center" colspan="5">Skor Panelis</th>
+                                    <th class="text-center align-items-center" rowspan="2"></th>
                                 </tr>
                                 <tr>
-                                    <th class="text-white text-center">-2</th>
-                                    <th class="text-white text-center">-1</th>
-                                    <th class="text-white text-center">0</th>
-                                    <th class="text-white text-center">1</th>
-                                    <th class="text-white text-center">2</th>
+                                    <th class="text-center">-2</th>
+                                    <th class="text-center">-1</th>
+                                    <th class="text-center">0</th>
+                                    <th class="text-center">1</th>
+                                    <th class="text-center">2</th>
                                 </tr>
                             </thead>
                             <tbody>
