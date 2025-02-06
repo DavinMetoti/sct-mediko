@@ -439,7 +439,7 @@
                 finishExam();
             },
             onReject: () => {
-                console.log('Rejected!');
+
             },
         });
     }

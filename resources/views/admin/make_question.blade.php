@@ -413,9 +413,6 @@
                 return;
             }
 
-            console.log(description);
-
-
             const formData = {
                 question: questionName,
                 thumbnail: thumbnail,
@@ -436,7 +433,6 @@
                     toastSuccess('Paket berhasil disimpan!');
 
                     questionsTable.ajax.reload(null, false);
-                    console.log(response);
 
                     $('#question_name').val('');
                     $('#thumbnail').val('');

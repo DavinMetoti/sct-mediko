@@ -267,7 +267,6 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Penghapusan dibatalkan');
                 }
             });
         });

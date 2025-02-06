@@ -426,7 +426,7 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Rejected!');
+
                 },
             });
 
@@ -456,7 +456,7 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Rejected!');
+
                 },
             });
         });
@@ -471,8 +471,6 @@
                 url: '{{ route("sub-topic.show", ":id") }}'.replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
-
                     subtopicTitleModal.text('Edit Topik');
 
                     subtopicModal.modal('show');

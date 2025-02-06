@@ -220,7 +220,6 @@
                         ? `<span class="badge bg-success">Active | ${formattedDate}</span>`
                         : `<span class="badge bg-danger">Inactive</span>`;
                     $('#is_actived').html(isActiveBadge);
-                    console.log(response);
 
                     if (response.user_detail == null) {
                         $('#allertuser').removeAttr('hidden');

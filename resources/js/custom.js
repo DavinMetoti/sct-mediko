@@ -28,8 +28,6 @@ toast.options = {
 
 $(document).ready(function () {
     $('#button-register').click(() => {
-        console.log(toast);
-
         toast.success('Toast launched successfully!');
     });
 });

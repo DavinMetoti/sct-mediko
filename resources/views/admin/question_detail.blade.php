@@ -394,8 +394,6 @@
                 panelist_answers_distribution: JSON.stringify(panelistJSON)
             };
 
-            console.log(data);
-
             $.ajax({
                 url: '{{ route('question-detail.store') }}',
                 type: 'POST',

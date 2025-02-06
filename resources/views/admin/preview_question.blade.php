@@ -30,7 +30,7 @@
                         </button>
                     @elseif ($checkTryout->status == 'completed')
                         <div>
-                            <button
+                            <button id="btn-refresh"
                                 class="btn btn-warning font-weight-bold {{ $questionDetail == 0 ? 'disabled' : '' }} mr-2">
                                 <span class="default-text"><i class="fas fa-refresh me-2"></i> Mengerjakan Ulang</span>
                                 <span class="loading-spinner d-none"><i class="fas fa-spinner fa-spin me-2"></i> Memproses...</span>
@@ -90,13 +90,13 @@
         }
 
         $('#run-tryout').on('click', function (e) {
-            e.preventDefault(); // Prevent default action
+            e.preventDefault();
             const button = $(this);
 
-            // Show loading spinner
+
             button.find('.default-text').addClass('d-none');
             button.find('.loading-spinner').removeClass('d-none');
-            button.prop('disabled', true); // Disable the button
+            button.prop('disabled', true);
 
             const sisa_waktu = timeToMinutes(question.time);
 
@@ -116,9 +116,7 @@
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"
                 },
                 success: function (response) {
-                    console.log('Task history created:', response);
 
-                    // Properly handle redirection
                     const redirectUrl = "{{ route('tryout.question.detail', ['idQuestion' => ':idQuestion', 'token' => auth()->user()->session_token]) }}";
                     window.location.href = redirectUrl.replace(':idQuestion', response.data.id);
                 },
@@ -126,7 +124,50 @@
                     console.error('Error creating task history:', error);
                     alert('Failed to start the task. Please try again.');
 
-                    // Revert button to original state
+
+                    button.find('.default-text').removeClass('d-none');
+                    button.find('.loading-spinner').addClass('d-none');
+                    button.prop('disabled', false);
+                }
+            });
+        });
+
+        $('#btn-refresh').on('click', function (e) {
+            e.preventDefault();
+            const button = $(this);
+
+
+            button.find('.default-text').addClass('d-none');
+            button.find('.loading-spinner').removeClass('d-none');
+            button.prop('disabled', true);
+
+            const sisa_waktu = timeToMinutes(question.time);
+
+            const data = {
+                user_id: "{{ auth()->id() }}",
+                question_id: question.id,
+                sisa_waktu: sisa_waktu,
+                score: 0,
+                status: 'in_progress'
+            };
+
+            $.ajax({
+                url: "{{ route('task-history.store') }}",
+                method: 'POST',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function (response) {
+
+                    const redirectUrl = "{{ route('tryout.question.detail', ['idQuestion' => ':idQuestion', 'token' => auth()->user()->session_token]) }}";
+                    window.location.href = redirectUrl.replace(':idQuestion', response.data.id);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error creating task history:', error);
+                    alert('Failed to start the task. Please try again.');
+
+
                     button.find('.default-text').removeClass('d-none');
                     button.find('.loading-spinner').addClass('d-none');
                     button.prop('disabled', false);

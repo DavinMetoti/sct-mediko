@@ -493,13 +493,12 @@
                             toastSuccess(response.message)
                         },
                         error: function(xhr, status, error) {
-                            console.log("Error:", error);
-                            alert("Terjadi kesalahan saat delete data.");
+                            toastError("Terjadi kesalahan saat delete data.");
                         }
                     });
                 },
                 onReject: () => {
-                    console.log('Rejected!');
+
                 },
             });
         });
@@ -512,7 +511,6 @@
                 url: '{{ route('package.show', ':id') }}'.replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
 
                     $('#edit_name').val(response.package.name);
                     $('#edit_price').val(response.package.price);
@@ -522,8 +520,7 @@
                     $('#editPackageForm').attr('action', '{{ route('package.update', ':id') }}'.replace(':id', response.package.id));
                 },
                 error: function(xhr, status, error) {
-                    console.log("Error:", error);
-                    alert("Terjadi kesalahan saat memuat data.");
+                    toastError("Terjadi kesalahan saat memuat data.");
                 }
             });
         });
@@ -545,7 +542,6 @@
                     toastSuccess(response.message);
                 },
                 error: function(xhr, status, error) {
-                    console.log("Error:", error);
                     toastError("Terjadi kesalahan saat menyimpan data.");
                 }
             });
@@ -579,7 +575,7 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Rejected!');
+
                 },
             });
         });

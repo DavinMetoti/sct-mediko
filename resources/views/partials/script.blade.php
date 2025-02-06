@@ -161,7 +161,6 @@
             });
 
             $('#dropdown-button').click(function (event) {
-                console.log('running');
 
                 event.stopPropagation();
                 $('#dropdown-profile .dropdown-menu').toggleClass('show');

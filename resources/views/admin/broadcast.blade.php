@@ -136,7 +136,6 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Rejected!');
                 },
             });
         });

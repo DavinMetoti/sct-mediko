@@ -170,7 +170,7 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Rejected!');
+
                 },
             });
         });

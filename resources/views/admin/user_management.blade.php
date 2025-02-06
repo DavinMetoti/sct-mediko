@@ -243,8 +243,6 @@
         $(document).on('click', '.edit-button', function() {
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
-            console.log('Edit button clicked');
-
 
             $.ajax({
                 url: `{{ url('admin/user-management') }}/${id}`,
@@ -318,8 +316,6 @@
         $(document).on('click', '.delete-button', function() {
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
-            console.log('Delete button clicked');
-
 
             confirmationModal.open({
                 message: 'Apakah Anda yakin ingin menghapus data ini?',
@@ -342,7 +338,6 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Penghapusan dibatalkan');
                 }
             });
         });

@@ -16,15 +16,14 @@ $questionDetailPanelis = array_combine(
     @include('partials.sidebar')
     @include('partials.navbar')
     <div class="content" id="content">
-        <div class="px-3">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Buat Soal Baru</h5>
-                            <small>Masukkan soal dalam bentuk teks dan gambar (opsional)</small>
-                        </div>
-                    </div>
+        <div class="container-fluid">
+            <div class="flex justify-content-between">
+                <div>
+                    <h3 class="fw-bold">Edit Soal</h3>
+                    <p class="text-subtitle text-muted">Sesuaikan dan perbaiki soal yang sudah dibuat.</p>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-upload me-2"></i><span>Perbarui Soal</span></button>
                 </div>
             </div>
             <div id="formComponent">
@@ -194,13 +193,6 @@ $questionDetailPanelis = array_combine(
                     </div>
                 </div>
             </div>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="flex justify-content-end">
-                        <button type="button" class="btn btn-primary" id="btn-save"><i class="fas fa-upload me-2"></i><span>Simpan</span></button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -238,8 +230,6 @@ $questionDetailPanelis = array_combine(
         });
 
         function initSelect2(question, medicalField, subTopic) {
-            console.log('Initializing Select2 for', question, medicalField);
-
             $(question).select2({
                 placeholder: 'Pilih Paket',
                 theme: 'bootstrap-5',

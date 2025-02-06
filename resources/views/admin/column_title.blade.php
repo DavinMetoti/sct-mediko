@@ -226,7 +226,6 @@
                     });
                 },
                 onReject: () => {
-                    console.log('Rejected!');
                 },
             });
         });

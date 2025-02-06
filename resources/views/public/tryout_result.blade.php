@@ -506,7 +506,7 @@
                 finishExam();
             },
             onReject: () => {
-                console.log('Rejected!');
+
             },
         });
     }
@@ -526,7 +526,7 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    console.log('Task history updated successfully:', response);
+                    toastError('Task history updated successfully:');
                 },
                 error: function(xhr, status, error) {
                     console.error('Error updating task history:', error);

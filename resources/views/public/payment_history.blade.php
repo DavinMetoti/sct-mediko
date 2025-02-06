@@ -55,8 +55,6 @@
 
         $('#historyTable').on('click', '.delete-btn', function() {
             let id = $(this).data('id');
-            console.log('button delete clicked, ID: ' + id);
-
             $.ajax({
                 url: "{{ route('payment.destroy',':id') }}".replace(':id', id),
                 method: "DELETE",

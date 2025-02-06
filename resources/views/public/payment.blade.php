@@ -240,9 +240,6 @@
                 reader.onload = function (e) {
                     base64File = e.target.result;
 
-                    console.log(base64File);
-
-
                     if (fileType.startsWith("image/")) {
                         filePreview.innerHTML += `<img src="${base64File}" alt="Preview" class="mt-2 rounded-lg shadow-md" width="150">`;
                     }

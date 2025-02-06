@@ -14,7 +14,7 @@
                         <div class="p-2">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 rounded-md p-3 bg-blue-500 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list w-6 h-6">
+                                    <svg xmlns="http:
                                         <line x1="8" x2="21" y1="6" y2="6"></line>
                                         <line x1="8" x2="21" y1="12" y2="12"></line>
                                         <line x1="8" x2="21" y1="18" y2="18"></line>
@@ -38,7 +38,7 @@
                         <div class="p-2">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 rounded-md p-3 bg-green-500 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users w-6 h-6">
+                                    <svg xmlns="http:
                                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                         <circle cx="9" cy="7" r="4"></circle>
                                         <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -60,7 +60,7 @@
                         <div class="p-2">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 rounded-md p-3 bg-yellow-500 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-6 h-6">
+                                    <svg xmlns="http:
                                         <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
                                     </svg>
                                 </div>
@@ -100,7 +100,7 @@
 
 <script>
     $(document).ready(function () {
-        // Grafik Paket
+
         const ctxPackage = $('#myChart')[0].getContext('2d');
         const packages = @json($package);
 
@@ -156,21 +156,18 @@
             }
         });
 
-        // Grafik Pendaftaran
+
         const ctxStudent = $('#studentChart')[0].getContext('2d');
         const registrations = @json($student);
 
-        console.log(registrations);
 
-
-        // Mengelompokkan data berdasarkan tanggal pendaftaran
         const registrationData = registrations.reduce((acc, reg) => {
             const date = new Date(reg.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' });
-            acc[date] = (acc[date] || 0) + 1; // Menambahkan jumlah pendaftaran per tanggal
+            acc[date] = (acc[date] || 0) + 1;
             return acc;
         }, {});
 
-        // Memisahkan data menjadi label dan jumlah
+
         const registrationDates = Object.keys(registrationData);
         const registrationCounts = Object.values(registrationData);
 

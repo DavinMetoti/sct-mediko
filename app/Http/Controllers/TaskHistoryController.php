@@ -32,7 +32,6 @@ class TaskHistoryController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate incoming request data
             $validatedData = $request->validate([
                 'user_id' => 'required|exists:users,id',
                 'question_id' => 'required|exists:questions,id',
@@ -41,22 +40,18 @@ class TaskHistoryController extends Controller
                 'status' => 'required|in:in_progress,completed,failed',
             ]);
 
-            // Check if there's a completed task history for the same user and question
-            $finishingTaskHistory = TaskHistory::where('user_id', $validatedData['user_id'])
+            // Cek apakah ada task history yang sudah completed
+            $completedTaskHistory = TaskHistory::where('user_id', $validatedData['user_id'])
                 ->where('question_id', $validatedData['question_id'])
                 ->where('status', 'completed')
                 ->first();
 
-            if ($finishingTaskHistory) {
-                // Delete the completed task history
-                $finishingTaskHistory->delete();
-
-                return response()->json([
-                    'message' => 'A completed task history was found and deleted.',
-                ], 200);
+            if ($completedTaskHistory) {
+                // Hapus task history yang sudah completed
+                $completedTaskHistory->delete();
             }
 
-            // Check if there's an in-progress task history for the same user and question
+            // Cek apakah ada task history dengan status in_progress
             $existingTaskHistory = TaskHistory::where('user_id', $validatedData['user_id'])
                 ->where('question_id', $validatedData['question_id'])
                 ->where('status', 'in_progress')
@@ -69,7 +64,7 @@ class TaskHistoryController extends Controller
                 ], 200);
             }
 
-            // Create a new task history record
+            // Membuat task history baru
             $taskHistory = TaskHistory::create($validatedData);
 
             return response()->json([
@@ -78,13 +73,13 @@ class TaskHistoryController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            // Catch and return any exceptions
             return response()->json([
                 'message' => 'Failed to create task history.',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
+
 
 
 

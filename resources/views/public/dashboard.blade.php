@@ -134,9 +134,6 @@
         const medicalFieldData = @json($medicalField);
         const taskHistoryQuestionDetail = @json($taskHistoryQuestionDetail);
 
-        console.log(taskHistoryQuestionDetail);
-
-
         const labels = medicalFieldData.map(field => field.name);
         const averages = medicalFieldData.map(field => field.average);
 

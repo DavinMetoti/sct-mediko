@@ -85,7 +85,7 @@
                 });
             },
             onReject: () => {
-                console.log('Rejected!');
+
             },
         });
     });
@@ -219,7 +219,6 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Notification marked as read:', data);
         })
         .catch(error => {
             console.error('Error marking notification as read:', error);
