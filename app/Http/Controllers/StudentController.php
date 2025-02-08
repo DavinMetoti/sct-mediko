@@ -43,8 +43,8 @@ class StudentController extends Controller
 
 
         $taskHistoryQuestionDetail->each(function ($taskHistory) {
-            $taskHistory->question->questionDetail->each(function ($questionDetail) {
-                if ($questionDetail->panelist_answers_distribution) {
+            optional($taskHistory->question)->questionDetail?->each(function ($questionDetail) {
+                if (!empty($questionDetail->panelist_answers_distribution)) {
                     $questionDetail->panelist_answers_distribution = json_decode($questionDetail->panelist_answers_distribution, true);
                 }
             });
