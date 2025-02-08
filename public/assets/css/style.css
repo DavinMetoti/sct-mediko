@@ -612,3 +612,19 @@ table.dataTable tbody tr:hover {
     width:100% !important;
     height:300px !important;
 }
+
+#closeModal {
+    background-color: rgba(0, 0, 0, 0.5); /* Warna hitam transparan */
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Membuatnya bundar */
+    transition: background-color 0.3s ease-in-out; /* Animasi efek hover */
+}
+
+#closeModal:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Lebih gelap saat di-hover */
+}
