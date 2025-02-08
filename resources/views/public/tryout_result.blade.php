@@ -383,8 +383,8 @@
                         : "{{ secure_asset('assets/images/No_Image_Available.jpg') }}"
                 );
                 $('#new_information').text(question_tryout.new_information);
-                $('#discussion_image').attr('src', question_tryout.sub_topic.path);
-                $('#iframe-pdf').attr('src', imageSrc);
+                $('#discussion_image').attr('src', imageSrc);
+                $('#iframe-pdf').attr('src', question_tryout.sub_topic.path);
                 $('#minus_one').text(question_tryout.question_type.minus_one);
                 $('#minus_two').text(question_tryout.question_type.minus_two);
                 $('#zero').text(question_tryout.question_type.zero);
