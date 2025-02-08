@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaskHistory;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HistoryTryoutController extends Controller
@@ -12,10 +13,13 @@ class HistoryTryoutController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', [User::class, 'tryout-archive.index']);
+
         $tryoutHistory = TaskHistory::with(['question' => function ($query) {
             $query->withCount('questionDetail');
         }])
             ->where('user_id', auth()->id())
+            ->where('status', 'completed')
             ->get();
 
         $tryoutHistory->each(function ($taskHistory) {

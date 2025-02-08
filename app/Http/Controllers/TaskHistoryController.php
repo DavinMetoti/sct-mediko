@@ -15,7 +15,7 @@ class TaskHistoryController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -23,7 +23,7 @@ class TaskHistoryController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -40,18 +40,18 @@ class TaskHistoryController extends Controller
                 'status' => 'required|in:in_progress,completed,failed',
             ]);
 
-            // Cek apakah ada task history yang sudah completed
+
             $completedTaskHistory = TaskHistory::where('user_id', $validatedData['user_id'])
                 ->where('question_id', $validatedData['question_id'])
                 ->where('status', 'completed')
                 ->first();
 
             if ($completedTaskHistory) {
-                // Hapus task history yang sudah completed
+
                 $completedTaskHistory->delete();
             }
 
-            // Cek apakah ada task history dengan status in_progress
+
             $existingTaskHistory = TaskHistory::where('user_id', $validatedData['user_id'])
                 ->where('question_id', $validatedData['question_id'])
                 ->where('status', 'in_progress')
@@ -64,7 +64,7 @@ class TaskHistoryController extends Controller
                 ], 200);
             }
 
-            // Membuat task history baru
+
             $taskHistory = TaskHistory::create($validatedData);
 
             return response()->json([
@@ -171,6 +171,6 @@ class TaskHistoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
     }
 }

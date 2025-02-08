@@ -15,16 +15,19 @@
                     </div>
 
                     <div class="row">
-                        @foreach ($tryoutHistory as $item)
+                        @forelse ($tryoutHistory as $item)
                         <div class="col-md-4">
                             <div class="card mb-5 shadow-lg border-0 rounded-xl">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div class="flex-column">
-                                            <h5 class="fw-bold">{{$item->question->question}}</h5>
+                                            <h5 class="fw-bold">
+                                                {{ optional($item->question)->question ?? 'Tidak ada soal' }}
+                                            </h5>
 
                                             <p class="text-muted text-sm">
-                                                Completed on: {{ $item->completed_at->format('d M Y, H:i') }}
+                                                Completed on:
+                                                {{ optional($item->completed_at)->format('d M Y, H:i') ?? '-' }}
                                             </p>
                                         </div>
 
@@ -38,11 +41,12 @@
                                                     bg-secondary
                                                 @endif
                                                 text-white rounded-pill p-2 font-weight-semibold">
-                                                {{ ucfirst($item->status) }}
+                                                {{ ucfirst($item->status ?? 'unknown') }}
                                             </span>
                                         </div>
                                     </div>
-                                    @if ($item->total_score < 70)
+
+                                    @if (($item->total_score ?? 0) < 70)
                                     <div class="text-center">
                                         <span class="badge text-danger rounded-pill p-2 font-weight-semibold" style="font-size: 2rem;">
                                             Tidak Lulus
@@ -55,21 +59,30 @@
                                         </span>
                                     </div>
                                     @endif
+
                                     <div class="flex justify-content-between">
                                         <p class="mt-3 mb-1 text-lg fw-bold">
                                             Score:
-                                            <span class="text-dark">{{ $item->total_score }}</span>
+                                            <span class="text-dark">{{ $item->total_score ?? 0 }}</span>
                                         </p>
 
+                                        @if($item->id)
                                         <a href="{{ route('task-history.show', $item->id) }}" class="btn btn-info btn-sm rounded-pill mt-3 d-flex align-items-center px-3 py-2">
                                             <i class="fas fa-book mr-2"></i> Pembahasan
                                         </a>
+                                        @endif
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                        @endforeach
+                        @empty
+                        <div class="col-12">
+                            <div class="alert alert-warning text-center">
+                                Tidak ada riwayat tryout tersedia.
+                            </div>
+                        </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
