@@ -184,7 +184,7 @@
                     <p id="clinic-case" class="text-sm"></p>
                     <div class="text-md fw-bold text-muted">Hipotesis Awal</div>
                     <p id="initial_hypothesis" class="text-sm"></p>
-                    <img id="img_initial_hypothesis" class="mb-3"></img>
+                    <img id="img_initial_hypothesis" class="mb-3" width="50%"></img>
                     <div class="text-md fw-bold text-muted">Informasi Baru</div>
                     <p id="new_information" class="text-sm"></p>
                     <div class="text-md fw-bold text-muted">Pembahasan</div>
@@ -192,7 +192,9 @@
                         src="https://sct-mediko.test/storage/uploads/file/TOWIa1s7dVTvapf8xxAjnf4X1AVY5dkF5mpxiRgY.pdf#toolbar=0&navpanes=0&scrollbar=0"
                         width="100%"
                         height="600px"
-                        oncontextmenu="return false;">
+                        oncontextmenu="return false;"
+                        id="iframe-pdf"
+                        >
                         Your browser does not support iframes.
                     </iframe>
                 </div>
@@ -381,7 +383,8 @@
                         : "{{ secure_asset('assets/images/No_Image_Available.jpg') }}"
                 );
                 $('#new_information').text(question_tryout.new_information);
-                $('#discussion_image').attr('src', imageSrc);
+                $('#discussion_image').attr('src', question_tryout.sub_topic.path);
+                $('#iframe-pdf').attr('src', imageSrc);
                 $('#minus_one').text(question_tryout.question_type.minus_one);
                 $('#minus_two').text(question_tryout.question_type.minus_two);
                 $('#zero').text(question_tryout.question_type.zero);
