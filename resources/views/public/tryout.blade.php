@@ -173,7 +173,7 @@
 </div>
 
 <div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-    <img id="modalImage" src="" alt="Enlarged Image">
+    <img id="modalImage" src="" alt="Enlarged Image" class="max-w-70vw max-h-70vh object-contain rounded-lg">
     <button id="closeModal" class="absolute top-5 right-5 text-white text-2xl font-bold">&times;</button>
 </div>
 
