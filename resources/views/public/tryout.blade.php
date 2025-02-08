@@ -94,7 +94,7 @@
                                                 <p class="mb-2" id="new_information"></p>
                                                 <div class="relative">
                                                     <img id="discussion_image" src="" alt="Clinical finding" class="max-w-xs mx-auto cursor-pointer hover:opacity-90 transition-opacity">
-                                                    <p class="text-center text-sm text-gray-500 mt-1">Klik untuk perbesar</p>
+                                                    <p id="descussion_image_text" class="text-center text-sm text-gray-500 mt-1">Klik untuk perbesar</p>
                                                 </div>
                                             </td>
                                             <td class="p-3 border">
@@ -173,7 +173,7 @@
 </div>
 
 <div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
-    <img id="modalImage" src="" alt="Enlarged Image" class="max-w-full max-h-full">
+    <img id="modalImage" src="" alt="Enlarged Image">
     <button id="closeModal" class="absolute top-5 right-5 text-white text-2xl font-bold">&times;</button>
 </div>
 
@@ -303,7 +303,7 @@
                 let question_tryout = response.data;
 
                 const defaultImage = '{{ secure_asset('assets/images/No_Image_Available.jpg') }}';
-                const imageSrc = question_tryout.discussion_image || defaultImage;
+                const imageSrc = question_tryout.discussion_image || null;
                 const selectedRadio = $('input[name="question-1-1"]:checked');
 
                 selectedRadio.prop('checked', false);
@@ -315,7 +315,13 @@
                 $('#clinic-case').text(question_tryout.clinical_case);
                 $('#initial_hypothesis').text(question_tryout.initial_hypothesis);
                 $('#new_information').text(question_tryout.new_information);
-                $('#discussion_image').attr('src', imageSrc);
+                if (imageSrc) {
+                    $('#discussion_image').attr('src', imageSrc).show();
+                    $('#descussion_image_text').show();
+                } else {
+                    $('#discussion_image').hide();
+                    $('#descussion_image_text').hide();
+                }
                 $('#minus_one').text(question_tryout.question_type.minus_one);
                 $('#minus_two').text(question_tryout.question_type.minus_two);
                 $('#zero').text(question_tryout.question_type.zero);
