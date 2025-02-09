@@ -15,7 +15,7 @@ class ListPakcageController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', [User::class, 'list-invoice.index']);
+        $this->authorize('viewAny', [User::class, 'list-package.index']);
 
         $userId = auth()->id();
 
