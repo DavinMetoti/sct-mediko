@@ -109,6 +109,8 @@ $(document).ready(function () {
         question_detail_ids: []
     };
 
+    let isSwap = false;
+
     const ctx = $('#medicalFieldChart')[0].getContext('2d');
     const qtx = $('#questionBankChart')[0].getContext('2d');
 
@@ -400,7 +402,7 @@ $(document).ready(function () {
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open');
 
-                if (selectedQuestionSwap.question_detail_ids.length > 0) {
+                if (isSwap) {
                     $.ajax({
                         url: '{{ route('question.detach-question-detail') }}',
                         type: 'POST',
@@ -411,6 +413,7 @@ $(document).ready(function () {
                             toastSuccess('Successfully swap question details.');
                             table.ajax.reload(null, false);
                             selectedQuestionSwap.question_detail_ids.length = 0;
+                            isSwap = false;
                         },
                         error: (xhr, status, error) => {
                             toastError('Failed to swap question details. Please try again.');
@@ -462,6 +465,7 @@ $(document).ready(function () {
     $('#table-check-import').on('click', '#btn-swap', function(){
         const id = $(this).data('bank-id');
         const question_id = $(this).data('id');
+        isSwap = true;
 
         selectedQuestionSwap.question_detail_ids.push(question_id);
 
