@@ -106,7 +106,7 @@ $questionDetailPanelis = array_combine(
                             </div>
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
-                                    <label for="discussion-image">Gambar Pembahasan (opsional)</label>
+                                    <label for="discussion-image">Gambar Soal (opsional)</label>
                                     <input type="file" name="discussion_image" id="discussion-image" class="form-control" accept="image/*">
                                 </div>
                             </div>
@@ -419,8 +419,8 @@ $questionDetailPanelis = array_combine(
 
                 },
                 error: function (error) {
-                    console.error('Error:', error);
-                    toastError(response.message);
+                    console.error(error);
+                    toastError(error.responseJSON.message);
                 }
             });
         });

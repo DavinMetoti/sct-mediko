@@ -14,7 +14,7 @@
                     <p class="text-subtitle text-muted">Tambahkan dan kelola admin untuk mempermudah pekerjaan.</p>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAccessRoleModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAccessRoleModal" onclick="clearForm()">
                         <i class="fas fa-plus me-2"></i><span>Tambah</span>
                     </button>
                 </div>
@@ -239,7 +239,6 @@
             });
         });
 
-        // Edit Access Role
         $(document).on('click', '.edit-button', function() {
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
@@ -312,7 +311,6 @@
             });
         });
 
-        // Delete Access Role
         $(document).on('click', '.delete-button', function() {
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
@@ -341,6 +339,18 @@
                 }
             });
         });
+
     });
+    function clearForm() {
+        $('#name').val('');
+        $('#username').val('');
+        $('#email').val('');
+        $('#access_role').val('');
+        $('#password-group').val('');
+        $('#password-confirmation-group').val('');
+
+        $('#password-group').attr('hidden', false);;
+        $('#password-confirmation-group').attr('hidden', false);;
+    }
 </script>
 

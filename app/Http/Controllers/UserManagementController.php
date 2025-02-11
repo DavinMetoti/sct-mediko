@@ -72,7 +72,7 @@ class UserManagementController extends Controller
                 'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|email|max:255',
                 'username' => 'sometimes|string|max:255|unique:users,username,' . $id,
-                'access_role' => 'sometimes|integer|exists:roles,id',
+                'id_access_role' => 'sometimes|integer|exists:access_roles,id',
             ]);
 
             $user = User::findOrFail($id);
@@ -108,7 +108,9 @@ class UserManagementController extends Controller
     public function destroy(string $id)
     {
         try {
+
             $user = User::findOrFail($id);
+            $this->authorize('delete', $user);
             $user->delete();
 
             return response()->json([

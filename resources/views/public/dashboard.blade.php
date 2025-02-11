@@ -8,6 +8,11 @@
     @include('partials.navbar')
     <div class="content" id="content">
         <div class="px-3">
+            <div class="alert alert-primary" role="alert">
+                Pastikan sudah bergabung dengan group WhatsApp,
+                <a href="{{ $setting[0]->value ?? '#' }}" target="_blank">Gabung sekarang.</a>
+            </div>
+
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <div class="bg-white overflow-hidden shadow rounded-lg">

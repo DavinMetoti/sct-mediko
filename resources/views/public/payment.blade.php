@@ -275,12 +275,14 @@
                     uploadBtn.disabled = true;
                 },
                 success: function (response) {
-                    successAllert('Pembelian berhasil, menunggu verfikasi');
+                    toastSuccess('Pembelian berhasil, menunggu verfikasi');
                     uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Upload';
                     uploadBtn.disabled = false;
+                    filePreview.innerHTML = "";
+
                 },
                 error: function () {
-                    alert("Gagal mengunggah file.");
+                    toastError("Gagal mengunggah file.");
                     uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Upload';
                     uploadBtn.disabled = false;
                 }

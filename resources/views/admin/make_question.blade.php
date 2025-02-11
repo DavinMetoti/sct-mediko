@@ -275,9 +275,9 @@
                         $('#time').val(totalMinutes);
                         $('#release_date').val(questionData.start_time.split(' ')[0]);
                         $('#expired_date').val(questionData.end_time.split(' ')[0]);
-                        description.html.set(questionData.description);
 
                         $('#is-public').prop('checked', questionData.is_public === 1);
+                        quill.root.innerHTML = questionData.description;
 
                         $('#cancel-button').attr('hidden', false);
                         $('#update-button').attr('hidden', false).attr('data-id', questionData.id);
@@ -452,8 +452,8 @@
             $('#release_date').flatpickr().clear();
             $('#expired_date').flatpickr().clear();
             $('#time').val('');
+            quill.root.innerHTML = '';
             $('#is-public').prop('checked', false);
-            description.html.set('');
 
             $('#cancel-button').attr('hidden', true);
             $('#update-button').attr('hidden', true);
@@ -502,7 +502,6 @@
                     $('#expired_date').flatpickr().clear();
                     $('#time').val('');
                     $('#is-public').prop('checked', false);
-                    description.html.set('');
 
                     $('#cancel-button').attr('hidden', true);
                     $('#update-button').attr('hidden', true);

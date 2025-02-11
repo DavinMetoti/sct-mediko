@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MedicalField;
 use App\Models\Question;
+use App\Models\Setting;
 use App\Models\TaskHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ class StudentController extends Controller
     public function index()
     {
         $this->authorize('viewAny', [User::class, 'student.index']);
+
+        $setting = Setting::all();
 
         $questionPublic = Question::where('status', 'active')
             ->where('is_public', 1)
@@ -119,7 +122,8 @@ class StudentController extends Controller
             'taskHistory',
             'average_total_akhir',
             'taskHistoryQuestionDetail',
-            'medicalField'
+            'medicalField',
+            'setting'
         ]));
     }
 

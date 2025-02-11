@@ -32,7 +32,7 @@ class LoginController extends Controller
 
         try {
 
-            $user = User::where('username', $validate['username'])->firstOrFail();
+            $user = User::with('accessRole')->where('username', $validate['username'])->firstOrFail();
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
 
@@ -68,7 +68,7 @@ class LoginController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Login berhasil!',
-            'redirect' => $user->id_access_role == 1 ? route('dashboard.index') : route('student.index')
+            'redirect' => $user->accessRole->access == "private" ? route('dashboard.index') : route('student.index')
         ]);
     }
 

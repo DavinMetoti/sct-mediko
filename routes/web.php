@@ -10,6 +10,7 @@ use App\Http\Controllers\ListInvoiceController;
 use App\Http\Controllers\ListPakcageController;
 use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
+use App\Http\Controllers\OtpController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\TaskHistoryController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TryoutController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Middleware\OtpAccessMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,11 +33,22 @@ Route::get('/', function () {
 });
 
 // Route for the auth page
+Route::resource('forgot-password', OtpController::class);
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::get('register', [LoginController::class, 'register'])->name('register');
 Route::post('login/check', [LoginController::class, 'login'])->name('login.check');
 Route::post('register/store', [LoginController::class, 'registerStore'])->name('register.store');
 Route::post('logout', [LoginController::class, 'logout'])->name('login.logout');
+Route::post('/send-otp', [OtpController::class, 'sendOtp'])->name('send.otp');
+Route::get('/verify-otp', [OtpController::class, 'showVerifyOtpPage'])
+    ->middleware(OtpAccessMiddleware::class)
+    ->name('verify.otp.view');
+Route::get('/change-password', [OtpController::class, 'changePasswordPage'])
+    ->middleware(OtpAccessMiddleware::class)
+    ->name('change.password.view');
+Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('verify.otp');
+Route::post('/change-password', [OtpController::class, 'updatePassword'])->name('change.password');
+
 
 // Route for the private access
 Route::middleware('auth')->resource('profile', ProfileController::class);
@@ -99,7 +112,6 @@ Route::middleware('auth')->post('/update-password/{id}', [ProfileController::cla
 Route::middleware('auth')->post('tryout/history/answer', [TryoutController::class, 'getHistoryAnswer'])->name('tryout.history.answer');
 
 
+
 Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])
-    ->name('package.question.destroy');
-
-
+->name('package.question.destroy');

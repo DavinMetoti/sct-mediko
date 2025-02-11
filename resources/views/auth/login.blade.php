@@ -32,22 +32,31 @@
                     <input type="text" class="form-control rounded px-3 py-2" id="username" name="username"
                         placeholder="Enter your username" required>
                 </div>
-                <div class="form-group mb-3">
+                <div class="form-group mb-3 position-relative">
                     <label for="password" class="form-label text-black fw-medium">Password</label>
-                    <input type="password" class="form-control rounded px-3 py-2" id="password" name="password"
-                        placeholder="Enter your password" required>
+                    <div class="position-relative">
+                        <input type="password" class="form-control rounded px-3 py-2 pe-5" id="password" name="password"
+                            placeholder="Enter your password" required>
+                        <i class="fa fa-eye position-absolute end-0 top-50 translate-middle-y me-3 text-secondary cursor-pointer"
+                            id="togglePassword" style="cursor: pointer;"></i>
+                    </div>
                 </div>
-                <div class="form-group form-check d-flex align-items-center mb-4">
-                    <input type="checkbox" class="form-check-input me-2" id="remember" name="remember">
-                    <label class="form-check-label text-secondary" for="remember">Remember me</label>
+                <div class="flex justify-content-between">
+                    <div class="form-group form-check d-flex align-items-center mb-4">
+                        <input type="checkbox" class="form-check-input me-2" id="remember" name="remember">
+                        <label class="form-check-label text-secondary" for="remember">Remember me</label>
+                    </div>
+                    <div class="text-muted">
+                        <a href="{{ route('forgot-password.index') }}" class="text-decoration-none text-primary">Forgot Password</a>
+                    </div>
                 </div>
                 <button type="button" id="button-login"
                     class="btn btn-primary btn-block rounded py-2 w-100">Login</button>
             </form>
             <div class="text-center mt-3">
                 <small class="text-muted">
-                    Belum punya akun?
-                    <a href="{{ route('register') }}" class="text-decoration-none text-primary">Daftar Sekarang</a>
+                    Don't have account?
+                    <a href="{{ route('register') }}" class="text-decoration-none text-primary">Register Now</a>
                 </small>
             </div>
         </div>
@@ -59,6 +68,20 @@
 
 <script>
     $(document).ready(function () {
+        $('#togglePassword').click(function () {
+            const passwordField = $('#password');
+            const icon = $(this);
+
+            if (passwordField.attr('type') === 'password') {
+                passwordField.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordField.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+
         function login() {
             const username = $('#username').val().trim();
             const password = $('#password').val().trim();
@@ -108,10 +131,8 @@
             });
         }
 
-        // Klik tombol login
         $('#button-login').click(login);
 
-        // Tekan Enter di input password
         $('#password').keypress(function (event) {
             if (event.which === 13) {
                 event.preventDefault();

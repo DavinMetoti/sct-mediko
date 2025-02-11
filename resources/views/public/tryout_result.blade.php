@@ -377,11 +377,11 @@
                 $('#rationale').html(question_tryout.rationale);
                 $('#clinic-case').text(question_tryout.clinical_case);
                 $('#initial_hypothesis').text(question_tryout.initial_hypothesis);
-                $('#img_initial_hypothesis').attr('src',
-                    question_tryout.discussion_image
-                        ? question_tryout.discussion_image
-                        : "{{ secure_asset('assets/images/No_Image_Available.jpg') }}"
-                );
+                if (question_tryout.discussion_image) {
+                    $('#img_initial_hypothesis').attr('src', question_tryout.discussion_image).show();
+                } else {
+                    $('#img_initial_hypothesis').hide();
+                };
                 $('#new_information').text(question_tryout.new_information);
                 $('#discussion_image').attr('src', imageSrc);
                 $('#iframe-pdf').attr('src', question_tryout.sub_topic.path);

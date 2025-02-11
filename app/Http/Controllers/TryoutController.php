@@ -22,11 +22,17 @@ class TryoutController extends Controller
             abort(403, 'Mohon maaf sesi ini tidak valid');
         }
 
+        $user = User::with('accessRole')->findOrFail(auth()->id());
+
         $tryout = TaskHistory::where('id', $idQuestion)
         ->first();
 
         if ($tryout->status == "completed") {
-            return redirect()->route('dashboard.index');
+            if($user->accessRole->access == "private"){
+                return redirect()->route('dashboard.index');
+            } else {
+                return redirect()->route('student.index');
+            }
         }
 
         $question = Question::with([

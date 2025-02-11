@@ -104,6 +104,11 @@ $(document).ready(function () {
 
     let questionTable;
 
+    let selectedQuestionSwap = {
+        question_id: questionId,
+        question_detail_ids: []
+    };
+
     const ctx = $('#medicalFieldChart')[0].getContext('2d');
     const qtx = $('#questionBankChart')[0].getContext('2d');
 
@@ -365,50 +370,6 @@ $(document).ready(function () {
             }
         });
     });
-    $('#check-bank').on('click', function () {
-        const idBank = $('#bank-soal-select').val();
-
-        if (!idBank) {
-            toastWarning('Please select a Bank Soal first.');
-            return;
-        }
-
-        $.ajax({
-            url: `{{ route('question-bank.show', ':id') }}`.replace(':id', idBank),
-            method: 'GET',
-            success: (response) => {
-                    $('#questionDetailsModal').modal('show');
-                    if ($.fn.DataTable.isDataTable('#questions-list-table')) {
-                        $('#questions-list-table').DataTable().clear().destroy();
-                    }
-
-                    questionTable = $('#questions-list-table').DataTable({
-                    responsive: true,
-                    pageLength: 10,
-                    destroy: true,
-                    data: response.data.question_details,
-                    columns: [
-                        { data: 'clinical_case' },
-                        { data: 'medical_field.name' },
-                        { data: 'question_type.name' },
-                        {
-                            data: 'question',
-                            render: (data) => {
-                                if (Array.isArray(data)) {
-                                    return data.map(item => `<span class="badge bg-success mr-1 mb-1">${$('<div>').text(item.question).html()}</span>`).join(' ');
-                                }
-                                return data;
-                            }
-                        }
-                    ]
-                });
-            },
-            error: (xhr, status, error) => {
-                toastError('Failed to load questions. Please try again later.');
-                console.error('Error:', error);
-            }
-        });
-    });
 
     $('#button-save-import').on('click', function () {
         const selectedData = $('#questions-list-table').DataTable().rows('.selected').data();
@@ -438,6 +399,26 @@ $(document).ready(function () {
                 $('#questionDetailsModal').modal('hide');
                 $('.modal-backdrop').remove();
                 $('body').removeClass('modal-open');
+
+                if (selectedQuestionSwap.question_detail_ids.length > 0) {
+                    $.ajax({
+                        url: '{{ route('question.detach-question-detail') }}',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        data: JSON.stringify(selectedQuestionSwap),
+                        success: (response) => {
+                            toastSuccess('Successfully swap question details.');
+                            table.ajax.reload(null, false);
+                            selectedQuestionSwap.question_detail_ids.length = 0;
+                        },
+                        error: (xhr, status, error) => {
+                            toastError('Failed to swap question details. Please try again.');
+                            selectedQuestionSwap.question_detail_ids.length = 0;
+                            console.error('Error:', error);
+                        }
+                    });
+                }
             },
             error: (xhr, status, error) => {
                 toastError('Failed to attach question details. Please try again.');
@@ -480,6 +461,9 @@ $(document).ready(function () {
 
     $('#table-check-import').on('click', '#btn-swap', function(){
         const id = $(this).data('bank-id');
+        const question_id = $(this).data('id');
+
+        selectedQuestionSwap.question_detail_ids.push(question_id);
 
         $.ajax({
             url: `{{ route('question-bank.show', ':id') }}`.replace(':id', id),

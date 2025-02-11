@@ -16,7 +16,7 @@
                     </div>
                     <div class="w-full flex justify-content-end pt-3 px-4">
                         <button class="btn" id="btn-update"><i class="fas fa-pencil text-primary"></i></button>
-                        <button class="btn" id="deleteUserButton"><i class="fas fa-trash text-danger"></i></button>
+                        <button class="btn" id="deleteUserButton" hidden><i class="fas fa-trash text-danger"></i></button>
                     </div>
                     <div class="px-4" style="padding-top: 2rem">
                         <div class="flex justify-content-between">
