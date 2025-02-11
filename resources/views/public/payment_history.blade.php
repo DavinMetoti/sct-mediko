@@ -49,7 +49,7 @@
                 // { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [
-                { targets: [2, 4], className: 'text-center w-30' }
+                { targets: [2], className: 'text-center w-30' }
             ]
         });
 
