@@ -263,7 +263,7 @@
                         const name = $('#name').val();
                         const username = $('#username').val();
                         const email = $('#email').val();
-                        const id_access_role = $('#access_role').val();
+                        const idAccessRole = $('#access_role').val().trim();
 
                         if (!username) {
                             toastWarning('Username wajib diisi!');
@@ -280,7 +280,7 @@
                                 name: name,
                                 username: username,
                                 email: email,
-                                id_access_role: id_access_role
+                                id_access_role: idAccessRole
                             },
                             success: function(response) {
                                 $('#addAccessRoleModal').modal('hide');
@@ -289,7 +289,6 @@
                                 $('#name').val('');
                                 $('#username').val('');
                                 $('#email').val('');
-                                $('#access_role').val('');
                                 $('#password-group').attr('hidden', false);;
                                 $('#password-confirmation-group').attr('hidden', false);;
 
