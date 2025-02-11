@@ -301,6 +301,8 @@
 
         $('#update-button').on('click', function() {
             const id = $(this).data('id');
+            const csrfToken = '{{ csrf_token() }}';
+
 
             const name = $('#name').val();
             const username = $('#username').val();
