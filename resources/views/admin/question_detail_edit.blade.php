@@ -414,7 +414,7 @@ $questionDetailPanelis = array_combine(
                 success: function (response) {
                     toastSuccess(response.message);
                     setTimeout(function() {
-                        window.history.back();
+                        window.location.replace(document.referrer);
                     }, 1500);
 
                 },
