@@ -275,7 +275,7 @@
                     uploadBtn.disabled = true;
                 },
                 success: function (response) {
-                    toastSuccess('Pembelian berhasil, menunggu verfikasi');
+                    toastSuccess('Pembelian berhasil, silakan cek status pembayaran anda');
                     uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Upload';
                     uploadBtn.disabled = false;
                     filePreview.innerHTML = "";
