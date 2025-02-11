@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserManagementController extends Controller
@@ -68,15 +69,21 @@ class UserManagementController extends Controller
     public function update(Request $request, string $id)
     {
         try {
+            $user = User::findOrFail($id);
+
             $validatedData = $request->validate([
                 'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|email|max:255',
-                'username' => 'sometimes|string|max:255|unique:users,username,' . $id,
+                'username' => [
+                    'sometimes',
+                    'string',
+                    'max:255',
+                    Rule::unique('users', 'username')->ignore($id, 'id'), // Pastikan 'id' adalah nama primary key
+                ],
                 'id_access_role' => 'sometimes|integer|exists:access_roles,id',
             ]);
 
-            $user = User::findOrFail($id);
-
+            // Periksa apakah ada perubahan pada data
             $changes = array_diff_assoc($validatedData, $user->only(array_keys($validatedData)));
 
             if (empty($changes)) {
@@ -86,6 +93,7 @@ class UserManagementController extends Controller
                 ], 200);
             }
 
+            // Simpan perubahan jika ada
             foreach ($changes as $field => $value) {
                 $user->{$field} = $value;
             }
