@@ -90,6 +90,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" id="save-button">Simpan</button>
+                <button type="button" class="btn btn-primary" id="update-button">Simpan</button>
             </div>
         </div>
     </div>
@@ -189,9 +190,7 @@
                 return;
             }
 
-
             $('#save-button').attr('disabled', true);
-
 
             $.ajax({
                 url: "{{ route('register.store') }}",
@@ -242,7 +241,7 @@
         $(document).on('click', '.edit-button', function() {
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
-            $('#save-button').attr('id', 'update-button');
+            $('#save-button').hide();
 
             $.ajax({
                 url: `{{ url('admin/user-management') }}/${id}`,
@@ -326,12 +325,12 @@
                     $('#name').val('');
                     $('#username').val('');
                     $('#email').val('');
-                    $('#access_role').val('');
+                    $('#access_role').val('').trigger('change');
                     $('#password-group').attr('hidden', false);;
                     $('#password-confirmation-group').attr('hidden', false);;
 
                     table.ajax.reload(null, false);
-                    $('#update-button').attr('id', 'save-button');
+                    $('#save-button').show();
 
                     toastSuccess(response.message);
                 },
@@ -351,8 +350,7 @@
         $('#password-group').val('');
         $('#password-confirmation-group').val('');
 
-        $('#update-button').attr('id', 'save-button');
-
+        $('#save-button').show();
 
         $('#password-group').attr('hidden', false);;
         $('#password-confirmation-group').attr('hidden', false);;
