@@ -77,7 +77,16 @@ class UserManagementController extends Controller
 
             $user = User::findOrFail($id);
 
-            foreach ($validatedData as $field => $value) {
+            $changes = array_diff_assoc($validatedData, $user->only(array_keys($validatedData)));
+
+            if (empty($changes)) {
+                return response()->json([
+                    'message' => 'Tidak ada perubahan data.',
+                    'data' => $user,
+                ], 200);
+            }
+
+            foreach ($changes as $field => $value) {
                 $user->{$field} = $value;
             }
 

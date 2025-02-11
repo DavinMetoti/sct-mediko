@@ -262,6 +262,51 @@
                     $('#access_role').val(response.data.id_access_role).trigger('change');
                     $('#addAccessRoleModal').modal('show');
 
+                    $('#update-button').on('click', function() {
+                        const name = $('#name').val();
+                        const username = $('#username').val();
+                        const email = $('#email').val();
+                        const idAccessRole = $('#access_role').val().trim();
+
+                        if (!username) {
+                            toastWarning('Username wajib diisi!');
+                            return;
+                        }
+
+                        $.ajax({
+                            url: `{{ url('admin/user-management') }}/${id}`,
+                            method: 'PUT',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            data: {
+                                name: name,
+                                username: username,
+                                email: email,
+                                id_access_role: idAccessRole
+                            },
+                            success: function(response) {
+                                $('#addAccessRoleModal').modal('hide');
+                                $('.modal-backdrop').remove();
+                                $('body').removeClass('modal-open');
+                                $('#name').val('');
+                                $('#username').val('');
+                                $('#email').val('');
+                                $('#access_role').val('').trigger('change');
+                                $('#password-group').attr('hidden', false);;
+                                $('#password-confirmation-group').attr('hidden', false);;
+
+                                table.ajax.reload(null, false);
+                                $('#save-button').show();
+
+                                toastSuccess(response.message);
+                            },
+                            error: function(xhr) {
+                                console.error(xhr.responseText);
+                                toastError('Terjadi kesalahan saat menyimpan data!');
+                            }
+                        });
+                    });
                 },
                 error: function(xhr) {
                     console.error(xhr.responseText);
@@ -295,56 +340,6 @@
                     });
                 },
                 onReject: () => {
-                }
-            });
-        });
-
-        $('#update-button').on('click', function() {
-            const id = $(this).data('id');
-            const csrfToken = '{{ csrf_token() }}';
-
-
-            const name = $('#name').val();
-            const username = $('#username').val();
-            const email = $('#email').val();
-            const idAccessRole = $('#access_role').val().trim();
-
-            if (!username) {
-                toastWarning('Username wajib diisi!');
-                return;
-            }
-
-            $.ajax({
-                url: `{{ url('admin/user-management') }}/${id}`,
-                method: 'PUT',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                data: {
-                    name: name,
-                    username: username,
-                    email: email,
-                    id_access_role: idAccessRole
-                },
-                success: function(response) {
-                    $('#addAccessRoleModal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    $('body').removeClass('modal-open');
-                    $('#name').val('');
-                    $('#username').val('');
-                    $('#email').val('');
-                    $('#access_role').val('').trigger('change');
-                    $('#password-group').attr('hidden', false);;
-                    $('#password-confirmation-group').attr('hidden', false);;
-
-                    table.ajax.reload(null, false);
-                    $('#save-button').show();
-
-                    toastSuccess(response.message);
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                    toastError('Terjadi kesalahan saat menyimpan data!');
                 }
             });
         });
