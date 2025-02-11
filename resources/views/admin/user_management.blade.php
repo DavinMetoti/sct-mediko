@@ -289,6 +289,7 @@
                                 $('#name').val('');
                                 $('#username').val('');
                                 $('#email').val('');
+                                $('#access_role').val('');
                                 $('#password-group').attr('hidden', false);;
                                 $('#password-confirmation-group').attr('hidden', false);;
 
