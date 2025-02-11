@@ -484,7 +484,7 @@
                     thumbnail: thumbnail,
                     start_time: releaseDate,
                     end_time: expiredDate,
-                    description: description.html.get(),
+                    description: description,
                     time: formattedTime,
                     is_public: isPublic,
                     status: 'active',
