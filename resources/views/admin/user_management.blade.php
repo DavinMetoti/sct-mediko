@@ -242,6 +242,7 @@
             const id = $(this).data('id');
             const csrfToken = '{{ csrf_token() }}';
             $('#save-button').hide();
+            $('#update-button').show();
 
             $.ajax({
                 url: `{{ url('admin/user-management') }}/${id}`,
@@ -351,6 +352,8 @@
         $('#password-confirmation-group').val('');
 
         $('#save-button').show();
+        $('#update-button').hide();
+
 
         $('#password-group').attr('hidden', false);;
         $('#password-confirmation-group').attr('hidden', false);;
