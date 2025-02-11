@@ -410,7 +410,6 @@ $(document).ready(function () {
                         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                         data: JSON.stringify(selectedQuestionSwap),
                         success: (response) => {
-                            toastSuccess('Successfully swap question details.');
                             table.ajax.reload(null, false);
                             selectedQuestionSwap.question_detail_ids.length = 0;
                             isSwap = false;

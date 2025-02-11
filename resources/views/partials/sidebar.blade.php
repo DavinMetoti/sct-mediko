@@ -174,7 +174,7 @@
         <div class="w-full menu-title">
             <a href="{{ route('user-management.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('user-management.index') ? 'active' : '' }}">
                 <i class="fas fa-users-gear me-3" style="width: 24px;text-align:center;"></i>
-                <span>Manajemen User</span>
+                <span>Manajemen Admin</span>
             </a>
         </div>
         @endcan
