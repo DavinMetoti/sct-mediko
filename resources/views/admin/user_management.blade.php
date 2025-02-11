@@ -245,6 +245,7 @@
             const csrfToken = '{{ csrf_token() }}';
             $('#save-button').hide();
             $('#update-button').show();
+            $('#update-button').attr('data-id'.id);
 
             $.ajax({
                 url: `{{ url('admin/user-management') }}/${id}`,
@@ -299,6 +300,8 @@
         });
 
         $('#update-button').on('click', function() {
+            const id = $(this).data('id');
+
             const name = $('#name').val();
             const username = $('#username').val();
             const email = $('#email').val();
