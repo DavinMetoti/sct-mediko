@@ -46,7 +46,7 @@
                 { data: 'package.name', name: 'package.name' },
                 { data: 'status', name: 'status', orderable: false, searchable: false },
                 { data: 'created_at', name: 'created_at' },
-                { data: 'action', name: 'action', orderable: false, searchable: false }
+                // { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [
                 { targets: [2, 4], className: 'text-center w-30' }
