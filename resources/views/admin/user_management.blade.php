@@ -90,7 +90,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-primary" id="save-button">Simpan</button>
-                <button type="button" class="btn btn-primary" hidden id="update-button">Simpan</button>
+                <button type="button" class="btn btn-primary" id="update-button">Simpan</button>
             </div>
         </div>
     </div>
@@ -101,6 +101,8 @@
 
 <script>
     $(document).ready(function() {
+        $('#update-button').hide();
+
         const table = $('#userPrivateTable').DataTable({
             processing: true,
             serverSide: true,
