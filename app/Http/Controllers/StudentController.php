@@ -64,7 +64,7 @@ class StudentController extends Controller
 
 
                 if ($taskHistoryForDetail) {
-                    $value = $questionDetail->panelist_answers_distribution[$taskHistoryForDetail->value] / $maxValue * 100;
+                    $value = $questionDetail->panelist_answers_distribution[$taskHistoryForDetail->value??0] / $maxValue * 100;
                     $questionDetail->value = round($value, 2);
                 } else {
                     $questionDetail->value = 0;

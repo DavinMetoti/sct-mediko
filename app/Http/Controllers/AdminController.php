@@ -15,19 +15,25 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', [User::class, 'dashboard.index']);
+        $user = User::with('accessRole')->findOrFail(auth()->id());
 
-        $question_total = QuestionDetail::count();
-        $questionActive_total = Question::where('status','active')->count();
-        $student_total = User::whereHas('accessRole', function ($query) {
-            $query->where('access', 'public');
-        })->count();
-        $student = User::whereHas('accessRole', function ($query) {
-            $query->where('access', 'public');
-        })->get();
+        if (optional($user->accessRole)->access === 'private') {
+            $this->authorize('viewAny', [User::class, 'dashboard.index']);
 
-        $package = Package::with('users')->get();
-        return view('admin.dashboard',compact('question_total','student_total','questionActive_total','package','student'));
+            $question_total = QuestionDetail::count();
+            $questionActive_total = Question::where('status', 'active')->count();
+            $student_total = User::whereHas('accessRole', function ($query) {
+                $query->where('access', 'public');
+            })->count();
+            $student = User::whereHas('accessRole', function ($query) {
+                $query->where('access', 'public');
+            })->get();
+
+            $package = Package::with('users')->get();
+            return view('admin.dashboard', compact('question_total', 'student_total', 'questionActive_total', 'package', 'student'));
+        } else {
+            return redirect()->route('student.index');
+        }
     }
 
     /**

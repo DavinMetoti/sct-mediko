@@ -8,21 +8,7 @@
     <div class="card shadow-lg rounded" style="width: 28rem;">
         <div class="card-body p-4">
             <div class="flex justify-content-center mb-3">
-                <a class="flex items-center" href="/">
-                    <div class="flex items-center gap-2">
-                        <svg viewBox="0 0 100 100" class="h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M30 70C30 45 45 40 45 40H55C55 40 70 45 70 70" stroke="#7AB929" stroke-width="6"
-                                stroke-linecap="round"></path>
-                            <circle cx="50" cy="35" r="15" stroke="#00A0DC" stroke-width="6"></circle>
-                            <path d="M20 50L35 50L40 35L50 65L60 50L80 50" stroke="#00A0DC" stroke-width="4"
-                                stroke-linecap="round"></path>
-                        </svg>
-                        <span class="text-2xl font-bold">
-                            <span class="text-[#7AB929]">MEDIKO</span>
-                            <span class="text-[#00A0DC]">.ID</span>
-                        </span>
-                    </div>
-                </a>
+                <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="20%">
             </div>
             <p class="text-center text-muted mb-4">Masuk ke akun Anda untuk melanjutkan</p>
             <form id="loginForm">

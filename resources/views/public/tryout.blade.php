@@ -21,7 +21,7 @@
                             </tr>
                             <tr>
                                 <td class="fw-bold text-muted w-20">Universitas</td>
-                                <td>: {{ $user->userDetail->univ??'Belum dipilih' }}</td>
+                                <td>: {{ $user->userDetail->univ ?? 'Belum dipilih' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -42,9 +42,15 @@
                             @endforeach
                         </ul>
                     </div>
+                    <div class="mt-4">
+                        <a href="{{ route('dashboard.index') }}" class="btn btn-secondary w-100">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+
 
         <div class="col-md-9">
             <div class="card mb-3">
@@ -154,11 +160,11 @@
                     </div>
 
                     <div class="flex justify-content-between mt-6">
-                        <button class="btn btn-outline-secondary" disabled id="mark-button" onclick="markQuestion()">
+                        <button class="btn btn-outline-secondary" id="mark-button" onclick="markQuestion()">
                             <i class="fas fa-flag"></i>
                             <span>Tandai Soal</span>
                         </button>
-                        <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors" id="finish-button" onclick="confirmFinishExam()">
+                        <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors" id="finish-button" data-bs-toggle="modal" data-bs-target="#finishModal" onclick="showAllert()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle w-4 h-4">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                 <path d="m9 11 3 3L22 4"></path>
@@ -175,6 +181,32 @@
 <div id="imageModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center">
     <img id="modalImage" src="" alt="Enlarged Image" class="max-w-70vw max-h-70vh object-contain rounded-lg">
     <button id="closeModal" class="absolute top-5 right-5 text-white text-2xl font-bold">&times;</button>
+</div>
+
+<div class="modal fade" id="finishModal" tabindex="-1" aria-labelledby="finishModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h5 class="text-muted fw-bold">Menyelesaikan tryout?</h5>
+        <div class="border-2 rounded p-3 shadow-sm bg-light mb-2">
+            <p class="mb-0">
+                <strong>Anda yakin ingin mengumpulkan tryout?</strong>
+                Anda belum mengerjakan nomor soal: <span id="unanswered-questions" class="fw-bold text-danger"></span>
+            </p>
+        </div>
+        <div class="border-2 rounded p-3 shadow-sm bg-light">
+            <p class="mb-0">
+                <strong>Anda yakin ingin mengumpulkan tryout?</strong>
+                Anda masih memiliki soal yang ditandai: <span id="mark-questions" class="fw-bold text-warning"></span>
+            </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outlined-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" onclick="finishExam()">Selesaikan</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 @endsection
@@ -271,11 +303,11 @@
 
                     for (let i = 0; i < answer.length; i++) {
                         if (answer[i].status == "completed" && activeQuestion != answer[i].question_detail_id) {
-                            $('#question-' + answer[i].question_detail_id).addClass('bg-success text-white');
-                            $('#question-' + answer[i].question_detail_id).removeClass('text-muted');
+                            $('#question-' + answer[i].question_detail_id).addClass('bg-success text-white completed');
+                            $('#question-' + answer[i].question_detail_id).removeClass('text-muted mark');
                         } else if (answer[i].status == "mark" && activeQuestion != answer[i].question_detail_id) {
-                            $('#question-' + answer[i].question_detail_id).addClass('bg-warning text-white');
-                            $('#question-' + answer[i].question_detail_id).removeClass('text-muted');
+                            $('#question-' + answer[i].question_detail_id).addClass('bg-warning text-white mark');
+                            $('#question-' + answer[i].question_detail_id).removeClass('text-muted completed');
                         }
                     }
                 },
@@ -333,7 +365,6 @@
                 }
 
                 checkStatusButton();
-                $('#mark-button').attr('disabled',true)
 
                 $('#current-no').text(currentNumber)
 
@@ -449,6 +480,28 @@
             },
         });
     }
+
+    function showAllert() {
+        // Ambil pertanyaan yang belum dijawab (tidak memiliki class .mark atau .completed)
+        let itemsUnanswer = $('#question-list li').not('.mark, .completed').map(function() {
+            return $(this).text().trim();
+        }).get();
+
+        // Ambil pertanyaan yang ditandai (hanya yang memiliki class .mark)
+        let itemsMarked = $('#question-list li.mark').map(function() {
+            return $(this).text().trim();
+        }).get();
+
+        // Gabungkan menjadi string dengan pemisah koma
+        let unanswer = itemsUnanswer.join(', ');
+        let marked = itemsMarked.join(', ');
+
+        // Masukkan hasil ke dalam elemen yang sesuai
+        $('#unanswered-questions').text(unanswer);
+        $('#mark-questions').text(marked);
+    }
+
+
 
 
     function finishExam() {

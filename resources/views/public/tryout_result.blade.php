@@ -42,6 +42,11 @@
                             @endforeach
                         </ul>
                     </div>
+                    <div>
+                        <a href="{{ route('dashboard.index') }}" class="btn btn-secondary w-100">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,8 +68,14 @@
                             <div class="card">
                                 <div class="card-body bg-light">
                                     <div class="fw-medium text-sm text-muted mb-2">Total Soal Terjawab</div>
-                                    <div class="text-xl fw-bold mb-2">{{$tryout->TaskHistory->count()}}/{{$question->questionDetail->count()}}</div>
-                                    <small class="text-muted text-md">{{$tryout->TaskHistory->count() / $question->questionDetail->count() * 100}} %</small>
+                                    @php
+                                        $answeredCount = $tryout->TaskHistory->filter(fn($task) => $task->value !== null)->count();
+                                        $totalQuestions = $question->questionDetail->count();
+                                        $percentage = $totalQuestions > 0 ? ($answeredCount / $totalQuestions * 100) : 0;
+                                    @endphp
+
+                                    <div class="text-xl fw-bold mb-2">{{ $answeredCount }}/{{ $totalQuestions }}</div>
+                                    <small class="text-muted text-md">{{ number_format($percentage, 2) }} %</small>
                                 </div>
                             </div>
                         </div>
