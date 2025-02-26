@@ -1,0 +1,157 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+body {
+    font-family: "Poppins", serif !important;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    position: fixed;
+    height: 80px;
+    background-color: #FFFFFF;
+    width: 100%;
+    z-index: 99999;
+}
+
+.text-tertiary {
+    color: #17ada8
+}
+
+.nav-text {
+    text-decoration: none;
+    color: #333;
+}
+
+section {
+    padding-top: 80px;
+}
+
+.jumbotron {
+    height: 90vh;
+}
+
+.jumbotron-title_main {
+    font-weight: 900;
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+}
+.jumbotron-title_sub {
+    font-weight: 900;
+    font-size: 4rem;
+    background: linear-gradient(90deg, rgba(45,139,201,1) 0%, rgba(128,187,62,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.testimoni-title {
+    font-weight: 700;
+    background: linear-gradient(90deg, rgba(45,139,201,1) 0%, rgba(128,187,62,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sub-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.card-price {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+.card-price_header {
+    background: linear-gradient(16deg, rgba(45,139,201,1) 0%, rgba(128,187,62,1) 100%);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.price {
+    background-color: rgba(255, 255, 255, 0.572);
+    border-radius: 12px;
+    color: white;
+}
+
+.accordion .card {
+    border: none;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.accordion .card-header {
+    background-color: #18A999;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+}
+
+.accordion .card-header:hover {
+    background-color: #14998A;
+}
+
+.accordion .card-body {
+    background-color: #18A999;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 20px;
+}
+
+.accordion .card-body .content {
+    background-color: #ffffff7b;
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.bg-footer-pattern {
+    background-image: url('/assets/images/footer.svg');
+    height: 256px;
+    margin-top: 80px;
+}
+
+.btn-primary {
+    background-color: #4B97CF !important;
+    color: white;
+    border: #4B97CF !important;
+}
+
+.btn-secondary {
+    background-color: #17ADA8 !important;
+    color: white;
+    border: #4B97CF !important;
+}
+
+.btn-primary:hover {
+    background-color: #58a5db !important;
+    color: white;
+}
+
+.btn-outline-primary {
+    color: #4B97CF !important;
+    border: 1px solid #4B97CF !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: #c9c7c7 !important;
+    color: #4B97CF !important;
+}
+
+
