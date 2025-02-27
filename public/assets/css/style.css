@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
 
 :root {
-    --primary-color: #2663EB;
+    --primary-color: #3B8DAA;
+    --warning-color: #eeac04;
     --background-color: #ffffff;
     --text-color: black;
     --hover-bg-color: #EFF6FF;
@@ -148,6 +149,24 @@ input[type=number] {
     z-index: 101;
     transition: all 0.5s ease-out;
 
+}
+
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border: 1px solid var(--primary-color) !important;
+}
+
+.btn-primary:hover {
+    background-color: #56a9c7 !important;
+}
+
+.btn-warning {
+    background-color: var(--warning-color) !important;
+    border: 1px solid var(--warning-color) !important;
+}
+
+.btn-warning:hover {
+    background-color: #f3bd36 !important;
 }
 
 .navbar.full {
