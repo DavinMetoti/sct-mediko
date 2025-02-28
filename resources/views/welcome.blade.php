@@ -8,7 +8,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ secure_asset('assets/css/landing-page.css') }}">
 
@@ -16,507 +16,361 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @endif
     <link href="{{ secure_asset('assets/bootstrap-5.0.2-dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
     <header class="flex align-items-center">
         <div class="container flex align-items-center justify-content-between">
-            <div class="">
+            <div class="flex">
                 <a href="#home">
                     <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="60%">
                 </a>
-            </div>
-            <div class="flex align-middle mt-3">
-                <ul class="flex gap-4 align-items-center">
+                <ul class="d-md-flex d-none gap-4 align-items-center mt-2">
                     <li>
-                        <a href="#about" class="btn-nav text-lg fw-bold nav-text">Tentang Kami</a>
+                        <a href="#about" class="btn-nav text-lg nav-text">Tentang Kami</a>
                     </li>
                     <li>
-                        <a href="#price" class="btn-nav text-lg fw-bold nav-text">Harga</a>
+                        <a href="#price" class="btn-nav text-lg nav-text">Harga</a>
                     </li>
                     <li>
-                        <a href="#testimoni" class="btn-nav text-lg fw-bold nav-text">Testimoni</a>
+                        <a href="#testimoni" class="btn-nav text-lg nav-text">Testimoni</a>
                     </li>
                     <li>
-                        <a href="#faq" class="btn-nav text-lg fw-bold nav-text">FAQ</a>
+                        <a href="#faq" class="btn-nav text-lg nav-text">FAQ</a>
                     </li>
                     <li>
-                        <a href="#contact" class="btn-nav text-lg fw-bold nav-text">Kontak</a>
-                    </li>
-                    <li>
-                        <a href="#kebijakan-privasi" class="btn-nav text-lg fw-bold nav-text">Kebijakan Privasi</a>
+                        <a href="#kebijakan-privasi" class="btn-nav text-lg nav-text">Privasi</a>
                     </li>
                 </ul>
             </div>
-            <div>
-                <a href="login" class="btn btn-outline-primary mr-2 px-4">Masuk</a>
-                <a href="register" class="btn btn-primary px-4">Daftar</a>
+            <div class="d-md-block d-none">
+                <a href="login" class="btn btn-outline-blue mr-2 px-4">Masuk</a>
+                <a href="register" class="btn-blue px-4">Daftar</a>
+            </div>
+            <div class="d-block d-md-none">
+                <button id="toggleSidebar" class="btn toggle-btn"><i class="fas fa-bars text-xl"></i></button>
             </div>
         </div>
     </header>
+    <div class="sidebar text-center">
+        <a href="#home" class="flex justify-content-center">
+            <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="60%">
+        </a>
+        <div class="flex gap-2 mt-5 w-full">
+            <a href="login" class="btn btn-sm btn-outline-primary w-100">Masuk</a>
+            <a href="register" class="btn btn-sm btn-primary w-100">Daftar</a>
+        </div>
+        <div class="mt-3 w-full">
+            <ul class="gap-4 align-items-center mt-2">
+                <li class="mb-3 text-right">
+                    <a href="#about" class="btn-nav text-lg nav-text">Tentang Kami</a>
+                </li>
+                <li class="mb-3 text-right">
+                    <a href="#price" class="btn-nav text-lg nav-text">Harga</a>
+                </li>
+                <li class="mb-3 text-right">
+                    <a href="#testimoni" class="btn-nav text-lg nav-text">Testimoni</a>
+                </li>
+                <li class="mb-3 text-right">
+                    <a href="#faq" class="btn-nav text-lg nav-text">FAQ</a>
+                </li>
+                <li class="mb-3 text-right">
+                    <a href="#kebijakan-privasi" class="btn-nav text-lg nav-text">Privasi</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="overlay"></div>
     <main>
-        <div class="container" id="main">
-            <section class="jumbotron flex justify-content-between align-items-center" id="home">
-                <div class="jumbotron-title">
-                    <h1 class="jumbotron-title_main">KINI HADIR DI</h1>
-                    <h1 class="jumbotron-title_sub">SELURUH INDONESIA</h1>
-                    <p class="sub-title mt-4 text-muted">
-                        MEDIKO.ID adalah platform bimbingan kedokteran TERBAIK yang mendukung<br>setiap langkah perjalanan belajarmu, mulai dari masa preklinik, koas,<br> persiapan UKMPPD hingga Internship.
-                    </p>
-                    <a href="#" class="btn btn-primary px-5 py-2 mt-4">Gabung Sekarang</a>
-                </div>
-                <div>
-                    <img src="{{ secure_asset('/assets/images/medics.svg') }}" alt="logo mediko" width="550rem">
+        <div id="main">
+            <section class="jumbotron" id="home">
+                <div class="container">
+                    <div class="flex justify-content-between align-items-center">
+                        <div class="jumbotron-title">
+                            <div class="mb-3 badge-custom">
+                                Hadir di seluruh Indonesia
+                            </div>
+                            <h1 class="jumbotron-title_main">Try Out & Bimbel SCT <br>UKMPPD Pertama di Indonesia</h1>
+                            <p class="sub-title mt-4 text-muted mb-5">
+                                MEDIKO.ID adalah platform bimbingan kedokteran TERBAIK yang <br> mendukung setiap langkah perjalanan belajarmu, mulai dari masa<br> preklinik, koas, persiapan UKMPPD hingga Internship.                    </p>
+                            <a href="register" class="btn-blue px-5 py-2">Gabung Sekarang</a>
+                        </div>
+                        <div class="d-none d-md-block" style="position: relative; width: 800px; display: flex; justify-content: flex-end; align-items: center;">
+                            <img src="{{ secure_asset('/assets/images/bg-grid.png') }}" alt="bg mediko"
+                                style="position: absolute; top: -50px; right: 0; width: 100vw; transform: scale(1.5); z-index: -1;">
+                            <img src="{{ secure_asset('/assets/images/medics.svg') }}" alt="logo mediko"
+                                style="position: relative; width: 600px; z-index: 1;">
+                        </div>
+                    </div>
+                    <div class="jumbotron-list md-mt-0 mt-5">
+                        <div class="d-md-flex justify-content-around w-100">
+                            <div class="flex gap-3 mb-md-0 mb-3">
+                                <i class="fas fa-check me-1" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>Bimbingan Komprehensif
+                            </div>
+                            <div class="flex gap-3 mb-md-0 mb-3">
+                                <i class="fas fa-check me-1" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>Materi Berkualitas & Terstruktur
+                            </div>
+                            <div class="flex gap-3 mb-md-0 mb-3">
+                                <i class="fas fa-check me-1" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>Simulasi Tryout dengan Sistem SCT
+                            </div>
+                            <div class="flex gap-3 mb-md-0 mb-3">
+                                <i class="fas fa-check me-1" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>Komunitas & Dukungan Belajar
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
             <section id="about">
-                <div class="card" style="border-radius: 12px;">
-                    <div class="card-body" style="box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;border-radius: 12px;">
-                        <div class="row justify-content-between">
-                            <div class="col-md-8">
-                                <div class="flex gap-2 align-items-center mb-5">
-                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" width="8%">
-                                    <h4 class="fw-bold" style="color: #17ADA8;">Tentang Kami</h4>
-                                </div>
-                                <p class="sub-title text-muted">
-                                    MEDIKO.ID adalah bimbingan kedokteran TERBAIK yang ada di Indonesia. Kami dibangun di Kota Semarang. MEDIKO.ID terdiri dari pengajar dari seluruh Indonesia! Pengajar-pengajar kami sudah terlibat dalam berbagai jenis tutorial seperti mantan asisten dosen dan mentoring UKMMPD. Pengajar-pengajar kami merupakan pengajar terbaik di bidangnya masing-masing, berpengalaman dan MENJUARAI berbagai kompetisi tingkat nasional dan internasional. Kami menyediakan program dari S1, Koas hingga UKMPPD baik secara online maupun offline! Yuk Kepoin MEDIKO.ID, MEDIKO Made the med-easy!
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h1 class="fw-bold">Tentang Mediko.ID</h1>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="sub-title">
+                                MEDIKO.ID adalah bimbingan kedokteran terbaik di Indonesia, berbasis di Semarang dengan pengajar dari seluruh negeri.
+                            </p>
+                            <br>
+                            <p class="sub-title mb-5">
+                                Tim kami terdiri dari mantan asisten dosen dan mentor UKMPPD yang berpengalaman serta berprestasi di tingkat nasional dan internasional. Kami menawarkan program untuk S1, Koas, hingga UKMPPD, baik online maupun offline.
+                            </p>
+                            <a href="register" class="btn-blue">Gabung Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div class="container">
+                    <div class="text-center">
+                        <h2 class="fw-medium">Raih Skor Terbaik UKMPPD dengan Mediko!</h2>
+                        <p style="font-size: 14px;">
+                            Platform pembelajaran kedokteran terlengkap dengan metode pembelajaran yang efektif
+                        </p>
+                    </div>
+                    <div class="d-md-flex justify-content-between gap-4 mt-5">
+                        <div class="card-1 mb-md-0 mb-3">
+                            <div>
+                                <img src="{{ secure_asset('/assets/images/image-2.jpg') }}" alt="logo mediko"
+                                    style="width: 100%; height: 80%; object-fit: cover; border-radius: 8px;">
+                            </div>
+                            <div class="mt-4">
+                                <h4>Tutor Berkualitas Terpercaya</h4>
+                            </div>
+                            <div class="mt-3">
+                                <p class="sub-title">
+                                    Belajar langsung dari dokter spesialis dan konsultan profesional yang memiliki....
                                 </p>
                             </div>
-                            <div class="col-md-4 flex justify-content-end">
-                                <img src="{{ secure_asset('/assets/images/about.svg') }}" alt="logo mediko" width="80%">
+                            <hr class="my-3">
+                            <div class="row">
+                                <div class="col-md-4 flex flex-column justify-content-end h-100">
+                                    <h4 class="fw-bold mb-0">50+</h4>
+                                    <p class="mb-0" style="font-size: 12px;">Tutor dari ahli</p>
+                                </div>
+                                <div class="col-md-8 flex flex-column justify-content-end md-mt-0 mt-3">
+                                    <a href="register" class="btn-blue px-5 py-2">Gabung Sekarang</a>
+                                </div>
                             </div>
                         </div>
-
+                        <div class="card-1 mb-md-0 mb-3">
+                            <div>
+                                <img src="{{ secure_asset('/assets/images/image-1.jpg') }}" alt="logo mediko"
+                                    style="width: 100%; height: 80%; object-fit: cover; border-radius: 8px;">
+                            </div>
+                            <div class="mt-4">
+                                <h4>Bank Soal Terstruktur</h4>
+                            </div>
+                            <div class="mt-3">
+                                <p class="sub-title">
+                                    Akses lebih dari 10.000 soal latihan UKMPPD yang disusun secara sistematis dengan...
+                                </p>
+                            </div>
+                            <hr class="my-3">
+                            <div class="row">
+                                <div class="col-md-4 flex flex-column justify-content-end h-100">
+                                    <h4 class="fw-bold mb-0">10,000+</h4>
+                                    <p class="mb-0" style="font-size: 12px;">Soal Terbaru</p>
+                                </div>
+                                <div class="col-md-8 flex flex-column justify-content-end md-mt-0 mt-3">
+                                    <a href="register" class="btn-blue">Gabung Sekarang</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-1 mb-md-0 mb-3">
+                            <div>
+                                <img src="{{ secure_asset('/assets/images/image-3.jpg') }}" alt="logo mediko"
+                                    style="width: 100%; height: 80%; object-fit: cover; border-radius: 8px;">
+                            </div>
+                            <div class="mt-4">
+                                <h4>Komunitas Belajar Interaktif</h4>
+                            </div>
+                            <div class="mt-3">
+                                <p class="sub-title">
+                                    Bergabung dengan 44.000+ peserta untuk berdiskusi secara aktif bersama tutor...
+                                </p>
+                            </div>
+                            <hr class="my-3">
+                            <div class="row">
+                                <div class="col-md-4 flex flex-column justify-content-end h-100">
+                                    <h4 class="fw-bold mb-0">44,000+</h4>
+                                    <p class="mb-0" style="font-size: 12px;">Jumlah Pengguna</p>
+                                </div>
+                                <div class="col-md-8 flex flex-column justify-content-end md-mt-0 mt-3">
+                                    <a href="register" class="btn-blue px-5 py-2">Gabung Sekarang</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
             <section id="price" class="mt-5">
-                <div class="row d-flex">
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Full Premium Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 100.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        10 Paket Try Out UKMPPD @‌1500 soal Akses pembahasan langsung di aplikasi Waktu pengerjaan fleksibel
-                                    </p>
-                                </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
-                                </div>
-                            </div>
-                        </div>
+                <div class="container">
+                    <div class="text-center">
+                        <h2 class="mb-0">Pilihan Paket Belajar Mediko.id</h2>
+                        <h2>Batch Februari 2025</h2>
+                        <p>
+                            Dapatkan akses ke program bimbingan terbaik dengan metode belajar yang efektif & terstruktur.<br> Pilih paket yang sesuai dengan kebutuhanmu & raih skor terbaik!
+                        </p>
                     </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Intensif Pendalaman Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 50.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        26 Paket Try Out Pendalaman UKMPPD @‌3420 soal. Terdapat 13 bidang UKMPPD dan setiap bidangnya terdapat 350 butir soal. Bahan soal disusun berdasarkan soal UKMPPD yang muncul selama 3 tahun terakhir. Cocok buat kamu yang ingin intensif mempelajari bidang tertentu. Akses pembahasan langsung di aplikasi. Waktu pengerjaan fleksibel
-                                    </p>
+                    <div class="row d-flex pb-5">
+                    @foreach($packages as $package)
+                        <div class="col-md-4 d-flex">
+                            <div class="card-price flex-fill">
+                                <div style="color: #3273F6; padding: 2px 20px; border-radius: 100px; border: #3273F6 solid 2px; display: inline-block; font-size: 14px !important;" class="mb-3">
+                                    {{ $package->questions->count() < 10 ? 'Basic' : ($package->questions->count() <= 20 ? 'Premium' : 'Platinum') }}
                                 </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
+                                <h5 class="fw-bold">{{ $package->name }}</h5>
+                                <p class="sub-title-price my-3">{{ $package->description }}</p>
+                                <h3 style="color: #3273F6;" class="fw-bold my-3">
+                                    Rp {{ number_format($package->price, 0, ',', '.') }}
+                                    <span class="text-muted text-lg fw-normal">/Periode</span>
+                                </h3>
+                                <hr>
+                                <div class="w-100 flex my-3">
+                                    <i class="fas fa-check me-3" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>Akses Pembahasan Live
+                                </div>
+                                <div class="w-100 flex my-3">
+                                    <i class="fas fa-check me-3" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>{{$package->questions->count()}} Paket Tryout
+                                </div>
+                                <div class="w-100 flex my-3">
+                                    <i class="fas fa-check me-3" style="display: flex; justify-content: center; align-items: center; text-align: center; width: 24px; height: 24px; background-color: #3273F6; color: white; border-radius: 50%; font-size: 12px;"></i>{{ $package->questions->sum(fn($q) => $q->questionDetail->count()) }} Soal Latihan Terbaru
+                                </div>
+                                <div class="d-flex">
+                                    <a href="register" class="btn-blue my-3 flex-grow-1 text-center">Gabung Sekarang</a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Full Premium Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 100.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        10 Paket Try Out UKMPPD @‌1500 soal Akses pembahasan langsung di aplikasi Waktu pengerjaan fleksibel
-                                    </p>
-                                </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Intensif Pendalaman Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 50.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        26 Paket Try Out Pendalaman UKMPPD @‌3420 soal. Terdapat 13 bidang UKMPPD dan setiap bidangnya terdapat 350 butir soal. Bahan soal disusun berdasarkan soal UKMPPD yang muncul selama 3 tahun terakhir. Cocok buat kamu yang ingin intensif mempelajari bidang tertentu. Akses pembahasan langsung di aplikasi. Waktu pengerjaan fleksibel
-                                    </p>
-                                </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Full Premium Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 100.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        10 Paket Try Out UKMPPD @‌1500 soal Akses pembahasan langsung di aplikasi Waktu pengerjaan fleksibel
-                                    </p>
-                                </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Intensif Pendalaman Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 50.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        26 Paket Try Out Pendalaman UKMPPD @‌3420 soal. Terdapat 13 bidang UKMPPD dan setiap bidangnya terdapat 350 butir soal. Bahan soal disusun berdasarkan soal UKMPPD yang muncul selama 3 tahun terakhir. Cocok buat kamu yang ingin intensif mempelajari bidang tertentu. Akses pembahasan langsung di aplikasi. Waktu pengerjaan fleksibel
-                                    </p>
-                                </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Full Premium Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 100.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        10 Paket Try Out UKMPPD @‌1500 soal Akses pembahasan langsung di aplikasi Waktu pengerjaan fleksibel
-                                    </p>
-                                </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 d-flex">
-                        <div class="card-price flex-fill">
-                            <div class="flex flex-column justify-content-between h-100">
-                                <div class="content">
-                                    <div class="card-price_header">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <h5 class="fw-bold text-white">Intensif Pendalaman Bundling Batch Februari 2025</h5>
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-center">
-                                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden p-2"
-                                                    style="width: 60px; height: 60px;">
-                                                    <img src="{{ secure_asset('/assets/images/logo-icon-mediko.webp') }}" alt="logo mediko" style="width: 100%; height: auto;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div style="padding-right: 30%;">
-                                                <div class="price p-2">
-                                                    <h2 class="mb-0 fw-bold">Rp. 50.000</h2>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="mt-3 text-muted">
-                                        26 Paket Try Out Pendalaman UKMPPD @‌3420 soal. Terdapat 13 bidang UKMPPD dan setiap bidangnya terdapat 350 butir soal. Bahan soal disusun berdasarkan soal UKMPPD yang muncul selama 3 tahun terakhir. Cocok buat kamu yang ingin intensif mempelajari bidang tertentu. Akses pembahasan langsung di aplikasi. Waktu pengerjaan fleksibel
-                                    </p>
-                                </div>
-                                <div class="card-price_footer">
-                                    <a href="register" class="btn btn-secondary w-full py-2 mt-3">DAFTAR SEKARANG</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section id="testimoni" class="mt-5 text-center">
-                <h1 class="testimoni-title">Apa Kata Pengguna Kami?</h1>
-                <p class="sub-title mb-5 text-muted">Berikut adalah beberapa testimoni dari pengguna kami yang telah merasakan manfaat dari layanan kami</p>
-                <div class="row d-flex justify-content-center gap-5">
-                    <div class="col-md-3">
-                        <div class="flex w-full flex-col justify-center gap-4 rounded-lg p-6 text-tertiary shadow-lg" data-sentry-component="CardAchievement" data-sentry-source-file="CardAchievement.tsx">
-                            <div class="flex flex-col items-center justify-center gap-6">
-                                <div class="rounded-full p-4" style="background-color: rgba(36,174,170,0.1);">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" class="h-12 w-12" data-sentry-element="Icon" data-sentry-source-file="CardAchievement.tsx" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M192 256c61.9 0 112-50.1 112-112S253.9 32 192 32 80 82.1 80 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C51.6 288 0 339.6 0 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zM480 256c53 0 96-43 96-96s-43-96-96-96-96 43-96 96 43 96 96 96zm48 32h-3.8c-13.9 4.8-28.6 8-44.2 8s-30.3-3.2-44.2-8H432c-20.4 0-39.2 5.9-55.7 15.4 24.4 26.3 39.7 61.2 39.7 99.8v38.4c0 2.2-.5 4.3-.6 6.4H592c26.5 0 48-21.5 48-48 0-61.9-50.1-112-112-112z"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-4xl font-semibold">44.238</p>
-                            </div>
-                            <div>
-                                <p class="text-center font-medium text-muted-foreground">Jumlah Pengguna</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="flex w-full flex-col justify-center gap-4 rounded-lg p-6 text-tertiary shadow-lg" data-sentry-component="CardAchievement" data-sentry-source-file="CardAchievement.tsx">
-                            <div class="flex flex-col items-center justify-center gap-6">
-                                <div class="rounded-full p-4" style="background-color: rgba(36,174,170,0.1);">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" class="h-12 w-12" data-sentry-element="Icon" data-sentry-source-file="CardAchievement.tsx" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M192 256c61.9 0 112-50.1 112-112S253.9 32 192 32 80 82.1 80 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C51.6 288 0 339.6 0 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zM480 256c53 0 96-43 96-96s-43-96-96-96-96 43-96 96 43 96 96 96zm48 32h-3.8c-13.9 4.8-28.6 8-44.2 8s-30.3-3.2-44.2-8H432c-20.4 0-39.2 5.9-55.7 15.4 24.4 26.3 39.7 61.2 39.7 99.8v38.4c0 2.2-.5 4.3-.6 6.4H592c26.5 0 48-21.5 48-48 0-61.9-50.1-112-112-112z"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-4xl font-semibold">178.860</p>
-                            </div>
-                            <div>
-                                <p class="text-center font-medium text-muted-foreground">Try Out Terlaksana</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="flex w-full flex-col justify-center gap-4 rounded-lg p-6 text-tertiary shadow-lg" data-sentry-component="CardAchievement" data-sentry-source-file="CardAchievement.tsx">
-                            <div class="flex flex-col items-center justify-center gap-6">
-                                <div class="rounded-full p-4" style="background-color: rgba(36,174,170,0.1);">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" class="h-12 w-12" data-sentry-element="Icon" data-sentry-source-file="CardAchievement.tsx" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M192 256c61.9 0 112-50.1 112-112S253.9 32 192 32 80 82.1 80 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C51.6 288 0 339.6 0 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zM480 256c53 0 96-43 96-96s-43-96-96-96-96 43-96 96 43 96 96 96zm48 32h-3.8c-13.9 4.8-28.6 8-44.2 8s-30.3-3.2-44.2-8H432c-20.4 0-39.2 5.9-55.7 15.4 24.4 26.3 39.7 61.2 39.7 99.8v38.4c0 2.2-.5 4.3-.6 6.4H592c26.5 0 48-21.5 48-48 0-61.9-50.1-112-112-112z"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-4xl font-semibold">43.353</p>
-                            </div>
-                            <div>
-                                <p class="text-center font-medium text-muted-foreground">Jumlah Alumni</p>
-                            </div>
-                        </div>
+                    @endforeach
                     </div>
                 </div>
             </section>
             <section id="faq" class="mt-5">
-                <div id="faqAccordion" class="accordion">
-                    <!-- Item 1 -->
-                    <div class="card">
-                        <div class="card-header" style="font-size: 1.5rem;" data-toggle="collapse" data-target="#collapseOne">
-                            <span class="toggle-icon me-2">▾</span> Kenapa memilih Mediko.id?
-                        </div>
-                        <div id="collapseOne" class="collapse show" data-parent="#faqAccordion">
-                            <div class="card-body">
-                                <div class="content">
-                                    MEDIKO.ID adalah try-out kedokteran terbaik, yang menyediakan soal yang berkualitas, pembahasan dan video pembahasan yang berkualitas, menyesuaikan dengan silabus UKMPPD dan tingkat kesusahan yang bertingkat sesuai dengan perubahan paket soal dari waktu. Harga yang murah dengan kualitas nomor SATU! Menyesuaikan dengan kantong mahasiswa ya gengs!
+                <div class="container">
+                    <div class="text-center">
+                        <h2 class="mb-0">Yang Sering Ditanyakan</h2>
+                        <p class="sub-title mb-5 text-muted mt-3">Punya pertanyaan tentang layanan kami? Temukan jawabannya di sini! Kami telah merangkum<br> pertanyaan yang paling sering diajukan untuk membantumu memahami MEDIKO.ID</p>
+                    </div>
+                    <div id="faqAccordion" class="accordion">
+                        <!-- Item 1 -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" data-toggle="collapse" data-target="#collapseOne">
+                            Kenapa memilih Mediko.id?
+                                <span class="text-right toggle-icon ms-auto">-</span>
+                            </div>
+                            <div id="collapseOne" class="collapse show" data-parent="#faqAccordion">
+                                <div class="card-body">
+                                    <div class="content">
+                                        MEDIKO.ID adalah try-out kedokteran terbaik, yang menyediakan soal yang berkualitas, pembahasan dan video pembahasan yang berkualitas, menyesuaikan dengan silabus UKMPPD dan tingkat kesusahan yang bertingkat sesuai dengan perubahan paket soal dari waktu. Harga yang murah dengan kualitas nomor SATU! Menyesuaikan dengan kantong mahasiswa ya gengs!
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="card">
-                        <div class="card-header" style="font-size: 1.5rem;" data-toggle="collapse" data-target="#collapseTwo">
-                            <span class="toggle-icon me-2">▸</span> Apa kelebihan tryout di Mediko.id?
-                        </div>
-                        <div id="collapseTwo" class="collapse" data-parent="#faqAccordion">
-                            <div class="card-body">
-                                <div class="content">
-                                    Try-out MEDIKO.ID merupakan try-out yang sangat berkualitas karena:
-                                    <ul>
-                                        <li>
-                                            1. Try-out terdiri dari 10x try-out masing-masing terdiri dari 100 soal dengan topik yang paling sering keluar di UKMPPD.
-                                        </li>
-                                        <li>
-                                            2. Pembahasan lengkap dan menarik, beberapa soal disertai dengan video pembahasan yang super interaktif!
-                                        </li>
-                                        <li>
-                                            3. Interface yang menarik dan terdapat applikasi di playstore yang membantu kamu bisa mengerjakan dengan gadget!
-                                        </li>
-                                    </ul>
+                        <!-- Item 2 -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" data-toggle="collapse" data-target="#collapseTwo">
+                            Apa kelebihan tryout di Mediko.id?
+                            <span class="text-right toggle-icon ms-auto">+</span>
+                            </div>
+                            <div id="collapseTwo" class="collapse" data-parent="#faqAccordion">
+                                <div class="card-body">
+                                    <div class="content">
+                                        Try-out MEDIKO.ID merupakan try-out yang sangat berkualitas karena:
+                                        <ul>
+                                            <li>
+                                                1. Try-out terdiri dari 10x try-out masing-masing terdiri dari 100 soal dengan topik yang paling sering keluar di UKMPPD.
+                                            </li>
+                                            <li>
+                                                2. Pembahasan lengkap dan menarik, beberapa soal disertai dengan video pembahasan yang super interaktif!
+                                            </li>
+                                            <li>
+                                                3. Interface yang menarik dan terdapat applikasi di playstore yang membantu kamu bisa mengerjakan dengan gadget!
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Item 3 -->
-                    <div class="card">
-                        <div class="card-header" style="font-size: 1.5rem;" data-toggle="collapse" data-target="#collapseThree">
-                            <span class="toggle-icon me-2">▸</span> Apakah bisa mencoba tryout secara gratis?
-                        </div>
-                        <div id="collapseThree" class="collapse" data-parent="#faqAccordion">
-                            <div class="card-body">
-                                <div class="content">
-                                    Ada try-out sampel yang bisa kamu kerjain!
+                        <!-- Item 3 -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" data-toggle="collapse" data-target="#collapseThree">
+                                Apakah bisa mencoba tryout secara gratis?
+                                <span class="text-right toggle-icon ms-auto">+</span>
+                            </div>
+                            <div id="collapseThree" class="collapse" data-parent="#faqAccordion">
+                                <div class="card-body">
+                                    <div class="content">
+                                        Ada try-out sampel yang bisa kamu kerjain!
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header" style="font-size: 1.5rem;" data-toggle="collapse" data-target="#collapseThree">
-                            <span class="toggle-icon me-2">▸</span> Pertanyaan lain?
-                        </div>
-                        <div id="collapseThree" class="collapse" data-parent="#faqAccordion">
-                            <div class="card-body">
-                                <div class="content">
-                                    Kamu bisa menghubungi kontak yang ada di bawah. Kami senang membantumu!
-                                </div>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" style="background-image: url('assets/images/bg-accordion.jpg');background-size: cover;background-position: center;background-repeat: no-repeat;" data-toggle="collapse" data-target="#collapseFour">
+                                Hubungi untuk pertanyaan lebih lanjut
+                                <span class="text-right ms-auto">
+                                    <i class="fas fa-phone text-sm"></i>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
             <section id="contact" class="mt-5 mb-5">
-                <div>
-                    <div class="card" style="border: none;">
-                        <div class="card-body border-none" style="border: none;box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;border-radius: 12px;">
-                            <div class="row px-5 p-3">
-                                <div class="col-md-6 flex justify-content-center">
-                                    <img src="{{ secure_asset('/assets/images/doctor.svg') }}" alt="logo mediko" style="width: 80%; height: auto;">
+                <div class="container">
+                    <div class="row p-3">
+                        <div class="col-md-6 mb-mb-0 mb-3 flex justify-content-center" style="font-size: 1.5rem;background-image: url('assets/images/bg-contact.png');background-size: 120%;background-position: center;background-repeat: no-repeat;border-radius: 20px;">
+                            <div class="my-auto text-center py-3">
+                                <div class="mb-3 badge-custom">
+                                    Contact Us
                                 </div>
-                                <div class="col-md-6">
-                                    <h3 class="fw-bold" style="color: #17ADA8;">Hubungi Kami</h3>
-                                    <h5>Kami Menjawab Pertanyaan Anda!</h5>
-                                    <div class="mt-3">
-                                        <a href="https://www.instagram.com/medikoind" class="flex gap-4 p-2 align-items-center mb-3" style="text-decoration: none;border: black 2px solid;border-radius:12px;">
-                                            <img src="{{ secure_asset('/assets/images/instagram.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
-                                            <h6 class="text-black mt-2">@medikoind (Mediko Tryout)</h6>
-                                        </a>
-                                        <a href="https://www.instagram.com/mediko.id" class="flex gap-4 p-2 align-items-center mb-3" style="text-decoration: none;border: black 2px solid;border-radius:12px;">
-                                            <img src="{{ secure_asset('/assets/images/instagram.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
-                                            <h6 class="text-black mt-2">@mediko.id (Mediko Bimble)</h6>
-                                        </a>
-                                        <a href="https://wa.me/6281215371635" class="flex gap-4 p-2 align-items-center mb-3" style="text-decoration: none;border: black 2px solid;border-radius:12px;">
-                                            <img src="{{ secure_asset('/assets/images/whatsapp.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
-                                            <h6 class="text-black mt-2">+6281215371635 (Mediko Tryout)</h6>
-                                        </a>
-                                        <a href="https://wa.me/6282134038758" class="flex gap-4 p-2 align-items-center mb-3" style="text-decoration: none;border: black 2px solid;border-radius:12px;">
-                                            <img src="{{ secure_asset('/assets/images/whatsapp.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
-                                            <h6 class="text-black mt-2">+6282134038758 (Mediko Bimbel)</h6>
-                                        </a>
-                                        <a href="https://t.me/medikoindonesia" class="flex gap-4 p-2 align-items-center mb-3" style="text-decoration: none;border: black 2px solid;border-radius:12px;">
-                                            <img src="{{ secure_asset('/assets/images/telegram.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
-                                            <h6 class="text-black mt-2">Mediko Indonesia</h6>
-                                        </a>
-                                    </div>
-                                </div>
+                                <h2 class="mb-0 fw-medium">Siap untuk yang terbaik?</h2>
+                                <h2 class="fw-medium">Hubungi Kami</h2>
+                                <p class="sub-title fw-normal">Mari rencanakan masa depan impian Anda dengan<br> penawaran eksklusif dan pengalaman yang tak terlupakan.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 px-md-2 px-0">
+                            <div class="flex gap-3 flex-column justify-content-between">
+                                <a href="https://www.instagram.com/medikoind" class="flex gap-4 p-3 align-items-center" style="text-decoration: none;border: gainsboro 1px solid;border-radius:12px;">
+                                    <img src="{{ secure_asset('/assets/images/instagram.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
+                                    <h6 class="text-black mt-2">@medikoind (Mediko Tryout)</h6>
+                                </a>
+                                <a href="https://www.instagram.com/mediko.id" class="flex gap-4 p-3 align-items-center" style="text-decoration: none;border: gainsboro 1px solid;border-radius:12px;">
+                                    <img src="{{ secure_asset('/assets/images/instagram.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
+                                    <h6 class="text-black mt-2">@mediko.id (Mediko Bimble)</h6>
+                                </a>
+                                <a href="https://wa.me/6281215371635" class="flex gap-4 p-3 align-items-center" style="text-decoration: none;border: gainsboro 1px solid;border-radius:12px;">
+                                    <img src="{{ secure_asset('/assets/images/whatsapp.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
+                                    <h6 class="text-black mt-2">+6281215371635 (Mediko Tryout)</h6>
+                                </a>
+                                <a href="https://wa.me/6282134038758" class="flex gap-4 p-3 align-items-center" style="text-decoration: none;border: gainsboro 1px solid;border-radius:12px;">
+                                    <img src="{{ secure_asset('/assets/images/whatsapp.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
+                                    <h6 class="text-black mt-2">+6282134038758 (Mediko Bimbel)</h6>
+                                </a>
+                                <a href="https://t.me/medikoindonesia" class="flex gap-4 p-3 align-items-center" style="text-decoration: none;border: gainsboro 1px solid;border-radius:12px;">
+                                    <img src="{{ secure_asset('/assets/images/telegram.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
+                                    <h6 class="text-black mt-2">Mediko Indonesia</h6>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -680,7 +534,39 @@
             </div>
         </div>
     </main>
-    <footer class="mt-20 h-64 bg-footer-pattern" data-sentry-component="Footer" data-sentry-source-file="Footer.tsx"></footer>
+    <footer class="mt-20 h-64" data-sentry-component="Footer" data-sentry-source-file="Footer.tsx">
+        <hr>
+        <div class="container">
+            <div class="row py-5 align-items-center">
+                <div class="col-md-6">
+                    <p>Copyright © 2024 Healix. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 d-md-flex justify-content-end">
+                    <div>
+                        <ul class="flex gap-4 align-items-center p-0 text-center">
+                            <li>
+                                <a href="#about" class="btn-nav text-lg nav-text">Tentang Kami</a>
+                            </li>
+                            <li>
+                                <a href="#price" class="btn-nav text-lg nav-text">Harga</a>
+                            </li>
+                            <li>
+                                <a href="#testimoni" class="btn-nav text-lg nav-text">Testimoni</a>
+                            </li>
+                        </ul>
+                        <ul class="flex gap-4 align-items-center p-0 text-center">
+                            <li>
+                                <a href="#faq" class="btn-nav text-lg nav-text">FAQ</a>
+                            </li>
+                            <li>
+                                <a href="#kebijakan-privasi" class="btn-nav text-lg nav-text">Privasi</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -700,11 +586,14 @@
                 main.removeClass('hidden');
             }
 
-            $(".card-header").click(function() {
-                let icon = $(this).find(".toggle-icon");
-                $(".toggle-icon").text("▸");
-                if (!$(this).next(".collapse").hasClass("show")) {
-                    icon.text("▾");
+            $('.card-header').click(function () {
+                var icon = $(this).find('.toggle-icon');
+
+                if ($(this).next('.collapse').hasClass('show')) {
+                    icon.text('+');
+                } else {
+                    $('.toggle-icon').text('+');
+                    icon.text('-');
                 }
             });
 
@@ -717,6 +606,26 @@
                 } else {
                     policy.addClass('hidden');
                     main.removeClass('hidden');
+                }
+            });
+
+            $("#toggleSidebar").click(function() {
+                $(".sidebar").toggleClass("show");
+                $(".overlay").toggleClass("active"); // Tambahkan class active
+                $("body").toggleClass("no-scroll");
+            });
+
+            $(".overlay").click(function() {
+                $(".sidebar").removeClass("show");
+                $(this).removeClass("active"); // Hapus class active
+                $("body").removeClass("no-scroll");
+            });
+
+            $(document).click(function(event) {
+                if (!$(event.target).closest("#toggleSidebar").length) {
+                    $(".sidebar").removeClass("show");
+                    $(".overlay").removeClass("active");
+                    $("body").removeClass("no-scroll");
                 }
             });
 

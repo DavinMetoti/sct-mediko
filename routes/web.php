@@ -25,12 +25,11 @@ use App\Http\Controllers\TaskHistoryController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TryoutController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\OtpAccessMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::resource('/', WelcomeController::class);
 
 // Route for the auth page
 Route::resource('forgot-password', OtpController::class);
