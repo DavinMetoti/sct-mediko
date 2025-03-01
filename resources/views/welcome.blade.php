@@ -240,7 +240,7 @@
                                 <div class="flex justify-content-between flex-column h-100">
                                     <div>
                                         <div style="color: #3273F6; padding: 2px 20px; border-radius: 100px; border: #3273F6 solid 2px; display: inline-block; font-size: 14px !important;" class="mb-3">
-                                            {{ $package->questions->count() < 10 ? 'Basic' : ($package->questions->count() <= 20 ? 'Premium' : 'Platinum') }}
+                                            {{ $package->category }}
                                         </div>
                                         <h5 class="fw-bold">{{ $package->name }}</h5>
                                         <p class="sub-title-price my-3">{{ $package->description }}</p>

@@ -8,7 +8,9 @@
     <div class="card shadow-lg rounded" style="width: 28rem;">
         <div class="card-body p-4">
             <div class="flex justify-content-center mb-3">
-                <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="20%">
+                <a href="/">
+                    <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="100%">
+                </a>
             </div>
             <p class="text-center text-muted mb-4">Masuk ke akun Anda untuk melanjutkan</p>
             <form id="loginForm">
