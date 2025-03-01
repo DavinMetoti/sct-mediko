@@ -237,27 +237,33 @@
                     @foreach($packages as $package)
                         <div class="col-md-4 d-flex">
                             <div class="card-price flex-fill">
-                                <div style="color: #3273F6; padding: 2px 20px; border-radius: 100px; border: #3273F6 solid 2px; display: inline-block; font-size: 14px !important;" class="mb-3">
-                                    {{ $package->questions->count() < 10 ? 'Basic' : ($package->questions->count() <= 20 ? 'Premium' : 'Platinum') }}
-                                </div>
-                                <h5 class="fw-bold">{{ $package->name }}</h5>
-                                <p class="sub-title-price my-3">{{ $package->description }}</p>
-                                <h3 style="color: #3273F6;" class="fw-bold my-3">
-                                    Rp {{ number_format($package->price, 0, ',', '.') }}
-                                    <span class="text-muted text-lg fw-normal">/Periode</span>
-                                </h3>
-                                <hr>
-                                <div class="w-100 flex my-3">
-                                    <i class="fas fa-check me-3" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>Akses Pembahasan Live
-                                </div>
-                                <div class="w-100 flex my-3">
-                                    <i class="fas fa-check me-3" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>{{$package->questions->count()}} Paket Tryout
-                                </div>
-                                <div class="w-100 flex my-3">
-                                    <i class="fas fa-check me-3" style="display: flex; justify-content: center; align-items: center; text-align: center; width: 24px; height: 24px; background-color: #3273F6; color: white; border-radius: 50%; font-size: 12px;"></i>{{ $package->questions->sum(fn($q) => $q->questionDetail->count()) }} Soal Latihan Terbaru
-                                </div>
-                                <div class="d-flex">
-                                    <a href="register" class="btn-blue my-3 flex-grow-1 text-center">Gabung Sekarang</a>
+                                <div class="flex justify-content-between flex-column h-100">
+                                    <div>
+                                        <div style="color: #3273F6; padding: 2px 20px; border-radius: 100px; border: #3273F6 solid 2px; display: inline-block; font-size: 14px !important;" class="mb-3">
+                                            {{ $package->questions->count() < 10 ? 'Basic' : ($package->questions->count() <= 20 ? 'Premium' : 'Platinum') }}
+                                        </div>
+                                        <h5 class="fw-bold">{{ $package->name }}</h5>
+                                        <p class="sub-title-price my-3">{{ $package->description }}</p>
+                                        <h3 style="color: #3273F6;" class="fw-bold my-3">
+                                            Rp {{ number_format($package->price, 0, ',', '.') }}
+                                            <span class="text-muted text-lg fw-normal">/Periode</span>
+                                        </h3>
+                                        <hr>
+                                        <div class="w-100 flex my-3">
+                                            <i class="fas fa-check me-3" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>Akses Pembahasan Live
+                                        </div>
+                                        <div class="w-100 flex my-3">
+                                            <i class="fas fa-check me-3" style="display: flex;justify-content: center;align-items: center;text-align: center;width: 24px;height: 24px;background-color: #3273F6;color: white;border-radius: 50%;font-size: 12px;"></i>{{$package->questions->count()}} Paket Tryout
+                                        </div>
+                                        <div class="w-100 flex my-3">
+                                            <i class="fas fa-check me-3" style="display: flex; justify-content: center; align-items: center; text-align: center; width: 24px; height: 24px; background-color: #3273F6; color: white; border-radius: 50%; font-size: 12px;"></i>{{ $package->questions->sum(fn($q) => $q->questionDetail->count()) }} Soal Latihan Terbaru
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex flex-column justify-content-end h-full">
+                                            <a href="register" class="btn-blue my-3 flex-grow-1 text-center">Gabung Sekarang</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

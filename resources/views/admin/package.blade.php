@@ -30,6 +30,8 @@
                                     <th class="text-left">Harga</th>
                                     <th>Deskripsi</th>
                                     <th>Kadaluarsa</th>
+                                    <th>Status</th>
+                                    <th>Kategori</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -61,6 +63,10 @@
                     <div class="mb-3">
                         <label for="price" class="form-label">Harga</label>
                         <input type="number" class="form-control" id="price" name="price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_category" class="form-label">Kategori</label>
+                        <input type="text" class="form-control" id="category" name="category" required>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Deskripsi</label>
@@ -101,12 +107,23 @@
                         <input type="number" class="form-control" id="edit_price" name="price" required>
                     </div>
                     <div class="mb-3">
+                        <label for="edit_category" class="form-label">Kategori</label>
+                        <input type="text" class="form-control" id="edit_category" name="category" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="edit_description" class="form-label">Deskripsi</label>
                         <textarea class="form-control" id="edit_description" name="description" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="edit_expired_date" class="form-label">Tanggal Kadaluarsa</label>
                         <input type="date" class="form-control" id="edit_expired_date" name="expires_at">
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_is_public" class="form-label">Status Publik</label>
+                        <select class="form-control" id="edit_is_public" name="is_public">
+                            <option value="1">Public</option>
+                            <option value="0">Private</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -214,6 +231,22 @@
                 } },
                 { data: 'description', name: 'description', className: 'text-left' },
                 { data: 'expires_at', name: 'expires_at', className: 'text-center' },
+                { data: 'is_public', name: 'is_public', className: 'text-center',
+                    render: function(data, type, row) {
+                        console.log(data);
+
+                        if (data) {
+                            return '<span class="badge bg-success">Public</span>';
+                        } else {
+                            return '<span class="badge bg-danger">Private</span>';
+                        }
+                    }
+                },
+                { data: 'category', name: 'category', className: 'text-center',
+                    render: function(data, type, row) {
+                        return `<span class="badge bg-primary ">${data}</span>`;
+                    }
+                },
                 { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }
             ],
             language: {
@@ -228,7 +261,7 @@
                 { targets: 2, width: '15%' },
                 { targets: 3, width: '30%' },
                 { targets: 4, width: '10%' },
-                { targets: 5, width: '20%' }
+                { targets: 7, width: '20%' }
             ]
         });
 
@@ -514,8 +547,10 @@
 
                     $('#edit_name').val(response.package.name);
                     $('#edit_price').val(response.package.price);
+                    $('#edit_category').val(response.package.category);
                     $('#edit_description').val(response.package.description);
                     $('#edit_expired_date').val(response.package.expires_at ? response.package.expires_at : '');
+                    $('#edit_is_public').val(response.package.is_public).trigger('change');
                     $('#editPackageModal').modal('show');
                     $('#editPackageForm').attr('action', '{{ route('package.update', ':id') }}'.replace(':id', response.package.id));
                 },

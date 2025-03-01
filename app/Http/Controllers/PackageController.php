@@ -62,6 +62,7 @@ class PackageController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'category' => 'required|string',
             'expired_date' => 'nullable|date',
         ]);
 
@@ -69,6 +70,7 @@ class PackageController extends Controller
         $package = new Package();
         $package->name = $validated['name'];
         $package->price = $validated['price'];
+        $package->category = $validated['category'];
         $package->description = $validated['description'];
         $package->expires_at = $validated['expired_date'] ?? null;
 
@@ -125,6 +127,8 @@ class PackageController extends Controller
             'price' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'expires_at' => 'sometimes|date',
+            'is_public' => 'sometimes|integer',
+            'category' => 'sometimes|string',
             'questions' => 'array',
             'users' => 'array',
         ]);
@@ -132,7 +136,7 @@ class PackageController extends Controller
         $package = Package::findOrFail($id);
 
         collect($validated)->each(function ($value, $key) use ($package) {
-            if (in_array($key, ['name', 'price', 'description', 'expires_at'])) {
+            if (in_array($key, ['name', 'price', 'description', 'expires_at','is_public','category'])) {
                 $package->$key = $value;
             }
         });
