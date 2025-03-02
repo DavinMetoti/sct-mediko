@@ -84,8 +84,8 @@
     <div class="overlay"></div>
     <main>
         <div id="main">
-            <section class="jumbotron" id="home">
-                <div class="container">
+            <section class="jumbotron mb-5" id="home">
+                <div class="container min-h-screen">
                     <div class="flex justify-content-between align-items-center">
                         <div class="jumbotron-title">
                             <div class="mb-3 badge-custom">
@@ -280,7 +280,7 @@
                     <div id="faqAccordion" class="accordion">
                         <!-- Item 1 -->
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" data-toggle="collapse" data-target="#collapseOne">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-bold text-xl" data-toggle="collapse" data-target="#collapseOne">
                             Kenapa memilih Mediko.id?
                                 <span class="text-right toggle-icon ms-auto">-</span>
                             </div>
@@ -294,7 +294,7 @@
                         </div>
                         <!-- Item 2 -->
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" data-toggle="collapse" data-target="#collapseTwo">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-bold text-xl" data-toggle="collapse" data-target="#collapseTwo">
                             Apa kelebihan tryout di Mediko.id?
                             <span class="text-right toggle-icon ms-auto">+</span>
                             </div>
@@ -319,7 +319,7 @@
                         </div>
                         <!-- Item 3 -->
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" data-toggle="collapse" data-target="#collapseThree">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-bold text-xl" data-toggle="collapse" data-target="#collapseThree">
                                 Apakah bisa mencoba tryout secara gratis?
                                 <span class="text-right toggle-icon ms-auto">+</span>
                             </div>
@@ -332,7 +332,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center fw-medium" style="background-image: url('assets/images/bg-accordion.jpg');background-size: cover;background-position: center;background-repeat: no-repeat;" data-toggle="collapse" data-target="#collapseFour">
+                            <div class="card-header d-flex justify-content-between align-items-center fw-bold text-xl" style="background-image: url('assets/images/bg-accordion.jpg');background-size: cover;background-position: center;background-repeat: no-repeat;" data-toggle="collapse" data-target="#collapseFour">
                                 Hubungi untuk pertanyaan lebih lanjut
                                 <span class="text-right ms-auto">
                                     <i class="fas fa-phone text-sm"></i>
