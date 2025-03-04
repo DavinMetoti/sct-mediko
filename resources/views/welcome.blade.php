@@ -92,8 +92,8 @@
                             <div class="mb-3 badge-custom">
                                 Hadir di seluruh Indonesia
                             </div>
-                            <h2 class="jumbotron-title_main">Try Out & Bimbel SCT UKMPPD</h2>
-                            <h1 class="jumbotron-title_sub">Pertama di Indonesia</h1>
+                            <h2 class="jumbotron-title_main">TRY OUT & BIMBEL SCT UKMPPD</h2>
+                            <h1 class="jumbotron-title_sub">PERTAMA DI INDONESIA</h1>
                             <p class="sub-title mt-4 text-muted mb-5">
                                 MEDIKO.ID adalah platform bimbingan kedokteran TERBAIK yang <br> mendukung setiap langkah perjalanan belajarmu, mulai dari masa<br> preklinik, koas, persiapan UKMPPD hingga Internship.                    </p>
                             <a href="register" class="btn-blue px-5 py-2">Gabung Sekarang</a>
@@ -137,6 +137,8 @@
                             <p class="sub-title mb-5">
                                 Tim kami terdiri dari mantan asisten dosen dan mentor UKMPPD yang berpengalaman serta berprestasi di tingkat nasional dan internasional. Kami menawarkan program untuk S1, Koas, hingga UKMPPD, baik online maupun offline.
                             </p>
+                        </div>
+                        <div class="col-md-12 text-center">
                             <a href="register" class="btn-blue">Gabung Sekarang</a>
                         </div>
                     </div>

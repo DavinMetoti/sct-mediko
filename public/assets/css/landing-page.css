@@ -88,13 +88,13 @@ section {
 
 .jumbotron-title_main {
     font-weight: 700;
-    font-size: 3.5rem;
+    font-size: 3.2rem;
     margin: 0;
     padding: 0;
 }
 .jumbotron-title_sub {
     font-weight: 900;
-    font-size: 3.5rem;
+    font-size: 3.2rem;
     background: linear-gradient(90deg, rgba(45,139,201,1) 0%, rgba(128,187,62,1) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
