@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ secure_asset('assets/css/landing-page.css') }}">
 
@@ -91,7 +92,8 @@
                             <div class="mb-3 badge-custom">
                                 Hadir di seluruh Indonesia
                             </div>
-                            <h1 class="jumbotron-title_main">Try Out & Bimbel SCT <br>UKMPPD Pertama di Indonesia</h1>
+                            <h2 class="jumbotron-title_main">Try Out & Bimbel SCT UKMPPD</h2>
+                            <h1 class="jumbotron-title_sub">Pertama di Indonesia</h1>
                             <p class="sub-title mt-4 text-muted mb-5">
                                 MEDIKO.ID adalah platform bimbingan kedokteran TERBAIK yang <br> mendukung setiap langkah perjalanan belajarmu, mulai dari masa<br> preklinik, koas, persiapan UKMPPD hingga Internship.                    </p>
                             <a href="register" class="btn-blue px-5 py-2">Gabung Sekarang</a>
@@ -363,7 +365,7 @@
                                 </a>
                                 <a href="https://www.instagram.com/mediko.id" class="flex gap-4 p-3 align-items-center" style="text-decoration: none;border: gainsboro 1px solid;border-radius:12px;">
                                     <img src="{{ secure_asset('/assets/images/instagram.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
-                                    <h6 class="text-black mt-2">@mediko.id (Mediko Bimble)</h6>
+                                    <h6 class="text-black mt-2">@mediko.id (Mediko Bimbel)</h6>
                                 </a>
                                 <a href="https://wa.me/6281215371635" class="flex gap-4 p-3 align-items-center" style="text-decoration: none;border: gainsboro 1px solid;border-radius:12px;">
                                     <img src="{{ secure_asset('/assets/images/whatsapp.png') }}" alt="logo mediko" style="width: 6%; height: auto;">
