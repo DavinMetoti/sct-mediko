@@ -125,16 +125,14 @@
             </section>
             <section id="about">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
+                    <div class="row ">
+                        <div class="col-md-12 text-center">
                             <h1 class="fw-bold">Tentang Mediko.ID</h1>
                         </div>
-                        <div class="col-md-6">
-                            <p class="sub-title">
-                                MEDIKO.ID adalah bimbingan kedokteran terbaik di Indonesia, berbasis di Semarang dengan pengajar dari seluruh negeri.
-                            </p>
+                        <div class="col-md-12 mt-3" style="text-align: justify;">
                             <br>
                             <p class="sub-title mb-5">
+                                MEDIKO.ID adalah bimbingan kedokteran terbaik di Indonesia, berbasis di Semarang dengan pengajar dari seluruh negeri.
                                 Tim kami terdiri dari mantan asisten dosen dan mentor UKMPPD yang berpengalaman serta berprestasi di tingkat nasional dan internasional. Kami menawarkan program untuk S1, Koas, hingga UKMPPD, baik online maupun offline.
                             </p>
                         </div>
