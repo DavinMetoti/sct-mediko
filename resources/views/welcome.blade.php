@@ -159,19 +159,14 @@
                             <div class="mt-4">
                                 <h4>Tutor Berkualitas Terpercaya</h4>
                             </div>
-                            <div class="mt-3">
-                                <p class="sub-title">
-                                    Belajar langsung dari dokter spesialis dan konsultan profesional yang memiliki....
-                                </p>
-                            </div>
                             <hr class="my-3">
                             <div class="row">
-                                <div class="col-md-4 flex flex-column justify-content-end h-100">
+                                <div class="col-md-5 flex flex-column justify-content-end h-100">
                                     <h4 class="fw-bold mb-0">50+</h4>
                                     <p class="mb-0" style="font-size: 12px;">Tutor dari ahli</p>
                                 </div>
-                                <div class="col-md-8 flex flex-column justify-content-end md-mt-0 mt-3">
-                                    <a href="register" class="btn-blue px-5 py-2">Gabung Sekarang</a>
+                                <div class="col-md-7 flex flex-column justify-content-end md-mt-0 mt-3">
+                                    <a href="register" class="btn-blue" style="font-size: 14px;">Gabung Sekarang</a>
                                 </div>
                             </div>
                         </div>
@@ -183,19 +178,14 @@
                             <div class="mt-4">
                                 <h4>Bank Soal Terstruktur</h4>
                             </div>
-                            <div class="mt-3">
-                                <p class="sub-title">
-                                    Akses lebih dari 10.000 soal latihan UKMPPD yang disusun secara sistematis dengan...
-                                </p>
-                            </div>
                             <hr class="my-3">
                             <div class="row">
-                                <div class="col-md-4 flex flex-column justify-content-end h-100">
+                                <div class="col-md-5 flex flex-column justify-content-end h-100">
                                     <h4 class="fw-bold mb-0">10,000+</h4>
                                     <p class="mb-0" style="font-size: 12px;">Soal Terbaru</p>
                                 </div>
-                                <div class="col-md-8 flex flex-column justify-content-end md-mt-0 mt-3">
-                                    <a href="register" class="btn-blue">Gabung Sekarang</a>
+                                <div class="col-md-7 flex flex-column justify-content-end md-mt-0 mt-3">
+                                    <a href="register" class="btn-blue" style="font-size: 14px;">Gabung Sekarang</a>
                                 </div>
                             </div>
                         </div>
@@ -207,19 +197,14 @@
                             <div class="mt-4">
                                 <h4>Komunitas Belajar Interaktif</h4>
                             </div>
-                            <div class="mt-3">
-                                <p class="sub-title">
-                                    Bergabung dengan 44.000+ peserta untuk berdiskusi secara aktif bersama tutor...
-                                </p>
-                            </div>
                             <hr class="my-3">
                             <div class="row">
-                                <div class="col-md-4 flex flex-column justify-content-end h-100">
+                                <div class="col-md-5 flex flex-column justify-content-end h-100">
                                     <h4 class="fw-bold mb-0">44,000+</h4>
                                     <p class="mb-0" style="font-size: 12px;">Jumlah Pengguna</p>
                                 </div>
-                                <div class="col-md-8 flex flex-column justify-content-end md-mt-0 mt-3">
-                                    <a href="register" class="btn-blue px-5 py-2">Gabung Sekarang</a>
+                                <div class="col-md-7 flex flex-column justify-content-end md-mt-0 mt-3">
+                                    <a href="register" class="btn-blue" style="font-size: 14px;">Gabung Sekarang</a>
                                 </div>
                             </div>
                         </div>
