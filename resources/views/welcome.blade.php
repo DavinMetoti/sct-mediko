@@ -152,10 +152,6 @@
                     </div>
                     <div class="d-md-flex justify-content-between gap-4 mt-5">
                         <div class="card-1 mb-md-0 mb-3">
-                            <div>
-                                <img src="{{ secure_asset('/assets/images/image-2.jpg') }}" alt="logo mediko"
-                                    style="width: 100%; height: 80%; object-fit: cover; border-radius: 8px;">
-                            </div>
                             <div class="mt-4">
                                 <h4>Tutor Berkualitas Terpercaya</h4>
                             </div>
@@ -165,16 +161,9 @@
                                     <h4 class="fw-bold mb-0">50+</h4>
                                     <p class="mb-0" style="font-size: 12px;">Tutor dari ahli</p>
                                 </div>
-                                <div class="col-md-7 flex flex-column justify-content-end md-mt-0 mt-3">
-                                    <a href="register" class="btn-blue" style="font-size: 14px;">Gabung Sekarang</a>
-                                </div>
                             </div>
                         </div>
                         <div class="card-1 mb-md-0 mb-3">
-                            <div>
-                                <img src="{{ secure_asset('/assets/images/image-1.jpg') }}" alt="logo mediko"
-                                    style="width: 100%; height: 80%; object-fit: cover; border-radius: 8px;">
-                            </div>
                             <div class="mt-4">
                                 <h4>Bank Soal Terstruktur</h4>
                             </div>
@@ -184,16 +173,9 @@
                                     <h4 class="fw-bold mb-0">10,000+</h4>
                                     <p class="mb-0" style="font-size: 12px;">Soal Terbaru</p>
                                 </div>
-                                <div class="col-md-7 flex flex-column justify-content-end md-mt-0 mt-3">
-                                    <a href="register" class="btn-blue" style="font-size: 14px;">Gabung Sekarang</a>
-                                </div>
                             </div>
                         </div>
                         <div class="card-1 mb-md-0 mb-3">
-                            <div>
-                                <img src="{{ secure_asset('/assets/images/image-3.jpg') }}" alt="logo mediko"
-                                    style="width: 100%; height: 80%; object-fit: cover; border-radius: 8px;">
-                            </div>
                             <div class="mt-4">
                                 <h4>Komunitas Belajar Interaktif</h4>
                             </div>
@@ -202,9 +184,6 @@
                                 <div class="col-md-5 flex flex-column justify-content-end h-100">
                                     <h4 class="fw-bold mb-0">44,000+</h4>
                                     <p class="mb-0" style="font-size: 12px;">Jumlah Pengguna</p>
-                                </div>
-                                <div class="col-md-7 flex flex-column justify-content-end md-mt-0 mt-3">
-                                    <a href="register" class="btn-blue" style="font-size: 14px;">Gabung Sekarang</a>
                                 </div>
                             </div>
                         </div>
