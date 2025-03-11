@@ -12,7 +12,7 @@
 
 body{
     background-color: #f2f7ff !important;
-    font-family: 'Nunito', sans-serif !important;
+    font-family: 'Poppins', sans-serif !important;
 
 }
 
@@ -76,6 +76,40 @@ input[type=number] {
     transition: transform 0.5s ease-out;
     z-index: 100;
     overflow: scroll;
+}
+
+.sidebar-mediko-quiz{
+    background-color: #2D0A56 !important;
+}
+
+.sidebar-mediko-quiz::-webkit-scrollbar-thumb {
+    background: white !important;
+    border-radius: 5px;
+  }
+
+.sidebar-mediko-quiz a {
+    color: white !important;
+}
+
+.sidebar-mediko-quiz .footer {
+    background-color: #2D0A56 !important;
+    border-top: none !important;
+    color: white !important;
+}
+
+.sidebar-mediko-quiz .header-menu h5 {
+    color: white !important;
+}
+
+.sidebar-mediko-quiz .menu-title a:hover,
+.sidebar-mediko-quiz .menu-title a.active {
+    color: #2D0A56 !important;
+    background-color: white !important;
+    font-weight: bold;
+}
+
+.sidebar-mediko-quiz .header-icon {
+    background-color: #2D0A56 !important;
 }
 
 .sidebar.hide {
@@ -151,6 +185,10 @@ input[type=number] {
 
 }
 
+.navbar-mediko-quiz {
+    background-color: #2D0A56 !important;
+}
+
 .btn-primary {
     background-color: var(--primary-color) !important;
     border: 1px solid var(--primary-color) !important;
@@ -192,7 +230,17 @@ input[type=number] {
     background-color: #f2f7ff;
 }
 
+.content-mediko-quiz {
+    background-color: #3B1171 !important;
+}
+
 .content.expanded {
+    left: 0;
+    width: 100vw;
+    transition: all 0.5s ease-out;
+}
+
+.content.content-mediko-quiz.expanded {
     left: 0;
     width: 100vw;
     transition: all 0.5s ease-out;
@@ -647,3 +695,52 @@ table.dataTable tbody tr:hover {
 #closeModal:hover {
     background-color: rgba(0, 0, 0, 0.8); /* Lebih gelap saat di-hover */
 }
+
+.nav-pills.custom-nav-pills {
+    border: 0.5px solid gainsboro;
+    border-radius: 7px;
+}
+
+.btn-quiz {
+    background-color: #2D0A56;
+    color: white;
+    width: 100%;
+    padding: 10px 20px;
+    border-radius: 7px;
+    font-size: .8rem;
+}
+
+.btn-quiz:hover {
+    color: white;
+    background-color: #3e1071;
+}
+
+.card-quiz {
+    background-color: #f8f9fa7d !important;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.custom-form-control {
+    background: transparent !important;
+    border: 1px solid white !important;
+    color: white !important;
+    padding: 8px 12px;
+    border-radius: 5px;
+    outline: none;
+    width: 100%;
+    display: inline;
+    margin-top: 10px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.custom-form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.custom-form-control:focus {
+    border-color: #ddd !important;
+    box-shadow: none;
+}
+
+

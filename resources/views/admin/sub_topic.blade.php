@@ -113,6 +113,7 @@
                 </div>
                 <div class="form-group">
                     <label for="file-sub-topic" class="form-label">Upload File</label>
+                    <small>File berupa PDF</small>
                     <div id="dropzone" class="dropzone">
                         <p id="dropzone-text">Drag & drop a file here or click to upload</p>
                         <input type="file" id="file-sub-topic" name="file-sub-topic" class="form-control" hidden>

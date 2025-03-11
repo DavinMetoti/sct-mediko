@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserDevice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,11 +32,8 @@ class LoginController extends Controller
         ]);
 
         try {
-
             $user = User::with('accessRole')->where('username', $validate['username'])->firstOrFail();
-
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-
             return response()->json([
                 'status' => 'error',
                 'message' => 'Username tidak ditemukan.'
@@ -56,10 +54,34 @@ class LoginController extends Controller
             ]);
         }
 
+        $deviceId = hash('sha256', request()->userAgent()); // Gunakan hash dari User-Agent
+        $userAgent = request()->userAgent();
+
+        // Ambil daftar perangkat user dari tabel user_devices
+        $deviceCount = UserDevice::where('user_id', $user->id)->count();
+
+        // Jika user sudah login di 2 perangkat lain, blokir login
+        if ($deviceCount >= 2) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Maksimal 2 perangkat diizinkan.'
+            ], 403);
+        }
+
+        $existingDevice = UserDevice::where('user_id', $user->id)
+            ->where('device_id', $deviceId)
+            ->first();
+
+        if (!$existingDevice) {
+            UserDevice::create([
+                'user_id' => $user->id,
+                'device_id' => $deviceId,
+                'user_agent' => $userAgent,
+            ]);
+        }
+
         Auth::login($user);
-
         $sessionToken = Str::uuid()->toString();
-
         $user->session_token = $sessionToken;
         $user->save();
 
@@ -131,58 +153,17 @@ class LoginController extends Controller
         }
     }
 
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-
-    }
-
     public function logout()
     {
+        $user = Auth::user();
+        $deviceId = hash('sha256', request()->userAgent());
+
+        if ($user) {
+            UserDevice::where('user_id', $user->id)
+                ->where('device_id', $deviceId)
+                ->delete();
+        }
+
         Auth::logout();
 
         return response()->json([
@@ -191,5 +172,6 @@ class LoginController extends Controller
             'redirect' => route('login')
         ]);
     }
+
 
 }

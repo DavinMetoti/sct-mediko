@@ -9,7 +9,7 @@ body {
     background-color: #f4f4f4;
     color: #333;
     line-height: 1.6;
-    width: 100vw;
+    overflow-x: hidden;
 }
 
 header {
@@ -70,6 +70,7 @@ header {
 
 section {
     padding-top: 80px;
+    display: block;
 }
 
 #price {
@@ -80,6 +81,11 @@ section {
     width: 100%;
     min-height: 400px;
 }
+
+#about {
+    padding-top: 5rem; /* Sesuaikan agar tidak menabrak */
+}
+
 
 
 .jumbotron {

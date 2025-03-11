@@ -15,31 +15,61 @@
             <p class="text-center text-muted mb-4">Masuk ke akun Anda untuk melanjutkan</p>
             <form id="loginForm">
                 @csrf
-                <div class="form-group mb-3">
-                    <label for="username" class="form-label text-black fw-medium">Username</label>
-                    <input type="text" class="form-control rounded px-3 py-2" id="username" name="username"
-                        placeholder="Enter your username" required>
-                </div>
-                <div class="form-group mb-3 position-relative">
-                    <label for="password" class="form-label text-black fw-medium">Password</label>
-                    <div class="position-relative">
-                        <input type="password" class="form-control rounded px-3 py-2 pe-5" id="password" name="password"
-                            placeholder="Enter your password" required>
-                        <i class="fa fa-eye position-absolute end-0 top-50 translate-middle-y me-3 text-secondary cursor-pointer"
-                            id="togglePassword" style="cursor: pointer;"></i>
+                <ul class="nav nav-pills custom-nav-pills w-100 mb-3" id="pills-login" role="tablist"
+                    style="flex-direction: row">
+                    <li class="nav-item w-50">
+                        <a class="nav-link active text-center" data-name="tryout" id="pills-new-tab" data-toggle="pill"
+                            href="#" aria-selected="true">
+                            Tryout</a>
+                    </li>
+                    <li class="nav-item w-50">
+                        <a class="nav-link text-center" data-name="quiz" id="pills-existing-tab" data-toggle="pill"
+                            href="#" aria-selected="false">Quiz</a>
+                    </li>
+                </ul>
+                <div id="tryout-login">
+                    <div class="form-group mb-3">
+                        <label for="username" class="form-label text-black fw-medium">Username</label>
+                        <input type="text" class="form-control rounded px-3 py-2" id="username" name="username"
+                            placeholder="Enter your username" required>
                     </div>
-                </div>
-                <div class="flex justify-content-between">
-                    <div class="form-group form-check d-flex align-items-center mb-4">
-                        <input type="checkbox" class="form-check-input me-2" id="remember" name="remember">
-                        <label class="form-check-label text-secondary" for="remember">Remember me</label>
+                    <div class="form-group mb-3 position-relative">
+                        <label for="password" class="form-label text-black fw-medium">Password</label>
+                        <div class="position-relative">
+                            <input type="password" class="form-control rounded px-3 py-2 pe-5" id="password" name="password"
+                                placeholder="Enter your password" required>
+                            <i class="fa fa-eye position-absolute end-0 top-50 translate-middle-y me-3 text-secondary cursor-pointer"
+                                id="togglePassword" style="cursor: pointer;"></i>
+                        </div>
                     </div>
-                    <div class="text-muted">
-                        <a href="{{ route('forgot-password.index') }}" class="text-decoration-none text-primary">Forgot Password</a>
+                    <div class="flex justify-content-between">
+                        <div class="form-group form-check d-flex align-items-center mb-4">
+                            <input type="checkbox" class="form-check-input me-2" id="remember" name="remember">
+                            <label class="form-check-label text-secondary" for="remember">Remember me</label>
+                        </div>
+                        <div class="text-muted">
+                            <a href="{{ route('forgot-password.index') }}" class="text-decoration-none text-primary">Forgot Password</a>
+                        </div>
                     </div>
+                    <button type="button" id="button-login"
+                        class="btn btn-primary btn-block rounded py-2 w-100">Login</button>
                 </div>
-                <button type="button" id="button-login"
-                    class="btn btn-primary btn-block rounded py-2 w-100">Login</button>
+                <div id="quiz-login"  class="hidden">
+                    <div class="form-group mb-3">
+                        <label for="code" class="form-label text-black fw-medium">Code</label>
+                        <input type="text" class="form-control rounded px-3 py-2" id="code" name="code"
+                            placeholder="Enter your code" required>
+                    </div>
+                    <div class="form-group mb-3 position-relative">
+                        <label for="fullname" class="form-label text-black fw-medium">Fullname</label>
+                        <div class="position-relative">
+                            <input type="text" class="form-control rounded px-3 py-2 pe-5" id="fullname" name="fullname"
+                                placeholder="Enter your fullname" required>
+                        </div>
+                    </div>
+                    <button type="button" id="button-quiz"
+                        class="btn btn-primary btn-block rounded py-2 w-100">Login</button>
+                </div>
             </form>
             <div class="text-center mt-3">
                 <small class="text-muted">
@@ -68,7 +98,6 @@
                 icon.removeClass('fa-eye-slash').addClass('fa-eye');
             }
         });
-
 
         function login() {
             const username = $('#username').val().trim();
@@ -126,6 +155,25 @@
                 event.preventDefault();
                 login();
             }
+        });
+
+        $("#pills-login .nav-link").click(function (event) {
+            event.preventDefault();
+
+            $("#pills-login .nav-link").removeClass("active");
+
+            $(this).addClass("active");
+
+            let cond = $(this).data('name');
+
+            if (cond == 'tryout') {
+                $('#tryout-login').show();
+                $('#quiz-login').hide();
+            } else {
+                $('#quiz-login').show();
+                $('#tryout-login').hide();
+            }
+
         });
     });
 </script>

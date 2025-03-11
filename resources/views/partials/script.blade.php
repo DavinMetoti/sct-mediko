@@ -18,6 +18,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 
     <script>
 
@@ -119,6 +121,14 @@
             }
         }
 
+        function formatDate(timestamp) {
+            let date = new Date(timestamp);
+            return new Intl.DateTimeFormat('id-ID', {
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+            }).format(date);
+        }
+
+
         $(document).ready(function () {
             const w = window.innerWidth;
             function adjustLayout() {
@@ -140,9 +150,11 @@
                 if ($('#sidebar').hasClass('hide')) {
                     $('#navbar').addClass('full');
                     $('#content').addClass('expanded');
+                    $('.content-mediko-quiz').addClass('expanded');
                 } else {
                     $('#navbar').removeClass('full');
                     $('#content').removeClass('expanded');
+                    $('.content-mediko-quiz').removeClass('expanded');
                 }
             }
 

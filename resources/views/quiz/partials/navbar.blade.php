@@ -1,4 +1,4 @@
-<nav class="navbar" id="navbar">
+<nav class="navbar navbar-mediko-quiz" id="navbar">
     <div class="d-flex justify-content-between align-items-center w-full">
         <div>
             <button type="button" class="hamburger-button" id="hamburger-button">
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <a href="{{ route('quiz.index') }}" class="btn-quiz"><i class="fas fa-play me-2"></i> Go To Quiz</a>
+            <a href="{{ route('dashboard.index') }}" class="btn btn-primary"><i class="fas fa-file-alt me-2"></i> Go To Tryout</a>
         </div>
     </div>
 </nav>

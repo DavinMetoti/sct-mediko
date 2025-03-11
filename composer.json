@@ -12,6 +12,7 @@
         "php": "^8.2",
         "laravel/framework": "^11.31",
         "laravel/passport": "^12.3",
+        "laravel/reverb": "^1.4",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.6",
         "pusher/pusher-php-server": "^7.2",
@@ -32,7 +33,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/DeviceHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
