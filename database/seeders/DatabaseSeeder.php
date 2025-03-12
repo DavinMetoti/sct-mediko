@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+        $this->call(MenuSeeder::class);
+        $this->call(MedicalFieldsTableSeeder::class);
+        $this->call(AccessRoleSeeder::class);
+        $this->call(AccessRoleMenuSeeder::class);
 
         User::create([
             'username' => 'admin',
@@ -25,9 +29,5 @@ class DatabaseSeeder extends Seeder
             'id_access_role' => 1,
         ]);
 
-        $this->call(MenuSeeder::class);
-        $this->call(MedicalFieldsTableSeeder::class);
-        $this->call(AccessRoleSeeder::class);
-        $this->call(AccessRoleMenuSeeder::class);
     }
 }
