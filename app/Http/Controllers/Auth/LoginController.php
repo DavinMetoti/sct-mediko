@@ -54,30 +54,31 @@ class LoginController extends Controller
             ]);
         }
 
-        $deviceId = hash('sha256', request()->userAgent()); // Gunakan hash dari User-Agent
+        $deviceId = hash('sha256', request()->userAgent());
         $userAgent = request()->userAgent();
 
-        // Ambil daftar perangkat user dari tabel user_devices
-        $deviceCount = UserDevice::where('user_id', $user->id)->count();
+        // **Batasi perangkat hanya jika aksesnya "public"**
+        if ($user->accessRole->access == "public") {
+            $deviceCount = UserDevice::where('user_id', $user->id)->count();
 
-        // Jika user sudah login di 2 perangkat lain, blokir login
-        if ($deviceCount >= 2) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Maksimal 2 perangkat diizinkan.'
-            ], 403);
-        }
+            if ($deviceCount >= 2) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Maksimal 2 perangkat diizinkan untuk akun publik.'
+                ], 403);
+            }
 
-        $existingDevice = UserDevice::where('user_id', $user->id)
-            ->where('device_id', $deviceId)
-            ->first();
+            $existingDevice = UserDevice::where('user_id', $user->id)
+                ->where('device_id', $deviceId)
+                ->first();
 
-        if (!$existingDevice) {
-            UserDevice::create([
-                'user_id' => $user->id,
-                'device_id' => $deviceId,
-                'user_agent' => $userAgent,
-            ]);
+            if (!$existingDevice) {
+                UserDevice::create([
+                    'user_id' => $user->id,
+                    'device_id' => $deviceId,
+                    'user_agent' => $userAgent,
+                ]);
+            }
         }
 
         Auth::login($user);
@@ -93,6 +94,7 @@ class LoginController extends Controller
             'redirect' => $user->accessRole->access == "private" ? route('dashboard.index') : route('student.index')
         ]);
     }
+
 
     /**
      * Display a listing of the register.
