@@ -214,8 +214,9 @@
 
     <script>
         $(document).ready(function() {
+            const questions = @json($questions);
+
             const question = new QuillEditor('#editor', {}, (content) => {
-                console.log("Editor content changed:", content);
                 localStorage.setItem('editorContent', content);
             });
             const quizQuestionBankApi = new HttpClient('{{ route("quiz-question-bank.index") }}');
@@ -226,20 +227,24 @@
             };
             let maxPanelis = 10;
 
-            $('#bank-soal').val(localStorage.getItem('bank-soal') || '');
-            $('#medical-field').val(localStorage.getItem('medical-field') || '');
-            $('#column-title').val(localStorage.getItem('column-title') || '');
-            $('#initial-hypothesis').val(localStorage.getItem('initial-hypothesis') || '');
-            $('#new-information').val(localStorage.getItem('new-information') || '');
-            $('#timer').val(localStorage.getItem('timer') || '');
-            question.setContent(localStorage.getItem('editorContent'));
+            $('#bank-soal').val(questions.quiz_question_bank_id).trigger('change');
+            $('#medical-field').val(questions.medical_field_id).trigger('change');
+            $('#column-title').val(questions.column_title_id).trigger('change');
+            $('#initial-hypothesis').val(questions.initial_hypothesis);
+            $('#new-information').val(questions.new_information);
+            $('#timer').val(questions.timer);
+            question.setContent(questions.clinical_case);
 
             $('input, select, textarea').on('input change', function() {
                 localStorage.setItem($(this).attr('id'), $(this).val());
             });
 
             for (let i = 1; i <= 5; i++) {
-                $(`#answer_${i}`).val(localStorage.getItem(`answer_${i}`) || '');
+                $(`#answer_${i}`).val(questions.answers[i-1].answer || '');
+            }
+
+            for (let i = 1; i <= 5; i++) {
+                $(`#score_${i}`).val(questions.answers[i-1].panelist || 0);
             }
 
             const firstLoadAPI = () => {
@@ -353,22 +358,19 @@
 
                 let max_score = getHighestScore();
 
-                console.log(max_score);
-
-
                 let answers = [];
 
                 for (let i = 1; i <= 5; i++) {
                     let answer = $(`#answer_${i}`).val();
                     let score = parseInt($(`#score_${i}`).val()) / max_score || 0;
-                    let value = i - 3;
                     let panelist = parseInt($(`#score_${i}`).val()) || 0
+                    let value = i - 3;
 
                     answers.push({
                         'answer': answer,
                         'value': value,
                         'score': score,
-                        'panelist': panelist
+                        'panelist': panelist,
                     });
                 }
 
@@ -384,10 +386,12 @@
                     'answer': answers
                 };
 
-                quizQuestionApi.request('POST', '', data)
+                const pathSegments = window.location.pathname.split('/');
+                const id = pathSegments[2];
+
+                quizQuestionApi.put(id, data)
                     .then(response => {
                         toastr.success(response.response.message, { timeOut: 5000 });
-                        console.log(response);
 
                         localStorage.removeItem('bank-soal');
                         localStorage.removeItem('medical-field');
@@ -395,26 +399,6 @@
                         localStorage.removeItem('initial-hypothesis');
                         localStorage.removeItem('new-information');
                         localStorage.removeItem('timer');
-
-                        $('#bank-soal').val('');
-                        $('#medical-field').val('');
-                        $('#column-title').val('');
-                        $('#initial-hypothesis').val('');
-                        $('#new-information').val('');
-                        $('#timer').val('');
-
-                        for (let i = 1; i <= 5; i++) {
-                            localStorage.removeItem(`answer_${i}`);
-                            localStorage.removeItem(`score_${i}`);
-                            $(`#answer_${i}`).val('');
-                            $(`#score_${i}`).val(0);
-                        }
-
-                        updateTotalPanelis(true);
-
-                        if (typeof question.setContent === 'function') {
-                            question.setContent('');
-                        }
 
                     })
                     .catch(error => {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QuizQuestion;
 use App\Models\QuizQuestionBank;
 use Illuminate\Http\Request;
 
@@ -83,7 +84,10 @@ class QuizQuestionBankController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $quizQuestion = QuizQuestion::with('answers')->get();
+        return view('quiz.content.layouts.quiz_question_list',[
+            'quizQuestions' => $quizQuestion,
+        ]);
     }
 
     /**

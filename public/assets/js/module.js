@@ -143,8 +143,8 @@ class HttpClient {
         return this.request('PUT', endpoint, data, headers);
     }
 
-    delete(endpoint, headers = {}) {
-        return this.request('DELETE', endpoint, {}, headers);
+    delete(endpoint,data = {}, headers = {}) {
+        return this.request('DELETE', endpoint, data, headers);
     }
 }
 

@@ -51,6 +51,7 @@ class QuizQuestionController extends Controller
                 'answer.*.answer' => 'required|string',
                 'answer.*.value' => 'required|integer',
                 'answer.*.score' => 'required|numeric|min:0|max:1',
+                'answer.*.panelist' => 'required|integer',
             ]);
 
             // Buat pertanyaan kuis dengan created_by dari auth()->id()
@@ -73,6 +74,7 @@ class QuizQuestionController extends Controller
                     'answer' => $ans['answer'],
                     'value' => $ans['value'],
                     'score' => $ans['score'],
+                    'panelist' => $ans['panelist'],
                 ]);
             }
 
@@ -106,7 +108,13 @@ class QuizQuestionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $columnTitle = ColumnTitle::all();
+        $questions = QuizQuestion::with('answers')->findOrFail($id);
+
+        return view('quiz.content.layouts.edit_quiz', [
+            'columnTitle' => $columnTitle,
+            'questions'   => $questions,
+        ]);
     }
 
     /**
@@ -114,14 +122,78 @@ class QuizQuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'quiz_question_bank_id' => 'required|exists:quiz_question_banks,id',
+                'medical_field_id' => 'required|exists:medical_fields,id',
+                'column_title_id' => 'required|exists:column_titles,id',
+                'clinical_case' => 'required|string',
+                'initial_hypothesis' => 'required|string',
+                'new_information' => 'required|string',
+                'timer' => 'required|integer|min:1',
+                'explanation' => 'nullable|string',
+                'answer' => 'required|array|min:1',
+                'answer.*.answer' => 'required|string',
+                'answer.*.value' => 'required|integer',
+                'answer.*.score' => 'required|numeric|min:0|max:1',
+                'answer.*.panelist' => 'required|integer',
+            ]);
+
+            $quizQuestion = QuizQuestion::findOrFail($id);
+
+            $quizQuestion->update([
+                'quiz_question_bank_id' => $validated['quiz_question_bank_id'],
+                'medical_field_id' => $validated['medical_field_id'],
+                'column_title_id' => $validated['column_title_id'],
+                'clinical_case' => $validated['clinical_case'],
+                'initial_hypothesis' => $validated['initial_hypothesis'],
+                'new_information' => $validated['new_information'],
+                'timer' => $validated['timer'],
+                'explanation' => $validated['explanation'] ?? null,
+                'updated_by' => auth()->id(),
+            ]);
+
+            $quizQuestion->answers()->delete();
+
+            $quizQuestion->answers()->createMany($validated['answer']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Quiz question updated successfully',
+                'data' => $quizQuestion->load('answers')
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update quiz question',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $quizQuestion = QuizQuestion::findOrFail($id);
+            $quizQuestion->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Quiz question deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete quiz question.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
+
 }

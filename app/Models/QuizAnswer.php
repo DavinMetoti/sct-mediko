@@ -13,7 +13,8 @@ class QuizAnswer extends Model
         'quiz_question_id',
         'answer',
         'value',
-        'score'
+        'score',
+        'panelist'
     ];
 
     /**

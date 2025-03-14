@@ -86,11 +86,11 @@
                     });
             }
 
-            function updateDisplay(data, filterText) {
+            function updateDisplay(data, filterText = '') {
                 let displayDiv = $('#diplayCardQuizQuestionBank');
                 displayDiv.empty();
 
-                // Filter data berdasarkan input pencarian
+                // Pastikan filterText diubah menjadi string kecil (lowercase)
                 let filteredData = data.filter(bank =>
                     bank.name.toLowerCase().includes(filterText.toLowerCase())
                 );
@@ -110,18 +110,20 @@
                                     <h6 class="card-title text-sm text-md-lg">${formatDate(bank.created_at)}</h6>
                                 </div>
                                 <div class="d-md-flex justify-content-between mt-md-3 mt-2">
-                                    <div class="text-sm">Jumlah Soal : ${bank.questions_count}</div>
-                                    <div class="flex gap-2 mt-3 mt-md-0">
+                                    <div class="text-sm">Jumlah Soal: ${bank.questions_count}</div>
+                                    <div class="d-flex gap-2 mt-3 mt-md-0">
                                         <button class="btn btn-danger btn-sm deleteBank" data-id="${bank.id}">
                                             <i class="fas me-2 fa-trash"></i> Hapus
                                         </button>
                                         <button class="btn btn-warning btn-sm editBank" data-id="${bank.id}" data-name="${bank.name}">
                                             <i class="fas me-2 fa-pencil"></i> Edit
                                         </button>
-                                        <button class="btn btn-success btn-sm showBank" data-id="${bank.id}"
-                                                ${bank.questions_count == 0 ? 'disabled' : ''}>
+                                        <a href="/quiz-question-bank/${bank.id}"
+                                        class="btn btn-success btn-sm showBank"
+                                        data-id="${bank.id}"
+                                        ${bank.questions_count == 0 ? 'disabled' : ''}>
                                             <i class="fas me-2 fa-list"></i> Soal
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -131,6 +133,7 @@
 
                 displayDiv.html(htmlContent);
             }
+
 
             $('#searchBank').on('input', function () {
                 let searchText = $(this).val().trim();
