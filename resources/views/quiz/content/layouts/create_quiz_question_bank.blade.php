@@ -159,6 +159,8 @@
 
                 apiClient.request('POST', '', newBank)
                     .then(response => {
+                        console.log('Response:', response);  // 🔍 Cek apakah respons sukses
+
                         toastr.success("Bank soal berhasil disimpan", { timeOut: 5000 });
 
                         $('#addBankModal').modal('hide');
@@ -168,9 +170,15 @@
                         renderCard();
                     })
                     .catch(error => {
-                        toastr.error(error.response.message);
-                        console.error('Error:', error);
+                        console.error('Error:', error);  // 🔍 Cek error yang muncul
+                        if (error.response) {
+                            console.log('Error Response:', error.response);
+                            toastr.error(error.response.data.message || "Terjadi kesalahan saat menyimpan data");
+                        } else {
+                            toastr.error("Terjadi kesalahan jaringan atau server tidak merespons");
+                        }
                     });
+
             });
 
             $(document).on('submit', '#editBankForm', function (e) {
