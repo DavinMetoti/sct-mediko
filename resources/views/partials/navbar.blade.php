@@ -39,7 +39,11 @@
                 </div>
             </div>
 
-            <a href="{{ route('quiz.index') }}" class="btn-quiz"><i class="fas fa-play me-2"></i> Go To Quiz</a>
+            @unless(app()->environment('production'))
+                <a href="{{ route('quiz.index') }}" class="btn-quiz">
+                    <i class="fas fa-play me-2"></i> Go To Quiz
+                </a>
+            @endunless
         </div>
     </div>
 </nav>
