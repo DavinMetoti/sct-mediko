@@ -32,11 +32,14 @@ class LoginController extends Controller
         ]);
 
         try {
-            $user = User::with('accessRole')->where('username', $validate['username'])->firstOrFail();
+            // Periksa apakah username mengandung "@" (menandakan email)
+            $field = filter_var($validate['username'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+            $user = User::with('accessRole')->where($field, $validate['username'])->firstOrFail();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Username tidak ditemukan.'
+                'message' => 'Akun tidak ditemukan.'
             ]);
         }
 
@@ -94,6 +97,7 @@ class LoginController extends Controller
             'redirect' => $user->accessRole->access == "private" ? route('dashboard.index') : route('student.index')
         ]);
     }
+
 
 
     /**

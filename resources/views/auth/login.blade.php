@@ -29,9 +29,9 @@
                 </ul>
                 <div id="tryout-login">
                     <div class="form-group mb-3">
-                        <label for="username" class="form-label text-black fw-medium">Username</label>
+                        <label for="username" class="form-label text-black fw-medium">Username / Email</label>
                         <input type="text" class="form-control rounded px-3 py-2" id="username" name="username"
-                            placeholder="Enter your username" required>
+                            placeholder="Enter your username or email" required>
                     </div>
                     <div class="form-group mb-3 position-relative">
                         <label for="password" class="form-label text-black fw-medium">Password</label>
