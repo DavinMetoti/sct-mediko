@@ -19,8 +19,22 @@ class LoginController extends Controller
      */
     public function index()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $deviceId = hash('sha256', request()->userAgent());
+
+            $existingDevice = UserDevice::where('user_id', $user->id)
+                ->where('device_id', $deviceId)
+                ->exists();
+
+            if ($existingDevice) {
+                return redirect($user->accessRole->access == "private" ? route('dashboard.index') : route('student.index'));
+            }
+        }
+
         return view('auth.login');
     }
+
 
     /**
      * Login process.
