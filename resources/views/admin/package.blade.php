@@ -233,7 +233,6 @@
                 { data: 'expires_at', name: 'expires_at', className: 'text-center' },
                 { data: 'is_public', name: 'is_public', className: 'text-center',
                     render: function(data, type, row) {
-                        console.log(data);
 
                         if (data) {
                             return '<span class="badge bg-success">Public</span>';
@@ -411,13 +410,12 @@
                 drawCallback: function(settings) {
                     totalUser = settings.aoData.length;
 
-                    $('.user-checkbox').each(function() {
-                        const userId = $(this).val();
-                        $(this).prop('checked', selectedUsers.has(userId));
-                    });
+                    // $('.user-checkbox').each(function() {
+                    //     const userId = $(this).val();
+                    //     $(this).prop('checked', selectedUsers.has(userId));
+                    // });
 
-                    // Update "Select All" checkbox
-                    const allChecked = $('.user-checkbox').length === $('.user-checkbox:checked').length;
+                    const allChecked = $('.user-checkbox').length == $('.user-checkbox:checked').length;
                     $('#select-all').prop('checked', allChecked);
                 },
                 columns: [
@@ -490,8 +488,6 @@
             $('.user-checkbox:checked').each(function () {
                 selectedUsers.add($(this).val());
             });
-
-            console.log("Sesudah: ", selectedUsers);
 
             const data = {
                 _token: '{{ csrf_token() }}',

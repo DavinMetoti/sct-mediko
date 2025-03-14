@@ -94,7 +94,7 @@ class ListStudentController extends Controller
     public function getPublicUserData()
     {
         try {
-            $users = User::with(['accessRole', 'userDetail'])->whereHas('accessRole', function ($query) {
+            $users = User::with(['accessRole', 'userDetail','packages'])->whereHas('accessRole', function ($query) {
                 $query->where('access', 'public');
             })->get();
 
