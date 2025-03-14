@@ -307,21 +307,16 @@
                     search: 'Search:'
                 },
             });
-
             $.ajax({
                 url: '{{ route("package.getSelectedQuestions", ":id") }}'.replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-
-
                     if (!$('#question').data('select2')) {
                         const selectedQuestions = response.selectedQuestions.map(question => {
                             const questionOption = new Option(question.text, question.id, true, true);
                             $('#question').append(questionOption);
                             return question.id;
                         });
-
-
                         $('#question').val(selectedQuestions).trigger('change');
                         $('#question').select2({
                             placeholder: 'Search and select a tryout',
@@ -355,17 +350,13 @@
                 }
             });
 
-
-
             $('#addQuestion').off('click').on('click', function () {
                 const selectedQuestions = $('#question').val();
                 const packageId = $('#packageId').val();
-
                 const data = {
                     _token: '{{csrf_token()}}',
                     questions: selectedQuestions
                 };
-
                 $.ajax({
                     url: '{{ route("package.update", ":id") }}'.replace(':id', packageId),
                     type: 'PUT',
@@ -382,7 +373,9 @@
                     }
                 });
             });
+
         });
+        let selectedUsers = new Set();
 
         $(document).on('click', '.user-package', function (event) {
             var button = $(this);
@@ -390,27 +383,24 @@
 
             $('#packageUserId').val(id);
 
-            const packageUserId = $('#packageUserId').val();
-
             $('#userPackageModal').modal('show');
+            const packageUserId = $('#packageUserId').val();
 
 
             let registeredUsers = @json($registeredUsers);
             let package = registeredUsers.find(pkg => pkg.id === parseInt(packageUserId));
             let totalChecked = 0;
             let totalUser = 0;
-
             for (let i = 0; i < package.users.length; i++) {
                 totalChecked++
             }
-
             if ($.fn.DataTable.isDataTable('#userTable')) {
                 $('#userTable').DataTable().destroy();
             }
-
             let user_table = $('#userTable').DataTable({
                 processing: true,
                 serverSide: true,
+                pageLength: 2,
                 ajax: {
                     url: '{{ route('admin.list-student.public') }}',
                     type: 'POST',
@@ -420,10 +410,15 @@
                 },
                 drawCallback: function(settings) {
                     totalUser = settings.aoData.length;
-                    if (totalChecked == totalUser) {
-                        $('#select-all').prop('checked', true);
-                    }
 
+                    $('.user-checkbox').each(function() {
+                        const userId = $(this).val();
+                        $(this).prop('checked', selectedUsers.has(userId));
+                    });
+
+                    // Update "Select All" checkbox
+                    const allChecked = $('.user-checkbox').length === $('.user-checkbox:checked').length;
+                    $('#select-all').prop('checked', allChecked);
                 },
                 columns: [
                     {
@@ -444,7 +439,7 @@
                             return data && data.univ ? data.univ : 'Belum ditentukan';
                         }
                     },
-                    { data: 'email', name: 'name' },
+                    { data: 'email', name: 'email' },
                 ],
                 columnDefs: [
                     { targets: 0, width: '5%' },
@@ -464,49 +459,61 @@
                     $(this).prop('checked', true);
                 }
             });
-
             $('#select-all').on('change', function() {
                 const isChecked = $(this).prop('checked');
+                $('.user-checkbox').each(function() {
+                    const userId = $(this).val();
+                    if (isChecked) {
+                        selectedUsers.add(userId);
+                    } else {
+                        selectedUsers.delete(userId);
+                    }
+                });
                 $('.user-checkbox').prop('checked', isChecked);
             });
-
             $(document).on('change', '.user-checkbox', function () {
+                const userId = $(this).val();
+
+                if ($(this).prop('checked')) {
+                    selectedUsers.add(userId);
+                } else {
+                    selectedUsers.delete(userId);
+                }
                 const allChecked = $('.user-checkbox').length === $('.user-checkbox:checked').length;
                 $('#select-all').prop('checked', allChecked);
             });
+        });
 
-            $(document).on('click', '#update_user_package', function () {
-                const selectedUsers = [];
+        $(document).on('click', '#update_user_package', function () {
+            const packageUserId = $('#packageUserId').val();
 
-                $('.user-checkbox:checked').each(function () {
-                    selectedUsers.push($(this).val());
-                });
-
-                const data = {
-                    _token: '{{ csrf_token() }}',
-                    users: selectedUsers.length === 0 ? [] : selectedUsers
-                };
-
-                $.ajax({
-                    url: '{{ route("package.update", ":id") }}'.replace(':id', packageUserId),
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    success: function (response) {
-                        if (response.success) {
-                            toastSuccess(response.message);
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1000);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        toastError('Something went wrong!');
-                    }
-                });
+            $('.user-checkbox:checked').each(function () {
+                selectedUsers.add($(this).val());
             });
 
+            console.log("Sesudah: ", selectedUsers);
+
+            const data = {
+                _token: '{{ csrf_token() }}',
+                users: Array.from(selectedUsers) // Konversi Set ke Array
+            };
+
+            $.ajax({
+                url: '{{ route("package.update", ":id") }}'.replace(':id', packageUserId),
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    if (response.success) {
+                        toastSuccess(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastError('Something went wrong!');
+                }
+            });
         });
+
 
         $(document).on('click', '.delete-package', function (event) {
             var button = $(this);
@@ -535,7 +542,6 @@
                 },
             });
         });
-
         $(document).on('click', '.edit-package', function (event) {
             var button = $(this);
             var id = button.data('id');
@@ -559,14 +565,11 @@
                 }
             });
         });
-
         $(document).on('submit', '#editPackageForm', function (event) {
             event.preventDefault();
-
             var form = $(this);
             var actionUrl = form.attr('action');
             var formData = form.serialize();
-
             $.ajax({
                 url: actionUrl,
                 type: 'PUT',
@@ -581,11 +584,9 @@
                 }
             });
         });
-
         $(document).on('click', '.delete-question', function() {
             let questionId = $(this).data('id');
             let packageId = $(this).data('package-id');
-
             confirmationModal.open({
                 message: 'Apakah anda yakin ingin menghapus tryout ini?',
                 severity: 'warn',
@@ -614,7 +615,6 @@
                 },
             });
         });
-
         $('#savePackageBtn').click(function() {
             var formData = new FormData($('#createPackageForm')[0]);
             $('#savePackageBtn').prop('disabled', true);
