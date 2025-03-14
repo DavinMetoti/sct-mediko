@@ -157,7 +157,7 @@
                     name: bankName
                 };
 
-                apiClient.request('POST', '', newBank)
+                apiClient.request('POST', "{{ route('quiz-question-bank.store') }}", newBank)
                     .then(response => {
                         console.log('Response:', response);  // 🔍 Cek apakah respons sukses
 
