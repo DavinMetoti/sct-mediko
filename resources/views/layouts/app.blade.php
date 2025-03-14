@@ -49,6 +49,12 @@
 
     <!-- Footer -->
     {{-- @include('partials.footer') --}}
+    <script>
+        window.addEventListener("beforeunload", function () {
+            navigator.sendBeacon("{{ route('login.logout') }}");
+        });
+    </script>
+
 </body>
 
 </html>
