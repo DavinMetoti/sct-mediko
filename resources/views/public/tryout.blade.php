@@ -111,7 +111,7 @@
                                                         </div>
                                                         <div class="flex-1">
                                                             <div class="fw-medium">-2</div>
-                                                            <div class="text-sm text-gray-600" id="minus_one"></div>
+                                                            <div class="text-sm text-gray-600" id="minus_two"></div>
                                                         </div>
                                                     </label>
                                                     <label class="flex items-center space-x-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -120,7 +120,7 @@
                                                         </div>
                                                         <div class="flex-1">
                                                             <div class="fw-medium">-1</div>
-                                                            <div class="text-sm text-gray-600" id="minus_two"></div>
+                                                            <div class="text-sm text-gray-600" id="minus_one"></div>
                                                         </div>
                                                     </label>
                                                     <label class="flex items-center space-x-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -354,8 +354,8 @@
                     $('#discussion_image').hide();
                     $('#descussion_image_text').hide();
                 }
-                $('#minus_one').text(question_tryout.question_type.minus_one);
                 $('#minus_two').text(question_tryout.question_type.minus_two);
+                $('#minus_one').text(question_tryout.question_type.minus_one);
                 $('#zero').text(question_tryout.question_type.zero);
                 $('#one').text(question_tryout.question_type.one);
                 $('#two').text(question_tryout.question_type.two);
