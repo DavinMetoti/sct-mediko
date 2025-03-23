@@ -39,11 +39,14 @@
                 </div>
             </div>
 
-            @unless(config('app.env') === 'production')
+            <!-- @unless(config('app.env') === 'production')
                 <a href="{{ route('quiz.index') }}" class="btn-quiz">
                     <i class="fas fa-play me-2"></i> Go To Quiz
                 </a>
-            @endunless
+            @endunless -->
+            <a href="{{ route('quiz.index') }}" class="btn-quiz">
+                <i class="fas fa-play me-2"></i> Go To Quiz
+            </a>
         </div>
     </div>
 </nav>
