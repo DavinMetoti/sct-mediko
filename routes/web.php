@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BroadcastController;
 use App\Http\Controllers\ColumnTitleController;
 use App\Http\Controllers\HistoryTryoutController;
+use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\LibraryFolderController;
 use App\Http\Controllers\ListInvoiceController;
 use App\Http\Controllers\ListPakcageController;
 use App\Http\Controllers\ListStudentController;
@@ -19,8 +21,10 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionDetailController;
 use App\Http\Controllers\QuestionDetailTypeController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuizPlayController;
 use App\Http\Controllers\QuizQuestionBankController;
 use App\Http\Controllers\QuizQuestionController;
+use App\Http\Controllers\QuizSessionContoller;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubTopicController;
@@ -30,12 +34,15 @@ use App\Http\Controllers\TryoutController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\OtpAccessMiddleware;
+use App\Models\QuizSession;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 Route::resource('/', WelcomeController::class);
 
 // Route for the auth page
 Route::resource('forgot-password', OtpController::class);
+Route::resource('quiz-play', QuizPlayController::class);
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::get('register', [LoginController::class, 'register'])->name('register');
 Route::post('login/check', [LoginController::class, 'login'])->name('login.check');
@@ -50,6 +57,7 @@ Route::get('/change-password', [OtpController::class, 'changePasswordPage'])
     ->name('change.password.view');
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('verify.otp');
 Route::post('/change-password', [OtpController::class, 'updatePassword'])->name('change.password');
+
 
 
 // Route for the private access
@@ -78,7 +86,10 @@ Route::middleware('auth')->resource('admin/column-title', ColumnTitleController:
 Route::middleware('auth')->resource('admin/list-invoice', ListInvoiceController::class);
 Route::middleware('auth')->resource('quiz', QuizController::class);
 Route::middleware('auth')->resource('quiz-question', QuizQuestionController::class);
+Route::middleware('auth')->resource('quiz-session', QuizSessionContoller::class);
 Route::middleware('auth')->resource('quiz-question-bank', QuizQuestionBankController::class);
+Route::middleware('auth')->resource('library', LibraryController::class);
+Route::middleware('auth')->resource('library-folder', LibraryFolderController::class);
 
 Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
 
@@ -94,6 +105,7 @@ Route::middleware('auth')->get('questions/detail/edit/{id}', [QuestionDetailCont
 Route::middleware('auth')->get('/package/search/question', [PackageController::class, 'searchQuestions'])->name('package.search.question');
 Route::middleware('auth')->get('package/{id}/selected-questions', [PackageController::class, 'getSelectedQuestions'])->name('package.getSelectedQuestions');
 Route::middleware('auth')->get('/admin/search-question-bank', [QuestionBankController::class, 'searchQuestionBank'])->name('admin.searchQuestionBank');
+Route::middleware('auth')->get('quiz-session/{id}/rank', [QuizSessionContoller::class, 'sessionRank'])->name('quiz-session.session_rank');
 
 Route::middleware('auth')->post('admin/access-role/data', [AccessRoleController::class, 'getAccessRoleData'])->name('admin.access-role.data');
 Route::middleware('auth')->post('admin/access-role/save/permission', [AccessRoleController::class, 'saveOrUpdatePermission'])->name('admin.access-role.permission');
@@ -114,8 +126,11 @@ Route::middleware('auth')->post('admin/topic/data', [TopicController::class, 'ge
 Route::middleware('auth')->post('admin/sub-topic/table', [SubTopicController::class, 'getSubTopicTable'])->name('admin.sub-topic.table');
 Route::middleware('auth')->post('/update-password/{id}', [ProfileController::class, 'updatePassword'])->name('update.password');
 Route::middleware('auth')->post('tryout/history/answer', [TryoutController::class, 'getHistoryAnswer'])->name('tryout.history.answer');
+Route::middleware('auth')->post('quiz-session/attach', [QuizSessionContoller::class, 'attach'])->name('quiz-session.attach');
+Route::middleware('auth')->post('quiz-session/check_access_code', [QuizSessionContoller::class, 'checkQuizSession'])->name('quiz-session.check_access_code');
 
 
 
 Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])
 ->name('package.question.destroy');
+

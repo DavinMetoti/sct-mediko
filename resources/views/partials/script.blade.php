@@ -19,9 +19,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
 
     <script>
+
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('d54d62cdcd51d9a71282', {
+                cluster: 'ap1'
+            });
+
+            var channel = pusher.subscribe('quiz-channel');
+                channel.bind('quiz-updated', function(data) {
+            });
+
 
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

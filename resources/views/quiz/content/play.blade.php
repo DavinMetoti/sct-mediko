@@ -107,23 +107,71 @@
         }
     }
 
+    .glosy-card {
+        position: relative;
+        width: 100%;
+        padding: 1rem;
+        border-radius: 8px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        text-align: center;
+        overflow: hidden;
+    }
+    /* Efek cahaya mengalir */
+    .glosy-card::after {
+        content: "";
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 50%);
+        transform: rotate(50deg);
+        animation: glossy-move 3s infinite linear;
+    }
+
+    @keyframes glossy-move {
+        0% {
+            top: -100%;
+            left: -100%;
+        }
+        100% {
+            top: 100%;
+            left: 100%;
+        }
+    }
+
+    .progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background-color: white;
+        transition: width 1s linear, background-color 1s linear;
+    }
+
+
 
 </style>
+@livewireStyles
 
 @section('title', config('app.name') . ' | Quiz')
 
 @section('content')
     <div class="min-h-screen">
-        @include('quiz.partials.sidebar')  {{-- Sidebar Quiz --}}
-        @include('quiz.partials.navbar')   {{-- Navbar Quiz --}}
-
-        <div class="content content-mediko-quiz text-white min-h-screen">
+        <div class="content-mediko-quiz text-white min-h-screen" style="width: 100% !important;">
             <div class="container-fluid">
                 <div id="toastiin-container"></div>
-                @yield('quiz-content')  {{-- Bagian ini akan diisi oleh halaman spesifik --}}
+                @yield('quiz-content')
             </div>
         </div>
     </div>
+    @livewireScripts
 @endsection
 
 @include('partials.script')

@@ -80,6 +80,7 @@ input[type=number] {
 
 .sidebar-mediko-quiz{
     background-color: #2D0A56 !important;
+    height: 100%;
 }
 
 .sidebar-mediko-quiz::-webkit-scrollbar-thumb {

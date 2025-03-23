@@ -82,13 +82,23 @@ class QuizQuestionBankController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-        $quizQuestion = QuizQuestion::with('answers')->get();
-        return view('quiz.content.layouts.quiz_question_list',[
-            'quizQuestions' => $quizQuestion,
+        $quizBank = QuizQuestionBank::with(['questions.answers', 'questions.medicalField'])->findOrFail($id);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'quizQuestions' => $quizBank->questions
+            ]);
+        }
+
+        return view('quiz.content.layouts.quiz_question_list', [
+            'quizQuestions' => $quizBank->questions,
         ]);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

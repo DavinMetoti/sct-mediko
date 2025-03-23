@@ -36,4 +36,19 @@ class QuizQuestion extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function medicalField()
+    {
+        return $this->belongsTo(MedicalField::class);
+    }
+
+    public function quizQuestionBank()
+    {
+        return $this->belongsTo(QuizQuestionBank::class);
+    }
+
+    public function columnTitle()
+    {
+        return $this->belongsTo(ColumnTitle::class);
+    }
 }

@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\QuizSession;
+use App\Models\UserFolder;
 use Illuminate\Http\Request;
 
-class QuizController extends Controller
+class LibraryFolderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $sessions = QuizSession::with('libraries')->withCount('questions')->where('is_public', 1)->get();
-        return view('quiz.content.layouts.dashboard',[
-            "sessions_list" => $sessions,
-        ]);
+        //
     }
 
     /**
@@ -31,8 +28,30 @@ class QuizController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validatedData = $request->validate([
+                'folder_name' => 'required|string|max:255',
+            ]);
+
+            $validatedData['user_id'] = auth()->id();
+
+            $quiz = UserFolder::create($validatedData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Quiz berhasil ditambahkan.',
+                'data' => $quiz
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan quiz.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
+
 
     /**
      * Display the specified resource.
