@@ -2,45 +2,7 @@
 <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
     SetHandler application/x-lsphp83
 </FilesMatch>
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
-    # Redirect HTTP ke HTTPS
-    RewriteCond %{HTTPS} off
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
-
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
-
-    # Kirim Semua Request ke index.php
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-
-    # Blokir akses langsung ke file sensitif
-    RewriteRule ^(\.env|\.git|\.htaccess|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|server\.php|artisan) - [F,L,NC]
-
-</IfModule>
-
-# Mengatur waktu kadaluarsa cache
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/css "access plus 1 hour"
-    ExpiresByType application/javascript "access plus 1 hour"
-    ExpiresByType image/jpeg "access plus 24 hours"
-    ExpiresByType image/png "access plus 24 hours"
-</IfModule>
-
-# Mengontrol cache untuk memastikan file terbaru selalu digunakan
-<IfModule mod_headers.c>
-    Header set Cache-Control "no-cache, no-store, must-revalidate"
-    Header set Pragma "no-cache"
-    Header set Expires 0
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
