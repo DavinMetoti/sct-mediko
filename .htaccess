@@ -2,7 +2,11 @@
 <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
     SetHandler application/x-lsphp83
 </FilesMatch>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
+    RewriteBase /
+
+    # Redirect semua permintaan ke folder public, kecuali jika sudah di dalam public/
+    RewriteRule ^(?!public/)(.*)$ public/$1 [L]
 </IfModule>
