@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Redirect HTTP to HTTPS
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -21,7 +25,6 @@
 
     # Block direct access to .env and other sensitive files
     RewriteRule ^(\.env|\.git|\.htaccess|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|server\.php|artisan) - [F,L,NC]
-
 </IfModule>
 
 <IfModule mod_expires.c>
