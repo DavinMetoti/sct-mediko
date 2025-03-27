@@ -1,27 +1,30 @@
-<!-- <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
+# Aktifkan PHP Handler jika diperlukan
+<FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
     SetHandler application/x-lsphp83
-</FilesMatch> -->
-<!-- <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
-</IfModule> -->
+</FilesMatch>
+
+# Mengaktifkan mod_rewrite
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # Arahkan semua permintaan ke dalam folder public/
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Redirect trailing slashes jika bukan direktori
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-    # Handle Front Controller...
+    # Menangani Front Controller (Laravel index.php)
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
-    # Ensure Authorization Header Is Passed To PHP
+    # Pastikan Authorization Header diteruskan ke PHP
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>
 
+# Menambahkan header keamanan
 <IfModule mod_headers.c>
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-XSS-Protection "1; mode=block"
@@ -31,3 +34,5 @@
 # Disable Directory Listing
 Options -Indexes
 
+# Menangani permintaan default jika tidak cocok dengan aturan di atas
+FallbackResource /index.php
