@@ -1,12 +1,7 @@
-# Pastikan semua file PHP menggunakan PHP 8.3
-<FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
+<!-- <FilesMatch "\.(php4|php5|php3|php2|php|phtml)$">
     SetHandler application/x-lsphp83
-</FilesMatch>
-
+</FilesMatch> -->
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
-
-    # Redirect semua permintaan ke folder public, kecuali jika sudah di dalam public/
-    RewriteRule ^(?!public/)(.*)$ public/$1 [L]
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
