@@ -43,7 +43,7 @@ Route::resource('/', WelcomeController::class);
 // Route for the auth page
 Route::resource('forgot-password', OtpController::class);
 Route::resource('quiz-play', QuizPlayController::class);
-Route::post('start-quiz', [QuizSessionContoller::class, 'checkQuizSession'])->name('start.quiz');
+Route::match(['get', 'post'], 'start-quiz', [QuizSessionController::class, 'checkQuizSession'])->name('start.quiz');
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::get('register', [LoginController::class, 'register'])->name('register');
 Route::post('login/check', [LoginController::class, 'login'])->name('login.check');
