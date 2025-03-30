@@ -14,7 +14,7 @@
     <script>
         const quizSessionId = @json($quizSessionId);
 
-        const apiUrl = "{{ route('quiz-session.session_rank', ['id' => $quizSessionId]) }}";
+        const apiUrl = "{{ route('quiz-rank', ['id' => $quizSessionId]) }}";
 
         function fetchSessionRank() {
             $.ajax({

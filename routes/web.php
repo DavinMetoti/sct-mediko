@@ -58,6 +58,7 @@ Route::get('/change-password', [OtpController::class, 'changePasswordPage'])
     ->name('change.password.view');
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('verify.otp');
 Route::post('/change-password', [OtpController::class, 'updatePassword'])->name('change.password');
+Route::get('quiz-rank/{id}', [QuizSessionContoller::class, 'sessionRank'])->name('quiz-rank');
 
 
 
@@ -107,7 +108,6 @@ Route::middleware('auth')->get('questions/detail/edit/{id}', [QuestionDetailCont
 Route::middleware('auth')->get('/package/search/question', [PackageController::class, 'searchQuestions'])->name('package.search.question');
 Route::middleware('auth')->get('package/{id}/selected-questions', [PackageController::class, 'getSelectedQuestions'])->name('package.getSelectedQuestions');
 Route::middleware('auth')->get('/admin/search-question-bank', [QuestionBankController::class, 'searchQuestionBank'])->name('admin.searchQuestionBank');
-Route::middleware('auth')->get('quiz-session/{id}/rank', [QuizSessionContoller::class, 'sessionRank'])->name('quiz-session.session_rank');
 
 Route::middleware('auth')->post('admin/access-role/data', [AccessRoleController::class, 'getAccessRoleData'])->name('admin.access-role.data');
 Route::middleware('auth')->post('admin/access-role/save/permission', [AccessRoleController::class, 'saveOrUpdatePermission'])->name('admin.access-role.permission');
