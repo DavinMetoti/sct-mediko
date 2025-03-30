@@ -222,6 +222,7 @@ class QuizSessionContoller extends Controller
 
     public function checkQuizSession(Request $request)
     {
+        $isQuery = $request->has('access_code'); // Cek apakah berasal dari query
         $access_code = $request->query('access_code') ?? $request->input('access_code');
 
         if (!$access_code) {
@@ -236,7 +237,7 @@ class QuizSessionContoller extends Controller
             ->first();
 
         if (!$quizSession || $quizSession->questions_count == 0) {
-            if ($request->isMethod('get')) {
+            if ($isQuery) {
                 abort(403, "Kode akses tidak valid atau quiz tidak ditemukan.");
             }
             return response()->json([
@@ -248,6 +249,9 @@ class QuizSessionContoller extends Controller
         $now = now();
 
         if ($now->lt($quizSession->start_time)) {
+            if ($isQuery) {
+                abort(403, "Quiz belum dimulai. Silakan coba lagi nanti.");
+            }
             return response()->json([
                 'success' => false,
                 'message' => 'Quiz belum dimulai. Silakan coba lagi nanti.'
@@ -255,6 +259,9 @@ class QuizSessionContoller extends Controller
         }
 
         if ($now->gt($quizSession->end_time)) {
+            if ($isQuery) {
+                abort(403, "Quiz sudah berakhir.");
+            }
             return response()->json([
                 'success' => false,
                 'message' => 'Quiz sudah berakhir.'
@@ -274,7 +281,7 @@ class QuizSessionContoller extends Controller
         broadcast(new QuizUpdated($quizAttempt))->toOthers();
 
         // Jika request menggunakan GET (query parameter), langsung redirect
-        if ($request->isMethod('get')) {
+        if ($isQuery) {
             return redirect()->route('quiz-play.index', ['attempt_token' => $quizAttempt->attempt_token])
                 ->with('success', 'Kode akses valid. Quiz attempt berhasil dibuat.');
         }
@@ -286,6 +293,7 @@ class QuizSessionContoller extends Controller
             'quiz_attempt' => $quizAttempt
         ]);
     }
+
 
     public function sessionRank(Request $request, string $id)
     {
