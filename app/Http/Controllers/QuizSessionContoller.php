@@ -287,9 +287,6 @@ class QuizSessionContoller extends Controller
         ]);
     }
 
-
-
-
     public function sessionRank(Request $request, string $id)
     {
         $session = QuizSession::with('questions')->findOrFail($id);

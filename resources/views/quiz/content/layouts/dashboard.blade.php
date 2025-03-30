@@ -270,7 +270,7 @@
                 $('#join-quiz').prop('disabled', true).text('Memeriksa...');
 
                 $.ajax({
-                    url: '/quiz-session/check_access_code',
+                    url: '/start-quiz',
                     type: 'POST',
                     data: {
                         access_code: access_code,
@@ -335,7 +335,7 @@
                 $('.start-btn').prop('disabled', true).text('Memulai...');
 
                 $.ajax({
-                    url: '/quiz-session/check_access_code',
+                    url: '/start-quiz',
                     type: 'POST',
                     data: {
                         access_code: access_code,

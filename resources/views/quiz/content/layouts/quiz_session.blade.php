@@ -65,7 +65,7 @@
             }
 
             function copySessionInfo(session) {
-    let baseUrl = "{{ route('quiz-session.check_access_code') }}"; // Gunakan route Laravel
+    let baseUrl = "{{ route('start.quiz') }}"; // Gunakan route Laravel
     let textToCopy = `
 ${session.title}
 Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama temanmu.

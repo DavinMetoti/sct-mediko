@@ -43,6 +43,7 @@ Route::resource('/', WelcomeController::class);
 // Route for the auth page
 Route::resource('forgot-password', OtpController::class);
 Route::resource('quiz-play', QuizPlayController::class);
+Route::post('start-quiz', [QuizSessionContoller::class, 'checkQuizSession'])->name('start.quiz');
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::get('register', [LoginController::class, 'register'])->name('register');
 Route::post('login/check', [LoginController::class, 'login'])->name('login.check');
@@ -57,7 +58,6 @@ Route::get('/change-password', [OtpController::class, 'changePasswordPage'])
     ->name('change.password.view');
 Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('verify.otp');
 Route::post('/change-password', [OtpController::class, 'updatePassword'])->name('change.password');
-Route::post('quiz-session/check_access_code', [QuizSessionContoller::class, 'checkQuizSession'])->name('quiz-session.check_access_code');
 
 
 
