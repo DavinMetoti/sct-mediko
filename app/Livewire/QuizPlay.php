@@ -15,7 +15,9 @@ class QuizPlay extends Component
     public $questions = [];
     public $currentQuestion = null;
     public $shownQuestions = [];
-    public $totalQuestions = 0; // Menyimpan total pertanyaan dalam sesi
+    public $totalQuestions = 0;
+    public $quizSessionId = null;
+
 
     public function mount()
     {
@@ -28,6 +30,8 @@ class QuizPlay extends Component
                 $this->session = QuizSession::where('id', $this->attempt->session_id)->first();
 
                 if ($this->session) {
+                    $this->quizSessionId = $this->session->id;
+
                     $this->questions = $this->session->questions()
                         ->with(['answers', 'creator', 'medicalField', 'quizQuestionBank', 'columnTitle'])
                         ->get();
@@ -45,6 +49,10 @@ class QuizPlay extends Component
                     }
                 }
             }
+        }
+
+        if (!$this->quizSessionId) {
+            $this->quizSessionId = 0;
         }
     }
 
@@ -87,7 +95,8 @@ class QuizPlay extends Component
     {
         return view('livewire.quiz-play', [
             'currentQuestion' => $this->currentQuestion,
-            'totalQuestions' => $this->totalQuestions // Mengirim total pertanyaan ke view
+            'totalQuestions' => $this->totalQuestions,
+            'quizSessionId' => $this->quizSessionId ?: 0
         ]);
     }
 }

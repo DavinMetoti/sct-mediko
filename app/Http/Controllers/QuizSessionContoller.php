@@ -21,7 +21,7 @@ class QuizSessionContoller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = QuizSession::all();
+            $data = QuizSession::withCount('attempts')->get();
             return response()->json($data);
         }
 
@@ -222,33 +222,73 @@ class QuizSessionContoller extends Controller
 
     public function checkQuizSession(Request $request)
     {
-        $quizSession = QuizSession::where('access_code', $request->access_code)->first();
+        $access_code = $request->query('access_code') ?? $request->input('access_code');
 
-        if ($quizSession) {
-            $quizAttempt = QuizAttempt::create([
-                'attempt_token' => Str::uuid()->toString(),
-                'session_id'    => $quizSession->id,
-                'user_id'       => auth()->id() ?? null,
-                'name'          => auth()->user()->name ?? null,
-                'score'         => 0,
-            ]);
-
-            Session::put('quiz_token', $quizAttempt->attempt_token);
-
-            broadcast(new QuizUpdated($quizAttempt))->toOthers();
-
+        if (!$access_code) {
             return response()->json([
-                'success' => true,
-                'message' => 'Kode akses valid. Quiz attempt berhasil dibuat.',
-                'quiz_attempt' => $quizAttempt
-            ]);
+                'success' => false,
+                'message' => 'Kode akses tidak boleh kosong.'
+            ], 400);
         }
 
+        $quizSession = QuizSession::withCount('questions')
+            ->where('access_code', $access_code)
+            ->first();
+
+        if (!$quizSession || $quizSession->questions_count == 0) {
+            if ($request->isMethod('get')) {
+                abort(403, "Kode akses tidak valid atau quiz tidak ditemukan.");
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'Kode akses tidak valid atau quiz tidak memiliki pertanyaan.'
+            ], 404);
+        }
+
+        $now = now();
+
+        if ($now->lt($quizSession->start_time)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Quiz belum dimulai. Silakan coba lagi nanti.'
+            ], 403);
+        }
+
+        if ($now->gt($quizSession->end_time)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Quiz sudah berakhir.'
+            ], 403);
+        }
+
+        $quizAttempt = QuizAttempt::create([
+            'attempt_token' => Str::uuid()->toString(),
+            'session_id'    => $quizSession->id,
+            'user_id'       => auth()->id() ?? null,
+            'name'          => auth()->user()->name ?? null,
+            'score'         => 0,
+        ]);
+
+        Session::put('quiz_token', $quizAttempt->attempt_token);
+
+        broadcast(new QuizUpdated($quizAttempt))->toOthers();
+
+        // Jika request menggunakan GET (query parameter), langsung redirect
+        if ($request->isMethod('get')) {
+            return redirect()->route('quiz-play.index', ['attempt_token' => $quizAttempt->attempt_token])
+                ->with('success', 'Kode akses valid. Quiz attempt berhasil dibuat.');
+        }
+
+        // Jika request menggunakan POST (request body), kembalikan response JSON
         return response()->json([
-            'success' => false,
-            'message' => 'Kode akses tidak valid atau tidak ditemukan.'
-        ], 404);
+            'success' => true,
+            'message' => 'Kode akses valid. Quiz attempt berhasil dibuat.',
+            'quiz_attempt' => $quizAttempt
+        ]);
     }
+
+
+
 
     public function sessionRank(Request $request, string $id)
     {

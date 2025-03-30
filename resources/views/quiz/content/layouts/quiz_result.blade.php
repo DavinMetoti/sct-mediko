@@ -32,38 +32,36 @@
 
                 <h3 class="mt-4">Detail Jawaban:</h3>
                 <ul class="list-group pb-5">
-                    @foreach ($attempt->session->questions as $question)
-                        <li class="list-group-item">
-                            <strong>Pertanyaan:</strong> {!! $question->clinical_case !!}
+                @php
+                    // Ambil semua jawaban pengguna dalam bentuk array yang bisa diakses cepat
+                    $allSelectedAnswers = $attempt->userAnswer->groupBy('quiz_question_id')->map(function ($answers) {
+                        return $answers->pluck('quiz_answer_id')->toArray();
+                    });
+                @endphp
+                @foreach ($attempt->session->questions as $question)
+                    <li class="list-group-item">
+                        <strong>Pertanyaan:</strong> {!! $question->clinical_case !!}
 
-                            @php
-                                $selectedAnswer = $attempt->userAnswer
-                                    ? $attempt->userAnswer->where('quiz_question_id', $question->id)->first()
-                                    : null;
-                            @endphp
+                        <div class="mt-2">
+                            @foreach ($question->answers as $answer)
+                                <div class="form-check">
+                                    <input
+                                        type="radio"
+                                        name="question_{{ $question->id }}"
+                                        class="form-check-input"
+                                        data-id="{{ $answer->id }}"
+                                        {{ in_array($answer->id, $allSelectedAnswers[$question->id] ?? []) ? 'checked' : 'disabled' }}
+                                    >
+                                    <label class="form-check-label"
+                                        style="@if ($answer->score == 1) color: green; font-weight: bold; @endif">
+                                        {{ $answer->answer }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </li>
+                @endforeach
 
-                            <div class="mt-2">
-                                @foreach ($question->answers as $answer)
-                                    <div class="form-check">
-                                        <input
-                                            type="radio"
-                                            name="question_{{ $question->id }}"
-                                            class="form-check-input"
-                                            {{ $selectedAnswer && $selectedAnswer->quiz_answer_id == $answer->id ? 'checked' : 'disabled' }}
-                                        >
-                                        <label
-                                            class="form-check-label"
-                                            style="
-                                                @if ($answer->score == 1) color: green; font-weight: bold; @endif
-                                            "
-                                        >
-                                            {{ $answer->answer }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </li>
-                    @endforeach
                 </ul>
             @else
                 <p class="text-center mt-4">Tidak ada data hasil kuis.</p>

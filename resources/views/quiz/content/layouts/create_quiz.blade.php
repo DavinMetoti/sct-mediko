@@ -215,7 +215,6 @@
     <script>
         $(document).ready(function() {
             const question = new QuillEditor('#editor', {}, (content) => {
-                console.log("Editor content changed:", content);
                 localStorage.setItem('editorContent', content);
             });
             const quizQuestionBankApi = new HttpClient('{{ route("quiz-question-bank.index") }}');
@@ -353,9 +352,6 @@
 
                 let max_score = getHighestScore();
 
-                console.log(max_score);
-
-
                 let answers = [];
 
                 for (let i = 1; i <= 5; i++) {
@@ -387,7 +383,6 @@
                 quizQuestionApi.request('POST', '', data)
                     .then(response => {
                         toastr.success(response.response.message, { timeOut: 5000 });
-                        console.log(response);
 
                         localStorage.removeItem('bank-soal');
                         localStorage.removeItem('medical-field');

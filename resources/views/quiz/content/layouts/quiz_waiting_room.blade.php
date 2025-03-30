@@ -3,7 +3,7 @@
 @section('quiz-content')
     <div class="quiz-header p-3 d-flex align-items-center justify-content-between">
         <div class="card-quiz p-2 rounded-sm">
-            <button class="header-btn"><i class="fas fa-times"></i></button>
+            <button class="header-btn" onclick="confirmExit()"><i class="fas fa-times"></i></button>
         </div>
 
         <span class="quiz-title">Creating a game...</span>
@@ -92,6 +92,25 @@
                 },
                 error: function() {
                     alert("Gagal memulai quiz, coba lagi!");
+                }
+            });
+        }
+
+        function confirmExit() {
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Anda akan menyelesaikan quiz ini!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, keluar!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    sessionStorage.removeItem("quiz_timer"); // Hapus hanya timer, bukan semua sessionStorage
+                    sessionStorage.removeItem("quiz_start_time");
+                    window.location.href = "{{ route('quiz.index') }}";
                 }
             });
         }

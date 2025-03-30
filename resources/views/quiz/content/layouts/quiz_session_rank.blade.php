@@ -8,84 +8,11 @@
 
 @section('quiz-content')
     <h3 class="fw-bold">Session Result : {{ $session->title }}</h3>
-    <div class="quiz-container"></div>
-
-    <style>
-        .quiz-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 10px;
-            background-color: #2E0052;
-            border-radius: 10px;
-            color: white;
-        }
-        .rank-item {
-            margin-bottom: 10px;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.5s ease-in-out;
-        }
-        .rank-item:nth-child(1) {
-            background-color: #FFD700;
-            color: #000;
-            font-weight: bold;
-        }
-        .rank-item:nth-child(2) {
-            background-color: #C0C0C0;
-            color: #000;
-            font-weight: bold;
-        }
-        .rank-item:nth-child(3) {
-            background-color: #CD7F32;
-            color: #000;
-            font-weight: bold;
-        }
-        .rank-card h5 {
-            margin: 0;
-            font-size: 18px;
-        }
-        .rank-card p {
-            margin: 5px 0 0;
-            font-size: 14px;
-        }
-
-        /* Animasi */
-        @keyframes fadeInScale {
-            0% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes flash {
-            0%, 100% {
-                background-color: #FFD700;
-            }
-            50% {
-                background-color: #fff275;
-            }
-        }
-
-        .animate-rank {
-            animation: fadeInScale 0.5s ease-in-out;
-        }
-
-        .rank-up {
-            animation: flash 1s ease-in-out 2;
-        }
-    </style>
+    <div class="quiz-container-rank"></div>
 
     <script src="{{ secure_asset('assets/js/module.js') }}"></script>
     <script>
         const quizSessionId = @json($quizSessionId);
-        console.log(quizSessionId);
 
         const apiUrl = "{{ route('quiz-session.session_rank', ['id' => $quizSessionId]) }}";
 
@@ -95,7 +22,6 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
                     toastr.success("Data rangking berhasil diambil", "", { timeOut: 3000 });
                     displaySessionRank(data.sessionRankList);
                 },
@@ -107,14 +33,13 @@
         }
 
         function displaySessionRank(attempts) {
-            const container = document.querySelector('.quiz-container');
+            const container = document.querySelector('.quiz-container-rank');
 
-            // Simpan peringkat sebelumnya
             const prevRanks = {};
             container.querySelectorAll('.rank-item').forEach((item, i) => {
                 const name = item.querySelector('h5')?.innerText;
                 if (name) {
-                    prevRanks[name] = i + 1; // Simpan peringkat sebelumnya
+                    prevRanks[name] = i + 1;
                 }
             });
 
@@ -125,19 +50,18 @@
                     const rankElement = document.createElement('div');
                     rankElement.classList.add('rank-item', 'p-2', 'rounded', 'd-flex', 'align-items-center', 'animate-rank');
 
-                    // Cek apakah user naik peringkat
                     if (prevRanks[rank.name] && prevRanks[rank.name] > index + 1) {
-                        rankElement.classList.add('rank-up'); // Tambahkan efek naik peringkat
+                        rankElement.classList.add('rank-up');
                     }
 
                     if (index === 0) {
-                        rankElement.style.backgroundColor = '#FFD700'; // Emas
+                        rankElement.style.backgroundColor = '#FFD700';
                     } else if (index === 1) {
-                        rankElement.style.backgroundColor = '#C0C0C0'; // Perak
+                        rankElement.style.backgroundColor = '#C0C0C0';
                     } else if (index === 2) {
-                        rankElement.style.backgroundColor = '#CD7F32'; // Perunggu
+                        rankElement.style.backgroundColor = '#CD7F32';
                     } else {
-                        rankElement.style.backgroundColor = '#888'; // Default
+                        rankElement.style.backgroundColor = '#888';
                     }
 
                     const crownIcon = index === 0

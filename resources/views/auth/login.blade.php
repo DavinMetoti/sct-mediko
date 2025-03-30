@@ -15,18 +15,6 @@
             <p class="text-center text-muted mb-4">Masuk ke akun Anda untuk melanjutkan</p>
             <form id="loginForm">
                 @csrf
-                <ul class="nav nav-pills custom-nav-pills w-100 mb-3" id="pills-login" role="tablist"
-                    style="flex-direction: row">
-                    <li class="nav-item w-50">
-                        <a class="nav-link active text-center" data-name="tryout" id="pills-new-tab" data-toggle="pill"
-                            href="#" aria-selected="true">
-                            Tryout</a>
-                    </li>
-                    <li class="nav-item w-50">
-                        <a class="nav-link text-center" data-name="quiz" id="pills-existing-tab" data-toggle="pill"
-                            href="#" aria-selected="false">Quiz</a>
-                    </li>
-                </ul>
                 <div id="tryout-login">
                     <div class="form-group mb-3">
                         <label for="username" class="form-label text-black fw-medium">Username / Email</label>
@@ -54,7 +42,7 @@
                     <button type="button" id="button-login"
                         class="btn btn-primary btn-block rounded py-2 w-100">Login</button>
                 </div>
-                <div id="quiz-login"  class="hidden">
+                <!-- <div id="quiz-login"  class="hidden">
                     <div class="form-group mb-3">
                         <label for="code" class="form-label text-black fw-medium">Code</label>
                         <input type="text" class="form-control rounded px-3 py-2" id="code" name="code"
@@ -69,7 +57,7 @@
                     </div>
                     <button type="button" id="button-quiz"
                         class="btn btn-primary btn-block rounded py-2 w-100">Login</button>
-                </div>
+                </div> -->
             </form>
             <div class="text-center mt-3">
                 <small class="text-muted">

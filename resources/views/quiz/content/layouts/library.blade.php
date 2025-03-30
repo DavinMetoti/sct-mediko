@@ -103,7 +103,6 @@
 
             apiClient.request('POST', '', data)
                 .then(response => {
-                    console.log('Response:', response);  // 🔍 Debugging
 
                     toastr.success("Koleksi berhasil ditambahkan!", "Sukses", {
                         timeOut: 3000,

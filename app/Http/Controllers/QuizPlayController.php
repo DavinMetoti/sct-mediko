@@ -73,7 +73,13 @@ class QuizPlayController extends Controller
     {
         $token = Session::get('quiz_token');
 
-        $attempt = QuizAttempt::with(['session.questions.answers','userAnswer'])->findOrFail($id);
+        $attempt = QuizAttempt::with([
+            'session.questions' => function ($query) {
+                $query->orderBy('id', 'asc');
+            },
+            'session.questions.answers',
+            'userAnswer'
+        ])->findOrFail($id);
 
         return view('quiz.content.layouts.quiz_result', compact('attempt'));
     }

@@ -107,6 +107,76 @@
         }
     }
 
+    .quiz-container-rank {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #2E0052;
+            border-radius: 10px;
+            color: white;
+        }
+        .rank-item {
+            margin-bottom: 10px;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.5s ease-in-out;
+        }
+        .rank-item:nth-child(1) {
+            background-color: #FFD700;
+            color: #000;
+            font-weight: bold;
+        }
+        .rank-item:nth-child(2) {
+            background-color: #C0C0C0;
+            color: #000;
+            font-weight: bold;
+        }
+        .rank-item:nth-child(3) {
+            background-color: #CD7F32;
+            color: #000;
+            font-weight: bold;
+        }
+        .rank-card h5 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .rank-card p {
+            margin: 5px 0 0;
+            font-size: 14px;
+        }
+
+        /* Animasi */
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flash {
+            0%, 100% {
+                background-color: #FFD700;
+            }
+            50% {
+                background-color: #fff275;
+            }
+        }
+
+        .animate-rank {
+            animation: fadeInScale 0.5s ease-in-out;
+        }
+
+        .rank-up {
+            animation: flash 1s ease-in-out 2;
+        }
+
 
 </style>
 

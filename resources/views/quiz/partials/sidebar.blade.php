@@ -135,7 +135,6 @@
 
             apiClient.request('POST', '', data)
                 .then(response => {
-                    console.log('Response:', response);  // 🔍 Debugging
 
                     toastr.success("Koleksi berhasil ditambahkan!", "Sukses", {
                         timeOut: 3000,
@@ -143,7 +142,6 @@
                         positionClass: "toast-top-right"
                     });
 
-                    // Reset form & tutup modal
                     document.getElementById('collectionForm').reset();
                     let modal = bootstrap.Modal.getInstance(document.getElementById('addCollectionModal'));
                     modal.hide();

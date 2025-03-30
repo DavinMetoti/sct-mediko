@@ -87,7 +87,6 @@
 
             apiQuizSession.request('GET', '')
                 .then(response => {
-                    console.log("Data Quiz Session:", response);
 
                     if (response.response.questions && response.response.questions.length > 0) {
                         let existingIds = new Set();
@@ -153,9 +152,6 @@
                             [...document.querySelectorAll('#list-question .card-purple')]
                                 .map(el => el.getAttribute('data-id'))
                         );
-
-                        console.log(selectedQuestions);
-
 
                         questions.forEach(question => {
                             let isChecked = selectedQuestions.has(String(question.id)) ? 'checked' : '';
@@ -240,7 +236,6 @@
                 return;
             }
 
-            console.log("Soal yang dipilih:", selectedQuestions);
 
             let existingIds = new Set([...listQuestionDiv.querySelectorAll('.card-purple')].map(el => el.getAttribute('data-id')));
 
@@ -280,12 +275,10 @@
                     let selectedCard = document.querySelector(`[data-id="${questionId}"]`);
                     if (selectedCard) {
                         selectedCard.remove();
-                        console.log(`Pertanyaan dengan ID ${questionId} telah dihapus.`);
                     }
 
                     let parentDiv = document.getElementById('list-question');
                     if (parentDiv.children.length === 0) {
-                        console.log("Semua pertanyaan telah dihapus.");
                     }
                 }
             }
@@ -313,8 +306,6 @@
                 return;
             }
 
-            console.log("Soal yang akan di-attach:", selectedQuestionIds);
-            console.log("ID Sesi Quiz:", quizSessionId);
 
             fetch(`{{ route('quiz-session.attach') }}`, {
                 method: 'POST',
@@ -355,15 +346,11 @@
             }
         });
 
-        console.log(initialSnapshot);
-
-
         observer.observe(listQuestionDiv, { childList: true });
 
         window.addEventListener('beforeunload', function (event) {
             if (isDataChanged) {
                 event.preventDefault();
-                console.log(initialSnapshot);
                 event.returnValue = "Data belum disimpan. Apakah Anda yakin ingin keluar?";
             }
         });

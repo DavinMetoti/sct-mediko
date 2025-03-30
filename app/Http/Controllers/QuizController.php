@@ -12,11 +12,23 @@ class QuizController extends Controller
      */
     public function index()
     {
-        $sessions = QuizSession::with('libraries')->withCount('questions')->where('is_public', 1)->get();
-        return view('quiz.content.layouts.dashboard',[
+        $sessions = QuizSession::with('libraries')
+            ->withCount('questions')
+            ->withCount('attempts')
+            ->where('is_public', 1)
+            ->get()
+            ->filter(function ($session) {
+                $now = now();
+                return $session->questions_count > 0
+                    && $now->gte($session->start_time)
+                    && $now->lte($session->end_time);
+            });
+
+        return view('quiz.content.layouts.dashboard', [
             "sessions_list" => $sessions,
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

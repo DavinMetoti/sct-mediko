@@ -72,8 +72,9 @@
                         </span>
 
                         <span class="badge bg-light text-primary position-absolute top-0 end-0 m-2 px-2 py-1">
-                            {{ number_format($session->plays) }} plays
+                            {{ $session->attempts_count >= 1000 ? number_format($session->attempts_count / 1000, $session->attempts_count % 1000 !== 0 ? 1 : 0) . 'k' : $session->attempts_count }} plays
                         </span>
+
 
                         <div class="d-flex justify-content-between align-items-center px-3 mb-3">
                             <h6 class="fw-bold text-dark mb-0">{{ $session->title }}</h6>
@@ -101,7 +102,7 @@
                         </div>
 
                         <div class="pb-3 px-3">
-                            <button class="btn btn-primary w-full rounded-pill">Start</button>
+                            <button class="btn btn-primary w-full rounded-pill start-btn" data-id="{{$session->access_code}}">Start</button>
                         </div>
                     </div>
                 </div>
@@ -142,9 +143,6 @@
                 let sessionId = icon.data('id');
                 let libraryId = icon.data('library-id'); // Ambil ID library jika ada
                 let isLiked = icon.hasClass('bi-heart-fill');
-
-                console.log(sessionId);
-
 
                 if (isLiked) {
                     // Jika ikon aktif (liked), hapus dari library
@@ -321,6 +319,72 @@
                     }
                 });
             });
+
+            $('.start-btn').click(function() {
+                let access_code = $(this).attr('data-id'); // Ambil kode akses dari atribut data-id
+
+                if (!access_code) {
+                    toastr.warning('Kode akses tidak valid!', 'Warning', {
+                        timeOut: 3000,
+                        progressBar: true,
+                        positionClass: "toast-top-right"
+                    });
+                    return;
+                }
+
+                $('.start-btn').prop('disabled', true).text('Memulai...');
+
+                $.ajax({
+                    url: '/quiz-session/check_access_code',
+                    type: 'POST',
+                    data: {
+                        access_code: access_code,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        setTimeout(() => {
+                            if (response.success) {
+                                sessionStorage.setItem('quiz_attempt_token', response.quiz_attempt.attempt_token);
+                                sessionStorage.setItem('quiz_session_id', response.quiz_attempt.session_id);
+                                sessionStorage.setItem('quiz_user_id', response.quiz_attempt.user_id);
+
+                                toastr.success(response.message, 'Success', {
+                                    timeOut: 3000,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right"
+                                });
+
+                                // Redirect ke halaman quiz
+                                window.location.href = "{{ route('quiz-play.index') }}";
+                            } else {
+                                toastr.error(response.message, 'Error', {
+                                    timeOut: 3000,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right"
+                                });
+                            }
+                        }, 3000);
+                    },
+                    error: function(error) {
+                        setTimeout(() => {
+                            toastr.error(error.responseJSON.message || "Terjadi kesalahan!", 'Error', {
+                                timeOut: 3000,
+                                progressBar: true,
+                                positionClass: "toast-top-right"
+                            });
+                        }, 3000);
+                    },
+                    complete: function() {
+                        setTimeout(() => {
+                            $('.start-btn').prop('disabled', false).text('Start');
+                        }, 3000);
+                    }
+                });
+            });
+
 
         });
     </script>

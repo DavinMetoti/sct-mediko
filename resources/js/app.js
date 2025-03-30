@@ -13,5 +13,4 @@ window.Echo = new Echo({
 
 window.Echo.channel('quiz-channel')
     .listen('.quiz.updated', (data) => {
-        console.log('Quiz Updated:', data);
     });

@@ -65,21 +65,23 @@
             }
 
             function copySessionInfo(session) {
-                let textToCopy = `
-        ${session.title}
+    let baseUrl = "{{ route('quiz-session.check_access_code') }}"; // Gunakan route Laravel
+    let textToCopy = `
+${session.title}
 Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama temanmu.
 
-        ✨ Gabung Sekarang!
-        🔑 Kode Akses: ${session.access_code}
-        📅 Waktu Mulai: ${session.start_time}
-        ⌛ Selesai: ${session.end_time}
+✨ Gabung Sekarang!
+🔑 Kode Akses: ${session.access_code}
+📅 Waktu Mulai: ${session.start_time}
+⌛ Selesai: ${session.end_time}
 
-Nikmati keseruan menjawab pertanyaan dan uji kemampuanmu bersama! 🚀`;
+🚀 Klik link ini untuk langsung masuk: ${baseUrl}?access_code=${session.access_code}
+`;
 
-                navigator.clipboard.writeText(textToCopy)
-                    .then(() => toastr.success("✅ Informasi sesi telah disalin ke clipboard!"))
-                    .catch(err => toastr.error("❌ Gagal menyalin teks:", err));
-            }
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => toastr.success("✅ Informasi sesi dan link telah disalin ke clipboard!"))
+        .catch(err => toastr.error("❌ Gagal menyalin teks:", err));
+}
 
             function renderCard(data) {
                 let container = document.getElementById("list-quiz-sessions");
@@ -109,27 +111,36 @@ Nikmati keseruan menjawab pertanyaan dan uji kemampuanmu bersama! 🚀`;
                                         ${session.end_time.split(" ")[0]} ${session.end_time.split(" ")[1].substring(0, 5)}
                                     </span>
                                     <span><i class="bi bi-clock"></i> ${session.timer} per soal</span>
-                                    <span><i class="bi bi-people"></i> 0 peserta</span>
+                                    <span><i class="bi bi-people"></i> ${session.attempts_count} peserta</span>
                                 </div>
                             </div>
                             <div class="text-end mt-3 mt-md-0">
-                                <div class="d-flex gap-2">
-                                    <a href="${baseUrl}/${session.id}/rank" class="btn btn-success mb-2 w-md-auto quiz-btn">
-                                        <i class="fas fa-chart-bar me-2"></i> Rank
-                                    </a>
-
-                                    <button class="btn btn-secondary mb-2 w-md-auto copy-btn" onclick='copySessionInfo(${JSON.stringify(session)})'>
-                                        <i class="bi bi-link-45deg me-2"></i> Copy
+                                <div class="dropdown d-flex justify-content-end mb-2">
+                                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots"></i>
                                     </button>
-
-                                    <a href="${baseUrl}/${session.id}" class="btn btn-primary mb-2 w-md-auto quiz-btn">
-                                        <i class="fas fa-file-alt me-2"></i> Quiz
-                                    </a>
-
-                                    <!-- Delete Button -->
-                                    <button class="btn btn-danger mb-2 w-md-auto delete-btn" onclick='deleteSession(${session.id})'>
-                                        <i class="bi bi-trash me-2"></i> Delete
-                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="${baseUrl}/${session.id}/rank" class="dropdown-item">
+                                                <i class="fas fa-chart-bar me-2"></i> Rank
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item copy-btn">
+                                                <i class="bi bi-link-45deg me-2"></i> Copy
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <a href="${baseUrl}/${session.id}" class="dropdown-item">
+                                                <i class="fas fa-file-alt me-2"></i> Quiz
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item text-danger delete-btn">
+                                                <i class="bi bi-trash me-2"></i> Delete
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <p class="text-muted mt-1 mb-0"><strong>Code:</strong> ${session.access_code}</p>
                                 <p class="text-muted text-sm mb-0"><strong>ID:</strong> ${session.session_id}</p>
