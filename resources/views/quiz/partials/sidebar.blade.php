@@ -1,4 +1,4 @@
-<div class="sidebar sidebar-mediko-quiz" id="sidebar">
+<div class="sidebar sidebar-mediko-quiz" style="overflow: hidden;" id="sidebar">
     <div class="flex justify-content-center mb-3 header-icon w-full h-full py-2">
         <a class="flex items-center">
             <div class="flex justify-content-center gap-2 p-2 rounded-lg bg-white shadow-md">
