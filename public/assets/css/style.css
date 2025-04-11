@@ -744,4 +744,9 @@ table.dataTable tbody tr:hover {
     box-shadow: none;
 }
 
+.custom-form-control option {
+    color: black;
+}
+
+
 
