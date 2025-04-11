@@ -251,6 +251,7 @@
                             let option = document.createElement('option');
                             option.value = bank.id;
                             option.textContent = bank.name;
+                            option.classList.add('text-black'); // Add this line
                             selectElement.appendChild(option);
                         });
                     })
@@ -267,6 +268,7 @@
                             let option = document.createElement('option');
                             option.value = field.id;
                             option.textContent = field.name;
+                            option.classList.add('text-black'); // Add this line
                             selectElement.appendChild(option);
                         });
                     })
@@ -274,6 +276,7 @@
                         console.error('Gagal mengambil data:', error);
                     });
             };
+
 
             function updateTotalPanelis(isSuccess = false) {
                 let total = 0;
