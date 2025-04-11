@@ -55,7 +55,7 @@
                         <select name="column-title" id="column-title" class="custom-form-control">
                             <option value="">Pilih Judul Kolom</option>
                             @foreach($columnTitle as $column)
-                                <option value="{{ $column->id }}">{{ $column->name }}</option>
+                                <option value="{{ $column->id }}" class="text-black">{{ $column->name }}</option>
                             @endforeach
                         </select>
                     </div>
