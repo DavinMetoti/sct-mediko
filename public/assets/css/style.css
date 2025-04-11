@@ -745,7 +745,7 @@ table.dataTable tbody tr:hover {
 }
 
 .custom-form-control option {
-    color: black;
+    color: black !important;
 }
 
 
