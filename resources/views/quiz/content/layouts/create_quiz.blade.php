@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mb-4">
+                    <div class="col-md-6 col-12 mb-4">
                         <div class="card text-white card-hover" style="background-color: #2E9DA6; width: 100%;">
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
@@ -130,7 +130,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mb-4">
+                    <div class="col-md-6 col-12 mb-4">
                         <div class="card text-white card-hover" style="background-color: #EFA929; width: 100%;">
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
@@ -155,7 +155,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mb-4">
+                    <div class="col-md-6 col-12 mb-4">
                         <div class="card text-white card-hover" style="background-color: #D5546D; width: 100%;">
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
@@ -180,7 +180,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mb-4">
+                    <div class="col-md-6 col-12 mb-4">
                         <div class="card text-white card-hover" style="background-color:rgb(84, 157, 213); width: 100%;">
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
