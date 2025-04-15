@@ -222,7 +222,7 @@ class QuizSessionContoller extends Controller
 
     public function checkQuizSession(Request $request)
     {
-        $isQuery = $request->has('access_code'); // Cek apakah berasal dari query
+        $isQuery = $request->query('access_code');
         $access_code = $request->query('access_code') ?? $request->input('access_code');
 
         if (!$access_code) {
@@ -280,8 +280,8 @@ class QuizSessionContoller extends Controller
 
         broadcast(new QuizUpdated($quizAttempt))->toOthers();
 
-        // Jika request menggunakan GET (query parameter), langsung redirect
         if ($isQuery) {
+            dd($isQuery);
             return redirect()->route('quiz-play.index', ['attempt_token' => $quizAttempt->attempt_token])
                 ->with('success', 'Kode akses valid. Quiz attempt berhasil dibuat.');
         }
@@ -291,7 +291,7 @@ class QuizSessionContoller extends Controller
             'success' => true,
             'message' => 'Kode akses valid. Quiz attempt berhasil dibuat.',
             'quiz_attempt' => $quizAttempt
-        ]);
+        ],200);
     }
 
 
