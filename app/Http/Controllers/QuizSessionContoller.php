@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\QuizUpdated;
 use App\Models\QuizAttempt;
 use App\Models\QuizSession;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -20,6 +21,8 @@ class QuizSessionContoller extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', [User::class, 'quiz-session.index']);
+
         if ($request->ajax()) {
             $data = QuizSession::withCount('attempts')->get();
             return response()->json($data);

@@ -6,6 +6,7 @@ use App\Models\ColumnTitle;
 use App\Models\QuestionBank;
 use App\Models\QuizAnswer;
 use App\Models\QuizQuestion;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuizQuestionController extends Controller
@@ -15,6 +16,8 @@ class QuizQuestionController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', [User::class, 'quiz-question.index']);
+
         $columnTitle = ColumnTitle::all();
 
         return view('quiz.content.layouts.create_quiz', [

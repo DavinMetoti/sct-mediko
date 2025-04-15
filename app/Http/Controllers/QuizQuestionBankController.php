@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\QuizQuestion;
 use App\Models\QuizQuestionBank;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuizQuestionBankController extends Controller
@@ -13,6 +14,8 @@ class QuizQuestionBankController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', [User::class, 'quiz-question-bank.index']);
+
         if ($request->ajax()) {
             return $this->apiIndex();
         }
