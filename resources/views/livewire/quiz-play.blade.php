@@ -57,7 +57,7 @@
                 <div class="col-md-9" id="quiz-question" data-id="{{ $currentQuestion->id }}" wire:key="quiz-question">
                     <div class="card-purple p-4 rounded shadow-sm">
                         @if ($currentQuestion)
-                            <div class="text-center">{!! $currentQuestion->clinical_case !!}</div>
+                            <div class="text-center" style="color: white !important;">{!! $currentQuestion->clinical_case !!}</div>
                         @else
                             <p class="text-muted">All questions have been displayed.</p>
                         @endif
