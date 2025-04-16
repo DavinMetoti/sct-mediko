@@ -69,7 +69,7 @@
                             </div>
 
                             <div class="pb-3 px-3">
-                                <button class="btn btn-primary w-full rounded-pill">Start</button>
+                                <button class="btn btn-primary w-full rounded-pill start-btn" data-id="{{$session->access_code}}">Start</button>
                             </div>
                         </div>
                     </div>
@@ -199,6 +199,71 @@
                     });
                 }
             });
+
+            $('.start-btn').click(function() {
+                let access_code = $(this).attr('data-id'); // Ambil kode akses dari atribut data-id
+
+                if (!access_code) {
+                    toastr.warning('Kode akses tidak valid!', 'Warning', {
+                        timeOut: 3000,
+                        progressBar: true,
+                        positionClass: "toast-top-right"
+                    });
+                    return;
+                }
+
+                $('.start-btn').prop('disabled', true).text('Memulai...');
+
+                    $.ajax({
+                        url: '/start-quiz',
+                        type: 'POST',
+                        data: {
+                            access_code: access_code,
+                            _token: "{{ csrf_token() }}"
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            setTimeout(() => {
+                                if (response.success) {
+                                    sessionStorage.setItem('quiz_attempt_token', response.quiz_attempt.attempt_token);
+                                    sessionStorage.setItem('quiz_session_id', response.quiz_attempt.session_id);
+                                    sessionStorage.setItem('quiz_user_id', response.quiz_attempt.user_id);
+
+                                    toastr.success(response.message, 'Success', {
+                                        timeOut: 3000,
+                                        progressBar: true,
+                                        positionClass: "toast-top-right"
+                                    });
+
+                                    // Redirect ke halaman quiz
+                                    window.location.href = "{{ route('quiz-play.index') }}";
+                                } else {
+                                    toastr.error(response.message, 'Error', {
+                                        timeOut: 3000,
+                                        progressBar: true,
+                                        positionClass: "toast-top-right"
+                                    });
+                                }
+                            }, 3000);
+                        },
+                        error: function(error) {
+                            setTimeout(() => {
+                                toastr.error(error.responseJSON.message || "Terjadi kesalahan!", 'Error', {
+                                    timeOut: 3000,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right"
+                                });
+                            }, 3000);
+                        },
+                        complete: function() {
+                            setTimeout(() => {
+                                $('.start-btn').prop('disabled', false).text('Start');
+                            }, 3000);
+                        }
+                    });
+                });
         });
 
 
