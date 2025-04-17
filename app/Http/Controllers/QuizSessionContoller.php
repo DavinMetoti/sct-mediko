@@ -284,7 +284,6 @@ class QuizSessionContoller extends Controller
         broadcast(new QuizUpdated($quizAttempt))->toOthers();
 
         if ($isQuery) {
-            dd($isQuery);
             return redirect()->route('quiz-play.index', ['attempt_token' => $quizAttempt->attempt_token])
                 ->with('success', 'Kode akses valid. Quiz attempt berhasil dibuat.');
         }
