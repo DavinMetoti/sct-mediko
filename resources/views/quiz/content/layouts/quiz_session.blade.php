@@ -72,11 +72,20 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
 
 ✨ Gabung Sekarang!
 🔑 Kode Akses: ${session.access_code}
-📅 Waktu Mulai: {{ \Carbon\Carbon::parse($session->start_time)->format('d-m-Y') }}
-⌛ Selesai: ${session.end_time}
+📅 Waktu Mulai: ${(() => {
+    const [date, time] = session.start_time.split(" ");
+    const [year, month, day] = date.split("-");
+    return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year}`;
+})()}
+⌛ Selesai: ${(() => {
+    const [date, time] = session.end_time.split(" ");
+    const [year, month, day] = date.split("-");
+    return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year}`;
+})()}
 
 🚀 Klik link ini untuk langsung masuk: ${baseUrl}?access_code=${session.access_code}
 `;
+
 
     navigator.clipboard.writeText(textToCopy)
         .then(() => toastr.success("✅ Informasi sesi dan link telah disalin ke clipboard!"))
