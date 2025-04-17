@@ -26,12 +26,12 @@ class QuizSession extends Model
 
     public function getStartTimeAttribute($value)
     {
-        return Carbon::parse($value)->format('Y-m-d');
+        return Carbon::parse($value)->format('Y-m-d H:i');
     }
 
     public function getEndTimeAttribute($value)
     {
-        return Carbon::parse($value)->format('Y-m-d');
+        return Carbon::parse($value)->format('Y-m-d H:i');
     }
 
     public function questions()
