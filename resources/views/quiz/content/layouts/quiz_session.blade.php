@@ -99,62 +99,64 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                     card.classList.add("quiz-session", "card-purple", "d-flex", "flex-wrap", "align-items-center",
                         "justify-content-between", "p-3", "rounded", "mb-3");
 
-                    card.innerHTML = `
-                        <div class="quiz-session card-purple d-flex flex-wrap flex-md-nowrap align-items-center justify-content-between p-3 rounded w-full">
-                            <div class="d-flex flex-column">
-                                <h5 class="fw-bold text-white mb-2">${session.title}</h5>
-                                <p class="text-light mb-2">${session.description}</p>
-                                <div class="d-flex flex-wrap gap-2 gap-md-3 text-white text-sm">
-                                    <span>
-                                        <i class="bi bi-calendar"></i>
-                                        ${(() => {
-                                            const [date, time] = session.start_time.split(" ");
-                                            const [year, month, day] = date.split("-");
-                                            return `${day}-${month}-${year} ${time.substring(0, 5)}`;
-                                        })()}
-                                        ${(() => {
-                                            const [date, time] = session.end_time.split(" ");
-                                            const [year, month, day] = date.split("-");
-                                            return `${day}-${month}-${year} ${time.substring(0, 5)}`;
-                                        })()}
-                                    </span>
-                                    <span><i class="bi bi-clock"></i> ${session.timer} per soal</span>
-                                    <span><i class="bi bi-people"></i> ${session.attempts_count} peserta</span>
+                        card.innerHTML = `
+                            <div class="quiz-session card-purple d-flex flex-wrap flex-md-nowrap align-items-center justify-content-between p-3 rounded w-full">
+                                <div class="d-flex flex-column">
+                                    <h5 class="fw-bold text-white mb-2">${session.title}</h5>
+                                    <p class="text-light mb-2">${session.description}</p>
+                                    <div class="d-flex flex-wrap gap-2 gap-md-3 text-white text-sm">
+                                        <span>
+                                            <i class="bi bi-calendar"></i>
+                                            ${(() => {
+                                                const [date, time] = session.start_time.split(" ");
+                                                const [year, month, day] = date.split("-");
+                                                return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year} ${time ? time.substring(0, 5) : 'N/A'}`;
+                                            })()}
+                                            -
+                                            ${(() => {
+                                                const [date, time] = session.end_time.split(" ");
+                                                const [year, month, day] = date.split("-");
+                                                return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year} ${time ? time.substring(0, 5) : 'N/A'}`;
+                                            })()}
+                                        </span>
+                                        <span><i class="bi bi-clock"></i> ${session.timer} per soal</span>
+                                        <span><i class="bi bi-people"></i> ${session.attempts_count} peserta</span>
+                                    </div>
+                                </div>
+                                <div class="text-end mt-3 mt-md-0">
+                                    <div class="dropdown d-flex justify-content-end mb-2">
+                                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-three-dots"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="${baseUrl}/${session.id}/rank" class="dropdown-item">
+                                                    <i class="fas fa-chart-bar me-2"></i> Rank
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item copy-btn">
+                                                    <i class="bi bi-link-45deg me-2"></i> Copy
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <a href="${baseUrl}/${session.id}" class="dropdown-item">
+                                                    <i class="fas fa-file-alt me-2"></i> Quiz
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item text-danger delete-btn">
+                                                    <i class="bi bi-trash me-2"></i> Delete
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <p class="text-muted mt-1 mb-0"><strong>Code:</strong> ${session.access_code}</p>
+                                    <p class="text-muted text-sm mb-0"><strong>ID:</strong> ${session.session_id}</p>
                                 </div>
                             </div>
-                            <div class="text-end mt-3 mt-md-0">
-                                <div class="dropdown d-flex justify-content-end mb-2">
-                                    <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-three-dots"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href="${baseUrl}/${session.id}/rank" class="dropdown-item">
-                                                <i class="fas fa-chart-bar me-2"></i> Rank
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item copy-btn">
-                                                <i class="bi bi-link-45deg me-2"></i> Copy
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <a href="${baseUrl}/${session.id}" class="dropdown-item">
-                                                <i class="fas fa-file-alt me-2"></i> Quiz
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item text-danger delete-btn">
-                                                <i class="bi bi-trash me-2"></i> Delete
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <p class="text-muted mt-1 mb-0"><strong>Code:</strong> ${session.access_code}</p>
-                                <p class="text-muted text-sm mb-0"><strong>ID:</strong> ${session.session_id}</p>
-                            </div>
-                        </div>
-                    `;
+                        `;
+
 
                     card.querySelector(".copy-btn").addEventListener("click", function () {
                         copySessionInfo(session);
