@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 class QuizSession extends Model
 {
@@ -21,6 +23,16 @@ class QuizSession extends Model
         'session_id',
         'is_public',
     ];
+
+    public function getStartTimeAttribute($value)
+    {
+        return Carbon::parse($value)->format('Y-m-d');
+    }
+
+    public function getEndTimeAttribute($value)
+    {
+        return Carbon::parse($value)->format('Y-m-d');
+    }
 
     public function questions()
     {
