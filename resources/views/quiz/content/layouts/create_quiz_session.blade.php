@@ -160,21 +160,23 @@
             }
 
             function copySessionInfo(session) {
-                let textToCopy = `
-        ${session.title}
+    let baseUrl = "{{ route('start.quiz') }}"; // Gunakan route Laravel
+    let textToCopy = `
+${session.title}
 Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama temanmu.
 
-        ✨ Gabung Sekarang!
-        🔑 Kode Akses: ${session.access_code}
-        📅 Waktu Mulai: ${session.start_time}
-        ⌛ Selesai: ${session.end_time}
+✨ Gabung Sekarang!
+🔑 Kode Akses: ${session.access_code}
+📅 Waktu Mulai: {{ \Carbon\Carbon::parse($session->start_time)->format('d-m-Y') }}
+⌛ Selesai: ${session.end_time}
 
-Nikmati keseruan menjawab pertanyaan dan uji kemampuanmu bersama! 🚀`;
+🚀 Klik link ini untuk langsung masuk: ${baseUrl}?access_code=${session.access_code}
+`;
 
-                navigator.clipboard.writeText(textToCopy)
-                    .then(() => alert("✅ Informasi sesi telah disalin ke clipboard!"))
-                    .catch(err => console.error("❌ Gagal menyalin teks:", err));
-            }
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => toastr.success("✅ Informasi sesi dan link telah disalin ke clipboard!"))
+        .catch(err => toastr.error("❌ Gagal menyalin teks:", err));
+}
 
             function renderCard(data) {
                 let container = document.getElementById("list-quiz-sessions");

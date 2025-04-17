@@ -72,7 +72,7 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
 
 ✨ Gabung Sekarang!
 🔑 Kode Akses: ${session.access_code}
-📅 Waktu Mulai: ${session.start_time}
+📅 Waktu Mulai: {{ \Carbon\Carbon::parse($session->start_time)->format('d-m-Y') }}
 ⌛ Selesai: ${session.end_time}
 
 🚀 Klik link ini untuk langsung masuk: ${baseUrl}?access_code=${session.access_code}
@@ -107,8 +107,16 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                                 <div class="d-flex flex-wrap gap-2 gap-md-3 text-white text-sm">
                                     <span>
                                         <i class="bi bi-calendar"></i>
-                                        ${session.start_time.split(" ")[0]} ${session.start_time.split(" ")[1].substring(0, 5)} -
-                                        ${session.end_time.split(" ")[0]} ${session.end_time.split(" ")[1].substring(0, 5)}
+                                        ${(() => {
+                                            const [date, time] = session.start_time.split(" ");
+                                            const [year, month, day] = date.split("-");
+                                            return `${day}-${month}-${year} ${time.substring(0, 5)}`;
+                                        })()}
+                                        ${(() => {
+                                            const [date, time] = session.end_time.split(" ");
+                                            const [year, month, day] = date.split("-");
+                                            return `${day}-${month}-${year} ${time.substring(0, 5)}`;
+                                        })()}
                                     </span>
                                     <span><i class="bi bi-clock"></i> ${session.timer} per soal</span>
                                     <span><i class="bi bi-people"></i> ${session.attempts_count} peserta</span>
