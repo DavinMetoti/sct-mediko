@@ -179,7 +179,7 @@
                         icon.addClass('bi-heart-fill text-danger').removeClass('bi-heart');
                         icon.data('library-id', response.id);
                     }).fail(function() {
-                        alert("Terjadi kesalahan, coba lagi.");
+                        toastr.error("Anda sudah menambahkan", "Gagal");
                     });
                 }
             });
@@ -203,7 +203,7 @@
                             icon.data('library-id', "");
                         },
                         error: function() {
-                            alert("Terjadi kesalahan, coba lagi.");
+                            toastr.error("Anda sudah menambahkan", "Gagal");
                         }
                     });
                 } else {

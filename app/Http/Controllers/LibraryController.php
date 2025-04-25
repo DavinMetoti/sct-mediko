@@ -56,11 +56,25 @@ class LibraryController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validasi input
             $request->validate([
                 'quiz_session_id' => 'required|exists:quiz_sessions,id',
                 'folder_id' => 'nullable|exists:user_folders,id',
             ]);
 
+            // Cek apakah user_id dan quiz_session_id sudah ada
+            $existingLibrary = UserLibrary::where('user_id', Auth::id())
+                                        ->where('quiz_session_id', $request->quiz_session_id)
+                                        ->first();
+
+            if ($existingLibrary) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data dengan user_id dan quiz_session_id yang sama sudah ada',
+                ], 400); // Kode status 400 untuk Bad Request
+            }
+
+            // Simpan data baru jika tidak ada duplikat
             $userLibrary = UserLibrary::create([
                 'user_id' => Auth::id(),
                 'quiz_session_id' => $request->quiz_session_id,
@@ -71,14 +85,15 @@ class LibraryController extends Controller
                 'success' => true,
                 'message' => 'Data berhasil disimpan',
                 'data' => $userLibrary
-            ], 201);
+            ], 201); // Kode status 201 untuk Created
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan data: ' . $e->getMessage(),
-            ], 500);
+            ], 500); // Kode status 500 untuk Internal Server Error
         }
     }
+
 
     /**
      * Display the specified resource.
