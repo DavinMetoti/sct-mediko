@@ -7,9 +7,9 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="d-flex justify-content-between align-items-center w-100 p-3 rounded shadow-sm mb-4">
-            <h3 class="fw-bold m-0 text-white"><i class="fas fa-book me-2"></i>Perpustakaan</h3>
-            <input type="text" id="searchInput" class="form-control w-25 border-success shadow-sm w-80" placeholder="Cari koleksi..." style="border-radius: 10px;">
+        <div class="d-md-flex justify-content-between align-items-center w-100 p-3 rounded shadow-sm mb-md-4 mb-2">
+            <h3 class="fw-bold m-0 text-white mb-md-0 mb-3"><i class="fas fa-book me-2"></i>Perpustakaan</h3>
+            <input type="text" id="searchInput" class="form-control border-success shadow-sm w-80 mb-md-0 mb-3" placeholder="Cari koleksi..." style="border-radius: 10px;">
             <div class="flex justify-content-between align-items-center gap-2 mb-3">
                 <button class="btn btn-success px-4 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addCollectionModal" style="border-radius: 8px; transition: all 0.3s;">
                     <i class="fas fa-folder-plus me-2"></i>Tambah Koleksi
