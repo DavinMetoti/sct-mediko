@@ -64,17 +64,20 @@
                             <div class="d-flex justify-content-between align-items-center px-3 mb-3">
                                 <h6 class="fw-bold text-dark mb-0">{{ $session->title }}</h6>
                                 <div>
+                                    @if($hasLike)
                                     <i class="bi like-icon {{ $hasLike ? 'bi-heart-fill text-danger' : 'bi-heart' }}"
                                         data-id="{{ $session->id }}"
                                         data-library-id="{{ $session->libraries->whereNull('folder_id')->pluck('id')->implode(',') }}"
                                         style="cursor: pointer; font-size: 1.2rem;">
                                     </i>
-
+                                    @endif
+                                    @if($hasBookmark)
                                     <i class="bi save-icon {{ $hasBookmark ? 'bi-bookmark-fill text-secondary' : 'bi-bookmark' }}"
                                         data-id="{{ $session->id }}"
                                         data-library-id="{{ $session->libraries->whereNotNull('folder_id')->pluck('id')->implode(',') }}"
                                         style="cursor: pointer; font-size: 1.2rem;">
                                     </i>
+                                    @endif
                                 </div>
                             </div>
 
