@@ -7,18 +7,18 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="d-md-flex justify-content-between align-items-center w-100 p-3 rounded shadow-sm mb-md-4 mb-2">
+        <div class="d-md-flex justify-content-between align-items-center w-100 rounded shadow-sm mb-md-4 mb-2">
             <h3 class="fw-bold m-0 text-white mb-md-0 mb-3"><i class="fas fa-book me-2"></i>Perpustakaan</h3>
-            <input type="text" id="searchInput" class="form-control border-success shadow-sm w-80 mb-md-0 mb-3" placeholder="Cari koleksi..." style="border-radius: 10px;">
-            <div class="flex justify-content-between align-items-center gap-2 mb-3">
+            <div class="flex justify-content-between align-items-center gap-2 mb-md-0 mb-3">
                 <button class="btn btn-success px-4 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addCollectionModal" style="border-radius: 8px; transition: all 0.3s;">
                     <i class="fas fa-folder-plus me-2"></i>Tambah Koleksi
                 </button>
                 @if($folderId)
-                    <button class="btn btn-danger px-4 py-2 btn-delete" ><i class="fas fa-trash me-2"></i> Hapus Koleksi</button>
+                <button class="btn btn-danger px-4 py-2 btn-delete" ><i class="fas fa-trash me-2"></i> Hapus Koleksi</button>
                 @endif
             </div>
         </div>
+        <input type="text" id="searchInput" class="form-control border-success shadow-sm w-100 mb-3" placeholder="Cari koleksi..." style="border-radius: 10px;">
 
         @if($groupedLibraries->isEmpty())
             <div class="alert alert-warning text-center" role="alert">
