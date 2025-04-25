@@ -168,6 +168,8 @@ class LibraryController extends Controller
             $folder = UserFolder::findOrFail($request->id);
             $folder->delete();
 
+            UserLibrary::where('folder_id', $request->id)->delete();
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Folder berhasil dihapus.'
