@@ -7,12 +7,17 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="d-flex justify-content-between align-items-center w-100 p-3 rounded shadow-sm mb-4 bg-light" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-left: 5px solid #28a745;">
-            <h3 class="fw-bold m-0 text-success"><i class="fas fa-book me-2"></i>Perpustakaan</h3>
-            <input type="text" id="searchInput" class="form-control w-25 border-success shadow-sm" placeholder="Cari koleksi..." style="border-radius: 10px;">
-            <button class="btn btn-success px-4 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addCollectionModal" style="border-radius: 8px; transition: all 0.3s;">
-                <i class="fas fa-folder-plus me-2"></i>Tambah Koleksi
-            </button>
+        <div class="d-flex justify-content-between align-items-center w-100 p-3 rounded shadow-sm mb-4">
+            <h3 class="fw-bold m-0 text-white"><i class="fas fa-book me-2"></i>Perpustakaan</h3>
+            <input type="text" id="searchInput" class="form-control w-25 border-success shadow-sm w-80" placeholder="Cari koleksi..." style="border-radius: 10px;">
+            <div class="flex justify-content-between align-items-center gap-2 mb-3">
+                <button class="btn btn-success px-4 py-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#addCollectionModal" style="border-radius: 8px; transition: all 0.3s;">
+                    <i class="fas fa-folder-plus me-2"></i>Tambah Koleksi
+                </button>
+                @if($folderId)
+                    <button class="btn btn-danger px-4 py-2 btn-delete" ><i class="fas fa-trash me-2"></i> Hapus Koleksi</button>
+                @endif
+            </div>
         </div>
 
         @if($groupedLibraries->isEmpty())
@@ -22,7 +27,12 @@
         @endif
 
         @foreach($groupedLibraries as $folderName => $libraries)
+        @php
+            $folderId = $libraries->first()->folder_id ?? null;
+        @endphp
+        <div class="flex justify-content-between align-items-center mb-3">
             <h3 class="mt-4">{{ $folderName }}</h3>
+        </div>
             <div class="row">
                 @foreach($libraries as $library)
                     @php
@@ -83,6 +93,8 @@
     <script src="{{ secure_asset('assets/js/module.js') }}"></script>
 
     <script>
+        const id = @json($id);
+
         document.getElementById('saveCollection').addEventListener('click', function() {
             let folderNameInput = document.getElementById('folderName');
             let folderName = folderNameInput.value.trim();
@@ -99,34 +111,6 @@
                 _token:"{{ csrf_token() }}"
              };
 
-            const apiClient = new HttpClient('{{ route("library-folder.index") }}');
-
-            apiClient.request('POST', '', data)
-                .then(response => {
-
-                    toastr.success("Koleksi berhasil ditambahkan!", "Sukses", {
-                        timeOut: 3000,
-                        progressBar: true,
-                        positionClass: "toast-top-right"
-                    });
-
-                    // Reset form & tutup modal
-                    document.getElementById('collectionForm').reset();
-                    let modal = bootstrap.Modal.getInstance(document.getElementById('addCollectionModal'));
-                    modal.hide();
-                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-
-                    if (error.response) {
-                        console.log('Error Response:', error.response);
-                        toastr.error(error.response.data.message || "Terjadi kesalahan saat menyimpan data", "Error");
-                    } else {
-                        toastr.error("Terjadi kesalahan jaringan atau server tidak merespons", "Error");
-                    }
-                });
         });
 
         document.getElementById('searchInput').addEventListener('keyup', function() {
@@ -263,7 +247,54 @@
                             }, 3000);
                         }
                     });
+            });
+
+            $('.btn-delete').click(function() {
+                $.ajax({
+                    url: '{{ route("delete_folder") }}',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        setTimeout(() => {
+                            if (response.status === 'success') {
+                                toastr.success(response.message, 'Success', {
+                                    timeOut: 2000,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right"
+                                });
+
+                                // Redirect ke /library?filter=all
+                                setTimeout(() => {
+                                    window.location.href = "{{ route('library.index') }}?filter=all";
+                                }, 2000);
+                            } else {
+                                toastr.error(response.message, 'Error', {
+                                    timeOut: 3000,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right"
+                                });
+                            }
+                        }, 500);
+                    },
+                    error: function(error) {
+                        setTimeout(() => {
+                            toastr.error(error.responseJSON.message || "Terjadi kesalahan!", 'Error', {
+                                timeOut: 3000,
+                                progressBar: true,
+                                positionClass: "toast-top-right"
+                            });
+                        }, 500);
+                    }
                 });
+            });
+
+
         });
 
 

@@ -14,7 +14,7 @@ class LibraryController extends Controller
      */
     public function index(Request $request)
     {
-        $filter = $request->query('filter', 'all'); // Ambil filter dari query string (default: 'all')
+        $filter = $request->query('filter', 'all');
 
         $query = UserLibrary::with([
             'session' => function ($query) {
@@ -24,7 +24,7 @@ class LibraryController extends Controller
         ]);
 
         if ($filter === 'like') {
-            $query->whereNull('folder_id'); // Misalnya 'like' adalah folder kosong
+            $query->whereNull('folder_id');
         }
 
         $libraries = $query->get();
@@ -36,7 +36,9 @@ class LibraryController extends Controller
         );
 
         return view('quiz.content.layouts.library', [
-            "groupedLibraries" => $groupedLibraries
+            "groupedLibraries" => $groupedLibraries,
+            "folderId" => false,
+            "id"=> null
         ]);
     }
 
@@ -98,7 +100,9 @@ class LibraryController extends Controller
 
         return view('quiz.content.layouts.library', [
             'folder' => $collections,
-            'groupedLibraries' => $groupedLibraries
+            'groupedLibraries' => $groupedLibraries,
+            "folderId" => true,
+            'id'=>$id
         ]);
     }
 
@@ -142,4 +146,24 @@ class LibraryController extends Controller
             ], 500);
         }
     }
+
+    public function delete_folder(Request $request)
+    {
+        try {
+            $folder = UserFolder::findOrFail($request->id);
+            $folder->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Folder berhasil dihapus.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menghapus folder.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

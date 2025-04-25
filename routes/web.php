@@ -129,6 +129,7 @@ Route::middleware('auth')->post('admin/sub-topic/table', [SubTopicController::cl
 Route::middleware('auth')->post('/update-password/{id}', [ProfileController::class, 'updatePassword'])->name('update.password');
 Route::middleware('auth')->post('tryout/history/answer', [TryoutController::class, 'getHistoryAnswer'])->name('tryout.history.answer');
 Route::middleware('auth')->post('quiz-session/attach', [QuizSessionContoller::class, 'attach'])->name('quiz-session.attach');
+Route::middleware('auth')->post('delete-folder', [LibraryController::class, 'delete_folder'])->name('delete_folder');
 
 
 
