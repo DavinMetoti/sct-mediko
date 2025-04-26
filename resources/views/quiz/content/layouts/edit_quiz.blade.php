@@ -22,7 +22,7 @@
                 <div class="card-quiz">
                     <div class="form-group">
                         <label for="editor" class="form-label fw-bold">Pertanyaan</label>
-                        <div id="editor" style="color: white !important;"></div>
+                        <div id="editor"></div>
                     </div>
                 </div>
             </div>
@@ -225,10 +225,47 @@
             const medicalFieldData = {
                 _token: "{{ csrf_token() }}"
             };
+
+            const firstLoadAPI = () => {
+                quizQuestionBankApi.request('GET', '')
+                    .then(response => {
+                        let allBanks = response.response.data;
+                        let selectElement = document.getElementById('bank-soal');
+
+                        allBanks.forEach(bank => {
+                            let option = document.createElement('option');
+                            option.value = bank.id;
+                            option.textContent = bank.name;
+                            selectElement.appendChild(option);
+                        });
+                        $('#bank-soal').val(questions.quiz_question_bank_id).trigger('change');
+                    })
+                    .catch(error => {
+                        console.error('Gagal mengambil data:', error);
+                    });
+
+                medicalFieldApi.request('POST', '', medicalFieldData)
+                    .then(response => {
+                        let allField = response.response.data;
+                        let selectElement = document.getElementById('medical-field');
+
+                        allField.forEach(field => {
+                            let option = document.createElement('option');
+                            option.value = field.id;
+                            option.textContent = field.name;
+                            selectElement.appendChild(option);
+                            $('#medical-field').val(questions.medical_field_id).trigger('change');
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Gagal mengambil data:', error);
+                    });
+            };
             let maxPanelis = 10;
 
-            $('#bank-soal').val(questions.quiz_question_bank_id).trigger('change');
-            $('#medical-field').val(questions.medical_field_id).trigger('change');
+            console.log(questions);
+
+
             $('#column-title').val(questions.column_title_id).trigger('change');
             $('#initial-hypothesis').val(questions.initial_hypothesis);
             $('#new-information').val(questions.new_information);
@@ -246,40 +283,6 @@
             for (let i = 1; i <= 5; i++) {
                 $(`#score_${i}`).val(questions.answers[i-1].panelist || 0);
             }
-
-            const firstLoadAPI = () => {
-                quizQuestionBankApi.request('GET', '')
-                    .then(response => {
-                        let allBanks = response.response.data;
-                        let selectElement = document.getElementById('bank-soal');
-
-                        allBanks.forEach(bank => {
-                            let option = document.createElement('option');
-                            option.value = bank.id;
-                            option.textContent = bank.name;
-                            selectElement.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Gagal mengambil data:', error);
-                    });
-
-                medicalFieldApi.request('POST', '', medicalFieldData)
-                    .then(response => {
-                        let allField = response.response.data;
-                        let selectElement = document.getElementById('medical-field');
-
-                        allField.forEach(field => {
-                            let option = document.createElement('option');
-                            option.value = field.id;
-                            option.textContent = field.name;
-                            selectElement.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Gagal mengambil data:', error);
-                    });
-            };
 
             function updateTotalPanelis(isSuccess = false) {
                 let total = 0;
@@ -399,6 +402,7 @@
                         localStorage.removeItem('initial-hypothesis');
                         localStorage.removeItem('new-information');
                         localStorage.removeItem('timer');
+                        localStorage.removeItem('editorContent');
 
                     })
                     .catch(error => {
