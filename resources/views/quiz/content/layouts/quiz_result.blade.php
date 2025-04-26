@@ -33,13 +33,12 @@
                 <h3 class="mt-4">Detail Jawaban:</h3>
                 <ul class="list-group pb-5">
                 @php
-                    // Ambil semua jawaban pengguna dalam bentuk array yang bisa diakses cepat
                     $allSelectedAnswers = $attempt->userAnswer->groupBy('quiz_question_id')->map(function ($answers) {
                         return $answers->pluck('quiz_answer_id')->toArray();
                     });
                 @endphp
                 @foreach ($attempt->session->questions as $question)
-                    <li class="list-group-item">
+                    <li class="list-group-item" style="color: black !important;">
                         <strong>Pertanyaan:</strong> {!! $question->clinical_case !!}
 
                         <div class="mt-2">
