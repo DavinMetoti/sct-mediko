@@ -41,8 +41,9 @@
                     <li class="list-group-item">
                         <strong>Pertanyaan:</strong>
                         <div style="color: black !important;">
-                            {!! $question->clinical_case !!}
+                            {!! preg_replace('/style="[^"]*"/i', '', $question->clinical_case) !!}
                         </div>
+
                         <div class="mt-2">
                             @foreach ($question->answers as $answer)
                                 <div class="form-check">
