@@ -74,16 +74,13 @@ class QuizPlayController extends Controller
         $token = Session::get('quiz_token');
 
         $attempt = QuizAttempt::with([
-            'session.questions' => function ($query) {
-                $query->orderBy('id', 'asc');
-            },
+            'session.questions', // hilangkan orderBy
             'session.questions.answers',
             'userAnswer'
         ])->findOrFail($id);
 
         return view('quiz.content.layouts.quiz_result', compact('attempt'));
     }
-
 
     /**
      * Update the specified resource in storage.
