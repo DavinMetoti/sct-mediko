@@ -22,7 +22,7 @@
                 <div class="card-quiz">
                     <div class="form-group">
                         <label for="editor" class="form-label fw-bold">Pertanyaan</label>
-                        <div id="editor" style="color: white !important;"></div>
+                        <div id="editor"></div>
                     </div>
                 </div>
             </div>

@@ -38,9 +38,11 @@
                     });
                 @endphp
                 @foreach ($attempt->session->questions as $question)
-                    <li class="list-group-item" style="color: black !important;">
-                        <strong>Pertanyaan:</strong> {!! $question->clinical_case !!}
-
+                    <li class="list-group-item">
+                        <strong>Pertanyaan:</strong>
+                        <div style="color: black !important;">
+                            {!! $question->clinical_case !!}
+                        </div>
                         <div class="mt-2">
                             @foreach ($question->answers as $answer)
                                 <div class="form-check">
