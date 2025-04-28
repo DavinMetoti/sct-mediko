@@ -62,8 +62,13 @@
                             </svg>
                             <span id="questionTitle" class="font-medium">Soal <span id="current-no"></span> dari {{$question->questionDetail->count()}}</span>
                         </div>
-                        <div class="text-gray-600">
-                            Sisa Waktu: <span id="timer" class="font-medium"></span>
+                        <div class="flex gap-2 align-items-center">
+                            <div class="text-gray-600">
+                                Sisa Waktu: <span id="timer" class="font-medium"></span>
+                            </div>
+                            <a href="{{ $formReport->first()->value }}" target="_blank" class="btn btn-danger d-inline-flex align-items-center">
+                                <i class="fas fa-flag"></i>
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use App\Models\QuestionDetail;
+use App\Models\Setting;
 use App\Models\TaskHistory;
 use App\Models\TaskHistoryDetail;
 use App\Models\User;
@@ -47,11 +48,12 @@ class TryoutController extends Controller
                 'tryout' => $tryout,
             ]);
         }
+        $formReport = Setting::where('key', 'form_aduan')->get();
 
 
         $user = User::with('userDetail')->findOrFail(auth()->id());
 
-        return view('public.tryout', compact(['question','user','tryout']));
+        return view('public.tryout', compact(['question','user','tryout','formReport']));
     }
 
     /**

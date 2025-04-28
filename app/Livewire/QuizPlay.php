@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\QuizAttempt;
 use App\Models\QuizSession;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
@@ -17,11 +18,13 @@ class QuizPlay extends Component
     public $shownQuestions = [];
     public $totalQuestions = 0;
     public $quizSessionId = null;
+    public $formReport;
 
 
     public function mount()
     {
         $this->token = Session::get('quiz_token');
+        $this->formReport = Setting::where('key', 'form_aduan')->get();
 
         if ($this->token) {
             $this->attempt = QuizAttempt::where('attempt_token', $this->token)->first();
@@ -96,7 +99,8 @@ class QuizPlay extends Component
         return view('livewire.quiz-play', [
             'currentQuestion' => $this->currentQuestion,
             'totalQuestions' => $this->totalQuestions,
-            'quizSessionId' => $this->quizSessionId ?: 0
+            'quizSessionId' => $this->quizSessionId ?: 0,
+            'formReport' => $this->formReport
         ]);
     }
 }
