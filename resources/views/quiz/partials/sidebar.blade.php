@@ -42,6 +42,14 @@
             </a>
         </div>
         @endcan
+        @can('viewAny', [App\Models\User::class,'quiz-result.index'])
+        <div class="w-full menu-title">
+            <a href="{{ route('quiz-result.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz-result.index') ? 'active' : '' }}">
+                <i class="fas fa-check me-3" style="width: 24px;text-align:center;"></i>
+                <span>Pembahasaan</span>
+            </a>
+        </div>
+        @endcan
         <div class="header-menu mt-2">
             <div class="header-menu-title mb-2">
                 <h5>Perpustakaan</h5>

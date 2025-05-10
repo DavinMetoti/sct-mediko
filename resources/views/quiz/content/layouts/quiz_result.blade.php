@@ -3,6 +3,13 @@
 @section('quiz-content')
     <div class="quiz-container">
         <div class="container">
+            <style>
+                @media print {
+                    button, .card-quiz {
+                        display: none !important;
+                    }
+                }
+            </style>
             <div class="quiz-header py-3 d-flex align-items-center justify-content-between">
                 <div class="card-quiz p-2 rounded-sm">
                     <button class="h-100 px-2" onclick="confirmExit()">
@@ -28,6 +35,7 @@
                     <p><strong>Nama Peserta:</strong> {{ $attempt->name ?? 'Tidak Diketahui' }}</p>
                     <p><strong>Total Soal:</strong> {{ $attempt->session->questions->count() }}</p>
                     <p><strong>Skor Akhir:</strong> {{ number_format(($attempt->score / $attempt->session->questions->count()) * 100, 2) }}</p>
+                    <button onclick="window.print()" class="btn btn-primary mt-3">Print</button>
                 </div>
 
                 <h3 class="mt-4">Detail Jawaban:</h3>
@@ -35,7 +43,8 @@
                 @php
                     $allSelectedAnswers = $attempt->userAnswer->groupBy('quiz_question_id')->map(function ($answers) {
                         return $answers->pluck('quiz_answer_id')->toArray();
-                    });
+                    })->flatten()->toArray(); // Ubah menjadi array datar
+
                 @endphp
                 @foreach ($attempt->session->questions as $question)
                     <li class="list-group-item">
@@ -48,11 +57,11 @@
                             @foreach ($question->answers as $answer)
                                 <div class="form-check">
                                     <input
-                                        type="radio"
-                                        name="question_{{ $question->id }}"
+                                        type="checkbox"
+                                        name="question_{{ $question->id }}[]"
                                         class="form-check-input"
                                         data-id="{{ $answer->id }}"
-                                        {{ in_array($answer->id, $allSelectedAnswers[$question->id] ?? []) ? 'checked' : 'disabled' }}
+                                        {{ in_array($answer->id, $allSelectedAnswers) ? 'checked' : 'disabled' }}
                                     >
                                     <label class="form-check-label"
                                         style="@if ($answer->score == 1) color: green; font-weight: bold; @endif">

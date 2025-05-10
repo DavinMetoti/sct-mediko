@@ -39,6 +39,19 @@ class QuillEditor {
                 this.onChangeCallback(this.getContent());
             }
         });
+
+        this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+            let ops = []
+            delta.ops.forEach(op => {
+              if (op.insert && typeof op.insert === 'string') {
+                ops.push({
+                  insert: op.insert
+                })
+              }
+            })
+            delta.ops = ops
+            return delta
+          })
     }
 
     getContent() {

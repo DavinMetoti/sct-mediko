@@ -160,7 +160,7 @@
                 apiClient.request('POST', '', newBank)
                     .then(response => {
 
-                        toastr.success("Bank soal berhasil disimpan", { timeOut: 5000 });
+                        toastr.success("✅ Bank soal berhasil disimpan! Anda dapat melihatnya di daftar bank soal.", "", { timeOut: 5000 });
 
                         $('#addBankModal').modal('hide');
                         $('.modal-backdrop').remove();
@@ -171,7 +171,7 @@
                     .catch(error => {
                         console.error('Error:', error);  // 🔍 Cek error yang muncul
                         if (error.response) {
-                            toastr.error(error.response.data.message || "Terjadi kesalahan saat menyimpan data");
+                            toastr.error("❌ Terjadi kesalahan saat menyimpan bank soal. Silakan coba lagi.", "", { timeOut: 5000 });
                         } else {
                             toastr.error("Terjadi kesalahan jaringan atau server tidak merespons");
                         }
@@ -198,7 +198,7 @@
 
                 apiClient.request('PUT', `/${id}`, newBank)
                     .then(response => {
-                        toastr.success("Bank soal berhasil diperbarui", { timeOut: 5000 });
+                        toastr.success("✅ Bank soal berhasil diperbarui! Data telah diperbarui.", "", { timeOut: 5000 });
 
                         $('#editBankModal').modal('hide');
                         $('.modal-backdrop').remove();
@@ -207,7 +207,7 @@
                         renderCard();
                     })
                     .catch(error => {
-                        toastr.error(error.response.message);
+                        toastr.error("❌ Gagal memperbarui bank soal. Silakan coba lagi.", "", { timeOut: 5000 });
                         console.error('Error:', error);
                     });
             });
@@ -237,12 +237,12 @@
                     onAccept: () => {
                         apiClient.request('DELETE', `/${id}`, { _token: "{{ csrf_token() }}" })
                             .then(response => {
-                                toastr.success("Bank soal berhasil dihapus", { timeOut: 5000 });
+                                toastr.success("✅ Bank soal berhasil dihapus! Data telah diperbarui.", "", { timeOut: 5000 });
 
                                 renderCard();
                             })
                             .catch(error => {
-                                toastr.error("Gagal menghapus Bank Soal");
+                                toastr.error("❌ Gagal menghapus bank soal. Silakan coba lagi.", "", { timeOut: 5000 });
                                 console.error('Error:', error);
                             });
                     },

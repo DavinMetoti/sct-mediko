@@ -17,9 +17,9 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row card-purple">
             <div class="col-md-12 mb-3 pb-3 pb-md-0">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="editor" class="form-label fw-bold">Pertanyaan</label>
                         <div id="editor"></div>
@@ -28,10 +28,10 @@
             </div>
             <div class="col-md-12 mt-5 pt-5"></div>
             <div class="col-md-12 mb-4 pt-5 pt-md-0 mt-5">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Bank Soal</label>
-                        <select class="custom-form-control" id="bank-soal" name="bank_soal">
+                        <select class="form-control-purple w-full" id="bank-soal" name="bank_soal">
                             <option value="" disabled selected>Pilih Bank Soal</option>
 
                         </select>
@@ -39,20 +39,20 @@
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Bidang</label>
-                        <select class="custom-form-control" id="medical-field" name="medical_field">
+                        <select class="form-control-purple w-full" id="medical-field" name="medical_field">
                             <option value="" disabled selected>Pilih Bidang</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Judul Kolom</label>
-                        <select name="column-title" id="column-title" class="custom-form-control">
+                        <select name="column-title" id="column-title" class="form-control-purple w-full">
                             <option value="">Pilih Judul Kolom</option>
                             @foreach($columnTitle as $column)
                                 <option value="{{ $column->id }}" class="text-black">{{ $column->name }}</option>
@@ -62,18 +62,18 @@
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Hipotesis Awal</label>
-                        <input class="custom-form-control" id="initial-hypothesis" name="initial_hypothesis" />
+                        <input class="form-control-purple w-full" id="initial-hypothesis" name="initial_hypothesis" />
                     </div>
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Informasi Baru</label>
-                        <input class="custom-form-control" id="new-information" name="new_information" />
+                        <input class="form-control-purple w-full" id="new-information" name="new_information" />
                     </div>
                 </div>
             </div>
@@ -85,10 +85,10 @@
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
                                     <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (-2)</div>
+                                        <div class="fw-medium text-md">Jawaban dengan nilai</div>
                                     </div>
                                     <div>
-                                        <i class="fas fa-trash text-white"></i>
+                                        <input type="number" class="form-control" id="value_1" placeholder="Type Here">
                                     </div>
                                 </div>
                             </div>
@@ -110,10 +110,10 @@
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
                                     <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (-1)</div>
+                                        <div class="fw-medium text-md">Jawaban dengan nilai</div>
                                     </div>
                                     <div>
-                                        <i class="fas fa-trash text-white"></i>
+                                        <input type="number" class="form-control" id="value_2" placeholder="Type Here">
                                     </div>
                                 </div>
                             </div>
@@ -135,10 +135,10 @@
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
                                     <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (0)</div>
+                                        <div class="fw-medium text-md">Jawaban dengan nilai</div>
                                     </div>
                                     <div>
-                                        <i class="fas fa-trash text-white"></i>
+                                        <input type="number" class="form-control" id="value_3" placeholder="Type Here">
                                     </div>
                                 </div>
                             </div>
@@ -160,10 +160,10 @@
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
                                     <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (1)</div>
+                                        <div class="fw-medium text-md">Jawaban dengan nilai</div>
                                     </div>
                                     <div>
-                                        <i class="fas fa-trash text-white"></i>
+                                        <input type="number" class="form-control" id="value_4" placeholder="Type Here">
                                     </div>
                                 </div>
                             </div>
@@ -185,10 +185,10 @@
                             <div class="card-header border-0 shadow-0">
                                 <div class ="flex justify-content-between align-items-center">
                                     <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (2)</div>
+                                        <div class="fw-medium text-md">Jawaban dengan nilai</div>
                                     </div>
                                     <div>
-                                        <i class="fas fa-trash text-white"></i>
+                                        <input type="number" class="form-control" id="value_5" placeholder="Type Here">
                                     </div>
                                 </div>
                             </div>
@@ -217,6 +217,14 @@
             const question = new QuillEditor('#editor', {}, (content) => {
                 localStorage.setItem('editorContent', content);
             });
+
+            // Ensure only plain text is pasted into the editor
+            document.querySelector('#editor').addEventListener('paste', function(e) {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text/plain'); // Get plain text
+                question.insertText(text); // Insert plain text into the editor
+            });
+
             const quizQuestionBankApi = new HttpClient('{{ route("quiz-question-bank.index") }}');
             const medicalFieldApi = new HttpClient('{{ route("admin.medical-fields.dropdown") }}');
             const quizQuestionApi = new HttpClient('{{ route("quiz-question.index") }}');
@@ -360,7 +368,7 @@
                 for (let i = 1; i <= 5; i++) {
                     let answer = $(`#answer_${i}`).val();
                     let score = parseInt($(`#score_${i}`).val()) / max_score || 0;
-                    let value = i - 3;
+                    let value = $(`#value_${i}`).val();
                     let panelist = parseInt($(`#score_${i}`).val()) || 0
 
                     answers.push({
@@ -422,6 +430,39 @@
 
 
             });
+
+            function isFormComplete() {
+                const requiredFields = [
+                    '#bank-soal',
+                    '#medical-field',
+                    '#column-title',
+                    '#initial-hypothesis',
+                    '#new-information',
+                    '#timer'
+                ];
+
+                for (let selector of requiredFields) {
+                    if (!$(selector).val()) {
+                        return false;
+                    }
+                }
+
+                for (let i = 1; i <= 5; i++) {
+                    if (!$(`#answer_${i}`).val()) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            function autoSave() {
+                if (isFormComplete()) {
+                    $('#save-question').click();
+                }
+            }
+
+            setInterval(autoSave, 60000); // Auto-save every 1 minute
 
             updateTotalPanelis();
             firstLoadAPI();

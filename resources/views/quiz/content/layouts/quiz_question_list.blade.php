@@ -75,7 +75,7 @@
                 let id = $(this).data('id');
 
                 if (!id) {
-                    toastr.warning("ID Quiz tidak ditemukan!");
+                    toastr.warning("⚠️ ID pertanyaan tidak ditemukan. Silakan coba lagi.", "", { timeOut: 3000 });
                     return;
                 }
                 data = { _token: "{{ csrf_token() }}" };
@@ -86,19 +86,19 @@
                     onAccept: function () {
                         quizQuestionApi.request('DELETE',`${id}`, data)
                             .then(response => {
-                                toastr.success("Quiz berhasil dihapus", "", { timeOut: 3000 });
+                                toastr.success("✅ Pertanyaan berhasil dihapus! Data telah diperbarui.", "", { timeOut: 3000 });
                                 setTimeout(() => {
                                     window.location.reload();
                                 }, 1000);
                             })
                             .catch(error => {
-                                toastr.error("Gagal menghapus Quiz");
+                                toastr.error("❌ Gagal menghapus pertanyaan. Silakan coba lagi.", "", { timeOut: 3000 });
                                 console.error('Error:', error);
                             });
 
                     },
                     onReject: function () {
-                        toastr.info("Penghapusan dibatalkan");
+                        toastr.info("ℹ️ Penghapusan pertanyaan dibatalkan.", "", { timeOut: 3000 });
                     }
                 });
             });

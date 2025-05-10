@@ -24,6 +24,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\QuizPlayController;
 use App\Http\Controllers\QuizQuestionBankController;
 use App\Http\Controllers\QuizQuestionController;
+use App\Http\Controllers\QuizResultController;
 use App\Http\Controllers\QuizSessionContoller;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StudentController;
@@ -93,6 +94,7 @@ Route::middleware('auth')->resource('quiz-session', QuizSessionContoller::class)
 Route::middleware('auth')->resource('quiz-question-bank', QuizQuestionBankController::class);
 Route::middleware('auth')->resource('library', LibraryController::class);
 Route::middleware('auth')->resource('library-folder', LibraryFolderController::class);
+Route::middleware('auth')->resource('quiz-result', QuizResultController::class);
 
 Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
 

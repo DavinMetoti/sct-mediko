@@ -2,40 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\QuizSession;
+use App\Models\QuizAttempt;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class QuizController extends Controller
+class QuizResultController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $user = User::with('accessRole')->findOrFail(auth()->user()->id);
+        $this->authorize('viewAny', [User::class, 'quiz-result.index']);
 
-        $sessionsQuery = QuizSession::with('libraries')
-            ->withCount('questions')
-            ->withCount('attempts');
+        $quizResult = QuizAttempt::with(['session.questions'])
+            ->where('user_id', auth()->user()->id)
+            ->get();
 
-        if ($user->accessRole->access !== 'private') {
-            $sessionsQuery->where('is_public', 1);
-        }
-
-        $sessions = $sessionsQuery->get()->filter(function ($session) {
-            $now = now();
-            return $session->questions_count > 0
-                && $now->gte($session->start_time)
-                && $now->lte($session->end_time);
-        });
-
-        return view('quiz.content.layouts.dashboard', [
-            "sessions_list" => $sessions,
-            'user'          => $user
+        return view('quiz.content.layouts.result_list', [
+            "quizResult" => $quizResult
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.

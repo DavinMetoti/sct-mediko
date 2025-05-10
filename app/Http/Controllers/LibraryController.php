@@ -15,6 +15,7 @@ class LibraryController extends Controller
     public function index(Request $request)
     {
         $filter = $request->query('filter', 'all');
+        $now = now(); // waktu saat ini
 
         $query = UserLibrary::with([
             'session' => function ($query) {
@@ -26,6 +27,12 @@ class LibraryController extends Controller
         if ($filter === 'like') {
             $query->whereNull('folder_id');
         }
+
+        $query->whereHas('session', function ($query) use ($now) {
+            $query->where('start_time', '<=', $now)
+                ->where('end_time', '>=', $now)
+                ->where('is_public', true);
+        });
 
         $libraries = $query->get();
 
@@ -41,6 +48,7 @@ class LibraryController extends Controller
             "id"=> null
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

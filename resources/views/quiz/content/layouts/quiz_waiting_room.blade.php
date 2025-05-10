@@ -57,9 +57,10 @@
 
                     console.log(randomName);
                     $("#username").val(randomName);
+                    toastr.success("✅ Nama berhasil diacak! Nama baru telah diisi.", "", { timeOut: 3000 });
                 },
                 error: function() {
-                    alert("Gagal mengambil nama, coba lagi!");
+                    toastr.error("❌ Gagal mengambil nama acak. Silakan coba lagi.", "", { timeOut: 3000 });
                 },
                 complete: function() {
                     // Kembalikan ikon ke normal dan aktifkan tombol
@@ -75,7 +76,7 @@
 
             // Pastikan nama tidak kosong
             if (username.trim() === "") {
-                alert("Harap masukkan nama sebelum memulai!");
+                toastr.warning("⚠️ Harap masukkan nama sebelum memulai quiz.", "", { timeOut: 3000 });
                 return;
             }
 
@@ -91,7 +92,7 @@
                     window.location.href = "{{ route('quiz-play.show', ['quiz_play' => 'temp']) }}".replace('temp', token);
                 },
                 error: function() {
-                    alert("Gagal memulai quiz, coba lagi!");
+                    toastr.error("❌ Gagal memulai quiz. Pastikan semua data sudah benar.", "", { timeOut: 3000 });
                 }
             });
         }

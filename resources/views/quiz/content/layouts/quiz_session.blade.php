@@ -104,6 +104,7 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                 data.forEach(session => {
                     let card = document.createElement("div");
                     let baseUrl = "{{ url('/quiz-session') }}";
+                    let rankUrl = "{{ url('') }}";
 
                     card.classList.add("quiz-session", "card-purple", "d-flex", "flex-wrap", "align-items-center",
                         "justify-content-between", "p-3", "rounded", "mb-3");
@@ -139,7 +140,7 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a href="${baseUrl}/${session.id}/rank" class="dropdown-item">
+                                                <a href="${rankUrl}/quiz-rank/${session.id}" class="dropdown-item">
                                                     <i class="fas fa-chart-bar me-2"></i> Rank
                                                 </a>
                                             </li>

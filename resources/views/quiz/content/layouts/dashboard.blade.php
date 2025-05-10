@@ -8,31 +8,35 @@
 @section('quiz-content')
     <div class="quiz-container">
         <div class="row g-4 align-items-stretch">
-            <div class="col-md-6 d-flex">
-                <div class="card shadow-lg border-0 w-100 p-4 d-flex flex-column justify-content-center" style="border-radius: 15px; background-color: #fff;">
-                    <h5 class="text-dark">Join a Quiz</h5>
-                    <div class="d-flex align-items-center border rounded-pill px-3 py-2 shadow-sm bg-light">
-                        <i class="fas fa-key me-2 text-primary"></i>
-                        <input type="text" id="access_code" class="form-control border-0 shadow-none bg-transparent text-uppercase" placeholder="Enter a join code" style="flex: 1; text-transform: uppercase;" maxlength="6">
-                        <button id="join-quiz" class="btn btn-primary px-4 rounded-pill shadow-sm">Join <i class="fas fa-arrow-right ms-1"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 d-flex">
-                <div class="card shadow-lg border-0 w-100 p-4 text-white position-relative overflow-hidden"
-                    style="background: linear-gradient(135deg, #6a11cb, #2575fc); border-radius: 15px; height: 200px;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-1">Welcome,</h5>
-                            <h1 class="fw-bold mt-2">{{ Str::title(auth()->user()->name) }}</h1>
-                        </div>
-                        <div class="position-absolute bottom-0 end-0">
-                            <img src="{{ secure_asset('assets/images/person.svg') }}" alt="person" width="180"
-                                style="display: block; transform: translateY(30%);">
+            @if ($user->accessRole->access != 'private')
+                <div class="{{ $user->accessRole->access != 'private' && isset($user) ? 'col-md-6' : 'col-md-12' }} d-flex">
+                    <div class="card shadow-lg border-0 w-100 p-4 d-flex flex-column justify-content-center" style="border-radius: 15px; background-color: #fff;">
+                        <h5 class="text-dark">Join a Quiz</h5>
+                        <div class="d-flex align-items-center border rounded-pill px-3 py-2 shadow-sm bg-light">
+                            <i class="fas fa-key me-2 text-primary"></i>
+                            <input type="text" id="access_code" class="form-control border-0 shadow-none bg-transparent text-uppercase" placeholder="Enter a join code" style="flex: 1; text-transform: uppercase;" maxlength="6">
+                            <button id="join-quiz" class="btn btn-primary px-4 rounded-pill shadow-sm">Join <i class="fas fa-arrow-right ms-1"></i></button>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
+            @if (isset($user))
+                <div class="{{ $user->accessRole->access != 'private' && isset($user) ? 'col-md-6' : 'col-md-12' }} d-flex">
+                    <div class="card shadow-lg border-0 w-100 p-4 text-white position-relative overflow-hidden"
+                        style="background: linear-gradient(135deg, #6a11cb, #2575fc); border-radius: 15px; height: 200px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">Welcome,</h5>
+                                <h1 class="fw-bold mt-2">{{ Str::title(auth()->user()->name) }}</h1>
+                            </div>
+                            <div class="position-absolute bottom-0 end-0">
+                                <img src="{{ secure_asset('assets/images/person.svg') }}" alt="person" width="180"
+                                    style="display: block; transform: translateY(30%);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div class="row mt-4">
@@ -102,7 +106,11 @@
                         </div>
 
                         <div class="pb-3 px-3">
-                            <button class="btn btn-primary w-full rounded-pill start-btn" data-id="{{$session->access_code}}">Start</button>
+                            @if ($user->accessRole->access == 'private')
+                                <a href="{{ route('quiz-rank', ['id' => $session->id]) }}" class="btn btn-secondary w-full rounded-pill">View Rank</a>
+                            @else
+                                <button class="btn btn-primary w-full rounded-pill start-btn" data-id="{{$session->access_code}}">Start</button>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -57,40 +57,67 @@ class QuizQuestionController extends Controller
                 'answer.*.panelist' => 'required|integer',
             ]);
 
-            // Buat pertanyaan kuis dengan created_by dari auth()->id()
-            $quizQuestion = QuizQuestion::create([
-                'quiz_question_bank_id' => $validated['quiz_question_bank_id'],
-                'medical_field_id' => $validated['medical_field_id'],
-                'column_title_id' => $validated['column_title_id'],
-                'clinical_case' => $validated['clinical_case'],
-                'initial_hypothesis' => $validated['initial_hypothesis'],
-                'new_information' => $validated['new_information'],
-                'timer' => $validated['timer'],
-                'created_by' => auth()->id(), // Ambil dari user yang sedang login
-                'explanation' => $validated['explanation'] ?? null,
-            ]);
+            // Cek apakah pertanyaan kuis sudah ada (autosave)
+            $quizQuestion = QuizQuestion::where('quiz_question_bank_id', $validated['quiz_question_bank_id'])
+                ->where('medical_field_id', $validated['medical_field_id'])
+                ->where('column_title_id', $validated['column_title_id'])
+                ->where('created_by', auth()->id())
+                ->latest('created_at') // Ambil soal terbaru berdasarkan waktu pembuatan
+                ->first();
 
-            // Simpan jawaban ke dalam tabel `quiz_answers`
-            foreach ($validated['answer'] as $ans) {
-                QuizAnswer::create([
-                    'quiz_question_id' => $quizQuestion->id,
-                    'answer' => $ans['answer'],
-                    'value' => $ans['value'],
-                    'score' => $ans['score'],
-                    'panelist' => $ans['panelist'],
+            if ($quizQuestion) {
+                // Update pertanyaan kuis yang sudah ada
+                $quizQuestion->update([
+                    'clinical_case' => $validated['clinical_case'],
+                    'initial_hypothesis' => $validated['initial_hypothesis'],
+                    'new_information' => $validated['new_information'],
+                    'timer' => $validated['timer'],
+                    'explanation' => $validated['explanation'] ?? null,
                 ]);
+
+                // Hapus jawaban lama dan simpan jawaban baru
+                $quizQuestion->answers()->delete();
+                $quizQuestion->answers()->createMany($validated['answer']);
+
+                $message = 'Quiz question updated successfully';
+            } else {
+                // Buat pertanyaan kuis baru
+                $quizQuestion = QuizQuestion::create([
+                    'quiz_question_bank_id' => $validated['quiz_question_bank_id'],
+                    'medical_field_id' => $validated['medical_field_id'],
+                    'column_title_id' => $validated['column_title_id'],
+                    'clinical_case' => $validated['clinical_case'],
+                    'initial_hypothesis' => $validated['initial_hypothesis'],
+                    'new_information' => $validated['new_information'],
+                    'timer' => $validated['timer'],
+                    'created_by' => auth()->id(),
+                    'explanation' => $validated['explanation'] ?? null,
+                ]);
+
+                // Simpan jawaban ke dalam tabel `quiz_answers`
+                foreach ($validated['answer'] as $ans) {
+                    QuizAnswer::create([
+                        'quiz_question_id' => $quizQuestion->id,
+                        'answer' => $ans['answer'],
+                        'value' => $ans['value'],
+                        'score' => $ans['score'],
+                        'panelist' => $ans['panelist'],
+                    ]);
+                }
+
+                $message = 'Quiz question created successfully';
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Quiz question created successfully',
+                'message' => $message,
                 'data' => $quizQuestion->load('answers') // Load jawaban yang baru disimpan
             ], 201);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create quiz question',
+                'message' => 'Failed to create or update quiz question',
                 'error' => $e->getMessage()
             ], 500);
         }

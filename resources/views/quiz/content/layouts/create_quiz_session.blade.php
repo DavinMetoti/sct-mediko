@@ -144,11 +144,11 @@
                     onAccept: function () {
                         apiClient.request('DELETE',`${session.id}`, data)
                             .then(response => {
-                                toastr.success("Quiz berhasil dihapus", "", { timeOut: 3000 });
+                                toastr.success("✅ Quiz berhasil dihapus! Data telah diperbarui.", "", { timeOut: 3000 });
                                 fetchApi();
                             })
                             .catch(error => {
-                                toastr.error("Gagal menghapus Quiz");
+                                toastr.error("❌ Gagal menghapus Quiz. Silakan coba lagi.", "", { timeOut: 3000 });
                                 console.error('Error:', error);
                             });
 
@@ -182,8 +182,8 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
 `;
 
     navigator.clipboard.writeText(textToCopy)
-        .then(() => toastr.success("✅ Informasi sesi dan link telah disalin ke clipboard!"))
-        .catch(err => toastr.error("❌ Gagal menyalin teks:", err));
+        .then(() => toastr.success("✅ Informasi sesi dan link telah disalin ke clipboard!", "", { timeOut: 3000 }))
+        .catch(err => toastr.error("❌ Gagal menyalin teks. Silakan coba lagi.", "", { timeOut: 3000 }));
 }
 
             function renderCard(data) {
@@ -279,7 +279,7 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                 let endTime = document.getElementById("end_time").value;
 
                 if (new Date(startTime) > new Date(endTime)) {
-                    toastr.warning("Waktu selesai tidak boleh kurang dari waktu mulai");
+                    toastr.warning("⚠️ Waktu selesai tidak boleh kurang dari waktu mulai. Periksa kembali data Anda.", "", { timeOut: 5000 });
                     return;
                 }
 
@@ -297,18 +297,18 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                 };
 
                 if (start_time > end_time) {
-                    toastr.warning("Waktu selesai tidak boleh kurang dari waktu mulai")
+                    toastr.warning("⚠️ Waktu selesai tidak boleh kurang dari waktu mulai. Periksa kembali data Anda.", "", { timeOut: 5000 });
                 }
 
                 apiClient.request('POST', '', quizData)
                     .then(() => {
-                        toastr.success("Sesi quiz berhasil disimpan", { timeOut: 5000 });
+                        toastr.success("✅ Sesi quiz berhasil disimpan! Anda dapat melihatnya di daftar sesi.", "", { timeOut: 5000 });
                         resetForm();
                         fetchApi();
                     })
                     .catch(error => {
-                        let errorMsg = error.response?.message || "Terjadi kesalahan saat menyimpan data";
-                        toastr.error(errorMsg);
+                        let errorMsg = error.response?.message || "❌ Terjadi kesalahan saat menyimpan sesi quiz. Silakan coba lagi.";
+                        toastr.error(errorMsg, "", { timeOut: 5000 });
                     });
             });
 
@@ -317,7 +317,7 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                 let endTime = document.getElementById("end_time").value;
 
                 if (new Date(startTime) > new Date(endTime)) {
-                    toastr.warning("Waktu selesai tidak boleh kurang dari waktu mulai");
+                    toastr.warning("⚠️ Waktu selesai tidak boleh kurang dari waktu mulai. Periksa kembali data Anda.", "", { timeOut: 5000 });
                     return;
                 }
 
@@ -335,12 +335,12 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                 };
 
                 if (start_time > end_time) {
-                    toastr.warning("Waktu selesai tidak boleh kurang dari waktu mulai")
+                    toastr.warning("⚠️ Waktu selesai tidak boleh kurang dari waktu mulai. Periksa kembali data Anda.", "", { timeOut: 5000 });
                 }
 
                 apiClient.request('PUT', `${selectedSession.id}`, quizData)
                     .then(() => {
-                        toastr.success("Sesi quiz berhasil diperbarui", { timeOut: 5000 });
+                        toastr.success("✅ Sesi quiz berhasil diperbarui! Data telah diperbarui.", "", { timeOut: 5000 });
                         resetForm();
                         fetchApi();
                         document.getElementById("save_button").hidden = false;
@@ -348,8 +348,8 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                         document.getElementById("refresh_code").disabled = false;
                     })
                     .catch(error => {
-                        let errorMsg = error.response?.message || "Terjadi kesalahan saat memperbarui data";
-                        toastr.error(errorMsg);
+                        let errorMsg = error.response?.message || "❌ Terjadi kesalahan saat memperbarui sesi quiz. Silakan coba lagi.";
+                        toastr.error(errorMsg, "", { timeOut: 5000 });
                     });
             });
 
