@@ -226,7 +226,6 @@ let sessions = [];
                     return moment(session.start_time, "YYYY-MM-DD HH:mm").isSameOrBefore(now) &&
                            moment(session.end_time, "YYYY-MM-DD HH:mm").isSameOrAfter(now);
                 });
-                console.log('sessions', sessions);
             }
         });
 

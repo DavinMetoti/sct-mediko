@@ -169,7 +169,6 @@
                     console.error('Error:', error);
 
                     if (error.response) {
-                        console.log('Error Response:', error.response);
                         toastr.error(error.response.data.message || "Terjadi kesalahan saat menyimpan data", "Error");
                     } else {
                         toastr.error("Terjadi kesalahan jaringan atau server tidak merespons", "Error");

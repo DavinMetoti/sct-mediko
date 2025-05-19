@@ -62,9 +62,6 @@ Route::post('/verify-otp', [OtpController::class, 'verifyOtp'])->name('verify.ot
 Route::post('/change-password', [OtpController::class, 'updatePassword'])->name('change.password');
 Route::get('quiz-rank/{id}', [QuizSessionContoller::class, 'sessionRank'])->name('quiz-rank');
 
-
-
-
 // Route for the private access
 Route::middleware('auth')->resource('profile', ProfileController::class);
 Route::middleware('auth')->resource('tryout', TryoutController::class);
@@ -89,22 +86,8 @@ Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetail
 Route::middleware('auth')->resource('admin/question-bank', QuestionBankController::class);
 Route::middleware('auth')->resource('admin/column-title', ColumnTitleController::class);
 Route::middleware('auth')->resource('admin/list-invoice', ListInvoiceController::class);
-Route::middleware('auth')->resource('quiz', QuizController::class);
-Route::middleware('auth')->resource('quiz-question', QuizQuestionController::class);
-Route::middleware('auth')->resource('quiz-session', QuizSessionContoller::class);
-Route::middleware('auth')->resource('quiz-question-bank', QuizQuestionBankController::class);
-Route::middleware('auth')->resource('library', LibraryController::class);
-Route::middleware('auth')->resource('library-folder', LibraryFolderController::class);
-Route::middleware('auth')->resource('quiz-result', QuizResultController::class);
-Route::middleware('auth')->resource('quiz-classroom', ClassroomController::class);
 
-Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
-
-Route::middleware('auth')->get('admin/get/private', [AccessRoleController::class, 'getPrivateAccessRoleData'])->name('admin.access-role.private');
-Route::middleware('auth')->get('admin/get/public', [AccessRoleController::class, 'getPublicAccessRoleData'])->name('admin.access-role.public');
-Route::middleware('auth')->get('admin/get/menus', [AccessRoleController::class, 'menuData'])->name('admin.access-role.menus');
-Route::middleware('auth')->get('admin/get/permission/{id}', [AccessRoleController::class, 'permissionData'])->name('admin.access-role.get.permission');
-Route::middleware('auth')->get('broadcast/data/{id}', [BroadcastController::class, 'getNotificationDataSendToUser'])->name('broadcast.data');
+// --- Pindahkan semua route custom quiz-* sebelum resource quiz ---
 Route::middleware('auth')->get('questions/list', [QuestionController::class, 'showQuestion'])->name('question-list.index');
 Route::middleware('auth')->get('payment-histories', [PaymentController::class, 'showPaymentHistory'])->name('payment-histories.index');
 Route::middleware('auth')->get('questions/preview/{id}', [QuestionController::class, 'showQuestionPreview'])->name('question.preview');
@@ -112,7 +95,14 @@ Route::middleware('auth')->get('questions/detail/edit/{id}', [QuestionDetailCont
 Route::middleware('auth')->get('/package/search/question', [PackageController::class, 'searchQuestions'])->name('package.search.question');
 Route::middleware('auth')->get('package/{id}/selected-questions', [PackageController::class, 'getSelectedQuestions'])->name('package.getSelectedQuestions');
 Route::middleware('auth')->get('/admin/search-question-bank', [QuestionBankController::class, 'searchQuestionBank'])->name('admin.searchQuestionBank');
+Route::middleware('auth')->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
+Route::middleware('auth')->get('admin/get/private', [AccessRoleController::class, 'getPrivateAccessRoleData'])->name('admin.access-role.private');
+Route::middleware('auth')->get('admin/get/public', [AccessRoleController::class, 'getPublicAccessRoleData'])->name('admin.access-role.public');
+Route::middleware('auth')->get('admin/get/menus', [AccessRoleController::class, 'menuData'])->name('admin.access-role.menus');
+Route::middleware('auth')->get('admin/get/permission/{id}', [AccessRoleController::class, 'permissionData'])->name('admin.access-role.get.permission');
+Route::middleware('auth')->get('broadcast/data/{id}', [BroadcastController::class, 'getNotificationDataSendToUser'])->name('broadcast.data');
 
+// --- POST routes ---
 Route::middleware('auth')->post('admin/access-role/data', [AccessRoleController::class, 'getAccessRoleData'])->name('admin.access-role.data');
 Route::middleware('auth')->post('admin/access-role/save/permission', [AccessRoleController::class, 'saveOrUpdatePermission'])->name('admin.access-role.permission');
 Route::middleware('auth')->post('admin/user-management', [UserManagementController::class, 'getPrivateUserData'])->name('admin.user-management.private');
@@ -134,13 +124,19 @@ Route::middleware('auth')->post('/update-password/{id}', [ProfileController::cla
 Route::middleware('auth')->post('tryout/history/answer', [TryoutController::class, 'getHistoryAnswer'])->name('tryout.history.answer');
 Route::middleware('auth')->post('quiz-session/attach', [QuizSessionContoller::class, 'attach'])->name('quiz-session.attach');
 Route::middleware('auth')->post('delete-folder', [LibraryController::class, 'delete_folder'])->name('delete_folder');
-
 Route::middleware('auth')->post('classroom/attach', [ClassroomController::class, 'attach'])->name('classroom.attach');
 Route::middleware('auth')->post('classroom/detach', [ClassroomController::class, 'detach'])->name('classroom.detach');
-
 Route::middleware('auth')->post('session/attach-classroom', [QuizSessionContoller::class, 'attachClassroom'])->name('session.attachClassroom');
 Route::middleware('auth')->post('session/detach-classroom', [QuizSessionContoller::class, 'detachClassroom'])->name('session.detachClassroom');
+Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])->name('package.question.destroy');
 
-Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])
-->name('package.question.destroy');
+// --- Resource routes quiz diletakkan setelah custom quiz-* ---
+Route::middleware('auth')->resource('quiz', QuizController::class);
+Route::middleware('auth')->resource('quiz-question', QuizQuestionController::class);
+Route::middleware('auth')->resource('quiz-session', QuizSessionContoller::class);
+Route::middleware('auth')->resource('quiz-question-bank', QuizQuestionBankController::class);
+Route::middleware('auth')->resource('library', LibraryController::class);
+Route::middleware('auth')->resource('library-folder', LibraryFolderController::class);
+Route::middleware('auth')->resource('quiz-result', QuizResultController::class);
+Route::middleware('auth')->resource('quiz-classroom', ClassroomController::class);
 

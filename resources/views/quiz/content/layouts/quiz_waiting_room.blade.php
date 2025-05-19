@@ -92,7 +92,6 @@
                     let lastName = data.results[0].name.last;
                     let randomName = `${firstName} ${lastName}`;
 
-                    console.log(randomName);
                     $("#username").val(randomName);
                     toastr.success("✅ Nama berhasil diacak! Nama baru telah diisi.", "", { timeOut: 3000 });
                 },

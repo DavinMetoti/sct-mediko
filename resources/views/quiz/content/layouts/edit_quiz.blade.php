@@ -263,9 +263,6 @@
             };
             let maxPanelis = 10;
 
-            console.log(questions);
-
-
             $('#column-title').val(questions.column_title_id).trigger('change');
             $('#initial-hypothesis').val(questions.initial_hypothesis);
             $('#new-information').val(questions.new_information);
