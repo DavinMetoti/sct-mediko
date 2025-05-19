@@ -14,7 +14,7 @@ class ClassroomController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('viewAny', [User::class, 'classroom.index']);
+        $this->authorize('viewAny', [User::class, 'quiz-classroom.index']);
         if ($request->ajax()) {
             $data = Classroom::select(['id', 'name', 'start_time', 'end_time', 'is_active']);
 
