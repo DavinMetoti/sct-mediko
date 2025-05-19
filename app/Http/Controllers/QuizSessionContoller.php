@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 
-
 class QuizSessionContoller extends Controller
 {
     /**
@@ -96,13 +95,12 @@ class QuizSessionContoller extends Controller
     public function show(Request $request, string $id)
     {
         if ($request->ajax()) {
-            $session = QuizSession::with('questions.medicalField')->findOrFail($id);
+            $session = QuizSession::with(['questions.medicalField', 'classrooms'])->findOrFail($id);
             return response()->json($session);
         }
 
         return view('quiz.content.layouts.mapping_quiz_session');
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -111,7 +109,6 @@ class QuizSessionContoller extends Controller
     {
 
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -223,6 +220,64 @@ class QuizSessionContoller extends Controller
         }
     }
 
+    public function attachClassroom(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'session_id' => 'required|exists:quiz_sessions,id',
+                'classroom_ids' => 'array',
+                'classroom_ids.*' => 'exists:classrooms,id',
+            ]);
+
+            $session = QuizSession::findOrFail($validated['session_id']);
+            $session->classrooms()->sync($validated['classroom_ids'] ?? []);
+
+            return response()->json([
+                'message' => 'Classroom berhasil dihubungkan ke sesi'
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'Session not found'
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function detachClassroom(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'session_id' => 'required|exists:quiz_sessions,id',
+                'classroom_id' => 'required|exists:classrooms,id',
+            ]);
+
+            $session = QuizSession::findOrFail($validated['session_id']);
+            $session->classrooms()->detach($validated['classroom_id']);
+
+            return response()->json([
+                'message' => 'Classroom berhasil dihapus dari sesi'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function checkQuizSession(Request $request)
     {
         $isQuery = $request->query('access_code');
@@ -296,15 +351,23 @@ class QuizSessionContoller extends Controller
         ],200);
     }
 
-
     public function sessionRank(Request $request, string $id)
     {
         $session = QuizSession::with('questions')->findOrFail($id);
 
         $questionCount = $session->questions ? $session->questions->count() : 0;
 
-        $attempts = QuizAttempt::where('session_id', $id)
-            ->whereNotNull('score')
+        $classroomId = $request->query('classroom_id');
+
+        $attemptsQuery = \App\Models\QuizAttempt::with('classroom')
+            ->where('session_id', $id)
+            ->whereNotNull('score');
+
+        if ($classroomId) {
+            $attemptsQuery->where('classroom_id', $classroomId);
+        }
+
+        $attempts = $attemptsQuery
             ->orderByDesc('score')
             ->get()
             ->map(function ($attempt) use ($questionCount) {
@@ -324,6 +387,4 @@ class QuizSessionContoller extends Controller
 
         return view('quiz.content.layouts.quiz_session_rank', compact('id', 'questionCount', 'attempts', 'session'));
     }
-
-
 }

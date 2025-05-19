@@ -50,4 +50,9 @@ class QuizSession extends Model
         return $this->hasMany(QuizAttempt::class, 'session_id');
     }
 
+    public function classrooms()
+    {
+        return $this->belongsToMany(\App\Models\Classroom::class, 'classroom_session', 'quiz_session_id', 'classroom_id');
+    }
+
 }

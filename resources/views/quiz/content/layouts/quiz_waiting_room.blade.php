@@ -33,6 +33,13 @@
                     </div>
                     <input type="hidden" id="quiz-token" value="{{ $token }}">
 
+                    <div class="mt-3">
+                        <label for="classroom_id">Pilih Classroom</label>
+                        <select id="classroom_id" class="form-control">
+                            <option value="">-- Pilih Classroom --</option>
+                        </select>
+                    </div>
+
                     <button class="btn btn-primary mt-3 w-full" style="font-size: 1.5rem;" onclick="startQuiz()">Start</button>
                 </div>
             </div>
@@ -40,6 +47,36 @@
     </div>
 
     <script>
+        let classrooms = [];
+
+        $(document).ready(function() {
+            // Ambil classroom berdasarkan quiz_session_id dari token
+            let token = $("#quiz-token").val();
+            $.ajax({
+                url: "{{ route('quiz-play.show', ['quiz_play' => 'temp']) }}".replace('temp', token),
+                type: "GET",
+                success: function(response) {
+                    // response.attempt.session.classrooms (pastikan relasi classrooms sudah dimuat di controller)
+                    let classroomList = [];
+                    // if (response && response.session && response.session.classrooms) {
+                    //     classroomList = response.session.classrooms;
+                    // } else if (response && response.classrooms) {
+                    //     classroomList = response.classrooms;
+                    // }
+
+                    classroomList = response.classrooms;
+
+                    classrooms = classroomList;
+                    let $dropdown = $("#classroom_id");
+                    $dropdown.empty();
+                    $dropdown.append('<option value="">-- Pilih Classroom --</option>');
+                    classroomList.forEach(function(c) {
+                        $dropdown.append('<option value="'+c.id+'">'+c.name+'</option>');
+                    });
+                }
+            });
+        });
+
         function shuffleName() {
             let shuffleBtn = $("#shuffle-btn");
             let shuffleIcon = $("#shuffle-icon");
@@ -73,6 +110,7 @@
         function startQuiz() {
             let username = $("#username").val();
             let token = $("#quiz-token").val();
+            let classroom_id = $("#classroom_id").val();
 
             // Pastikan nama tidak kosong
             if (username.trim() === "") {
@@ -80,13 +118,20 @@
                 return;
             }
 
-            // Kirim AJAX untuk update userAttempts->name
+            // Pastikan classroom dipilih jika ada classroom
+            if (classrooms.length > 0 && !classroom_id) {
+                toastr.warning("⚠️ Silakan pilih classroom terlebih dahulu.", "", { timeOut: 3000 });
+                return;
+            }
+
+            // Kirim AJAX untuk update userAttempts->name dan classroom_id
             $.ajax({
                 url: "{{ route('quiz-play.update', ['quiz_play' => 'temp']) }}".replace('temp', token),
                 type: "PUT",
                 data: {
                     _token: "{{ csrf_token() }}",
-                    name: username
+                    name: username,
+                    classroom_id: classroom_id
                 },
                 success: function(response) {
                     window.location.href = "{{ route('quiz-play.show', ['quiz_play' => 'temp']) }}".replace('temp', token);

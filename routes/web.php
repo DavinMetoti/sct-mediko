@@ -4,6 +4,7 @@ use App\Http\Controllers\AccessRoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BroadcastController;
+use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ColumnTitleController;
 use App\Http\Controllers\HistoryTryoutController;
 use App\Http\Controllers\LibraryController;
@@ -95,6 +96,7 @@ Route::middleware('auth')->resource('quiz-question-bank', QuizQuestionBankContro
 Route::middleware('auth')->resource('library', LibraryController::class);
 Route::middleware('auth')->resource('library-folder', LibraryFolderController::class);
 Route::middleware('auth')->resource('quiz-result', QuizResultController::class);
+Route::middleware('auth')->resource('quiz-classroom', ClassroomController::class);
 
 Route::middleware(['auth'])->get('tryout/{idQuestion}/question', [TryoutController::class, 'index'])->name('tryout.question.detail');
 
@@ -133,7 +135,11 @@ Route::middleware('auth')->post('tryout/history/answer', [TryoutController::clas
 Route::middleware('auth')->post('quiz-session/attach', [QuizSessionContoller::class, 'attach'])->name('quiz-session.attach');
 Route::middleware('auth')->post('delete-folder', [LibraryController::class, 'delete_folder'])->name('delete_folder');
 
+Route::middleware('auth')->post('classroom/attach', [ClassroomController::class, 'attach'])->name('classroom.attach');
+Route::middleware('auth')->post('classroom/detach', [ClassroomController::class, 'detach'])->name('classroom.detach');
 
+Route::middleware('auth')->post('session/attach-classroom', [QuizSessionContoller::class, 'attachClassroom'])->name('session.attachClassroom');
+Route::middleware('auth')->post('session/detach-classroom', [QuizSessionContoller::class, 'detachClassroom'])->name('session.detachClassroom');
 
 Route::middleware('auth')->delete('/package/{package}/question/{question}', [PackageController::class, 'destroyQuestion'])
 ->name('package.question.destroy');

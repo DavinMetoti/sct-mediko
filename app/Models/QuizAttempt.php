@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class QuizAttempt extends Model {
     use HasFactory;
 
-    protected $fillable = ['attempt_token', 'session_id', 'user_id', 'name', 'score', 'completed_at'];
+    protected $fillable = ['attempt_token', 'session_id', 'user_id','classroom_id', 'name', 'score', 'completed_at'];
 
     protected static function boot() {
         parent::boot();
@@ -20,6 +20,10 @@ class QuizAttempt extends Model {
 
     public function session() {
         return $this->belongsTo(QuizSession::class, 'session_id');
+    }
+
+    public function classroom() {
+        return $this->belongsTo(\App\Models\Classroom::class, 'classroom_id');
     }
 
     public function answers() {

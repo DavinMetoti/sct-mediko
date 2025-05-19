@@ -50,6 +50,12 @@
             </a>
         </div>
         @endcan
+        <div class="w-full menu-title">
+            <a href="{{ route('quiz-classroom.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz-classroom.index') ? 'active' : '' }}">
+                <i class="fas fa-chalkboard me-3" style="width: 24px;text-align:center;"></i>
+                <span>Classroom</span>
+            </a>
+        </div>
         <div class="header-menu mt-2">
             <div class="header-menu-title mb-2">
                 <h5>Perpustakaan</h5>

@@ -125,7 +125,7 @@
         const questionObserver = new MutationObserver((mutationsList) => {
             for (let mutation of mutationsList) {
                 if (mutation.type === "childList" || mutation.type === "attributes") {
-                    fetchSessionRank();
+                    fetchSessionRank('{{ $attempt->classroom_id }}');
                     break;
                 }
             }
@@ -135,7 +135,6 @@
         if (quizQuestionElement) {
             questionObserver.observe(quizQuestionElement, { childList: true, attributes: true, subtree: true });
         }
-
 
         function updateTimerDisplay() {
             let minutes = Math.floor(totalTime / 60);
@@ -178,11 +177,11 @@
                 sessionStorage.setItem("quiz_start_time", Date.now());
                 updateTimerDisplay();
                 startCountdown();
-                fetchSessionRank();
+                fetchSessionRank("{{ $attempt->classroom_id }}");
             });
         }
 
-        fetchSessionRank();
+        fetchSessionRank("{{ $attempt->classroom_id }}");
 
         Pusher.logToConsole = true;
 
@@ -193,7 +192,7 @@
         var channel = pusher.subscribe('quiz-channel');
 
         channel.bind('quiz-updated', function(data) {
-            fetchSessionRank();
+            fetchSessionRank("{{ $attempt->classroom_id }}");
             toastr.success("Data rangking berhasil diperbarui", "", { timeOut: 3000 });
         });
 
@@ -204,7 +203,6 @@
                 const loadingOverlay = document.getElementById('loading-overlay');
                 let quizQuestionElement = document.getElementById("quiz-question");
                 let quizQuestionId = quizQuestionElement ? quizQuestionElement.getAttribute("data-id") : null;
-
 
                 loadingOverlay.style.display = "flex";
 
@@ -291,11 +289,15 @@
         }
     }
 
-    const apiUrl = "{{ route('quiz-rank', ['id' => $quizSessionId]) }}";
+    const apiUrlBase = "{{ route('quiz-rank', ['id' => $quizSessionId]) }}";
 
-    function fetchSessionRank() {
+    function fetchSessionRank(classroomId = null) {
+        let url = apiUrlBase;
+        if (classroomId) {
+            url += '?classroom_id=' + classroomId;
+        }
         $.ajax({
-            url: apiUrl,
+            url: url,
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -325,6 +327,9 @@
         }
 
         container.innerHTML = '';
+        // Ambil id attempt user saat ini
+        const currentAttemptId = @json($attempt->id);
+
         attempts.forEach((rank, index) => {
             const rankElement = document.createElement('div');
             rankElement.classList.add('rank-item', 'p-2', 'rounded', 'd-flex', 'align-items-center');
@@ -333,10 +338,14 @@
                 rankElement.classList.add('rank-up');
             }
 
-            rankElement.style.backgroundColor = ["#FFD700", "#C0C0C0", "#CD7F32", "#888"][index] || "#888";
+            // Gunakan id untuk membedakan user sendiri
+            let cardBg = ["#FFD700", "#C0C0C0", "#CD7F32", "#888"][index] || "#888";
+            if (rank.id == currentAttemptId) {
+                cardBg = "#2D70AE";
+            }
 
             rankElement.innerHTML = `
-                <div class="rank-card w-100 p-2 d-flex justify-content-between align-items-center">
+                <div class="rank-card w-100 p-2 d-flex justify-content-between align-items-center" style="background-color: ${cardBg};">
                     <div class="d-flex gap-2 align-items-center">
                         <h3 class="m-0">#${index + 1}</h3>
                         <div>

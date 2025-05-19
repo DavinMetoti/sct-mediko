@@ -8,10 +8,30 @@
         stroke: white !important;
         border-radius: 12px !important;
     }
+    .ql-picker,
+    .ql-picker-options,
+    .ql-picker-item,
+    .ql-picker-label {
+    color: black !important;
+    fill: black !important;
+    stroke: black !important;
+    }
+
+    .ql-picker-item svg .ql-stroke {
+    stroke: black !important;
+    }
+
 
     .card .card-body {
         position: relative;
         overflow: hidden; /* Mencegah efek keluar dari card */
+    }
+
+    .dt-info{
+        color: white !important;
+    }
+    .dt-search label{
+        color: white !important;
     }
 
 
@@ -197,4 +217,6 @@
 @endsection
 
 @include('partials.script')
+
+@stack('scripts');
 

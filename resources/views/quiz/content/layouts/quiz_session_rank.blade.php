@@ -8,13 +8,24 @@
 
 @section('quiz-content')
     <h3 class="fw-bold">Session Result : {{ $session->title }}</h3>
-    <div class="quiz-container-rank"></div>
+    <div class="mb-3 text-muted">
+        <strong>Waktu Classroom:</strong>
+        <span id="classroom-time-range"></span>
+    </div>
+    <div class="flex flex-column mb-3">
+        <label for="filterClassroom" class="form-label">Filter Classroom:</label>
+        <select id="filterClassroom" class="form-select" style="max-width:300px;display:inline-block;">
+            <option value="">Semua Classroom</option>
+        </select>
+    </div>
+    <div id="rank-group-container"></div>
 
     <script src="{{ secure_asset('assets/js/module.js') }}"></script>
     <script>
         const quizSessionId = @json($quizSessionId);
-
         const apiUrl = "{{ route('quiz-rank', ['id' => $quizSessionId]) }}";
+        let allAttempts = [];
+        let classroomMap = {};
 
         function fetchSessionRank() {
             $.ajax({
@@ -23,7 +34,10 @@
                 dataType: 'json',
                 success: function(data) {
                     toastr.success("Data rangking berhasil diambil", "", { timeOut: 3000 });
-                    displaySessionRank(data.sessionRankList);
+                    allAttempts = data.sessionRankList || [];
+                    buildClassroomMap(allAttempts);
+                    populateClassroomFilter();
+                    displaySessionRankGrouped(allAttempts);
                 },
                 error: function(xhr, status, error) {
                     toastr.error("Gagal mengambil data rangking");
@@ -32,9 +46,100 @@
             });
         }
 
-        function displaySessionRank(attempts) {
-            const container = document.querySelector('.quiz-container-rank');
+        function buildClassroomMap(attempts) {
+            classroomMap = {};
+            attempts.forEach(attempt => {
+                if (attempt.classroom_id && attempt.classroom) {
+                    classroomMap[attempt.classroom_id] = attempt.classroom;
+                }
+            });
+        }
 
+        function populateClassroomFilter() {
+            const $filter = $('#filterClassroom');
+            $filter.empty();
+            $filter.append('<option value="">Semua Classroom</option>');
+            // Kumpulkan unique classroom_id
+            let ids = {};
+            allAttempts.forEach(a => {
+                if (a.classroom_id && a.classroom) {
+                    ids[a.classroom_id] = a.classroom.name + ' (' + (a.classroom.start_time ?? '') + ' - ' + (a.classroom.end_time ?? '') + ')';
+                }
+            });
+            Object.keys(ids).forEach(cid => {
+                $filter.append(`<option value="${cid}">${ids[cid]}</option>`);
+            });
+        }
+
+        $('#filterClassroom').on('change', function() {
+            displaySessionRankGrouped(allAttempts);
+        });
+
+        function displaySessionRankGrouped(attempts) {
+            const container = document.getElementById('rank-group-container');
+            container.innerHTML = '';
+
+            if (!attempts || attempts.length === 0) {
+                container.innerHTML = `<p class="text-center">No rankings available.</p>`;
+                $('#classroom-time-range').text('');
+                return;
+            }
+
+            // Filter by classroom if selected
+            const selectedClassroom = $('#filterClassroom').val();
+            let filteredAttempts = attempts;
+            if (selectedClassroom) {
+                filteredAttempts = attempts.filter(a => String(a.classroom_id) === String(selectedClassroom));
+            }
+
+            // Group by classroom_id
+            const grouped = {};
+            filteredAttempts.forEach(attempt => {
+                const cid = attempt.classroom_id || 'Tanpa Classroom';
+                if (!grouped[cid]) grouped[cid] = [];
+                grouped[cid].push(attempt);
+            });
+
+            // Show classroom time range if filter is selected
+            if (selectedClassroom && classroomMap[selectedClassroom]) {
+                $('#classroom-time-range').text(
+                    (classroomMap[selectedClassroom].start_time ?? '') +
+                    ' - ' +
+                    (classroomMap[selectedClassroom].end_time ?? '')
+                );
+            } else {
+                $('#classroom-time-range').text('');
+            }
+
+            Object.keys(grouped).forEach(cid => {
+                // Classroom title
+                let classroomTitle = 'Tanpa Classroom';
+                let classroomTime = '';
+                if (cid !== 'Tanpa Classroom' && classroomMap[cid]) {
+                    classroomTitle = classroomMap[cid].name;
+                    classroomTime = (classroomMap[cid].start_time ?? '') + ' - ' + (classroomMap[cid].end_time ?? '');
+                } else if (cid !== 'Tanpa Classroom') {
+                    classroomTitle = `Classroom #${cid}`;
+                }
+
+                const groupDiv = document.createElement('div');
+                groupDiv.classList.add('mb-4');
+
+                groupDiv.innerHTML = `
+                    <h4 class="fw-bold mb-1">${classroomTitle}</h4>
+                    ${classroomTime ? `<div class="text-muted mb-2" style="font-size:0.95em;">${classroomTime}</div>` : ''}
+                    <div class="quiz-container-rank"></div>
+                `;
+
+                container.appendChild(groupDiv);
+
+                // Render rank for this group
+                displaySessionRank(grouped[cid], groupDiv.querySelector('.quiz-container-rank'));
+            });
+        }
+
+        function displaySessionRank(attempts, container) {
+            if (!container) return;
             const prevRanks = {};
             container.querySelectorAll('.rank-item').forEach((item, i) => {
                 const name = item.querySelector('h5')?.innerText;

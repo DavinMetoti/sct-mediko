@@ -74,11 +74,101 @@
         </div>
     </div>
 
+    <div class="modal fade" id="sessionModal" tabindex="-1" role="dialog" aria-labelledby="sessionModalLabel">
+        <div class="modal-dialog" role="document">
+            <form id="sessionForm">
+                @csrf
+                <input type="hidden" id="idsession" name="id" value="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title color-dark" style="color: black;" id="sessionModalLabel">Kelola Sesi Classroom</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="sessionSelect" class="text-dark">Tambah Sesi ke Classroom</label>
+                            <select id="sessionSelect" name="sessions[]" multiple="multiple" class="form-control" style="width: 100%">
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-dark">Daftar Sesi yang Terhubung</label>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="attachedSessionTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Kelas</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Classroom -->
+    <div class="modal fade" id="classroomModal" tabindex="-1" role="dialog" aria-labelledby="classroomModalLabel">
+        <div class="modal-dialog" role="document">
+            <form id="classroomForm">
+                @csrf
+                <input type="hidden" id="sessionIdForClassroom" name="session_id" value="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title color-dark" style="color: black;" id="classroomModalLabel">Kelola Classroom untuk Sesi Ini</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="classroomSelect" class="text-dark">Tambah Classroom ke Sesi</label>
+                            <select id="classroomSelect" name="classrooms[]" multiple="multiple" class="form-control" style="width: 100%">
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-dark">Daftar Classroom yang Terhubung</label>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="attachedClassroomTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Classroom</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="{{ secure_asset('assets/js/module.js') }}"></script>
 
     <script>
         const apiClient = new HttpClient('{{ route("quiz-session.index") }}');
         let selectedSession ;
+        let classrooms = [];
 
         document.addEventListener("DOMContentLoaded", function () {
             // Inisialisasi Datepicker
@@ -219,7 +309,10 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                             </div>
                             <div class="text-end mt-3 mt-md-0">
                                 <div class="d-flex gap-2">
-                                    <!-- Copy Link Button -->
+                                    <button class="btn btn-success mb-2 w-md-auto" id="class-btn" onclick="openClassroomModal(${session.id})">
+                                        <i class="fas fa-chalkboard me-2"></i> Class
+                                    </button>
+
                                     <button class="btn btn-secondary mb-2 w-md-auto copy-btn">
                                         <i class="bi bi-link-45deg me-2"></i> Copy
                                     </button>
@@ -369,9 +462,143 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                 document.getElementById("refresh_code").disabled = false;
             }
 
-
             fetchApi();
         });
 
+        $(document).ready(function () {
+            // Ambil data classroom
+            $.ajax({
+                url: "{{ route('quiz-classroom.index') }}",
+                method: "GET",
+                success: function (data) {
+                    // DataTables response, ambil data classroom saja
+                    if (data.data) {
+                        classrooms = data.data;
+                    } else {
+                        classrooms = data;
+                    }
+                }
+            });
+
+            $('#classroomForm').on('submit', function (e) {
+                e.preventDefault();
+                attachClassroomToSession();
+            });
+        });
+
+        // Buka modal classroom untuk session tertentu
+        function openClassroomModal(sessionId) {
+            $('#sessionIdForClassroom').val(sessionId);
+            const $select = $('#classroomSelect');
+            $select.empty();
+
+            // Ambil classroom yang sudah terhubung ke session
+            $.get("{{ url('quiz-session') }}/" + sessionId, function(data) {
+                const attachedClassrooms = data.classrooms || [];
+                const attachedIds = attachedClassrooms.map(c => c.id);
+
+                // Populate select2 dengan classroom yang belum terhubung
+                classrooms.forEach(classroom => {
+                    if (!attachedIds.includes(classroom.id)) {
+                        const option = new Option(classroom.name, classroom.id, false, false);
+                        $select.append(option);
+                    }
+                });
+
+                $select.select2({
+                    placeholder: "Pilih satu atau lebih classroom",
+                    allowClear: true,
+                    theme: 'bootstrap-5',
+                    dropdownParent: $('#classroomModal')
+                });
+
+                renderAttachedClassrooms(attachedClassrooms);
+                $('#classroomModal').modal('show');
+            });
+        }
+
+        function renderAttachedClassrooms(attachedClassrooms) {
+            const $tbody = $('#attachedClassroomTable tbody');
+            $tbody.empty();
+            if (attachedClassrooms.length === 0) {
+                $tbody.append('<tr><td colspan="3" class="text-center">Belum ada classroom terhubung</td></tr>');
+                return;
+            }
+            attachedClassrooms.forEach((classroom, idx) => {
+                $tbody.append(`
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td>${classroom.name}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="detachClassroomFromSession(${classroom.pivot.quiz_session_id}, ${classroom.id})">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+        }
+
+        function attachClassroomToSession() {
+            const sessionId = $('#sessionIdForClassroom').val();
+            const selectedClassroomIds = $('#classroomSelect').val() || [];
+
+            // Ambil classroom yang sudah terhubung sebelumnya dari tabel
+            let previousClassroomIds = [];
+            $('#attachedClassroomTable tbody tr').each(function() {
+                const onclickAttr = $(this).find('button[onclick^="detachClassroomFromSession"]').attr('onclick');
+                if (onclickAttr) {
+                    const match = onclickAttr.match(/detachClassroomFromSession\(\s*\d+\s*,\s*(\d+)\s*\)/);
+                    if (match) {
+                        previousClassroomIds.push(match[1]);
+                    }
+                }
+            });
+
+            // Gabungkan classroom sebelumnya dan yang baru dipilih, lalu hilangkan duplikat
+            const allClassroomIds = Array.from(new Set([...previousClassroomIds, ...selectedClassroomIds]));
+
+            $.ajax({
+                url: '{{ route("session.attachClassroom") }}',
+                method: 'POST',
+                data: {
+                    session_id: sessionId,
+                    classroom_ids: allClassroomIds,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $('#classroomModal').modal('hide');
+                    // reload data jika perlu
+                    toastSuccess(response.message);
+                },
+                error: function(xhr) {
+                    toastError(xhr.responseJSON?.message || 'Gagal memperbarui classroom.');
+                }
+            });
+        }
+
+        function detachClassroomFromSession(sessionId, classroomId) {
+            if (!confirm('Yakin ingin menghapus classroom dari sesi ini?')) return;
+            $.ajax({
+                url: '{{ route("session.detachClassroom") }}',
+                method: 'POST',
+                data: {
+                    session_id: sessionId,
+                    classroom_id: classroomId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    // Refresh attached classrooms table
+                    $.get("{{ url('quiz-session') }}/" + sessionId, function(data) {
+                        const attachedClassrooms = data.classrooms || [];
+                        renderAttachedClassrooms(attachedClassrooms);
+                    });
+                    toastSuccess(response.message);
+                },
+                error: function(xhr) {
+                    toastError(xhr.responseJSON?.message || 'Gagal menghapus classroom.');
+                }
+            });
+        }
     </script>
 @endsection

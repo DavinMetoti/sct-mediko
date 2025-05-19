@@ -66,7 +66,12 @@ class QuizPlay extends Component
             if (!$this->attempt->completed_at) {
                 $this->attempt->update(['completed_at' => now()]);
             }
-            Session::forget(['quiz_token', 'shown_questions', 'current_question']);
+
+            // Hanya hapus session yang bersangkutan kecuali quiz_token
+            $sessionKeys = ['shown_questions', 'current_question'];
+            foreach ($sessionKeys as $key) {
+                Session::forget($key);
+            }
 
             return redirect()->route('quiz-play.edit', ['quiz_play' => $this->attempt->id]);
         }
@@ -91,6 +96,10 @@ class QuizPlay extends Component
 
     public function exitQuiz()
     {
+        $sessionKeys = ['shown_questions', 'current_question'];
+        foreach ($sessionKeys as $key) {
+            Session::forget($key);
+        }
         return redirect()->route('quiz.index');
     }
 
