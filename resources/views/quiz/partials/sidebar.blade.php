@@ -57,7 +57,7 @@
                 <span>Classroom</span>
             </a>
         </div>
-        @end
+        @endcan
         <div class="header-menu mt-2">
             <div class="header-menu-title mb-2">
                 <h5>Perpustakaan</h5>
