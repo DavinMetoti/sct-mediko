@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classroom;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -13,6 +14,7 @@ class ClassroomController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', [User::class, 'classroom.index']);
         if ($request->ajax()) {
             $data = Classroom::select(['id', 'name', 'start_time', 'end_time', 'is_active']);
 
