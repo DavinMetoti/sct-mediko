@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex align-items-center justify-content-center vh-100 bg-light">
-    <div class="text-center">
+    <div class="text-center flex justify-content-center flex-column align-items-center">
         <div class="mb-4">
             <svg width="120" height="120" fill="none" viewBox="0 0 120 120">
                 <circle cx="60" cy="60" r="56" stroke="#38bdf8" stroke-width="8" fill="#fff"/>
