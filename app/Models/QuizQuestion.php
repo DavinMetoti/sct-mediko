@@ -18,7 +18,8 @@ class QuizQuestion extends Model
         'new_information',
         'timer',
         'created_by',
-        'explanation'
+        'explanation',
+        'uploaded_image_base64'
     ];
 
     /**

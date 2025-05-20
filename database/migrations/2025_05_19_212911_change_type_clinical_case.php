@@ -11,9 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('quiz_questions', function (Blueprint $table) {
-            $table->longText('clinical_case')->change();
-        });
+        if (Schema::hasTable('quiz_questions')) {
+            Schema::table('quiz_questions', function (Blueprint $table) {
+                if (Schema::hasColumn('quiz_questions', 'clinical_case')) {
+                    // Kolom ada → ubah ke longText
+                    $table->longText('clinical_case')->change();
+                } else {
+                    // Kolom tidak ada → tambahkan baru
+                    $table->longText('clinical_case')->nullable();
+                }
+            });
+        }
     }
 
     /**
@@ -21,8 +29,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('quiz_questions', function (Blueprint $table) {
-            $table->dropColumn('clinical_case')->change();
-        });
+        if (Schema::hasTable('quiz_questions') && Schema::hasColumn('quiz_questions', 'clinical_case')) {
+            Schema::table('quiz_questions', function (Blueprint $table) {
+                $table->dropColumn('clinical_case');
+            });
+        }
     }
 };

@@ -68,7 +68,7 @@
                                 <p class="text-sm" style="height: 2rem;">
                                     {{ $currentQuestion->columnTitle->{'column_' . ($key + 1)} }}
                                 </p>
-                                <div class="card-purple p-3 d-flex align-items-center justify-content-center">
+                                <div class="card-purple p-3 d-flex align-items-center justify-content-center flex-column">
                                     @if ($type === 'answers')
                                         <div class="row">
                                             @foreach ($currentQuestion->answers as $index => $answer)
@@ -86,7 +86,19 @@
                                             @endforeach
                                         </div>
                                     @else
-                                        {{ $currentQuestion->$type }}
+                                        <div class="w-100 text-center">
+                                            {{ $currentQuestion->$type }}
+                                        </div>
+                                        @if ($type === 'new_information' && !empty($currentQuestion->uploaded_image_base64))
+                                            <div class="mt-2 text-center w-100">
+                                                <img
+                                                    src="{{ $currentQuestion->uploaded_image_base64 }}"
+                                                    alt="Informasi Baru Gambar"
+                                                    style="max-width:100%;max-height:200px;border-radius:8px;cursor:zoom-in;"
+                                                    onclick="showZoomImageModal(this.src)"
+                                                >
+                                            </div>
+                                        @endif
                                     @endif
                                 </div>
                             </div>
@@ -104,7 +116,21 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="zoomImageModal" tabindex="-1" aria-labelledby="zoomImageModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+          <div class="modal-body text-center p-0" style="position:relative;">
+            <img id="zoomImageModalImg" src="" style="max-width:90vw;max-height:80vh;border-radius:12px;box-shadow:0 0 20px #000;">
+            <button type="button" class="btn btn-light position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close" style="z-index:10;">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
+
+{{-- Modal Zoom Image --}}
 
 <script>
     const quizSessionId = @json($quizSessionId);
@@ -357,6 +383,13 @@
             `;
             container.appendChild(rankElement);
         });
+    }
+
+    function showZoomImageModal(src) {
+        var modalImg = document.getElementById('zoomImageModalImg');
+        modalImg.src = src;
+        var modal = new bootstrap.Modal(document.getElementById('zoomImageModal'));
+        modal.show();
     }
 </script>
 

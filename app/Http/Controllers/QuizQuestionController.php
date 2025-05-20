@@ -55,6 +55,7 @@ class QuizQuestionController extends Controller
                 'answer.*.value' => 'required|integer',
                 'answer.*.score' => 'required|numeric|min:0|max:1',
                 'answer.*.panelist' => 'required|integer',
+                'uploaded_image_base64' => 'nullable|string',
             ]);
 
             // Cek apakah pertanyaan kuis sudah ada (autosave)
@@ -73,6 +74,7 @@ class QuizQuestionController extends Controller
                     'new_information' => $validated['new_information'],
                     'timer' => $validated['timer'],
                     'explanation' => $validated['explanation'] ?? null,
+                    'uploaded_image_base64' => $validated['uploaded_image_base64'] ?? null,
                 ]);
 
                 // Hapus jawaban lama dan simpan jawaban baru
@@ -92,6 +94,7 @@ class QuizQuestionController extends Controller
                     'timer' => $validated['timer'],
                     'created_by' => auth()->id(),
                     'explanation' => $validated['explanation'] ?? null,
+                    'uploaded_image_base64' => $validated['uploaded_image_base64'] ?? null,
                 ]);
 
                 // Simpan jawaban ke dalam tabel `quiz_answers`
@@ -167,6 +170,7 @@ class QuizQuestionController extends Controller
                 'answer.*.value' => 'required|integer',
                 'answer.*.score' => 'required|numeric|min:0|max:1',
                 'answer.*.panelist' => 'required|integer',
+                'uploaded_image_base64' => 'nullable|string',
             ]);
 
             $quizQuestion = QuizQuestion::findOrFail($id);
@@ -181,6 +185,7 @@ class QuizQuestionController extends Controller
                 'timer' => $validated['timer'],
                 'explanation' => $validated['explanation'] ?? null,
                 'updated_by' => auth()->id(),
+                'uploaded_image_base64' => $validated['uploaded_image_base64'] ?? null,
             ]);
 
             $quizQuestion->answers()->delete();
