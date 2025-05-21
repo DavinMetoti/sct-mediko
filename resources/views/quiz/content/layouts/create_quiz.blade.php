@@ -66,6 +66,11 @@
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Hipotesis Awal</label>
                         <input class="form-control-purple w-full" id="initial-hypothesis" name="initial_hypothesis" />
+
+                        <label for="panelist-desc" class="fw-bold mt-4">Keterangan Panelis</label>
+                        <select id="panelist-desc" class="form-control-purple w-full">
+                            <option value="">Pilih Keterangan Panelis</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -230,6 +235,116 @@
                 localStorage.setItem('editorContent', content);
             });
 
+            const panelistDescriptions = {
+                'DIAGNOSIS': [
+                    { value: -2, text: 'Sangat tidak mungkin' },
+                    { value: -1, text: 'Tidak mungkin' },
+                    { value: 0, text: 'Tidak mendukung ataupun menyingkirkan' },
+                    { value: 1, text: 'Mungkin' },
+                    { value: 2, text: 'Sangat mungkin' }
+                ],
+                'MASALAH KEGUNAAN (PENAPISAN)': [
+                    { value: -2, text: 'Tidak berguna' },
+                    { value: -1, text: 'Sedikit berguna' },
+                    { value: 0, text: 'Di antara berguna dan tidak berguna' },
+                    { value: 1, text: 'Berguna' },
+                    { value: 2, text: 'Sangat berguna' }
+                ],
+                'MASALAH KEGUNAAN (TATALAKSANA)': [
+                    { value: -2, text: 'Tidak berguna' },
+                    { value: -1, text: 'Sedikit berguna' },
+                    { value: 0, text: 'Di antara berguna dan tidak berguna' },
+                    { value: 1, text: 'Berguna' },
+                    { value: 2, text: 'Sangat berguna' }
+                ],
+                'UNTUNG RUGI (PENAPISAN)': [
+                    { value: -2, text: 'Kontraindikasi kuat' },
+                    { value: -1, text: 'Kontraindikasi lemah' },
+                    { value: 0, text: 'Bukan kontraindikasi maupun indikasi' },
+                    { value: 1, text: 'Indikasi lemah' },
+                    { value: 2, text: 'Indikasi kuat' }
+                ],
+                'UNTUNG RUGI (TATALAKSANA)': [
+                    { value: -2, text: 'Kontraindikasi kuat' },
+                    { value: -1, text: 'Kontraindikasi lemah' },
+                    { value: 0, text: 'Bukan kontraindikasi maupun indikasi' },
+                    { value: 1, text: 'Indikasi lemah' },
+                    { value: 2, text: 'Indikasi kuat' }
+                ]
+            };
+
+            // Inisialisasi dropdown panelist-desc dengan semua opsi dari seluruh kategori
+            function initPanelistDescDropdown() {
+                const $panelistDesc = $('#panelist-desc');
+                $panelistDesc.empty();
+                $panelistDesc.append($('<option>', { value: '', text: 'Pilih Keterangan Panelis' }));
+
+                // Tambahkan kategori utama sebagai opsi
+                Object.keys(panelistDescriptions).forEach(key => {
+                    $panelistDesc.append($('<option>', {
+                        value: key,
+                        text: key
+                    }));
+                });
+            }
+
+            // Panggil saat halaman dimuat
+            initPanelistDescDropdown();
+
+            // Isi otomatis answer_1 - answer_5 sesuai pilihan kategori panelist-desc
+            $('#panelist-desc').on('change', function() {
+                const selectedCategory = $(this).val();
+                if (panelistDescriptions[selectedCategory]) {
+                    panelistDescriptions[selectedCategory].forEach((opt, idx) => {
+                        $(`#answer_${idx + 1}`).val(opt.text);
+                    });
+                    // Kosongkan jika kurang dari 5
+                    for (let i = panelistDescriptions[selectedCategory].length + 1; i <= 5; i++) {
+                        $(`#answer_${i}`).val('');
+                    }
+                } else {
+                    // Jika tidak ada kategori, kosongkan semua
+                    for (let i = 1; i <= 5; i++) {
+                        $(`#answer_${i}`).val('');
+                    }
+                }
+            });
+
+            // Restore form values from localStorage if exist
+            const fields = [
+                'bank-soal',
+                'medical-field',
+                'column-title',
+                'initial-hypothesis',
+                'new-information',
+                'timer'
+            ];
+            fields.forEach(id => {
+                const val = localStorage.getItem(id);
+                if (val !== null) {
+                    $(`#${id}`).val(val);
+                }
+            });
+
+            // Restore Quill editor content
+            if (localStorage.getItem('editorContent')) {
+                question.setContent(localStorage.getItem('editorContent'));
+            }
+
+            // Restore answer fields
+            for (let i = 1; i <= 5; i++) {
+                const ans = localStorage.getItem(`answer_${i}`);
+                if (ans !== null) {
+                    $(`#answer_${i}`).val(ans);
+                }
+            }
+
+            $('#column-title').select2({
+                placeholder: 'Pilih judul kolom',
+                width: '100%',
+                theme: 'bootstrap-5'
+            });
+
             // Ensure only plain text is pasted into the editor
             document.querySelector('#editor').addEventListener('paste', function(e) {
                 e.preventDefault();
@@ -245,74 +360,56 @@
             };
             let maxPanelis = 10;
 
-            $('#bank-soal').val(localStorage.getItem('bank-soal') || '');
-            $('#medical-field').val(localStorage.getItem('medical-field') || '');
-            $('#column-title').val(localStorage.getItem('column-title') || '');
-            $('#initial-hypothesis').val(localStorage.getItem('initial-hypothesis') || '');
-            $('#new-information').val(localStorage.getItem('new-information') || '');
-            $('#timer').val(localStorage.getItem('timer') || '');
-            question.setContent(localStorage.getItem('editorContent'));
-
-            $('input, select, textarea').on('input change', function() {
-                localStorage.setItem($(this).attr('id'), $(this).val());
-            });
-
-            for (let i = 1; i <= 5; i++) {
-                $(`#answer_${i}`).val(localStorage.getItem(`answer_${i}`) || '');
-            }
-
             const firstLoadAPI = () => {
                 quizQuestionBankApi.request('GET', '')
                     .then(response => {
                         let allBanks = response.response.data;
                         let selectElement = document.getElementById('bank-soal');
 
-                        // Kosongkan dulu isi select (jika perlu)
                         selectElement.innerHTML = '';
 
-                        // Tambahkan placeholder sebagai opsi pertama
                         let placeholderOption = document.createElement('option');
                         placeholderOption.disabled = true;
                         placeholderOption.selected = true;
                         placeholderOption.textContent = 'Pilih bank soal';
                         selectElement.appendChild(placeholderOption);
 
-                        // Tambahkan data dari server sebagai opsi
                         allBanks.forEach(bank => {
                             let option = document.createElement('option');
                             option.value = bank.id;
                             option.textContent = bank.name;
-                            option.classList.add('text-black'); // styling tambahan
+                            option.classList.add('text-black');
                             selectElement.appendChild(option);
                         });
 
-                        // Inisialisasi Select2 setelah opsi ditambahkan
                         $('#bank-soal').select2({
                             placeholder: 'Pilih bank soal',
                             width: '100%',
                             theme: 'bootstrap-5'
                         });
+
+                        // Set value from localStorage if exists
+                        const bankSoalVal = localStorage.getItem('bank-soal');
+                        if (bankSoalVal !== null) {
+                            $('#bank-soal').val(bankSoalVal).trigger('change');
+                        }
                     })
                     .catch(error => {
                         console.error('Gagal mengambil data:', error);
                     });
-
 
                 medicalFieldApi.request('GET', '', medicalFieldData)
                     .then(response => {
                         let allField = response.response.data;
                         let selectElement = document.getElementById('medical-field');
 
-
                         selectElement.innerHTML = '';
-
 
                         let placeholderOption = document.createElement('option');
                         placeholderOption.disabled = true;
                         placeholderOption.selected = true;
                         placeholderOption.textContent = 'Pilih bidang medis';
                         selectElement.appendChild(placeholderOption);
-
 
                         allField.forEach(field => {
                             let option = document.createElement('option');
@@ -322,29 +419,49 @@
                             selectElement.appendChild(option);
                         });
 
-
                         $('#medical-field').select2({
                             placeholder: 'Pilih bidang medis',
                             theme: 'bootstrap-5',
                             width: '100%'
                         });
+
+                        // Set value from localStorage if exists
+                        const medicalFieldVal = localStorage.getItem('medical-field');
+                        if (medicalFieldVal !== null) {
+                            $('#medical-field').val(medicalFieldVal).trigger('change');
+                        }
                     })
                     .catch(error => {
                         console.error('Gagal mengambil data:', error);
                     });
-
             };
 
+            // Save input/select/textarea changes to localStorage
+            $('input, select, textarea').on('input change', function() {
+                localStorage.setItem($(this).attr('id'), $(this).val());
+            });
+
+            // Save answer fields to localStorage
+            for (let i = 1; i <= 5; i++) {
+                $(`#answer_${i}`).on('input', function() {
+                    localStorage.setItem(`answer_${i}`, $(this).val());
+                });
+            }
 
             function updateTotalPanelis(isSuccess = false) {
                 let total = 0;
 
-                $(".counter-input").each(function () {
-                    if (isSuccess) {
-                        $(this).val(10);
-                    }
-                    total += parseInt($(this).val());
-                });
+                if (isSuccess) {
+                    // Reset all panelist counters to 0
+                    $(".counter-input").each(function () {
+                        $(this).val(0);
+                    });
+                    total = 0;
+                } else {
+                    $(".counter-input").each(function () {
+                        total += parseInt($(this).val());
+                    });
+                }
 
                 let remaining = maxPanelis - total;
                 $("#panelis").text(remaining);
@@ -434,9 +551,9 @@
 
                     for (let i = 1; i <= 5; i++) {
                         let answer = $(`#answer_${i}`).val();
-                        let score = parseInt($(`#score_${i}`).val()) / max_score || 0;
                         let value = $(`#value_${i}`).val();
-                        let panelist = parseInt($(`#score_${i}`).val()) || 0
+                        let panelist = parseInt($(`#score_${i}`).val()) || 0;
+                        let score = (max_score > 0) ? (panelist / max_score) : 0;
 
                         answers.push({
                             'answer': answer,
@@ -456,26 +573,38 @@
                         'new_information': new_information,
                         'timer': timer,
                         'answer': answers,
-                        'uploaded_image_base64': base64Image // <<=== Here
+                        'uploaded_image_base64': base64Image
                     };
 
                     quizQuestionApi.request('POST', '', data)
                         .then(response => {
                             toastr.success(response.response.message, { timeOut: 5000 });
 
-                            localStorage.clear();
-
+                            // Clear form fields
                             $('#bank-soal, #medical-field, #column-title, #initial-hypothesis, #new-information, #timer').val('');
                             $('#upload-file').val('');
-
                             for (let i = 1; i <= 5; i++) {
                                 $(`#answer_${i}`).val('');
                                 $(`#score_${i}`).val(0);
                             }
-
                             updateTotalPanelis(true);
                             if (typeof question.setContent === 'function') {
                                 question.setContent('');
+                            }
+
+                            // Clear localStorage for all concerned fields after save
+                            const fields = [
+                                'bank-soal',
+                                'medical-field',
+                                'column-title',
+                                'initial-hypothesis',
+                                'new-information',
+                                'timer',
+                                'editorContent'
+                            ];
+                            fields.forEach(id => localStorage.removeItem(id));
+                            for (let i = 1; i <= 5; i++) {
+                                localStorage.removeItem(`answer_${i}`);
                             }
                         })
                         .catch(error => {

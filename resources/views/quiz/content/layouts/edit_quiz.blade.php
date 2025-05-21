@@ -3,7 +3,7 @@
 @section('quiz-content')
     <div class="quiz-container">
         <div class="d-flex justify-content-between align-items-center w-100 rounded shadow-sm mb-4">
-            <h3 class="fw-bold m-0">Buat Soal</h3>
+            <h3 class="fw-bold m-0">Edit Soal</h3>
             <div class="row g-3 align-items-center">
                 <div class="col-md-7">
                     <div class="input-group">
@@ -17,9 +17,9 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row card-purple">
             <div class="col-md-12 mb-3 pb-3 pb-md-0">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="editor" class="form-label fw-bold">Pertanyaan</label>
                         <div id="editor"></div>
@@ -28,183 +28,99 @@
             </div>
             <div class="col-md-12 mt-5 pt-5"></div>
             <div class="col-md-12 mb-4 pt-5 pt-md-0 mt-5">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Bank Soal</label>
-                        <select class="custom-form-control" id="bank-soal" name="bank_soal">
+                        <select class="form-control-purple w-full" id="bank-soal" name="bank_soal">
                             <option value="" disabled selected>Pilih Bank Soal</option>
-
                         </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Bidang</label>
-                        <select class="custom-form-control" id="medical-field" name="medical_field">
+                        <select class="form-control-purple w-full" id="medical-field" name="medical_field">
                             <option value="" disabled selected>Pilih Bidang</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Judul Kolom</label>
-                        <select name="column-title" id="column-title" class="custom-form-control">
+                        <select name="column-title" id="column-title" class="form-control-purple w-full">
                             <option value="">Pilih Judul Kolom</option>
                             @foreach($columnTitle as $column)
-                                <option value="{{ $column->id }}">{{ $column->name }}</option>
+                                <option value="{{ $column->id }}" class="text-black">{{ $column->name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
             </div>
+            <!-- Tambahkan select Keterangan Panelis -->
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
-                        <label for="bank-soal mb-2 fw-bold">Hipotesis Awal</label>
-                        <input class="custom-form-control" id="initial-hypothesis" name="initial_hypothesis" />
+                        <label for="panelist-desc" class="fw-bold">Keterangan Panelis</label>
+                        <select id="panelist-desc" class="form-control-purple w-full">
+                            <option value="">Pilih Keterangan Panelis</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 mb-4">
-                <div class="card-quiz">
+                <div class="card-purple">
                     <div class="form-group">
-                        <label for="bank-soal mb-2 fw-bold">Informasi Baru</label>
-                        <input class="custom-form-control" id="new-information" name="new_information" />
+                        <label for="bank-soal mb-2 fw-bold">Hipotesis Awal</label>
+                        <input class="form-control-purple w-full" id="initial-hypothesis" name="initial_hypothesis" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card-purple">
+                    <div class="form-group">
+                        <label for="new-information" class="mb-2 fw-bold">Informasi Baru</label>
+                        <input class="form-control-purple w-full" id="new-information" name="new_information" />
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="text-right mb-2">Sisa panelis : <span id="panelis">10</span></div>
                 <div class="row">
-                    <div class="col-md-12 mb-4">
-                        <div class="card text-white card-hover" style="background-color: #2D70AE; width: 100%;">
+                    @for($i = 1; $i <= 5; $i++)
+                    <div class="col-md-{{ $i == 1 ? '12' : '6 col-12' }} mb-4">
+                        <div class="card text-white card-hover"
+                            style="background-color:
+                                {{ $i == 1 ? '#2D70AE' : ($i == 2 ? '#2E9DA6' : ($i == 3 ? '#EFA929' : ($i == 4 ? '#D5546D' : 'rgb(84, 157, 213)'))) }};
+                                width: 100%;">
                             <div class="card-header border-0 shadow-0">
-                                <div class ="flex justify-content-between align-items-center">
+                                <div class="flex justify-content-between align-items-center">
                                     <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (-2)</div>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-trash text-white"></i>
+                                        <div class="fw-medium text-md">
+                                            Jawaban dengan nilai {{ $i - 3 }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control custom-input text-white bg-transparent border-0" id="answer_1" placeholder="Type Here">
+                                <input type="text" class="form-control custom-input text-white bg-transparent border-0"
+                                    id="answer_{{ $i }}" placeholder="Type Here">
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <h6 class="text-sm">Masukan pilihan panelis</h6>
                                 <div class="flex gap-1">
                                     <button class="btn btn-primary btn-decrease">-</button>
-                                    <input type="text" class="form-control text-center mx-2 counter-input" id="score_1" value="0" style="width: 50px;" readonly>
+                                    <input type="text" class="form-control text-center mx-2 counter-input"
+                                        id="score_{{ $i }}" value="0" style="width: 50px;" readonly>
                                     <button class="btn btn-primary btn-increase">+</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mb-4">
-                        <div class="card text-white card-hover" style="background-color: #2E9DA6; width: 100%;">
-                            <div class="card-header border-0 shadow-0">
-                                <div class ="flex justify-content-between align-items-center">
-                                    <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (-1)</div>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-trash text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control custom-input text-white bg-transparent border-0" id="answer_2" placeholder="Type Here">
-                            </div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <h6 class="text-sm">Masukan pilihan panelis</h6>
-                                <div class="flex gap-1">
-                                    <button class="btn btn-primary btn-decrease">-</button>
-                                    <input type="text" class="form-control text-center mx-2 counter-input" id="score_2" value="0" style="width: 50px;" readonly>
-                                    <button class="btn btn-primary btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-4">
-                        <div class="card text-white card-hover" style="background-color: #EFA929; width: 100%;">
-                            <div class="card-header border-0 shadow-0">
-                                <div class ="flex justify-content-between align-items-center">
-                                    <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (0)</div>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-trash text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control custom-input text-white bg-transparent border-0" id="answer_3" placeholder="Type Here">
-                            </div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <h6 class="text-sm">Masukan pilihan panelis</h6>
-                                <div class="flex gap-1">
-                                    <button class="btn btn-primary btn-decrease">-</button>
-                                    <input type="text" class="form-control text-center mx-2 counter-input" value="0" id="score_3" style="width: 50px;" readonly>
-                                    <button class="btn btn-primary btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-4">
-                        <div class="card text-white card-hover" style="background-color: #D5546D; width: 100%;">
-                            <div class="card-header border-0 shadow-0">
-                                <div class ="flex justify-content-between align-items-center">
-                                    <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (1)</div>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-trash text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control custom-input text-white bg-transparent border-0" id="answer_4" placeholder="Type Here">
-                            </div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <h6 class="text-sm">Masukan pilihan panelis</h6>
-                                <div class="flex gap-1">
-                                    <button class="btn btn-primary btn-decrease">-</button>
-                                    <input type="text" class="form-control text-center mx-2 counter-input" id="score_4" value="0" style="width: 50px;" readonly>
-                                    <button class="btn btn-primary btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mb-4">
-                        <div class="card text-white card-hover" style="background-color:rgb(84, 157, 213); width: 100%;">
-                            <div class="card-header border-0 shadow-0">
-                                <div class ="flex justify-content-between align-items-center">
-                                    <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">Jawaban dengan nilai (2)</div>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-trash text-white"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control custom-input text-white bg-transparent border-0" id="answer_5" placeholder="Type Here">
-                            </div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <h6 class="text-sm">Masukan pilihan panelis</h6>
-                                <div class="flex gap-1">
-                                    <button class="btn btn-primary btn-decrease">-</button>
-                                    <input type="text" class="form-control text-center mx-2 counter-input" id="score_5" value="0" style="width: 50px;" readonly>
-                                    <button class="btn btn-primary btn-increase">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endfor
                 </div>
             </div>
         </div>
@@ -215,89 +131,161 @@
     <script>
         $(document).ready(function() {
             const questions = @json($questions);
-
             const question = new QuillEditor('#editor', {}, (content) => {
-                localStorage.setItem('editorContent', content);
+                // No localStorage
             });
+
+            // Restore form values from questions only (no localStorage)
+            const fields = [
+                'bank-soal',
+                'medical-field',
+                'column-title',
+                'initial-hypothesis',
+                'new-information',
+                'timer'
+            ];
+            fields.forEach(id => {
+                if (questions) {
+                    switch(id) {
+                        case 'bank-soal':
+                            $(`#${id}`).val(questions.quiz_question_bank_id);
+                            break;
+                        case 'medical-field':
+                            $(`#${id}`).val(questions.medical_field_id);
+                            break;
+                        case 'column-title':
+                            $(`#${id}`).val(questions.column_title_id);
+                            break;
+                        case 'initial-hypothesis':
+                            $(`#${id}`).val(questions.initial_hypothesis);
+                            break;
+                        case 'new-information':
+                            $(`#${id}`).val(questions.new_information);
+                            break;
+                        case 'timer':
+                            $(`#${id}`).val(questions.timer);
+                            break;
+                    }
+                }
+            });
+
+            // Restore Quill editor content from questions only
+            if (questions) {
+                question.setContent(questions.clinical_case);
+            }
+
+            // Restore answer fields from questions only
+            for (let i = 1; i <= 5; i++) {
+                if (questions && questions.answers && questions.answers[i-1]) {
+                    $(`#answer_${i}`).val(questions.answers[i-1].answer || '');
+                }
+            }
+            for (let i = 1; i <= 5; i++) {
+                if (questions && questions.answers && questions.answers[i-1]) {
+                    $(`#score_${i}`).val(questions.answers[i-1].panelist || 0);
+                }
+            }
+
+            $('#column-title').select2({
+                placeholder: 'Pilih judul kolom',
+                width: '100%',
+                theme: 'bootstrap-5'
+            });
+
+            // Ensure only plain text is pasted into the editor
+            document.querySelector('#editor').addEventListener('paste', function(e) {
+                e.preventDefault();
+                const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+                question.insertText(text);
+            });
+
             const quizQuestionBankApi = new HttpClient('{{ route("quiz-question-bank.index") }}');
-            const medicalFieldApi = new HttpClient('{{ route("admin.medical-fields.dropdown") }}');
+            const medicalFieldApi = new HttpClient('{{ route("medical-field.index") }}');
             const quizQuestionApi = new HttpClient('{{ route("quiz-question.index") }}');
             const medicalFieldData = {
                 _token: "{{ csrf_token() }}"
             };
+            let maxPanelis = 10;
 
             const firstLoadAPI = () => {
                 quizQuestionBankApi.request('GET', '')
                     .then(response => {
                         let allBanks = response.response.data;
                         let selectElement = document.getElementById('bank-soal');
-
+                        selectElement.innerHTML = '';
+                        let placeholderOption = document.createElement('option');
+                        placeholderOption.disabled = true;
+                        placeholderOption.selected = true;
+                        placeholderOption.textContent = 'Pilih bank soal';
+                        selectElement.appendChild(placeholderOption);
                         allBanks.forEach(bank => {
                             let option = document.createElement('option');
                             option.value = bank.id;
                             option.textContent = bank.name;
+                            option.classList.add('text-black');
                             selectElement.appendChild(option);
                         });
-                        $('#bank-soal').val(questions.quiz_question_bank_id).trigger('change');
+                        $('#bank-soal').select2({
+                            placeholder: 'Pilih bank soal',
+                            width: '100%',
+                            theme: 'bootstrap-5'
+                        });
+                        if (questions) {
+                            $('#bank-soal').val(questions.quiz_question_bank_id).trigger('change');
+                        }
                     })
                     .catch(error => {
                         console.error('Gagal mengambil data:', error);
                     });
 
-                medicalFieldApi.request('POST', '', medicalFieldData)
+                medicalFieldApi.request('GET', '', medicalFieldData)
                     .then(response => {
                         let allField = response.response.data;
                         let selectElement = document.getElementById('medical-field');
-
+                        selectElement.innerHTML = '';
+                        let placeholderOption = document.createElement('option');
+                        placeholderOption.disabled = true;
+                        placeholderOption.selected = true;
+                        placeholderOption.textContent = 'Pilih bidang medis';
+                        selectElement.appendChild(placeholderOption);
                         allField.forEach(field => {
                             let option = document.createElement('option');
                             option.value = field.id;
                             option.textContent = field.name;
+                            option.classList.add('text-black');
                             selectElement.appendChild(option);
-                            $('#medical-field').val(questions.medical_field_id).trigger('change');
                         });
+                        $('#medical-field').select2({
+                            placeholder: 'Pilih bidang medis',
+                            theme: 'bootstrap-5',
+                            width: '100%'
+                        });
+                        if (questions) {
+                            $('#medical-field').val(questions.medical_field_id).trigger('change');
+                        }
                     })
                     .catch(error => {
                         console.error('Gagal mengambil data:', error);
                     });
             };
-            let maxPanelis = 10;
-
-            $('#column-title').val(questions.column_title_id).trigger('change');
-            $('#initial-hypothesis').val(questions.initial_hypothesis);
-            $('#new-information').val(questions.new_information);
-            $('#timer').val(questions.timer);
-            question.setContent(questions.clinical_case);
-
-            $('input, select, textarea').on('input change', function() {
-                localStorage.setItem($(this).attr('id'), $(this).val());
-            });
-
-            for (let i = 1; i <= 5; i++) {
-                $(`#answer_${i}`).val(questions.answers[i-1].answer || '');
-            }
-
-            for (let i = 1; i <= 5; i++) {
-                $(`#score_${i}`).val(questions.answers[i-1].panelist || 0);
-            }
 
             function updateTotalPanelis(isSuccess = false) {
                 let total = 0;
-
-                $(".counter-input").each(function () {
-                    if (isSuccess) {
-                        $(this).val(10);
-                    }
-                    total += parseInt($(this).val());
-                });
-
+                if (isSuccess) {
+                    $(".counter-input").each(function () {
+                        $(this).val(0);
+                    });
+                    total = 0;
+                } else {
+                    $(".counter-input").each(function () {
+                        total += parseInt($(this).val());
+                    });
+                }
                 let remaining = maxPanelis - total;
                 $("#panelis").text(remaining);
-
                 $(".btn-increase").each(function () {
                     let input = $(this).siblings(".counter-input");
                     let currentValue = parseInt(input.val()) || 0;
-
                     if (remaining <= 0) {
                         $(this).prop("disabled", true);
                     } else {
@@ -314,7 +302,6 @@
                     parseInt($('#score_4').val()) || 0,
                     parseInt($('#score_5').val()) || 0
                 ];
-
                 let highestScore = Math.max(...scores);
                 return highestScore;
             }
@@ -322,7 +309,6 @@
             $(".btn-increase").click(function () {
                 let input = $(this).siblings(".counter-input");
                 let currentValue = parseInt(input.val());
-
                 if (currentValue < maxPanelis) {
                     input.val(currentValue + 1);
                     updateTotalPanelis();
@@ -332,7 +318,6 @@
             $(".btn-decrease").click(function () {
                 let input = $(this).siblings(".counter-input");
                 let currentValue = parseInt(input.val());
-
                 if (currentValue > 0) {
                     input.val(currentValue - 1);
                     updateTotalPanelis();
@@ -342,7 +327,6 @@
             $('.custom-input').on('focus', function () {
                 $(this).closest('.card').addClass('active');
             });
-
             $('.custom-input').on('blur', function () {
                 $(this).closest('.card').removeClass('active');
             });
@@ -355,25 +339,20 @@
                 const initial_hypothesis = $('#initial-hypothesis').val();
                 const new_information = $('#new-information').val();
                 const timer = $('#timer').val();
-
                 let max_score = getHighestScore();
-
                 let answers = [];
-
                 for (let i = 1; i <= 5; i++) {
                     let answer = $(`#answer_${i}`).val();
-                    let score = parseInt($(`#score_${i}`).val()) / max_score || 0;
-                    let panelist = parseInt($(`#score_${i}`).val()) || 0
-                    let value = i - 3;
-
+                    let value = $(`#value_${i}`).val() || (i - 3);
+                    let panelist = parseInt($(`#score_${i}`).val()) || 0;
+                    let score = (max_score > 0) ? (panelist / max_score) : 0;
                     answers.push({
                         'answer': answer,
                         'value': value,
                         'score': score,
-                        'panelist': panelist,
+                        'panelist': panelist
                     });
                 }
-
                 let data = {
                     '_token': '{{ csrf_token() }}',
                     'clinical_case': clinical_case,
@@ -385,34 +364,145 @@
                     'timer': timer,
                     'answer': answers
                 };
-
                 const pathSegments = window.location.pathname.split('/');
                 const id = pathSegments[2];
-
                 quizQuestionApi.put(id, data)
                     .then(response => {
                         toastr.success(response.response.message, { timeOut: 5000 });
-
-                        localStorage.removeItem('bank-soal');
-                        localStorage.removeItem('medical-field');
-                        localStorage.removeItem('column-title');
-                        localStorage.removeItem('initial-hypothesis');
-                        localStorage.removeItem('new-information');
-                        localStorage.removeItem('timer');
-                        localStorage.removeItem('editorContent');
-
+                        // Clear form fields
+                        $('#bank-soal, #medical-field, #column-title, #initial-hypothesis, #new-information, #timer').val('');
+                        for (let i = 1; i <= 5; i++) {
+                            $(`#answer_${i}`).val('');
+                            $(`#score_${i}`).val(0);
+                        }
+                        updateTotalPanelis(true);
+                        if (typeof question.setContent === 'function') {
+                            question.setContent('');
+                        }
                     })
                     .catch(error => {
-                        toastr.error(error.response.error, { timeOut: 5000 });
+                        toastr.error(error.response?.error || 'Terjadi kesalahan', { timeOut: 5000 });
                         console.error('Gagal mengambil data:', error);
                     });
+            });
 
+            function isFormComplete() {
+                const requiredFields = [
+                    '#bank-soal',
+                    '#medical-field',
+                    '#column-title',
+                    '#initial-hypothesis',
+                    '#new-information',
+                    '#timer'
+                ];
+                for (let selector of requiredFields) {
+                    if (!$(selector).val()) {
+                        return false;
+                    }
+                }
+                for (let i = 1; i <= 5; i++) {
+                    if (!$(`#answer_${i}`).val()) {
+                        return false;
+                    }
+                }
+                return true;
+            }
 
+            function autoSave() {
+                if (isFormComplete()) {
+                    $('#save-question').click();
+                }
+            }
+
+            setInterval(autoSave, 60000); // Auto-save every 1 minute
+
+            // Mapping keterangan panelis per judul kolom
+            const panelistDescriptions = {
+                'DIAGNOSIS': [
+                    { value: -2, text: 'Sangat tidak mungkin' },
+                    { value: -1, text: 'Tidak mungkin' },
+                    { value: 0, text: 'Tidak mendukung ataupun menyingkirkan' },
+                    { value: 1, text: 'Mungkin' },
+                    { value: 2, text: 'Sangat mungkin' }
+                ],
+                'MASALAH KEGUNAAN (PENAPISAN)': [
+                    { value: -2, text: 'Tidak berguna' },
+                    { value: -1, text: 'Sedikit berguna' },
+                    { value: 0, text: 'Di antara berguna dan tidak berguna' },
+                    { value: 1, text: 'Berguna' },
+                    { value: 2, text: 'Sangat berguna' }
+                ],
+                'MASALAH KEGUNAAN (TATALAKSANA)': [
+                    { value: -2, text: 'Tidak berguna' },
+                    { value: -1, text: 'Sedikit berguna' },
+                    { value: 0, text: 'Di antara berguna dan tidak berguna' },
+                    { value: 1, text: 'Berguna' },
+                    { value: 2, text: 'Sangat berguna' }
+                ],
+                'UNTUNG RUGI (PENAPISAN)': [
+                    { value: -2, text: 'Kontraindikasi kuat' },
+                    { value: -1, text: 'Kontraindikasi lemah' },
+                    { value: 0, text: 'Bukan kontraindikasi maupun indikasi' },
+                    { value: 1, text: 'Indikasi lemah' },
+                    { value: 2, text: 'Indikasi kuat' }
+                ],
+                'UNTUNG RUGI (TATALAKSANA)': [
+                    { value: -2, text: 'Kontraindikasi kuat' },
+                    { value: -1, text: 'Kontraindikasi lemah' },
+                    { value: 0, text: 'Bukan kontraindikasi maupun indikasi' },
+                    { value: 1, text: 'Indikasi lemah' },
+                    { value: 2, text: 'Indikasi kuat' }
+                ]
+            };
+
+            function getColumnTitleTextById(id) {
+                let text = '';
+                $('#column-title option').each(function() {
+                    if ($(this).val() == id) {
+                        text = $(this).text().trim().toUpperCase();
+                    }
+                });
+                return text;
+            }
+
+            function updatePanelistDescOptions(columnTitleId) {
+                const titleText = getColumnTitleTextById(columnTitleId);
+                const descArr = panelistDescriptions[titleText] || [];
+                const $desc = $('#panelist-desc');
+                $desc.empty();
+                $desc.append('<option value="">Pilih Keterangan Panelis</option>');
+                descArr.forEach(function(item) {
+                    $desc.append(`<option value="${item.value}">${item.text}</option>`);
+                });
+            }
+
+            function fillAnswersFromPanelistDesc(columnTitleId) {
+                const titleText = getColumnTitleTextById(columnTitleId);
+                const descArr = panelistDescriptions[titleText] || [];
+                for (let i = 1; i <= 5; i++) {
+                    $(`#answer_${i}`).val(descArr[i-1] ? descArr[i-1].text : '');
+                }
+            }
+
+            $('#column-title').on('change', function() {
+                const colId = $(this).val();
+                updatePanelistDescOptions(colId);
+                fillAnswersFromPanelistDesc(colId);
+            });
+
+            $('#panelist-desc').on('change', function() {
+                const colId = $('#column-title').val();
+                const titleText = getColumnTitleTextById(colId);
+                const descArr = panelistDescriptions[titleText] || [];
+                const selectedVal = parseInt($(this).val());
+                const idx = descArr.findIndex(item => item.value === selectedVal);
+                if (idx !== -1) {
+                    $(`#answer_${idx+1}`).val(descArr[idx].text);
+                }
             });
 
             updateTotalPanelis();
             firstLoadAPI();
-
         });
     </script>
 @endsection

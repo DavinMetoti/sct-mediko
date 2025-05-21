@@ -87,7 +87,13 @@ class QuizQuestionBankController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $quizBank = QuizQuestionBank::with(['questions.answers', 'questions.medicalField'])->findOrFail($id);
+        $quizBank = QuizQuestionBank::with([
+            'questions' => function ($query) {
+                $query->orderBy('id', 'desc');
+            },
+            'questions.answers',
+            'questions.medicalField'
+        ])->findOrFail($id);
 
         if ($request->ajax()) {
             return response()->json([
