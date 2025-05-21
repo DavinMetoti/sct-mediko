@@ -238,7 +238,7 @@
             });
 
             const quizQuestionBankApi = new HttpClient('{{ route("quiz-question-bank.index") }}');
-            const medicalFieldApi = new HttpClient('{{ route("admin.medical-field.index") }}');
+            const medicalFieldApi = new HttpClient('{{ route("medical-field.index") }}');
             const quizQuestionApi = new HttpClient('{{ route("quiz-question.index") }}');
             const medicalFieldData = {
                 _token: "{{ csrf_token() }}"
@@ -298,7 +298,7 @@
                     });
 
 
-                medicalFieldApi.request('POST', '', medicalFieldData)
+                medicalFieldApi.request('GET', '', medicalFieldData)
                     .then(response => {
                         let allField = response.response.data;
                         let selectElement = document.getElementById('medical-field');
