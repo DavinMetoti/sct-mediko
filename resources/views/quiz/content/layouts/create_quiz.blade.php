@@ -597,6 +597,9 @@
                             $('#medical-field').val(null).trigger('change');
                             $('#column-title').val(null).trigger('change');
 
+                            // Clear panelist-desc selection
+                            $('#panelist-desc').val('').trigger('change');
+
                             // Clear localStorage for all concerned fields after save
                             const fields = [
                                 'bank-soal',
