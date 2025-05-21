@@ -592,6 +592,11 @@
                                 question.setContent('');
                             }
 
+                            // Clear select2 selections
+                            $('#bank-soal').val(null).trigger('change');
+                            $('#medical-field').val(null).trigger('change');
+                            $('#column-title').val(null).trigger('change');
+
                             // Clear localStorage for all concerned fields after save
                             const fields = [
                                 'bank-soal',
@@ -627,7 +632,6 @@
                 }
             });
 
-
             function isFormComplete() {
                 const requiredFields = [
                     '#bank-soal',
@@ -653,17 +657,41 @@
                 return true;
             }
 
-            function autoSave() {
-                if (isFormComplete()) {
-                    $('#save-question').click();
-                }
+            // --- AUTO-SAVE LOGIC WITH INACTIVITY TIMER ---
+            let autoSaveTimeout = null;
+            const AUTO_SAVE_DELAY = 60000; // 1 minute
+
+            function resetAutoSaveTimer() {
+                if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
+                autoSaveTimeout = setTimeout(() => {
+                    if (isFormComplete()) {
+                        $('#save-question').click();
+                    }
+                }, AUTO_SAVE_DELAY);
             }
 
-            setInterval(autoSave, 60000); // Auto-save every 1 minute
+            // Reset timer on any user interaction with form fields
+            $('input, select, textarea').on('input change', function() {
+                resetAutoSaveTimer();
+            });
+
+            // Also reset timer on Quill editor changes
+            if (typeof question !== 'undefined' && question && typeof question.onChange === 'function') {
+                question.onChange(() => {
+                    resetAutoSaveTimer();
+                });
+            } else {
+                // fallback: listen to DOM changes in #editor
+                $('#editor').on('input', function() {
+                    resetAutoSaveTimer();
+                });
+            }
+
+            // Initial timer start
+            resetAutoSaveTimer();
 
             updateTotalPanelis();
             firstLoadAPI();
-
         });
     </script>
 @endsection
