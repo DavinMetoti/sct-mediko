@@ -65,7 +65,6 @@ class QuizQuestionController extends Controller
                 ->where('new_information', $validated['new_information'])
                 ->where('initial_hypothesis', $validated['initial_hypothesis'])
                 ->where('created_by', auth()->id())
-                ->latest('created_at')
                 ->first();
 
             $shouldUpdate = false;
