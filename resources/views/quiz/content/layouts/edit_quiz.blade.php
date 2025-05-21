@@ -379,6 +379,8 @@
                         if (typeof question.setContent === 'function') {
                             question.setContent('');
                         }
+                        // Kembali ke halaman sebelumnya setelah berhasil simpan
+                        window.history.back();
                     })
                     .catch(error => {
                         toastr.error(error.response?.error || 'Terjadi kesalahan', { timeOut: 5000 });
