@@ -58,16 +58,28 @@ class QuizQuestionController extends Controller
                 'uploaded_image_base64' => 'nullable|string',
             ]);
 
-            // Cek apakah pertanyaan kuis sudah ada (autosave)
+            // Ambil soal terakhir dengan kombinasi yang sama
             $quizQuestion = QuizQuestion::where('quiz_question_bank_id', $validated['quiz_question_bank_id'])
                 ->where('medical_field_id', $validated['medical_field_id'])
                 ->where('column_title_id', $validated['column_title_id'])
+                ->where('new_information', $validated['new_information'])
+                ->where('initial_hypothesis', $validated['initial_hypothesis'])
                 ->where('created_by', auth()->id())
-                ->latest('created_at') // Ambil soal terbaru berdasarkan waktu pembuatan
+                ->latest('created_at')
                 ->first();
 
+            $shouldUpdate = false;
             if ($quizQuestion) {
-                // Update pertanyaan kuis yang sudah ada
+                // Cek apakah semua field (selain jawaban) sama persis
+                $shouldUpdate =
+                    $quizQuestion->clinical_case === $validated['clinical_case'] &&
+                    $quizQuestion->initial_hypothesis === $validated['initial_hypothesis'] &&
+                    $quizQuestion->new_information === $validated['new_information'] &&
+                    $quizQuestion->new_information == $validated['new_information'] &&
+                    $quizQuestion->uploaded_image_base64 === ($validated['uploaded_image_base64'] ?? null);
+            }
+
+            if ($quizQuestion && $shouldUpdate) {
                 $quizQuestion->update([
                     'clinical_case' => $validated['clinical_case'],
                     'initial_hypothesis' => $validated['initial_hypothesis'],
@@ -114,7 +126,7 @@ class QuizQuestionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => $message,
-                'data' => $quizQuestion->load('answers') // Load jawaban yang baru disimpan
+                'data' => $quizQuestion->load('answers')
             ], 201);
 
         } catch (\Exception $e) {
