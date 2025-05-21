@@ -238,7 +238,7 @@
             });
 
             const quizQuestionBankApi = new HttpClient('{{ route("quiz-question-bank.index") }}');
-            const medicalFieldApi = new HttpClient('{{ route("admin.medical-fields.dropdown") }}');
+            const medicalFieldApi = new HttpClient('{{ route("admin.medical-fields.index") }}');
             const quizQuestionApi = new HttpClient('{{ route("quiz-question.index") }}');
             const medicalFieldData = {
                 _token: "{{ csrf_token() }}"

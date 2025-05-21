@@ -12,9 +12,25 @@ class MedicalFieldController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny', [User::class, 'medical-field.index']);
+
+        $medicalFields = MedicalField::all();
+
+        if ($request->ajax()) {
+            try {
+                return response()->json([
+                    'success' => true,
+                    'data' => $medicalFields,
+                ], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to fetch medical fields: ' . $e->getMessage(),
+                ], 500);
+            }
+        }
 
         return view('admin.medical_field');
     }
