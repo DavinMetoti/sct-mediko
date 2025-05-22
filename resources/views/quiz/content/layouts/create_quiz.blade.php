@@ -85,10 +85,10 @@
                             class="form-control-purple w-full"
                             id="upload-file"
                             name="uploaded_file"
-                            accept=".jpg, .jpeg" />
+                            accept=".jpg, .jpeg, .png" />
 
                         <small class="form-text">
-                            Hanya file dengan format <strong>.jpg</strong> atau <strong>.jpeg</strong> yang diizinkan.
+                            Hanya file dengan format <strong>.jpg</strong>, <strong>.jpeg</strong>, atau <strong>.png</strong> yang diizinkan.
                         </small>
 
                     </div>
@@ -523,8 +523,8 @@
                 const fileInput = document.getElementById('upload-file');
                 const file = fileInput.files[0];
 
-                if (file && !['image/jpeg', 'image/jpg'].includes(file.type)) {
-                    toastr.error('Hanya file .jpg atau .jpeg yang diizinkan', { timeOut: 5000 });
+                if (file && !['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+                    toastr.error('Hanya file .jpg, .jpeg, atau .png yang diizinkan', { timeOut: 5000 });
                     return;
                 }
 
