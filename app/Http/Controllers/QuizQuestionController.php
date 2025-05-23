@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ColumnTitle;
-use App\Models\QuestionBank;
 use App\Models\QuizAnswer;
 use App\Models\QuizQuestion;
+use App\Models\QuizQuestionBank;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -42,7 +42,7 @@ class QuizQuestionController extends Controller
         try {
             // Validasi request
             $validated = $request->validate([
-                'quiz_question_bank_id' => 'required|exists:quiz_question_banks,id',
+                'quiz_question_bank_id' => 'nullable',
                 'medical_field_id' => 'required|exists:medical_fields,id',
                 'column_title_id' => 'required|exists:column_titles,id',
                 'clinical_case' => 'required|string',
@@ -56,7 +56,19 @@ class QuizQuestionController extends Controller
                 'answer.*.score' => 'required|numeric|min:0|max:1',
                 'answer.*.panelist' => 'required|integer',
                 'uploaded_image_base64' => 'nullable|string',
+                'new_bank'=>'nullable|string'
             ]);
+
+            // Jika new_bank diisi, buat bank baru dan gunakan id-nya
+            if (!empty($validated['new_bank'])) {
+                $quizQuestionBank = new QuizQuestionBank();
+                $quizQuestionBank->name = $validated['new_bank'];
+                $quizQuestionBank->save();
+                $validated['quiz_question_bank_id'] = $quizQuestionBank->id;
+            } else {
+                // Jika tidak ada new_bank, pastikan quiz_question_bank_id ada (boleh null)
+                $validated['quiz_question_bank_id'] = $validated['quiz_question_bank_id'] ?? null;
+            }
 
             // Ambil soal terakhir dengan kombinasi yang sama
             $quizQuestion = QuizQuestion::where('quiz_question_bank_id', $validated['quiz_question_bank_id'])

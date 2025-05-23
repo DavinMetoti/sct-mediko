@@ -31,10 +31,20 @@
                 <div class="card-purple">
                     <div class="form-group">
                         <label for="bank-soal mb-2 fw-bold">Bank Soal</label>
-                        <select class="form-control-purple w-full" id="bank-soal" name="bank_soal">
-                            <option value="" disabled selected>Pilih Bank Soal</option>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control-purple w-full" id="bank-soal" name="bank_soal">
+                                    <option value="" disabled selected>Pilih Bank Soal</option>
 
-                        </select>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-success" id="btn-new-bank"><i class="fas fa-plus me-2"></i>New Bank</button>
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control-purple w-full d-none" id="new-bank" name="new_bank" placeholder="Tambahkan nama bank disini" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -573,7 +583,8 @@
                         'new_information': new_information,
                         'timer': timer,
                         'answer': answers,
-                        'uploaded_image_base64': base64Image
+                        'uploaded_image_base64': base64Image,
+                        'new_bank': $('#new-bank').val()
                     };
 
                     quizQuestionApi.request('POST', '', data)
@@ -581,7 +592,7 @@
                             toastr.success(response.response.message, { timeOut: 5000 });
 
                             // Clear form fields
-                            $('#bank-soal, #medical-field, #column-title, #initial-hypothesis, #new-information, #timer').val('');
+                            $('#bank-soal, #medical-field, #column-title, #initial-hypothesis, #new-information, #timer, #new-bank').val('');
                             $('#upload-file').val('');
                             for (let i = 1; i <= 5; i++) {
                                 $(`#answer_${i}`).val('');
@@ -695,6 +706,18 @@
 
             updateTotalPanelis();
             firstLoadAPI();
+
+            // --- SHOW/HIDE "Tambahkan nama bank disini" LOGIC ---
+            $('#btn-new-bank').on('click', function() {
+                $('#new-bank').removeClass('d-none').focus();
+                $('#bank-soal').val('').trigger('change');
+            });
+
+            $('#bank-soal').on('change', function() {
+                if ($(this).val()) {
+                    $('#new-bank').addClass('d-none').val('');
+                }
+            });
         });
     </script>
 @endsection
