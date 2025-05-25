@@ -219,7 +219,6 @@
 
         channel.bind('quiz-updated', function(data) {
             fetchSessionRank("{{ $attempt->classroom_id }}");
-            toastr.success("Data rangking berhasil diperbarui", "", { timeOut: 3000 });
         });
 
         document.querySelector(".quiz-container").addEventListener("change", function (event) {
