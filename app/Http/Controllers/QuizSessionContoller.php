@@ -369,6 +369,7 @@ class QuizSessionContoller extends Controller
 
         $attempts = $attemptsQuery
             ->orderByDesc('score')
+            ->orderBy('completed_at')
             ->get()
             ->map(function ($attempt) use ($questionCount) {
                 $attempt->percentage_score = $questionCount > 0

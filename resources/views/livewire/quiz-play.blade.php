@@ -134,6 +134,12 @@
 
 <script>
     const quizSessionId = @json($quizSessionId);
+    const socket = io('https://server.oscemediko.id/', {
+        query: {
+            channel: 'channel-set-mediko',
+            secureKey: 'D4BA583B5663BDCA754B8C5448977'
+        }
+    });
     document.addEventListener("DOMContentLoaded", function () {
         let sessionTimer = {{ $session->timer }};
         let questionTimer = {{ $currentQuestion->timer ?? 0 }};

@@ -22,6 +22,12 @@
 
     <script src="{{ secure_asset('assets/js/module.js') }}"></script>
     <script>
+        const socket = io('https://server.oscemediko.id/', {
+            query: {
+                channel: 'channel-set-mediko',
+                secureKey: 'D4BA583B5663BDCA754B8C5448977'
+            }
+        });
         const quizSessionId = @json($quizSessionId);
         const apiUrl = "{{ route('quiz-rank', ['id' => $quizSessionId]) }}";
         let allAttempts = [];

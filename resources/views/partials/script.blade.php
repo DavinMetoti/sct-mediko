@@ -24,12 +24,6 @@
 
 
     <script>
-            const socket = io('https://server.oscemediko.id/', {
-                query: {
-                    channel: 'channel-set-mediko',
-                    secureKey: 'D4BA583B5663BDCA754B8C5448977'
-                }
-            });
             // Pusher.logToConsole = true;
 
             // var pusher = new Pusher('d54d62cdcd51d9a71282', {
