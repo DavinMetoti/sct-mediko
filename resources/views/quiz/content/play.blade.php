@@ -241,8 +241,8 @@
             </div>
         </div>
     </div>
+    @include('partials.script')
     @livewireScripts
 @endsection
 
-@include('partials.script')
 
