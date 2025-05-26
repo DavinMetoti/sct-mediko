@@ -134,7 +134,6 @@
 
 <script>
     const quizSessionId = @json($quizSessionId);
-
     document.addEventListener("DOMContentLoaded", function () {
         let sessionTimer = {{ $session->timer }};
         let questionTimer = {{ $currentQuestion->timer ?? 0 }};
@@ -204,22 +203,24 @@
                 updateTimerDisplay();
                 startCountdown();
                 fetchSessionRank("{{ $attempt->classroom_id }}");
+                sendMessage();
             });
         }
 
-        fetchSessionRank("{{ $attempt->classroom_id }}");
+        function sendMessage() {
+            const message = {
+                user: 'Admin',
+                content: 'Hello from channel-set-mediko!'
+            };
+            socket.emit('send-message', message);
+        }
 
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('d54d62cdcd51d9a71282', {
-            cluster: 'ap1'
-        });
-
-        var channel = pusher.subscribe('quiz-channel');
-
-        channel.bind('quiz-updated', function(data) {
+        socket.on('receive-message', (data) => {
+            console.log('Received:', data);
             fetchSessionRank("{{ $attempt->classroom_id }}");
         });
+
+        fetchSessionRank("{{ $attempt->classroom_id }}");
 
         document.querySelector(".quiz-container").addEventListener("change", function (event) {
             if (event.target.classList.contains("answer-input")) {

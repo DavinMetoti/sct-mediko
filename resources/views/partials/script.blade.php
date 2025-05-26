@@ -24,16 +24,21 @@
 
 
     <script>
-
-            Pusher.logToConsole = true;
-
-            var pusher = new Pusher('d54d62cdcd51d9a71282', {
-                cluster: 'ap1'
+            const socket = io('https://server.oscemediko.id/', {
+                query: {
+                    channel: 'channel-set-mediko',
+                    secureKey: 'D4BA583B5663BDCA754B8C5448977'
+                }
             });
+            // Pusher.logToConsole = true;
 
-            var channel = pusher.subscribe('quiz-channel');
-                channel.bind('quiz-updated', function(data) {
-            });
+            // var pusher = new Pusher('d54d62cdcd51d9a71282', {
+            //     cluster: 'ap1'
+            // });
+
+            // var channel = pusher.subscribe('quiz-channel');
+            //     channel.bind('quiz-updated', function(data) {
+            // });
 
 
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))

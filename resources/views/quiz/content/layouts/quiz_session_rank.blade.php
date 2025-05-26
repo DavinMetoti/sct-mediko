@@ -75,6 +75,11 @@
             displaySessionRankGrouped(allAttempts);
         });
 
+        socket.on('receive-message', (data) => {
+            console.log('Received:', data);
+            fetchSessionRank();
+        });
+
         function displaySessionRankGrouped(attempts) {
             const container = document.getElementById('rank-group-container');
             container.innerHTML = '';
@@ -197,18 +202,5 @@
         }
 
         fetchSessionRank();
-
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('d54d62cdcd51d9a71282', {
-            cluster: 'ap1'
-        });
-
-        var channel = pusher.subscribe('quiz-channel');
-
-        channel.bind('quiz-updated', function(data) {
-            fetchSessionRank();
-            toastr.success("Data rangking berhasil diperbarui", "", { timeOut: 3000 });
-        });
     </script>
 @endsection
