@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
 Route::resource('/', WelcomeController::class);
+Route::telescope('/telescope');
 
 // Route for the auth page
 Route::resource('forgot-password', OtpController::class);
