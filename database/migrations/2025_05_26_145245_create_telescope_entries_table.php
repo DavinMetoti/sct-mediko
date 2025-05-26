@@ -23,8 +23,8 @@ return new class extends Migration
 
         $schema->create('telescope_entries', function (Blueprint $table) {
             $table->bigIncrements('sequence');
-            $table->char('uuid', 36)->unique();
-            $table->char('batch_id', 36);
+            $table->uuid('uuid');
+            $table->uuid('batch_id');
             $table->string('family_hash')->nullable();
             $table->boolean('should_display_on_index')->default(true);
             $table->string('type', 20);
