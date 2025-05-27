@@ -113,6 +113,7 @@ class QuizPlayController extends Controller
             'session.questions' => function ($query) {
                 $query->orderBy('id', 'asc');
             },
+            'session.questions.columnTitle',
             'session.questions.answers',
             'userAnswer'
         ])->findOrFail($id);

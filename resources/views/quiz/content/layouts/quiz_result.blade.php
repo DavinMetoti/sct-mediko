@@ -50,6 +50,17 @@
                         <div style="color: black !important;">
                             {!! preg_replace('/style="[^"]*"/i', '', $question->clinical_case) !!}
                         </div>
+                        <strong>{{$question->columnTitle->column_1}}</strong>
+                        <div style="color: black !important;">
+                            {!! preg_replace('/style="[^"]*"/i', '', $question->initial_hypothesis) !!}
+                        </div>
+                        <strong>{{$question->columnTitle->column_2}}</strong>
+                        <div style="color: black !important;">
+                            {!! preg_replace('/style="[^"]*"/i', '', $question->new_informartion) !!}
+                            @if ($question->uploaded_image_base64)
+                                <img src="{{ $question->uploaded_image_base64 }}" width="400rem" alt="Informasi Baru Gambar">
+                            @endif
+                        </div>
 
                         {{-- Rationale dan Skor Likert Table --}}
                         @php
