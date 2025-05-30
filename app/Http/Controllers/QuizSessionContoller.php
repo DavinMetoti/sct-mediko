@@ -361,7 +361,8 @@ class QuizSessionContoller extends Controller
 
         $attemptsQuery = \App\Models\QuizAttempt::with('classroom')
             ->where('session_id', $id)
-            ->whereNotNull('score');
+            ->whereNotNull('score')
+            ->whereNotNull('name');
 
         if ($classroomId) {
             $attemptsQuery->where('classroom_id', $classroomId);

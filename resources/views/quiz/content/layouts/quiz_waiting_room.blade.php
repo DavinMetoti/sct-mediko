@@ -46,6 +46,11 @@
         </div>
     </div>
 
+    <!-- Countdown Overlay -->
+    <div id="countdown-overlay" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;">
+        <span id="countdown-number" style="color:#fff;font-size:8rem;font-weight:bold;display:block;text-align:center;width:100vw;"></span>
+    </div>
+
     <script>
         let classrooms = [];
 
@@ -133,12 +138,33 @@
                     classroom_id: classroom_id
                 },
                 success: function(response) {
-                    window.location.href = "{{ route('quiz-play.show', ['quiz_play' => 'temp']) }}".replace('temp', token);
+                    showCountdownAndRedirect();
                 },
                 error: function() {
                     toastr.error("❌ Gagal memulai quiz. Pastikan semua data sudah benar.", "", { timeOut: 3000 });
                 }
             });
+        }
+
+        function showCountdownAndRedirect() {
+            let overlay = $("#countdown-overlay");
+            let number = $("#countdown-number");
+            overlay.css("display", "flex");
+            let count = 3;
+            number.text(count);
+            let token = $("#quiz-token").val();
+            let interval = setInterval(function() {
+                count--;
+                if (count > 0) {
+                    number.text(count);
+                } else {
+                    clearInterval(interval);
+                    number.text("1");
+                    setTimeout(function() {
+                        window.location.href = "{{ route('quiz-play.show', ['quiz_play' => 'temp']) }}".replace('temp', token);
+                    }, 700);
+                }
+            }, 900);
         }
 
         function confirmExit() {
