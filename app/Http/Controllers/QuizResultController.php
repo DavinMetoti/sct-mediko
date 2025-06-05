@@ -17,6 +17,7 @@ class QuizResultController extends Controller
 
         $quizResult = QuizAttempt::with(['session.questions'])
             ->where('user_id', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('quiz.content.layouts.result_list', [

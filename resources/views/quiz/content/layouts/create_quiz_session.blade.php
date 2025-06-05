@@ -2,75 +2,81 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="d-flex justify-content-between align-items-center w-100 rounded shadow-sm mb-4">
-            <h3 class="fw-bold m-0">Buat Sesi Quiz</h3>
+        <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+            <h4 class="fw-semibold" style="color: #5E5E5E;">Buat sesi kuis</h4>
         </div>
-        <div class="card-purple p-4">
-            <div class="form-group">
-                <label for="title" class="mb-2">Judul</label>
-                <input type="text" name="title" id="title" class="form-control-purple w-full" placeholder="Masukan judul">
-            </div>
-            <div class="form-group mt-4">
-                <label for="description" class="mb-2">Deskripsi</label>
-                <textarea name="description" id="description" class="form-control-purple w-full" placeholder="Masukan deskripsi"></textarea>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="start_time" class="mb-2">Mulai</label>
-                        <input type="text" name="start_time" id="start_time" class="form-control-purple w-full" placeholder="Pilih waktu mulai">
+        <div class="card shadow-sm border-0 p-3 rounded-4 mb-4">
+            <div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="title" class="mb-1 text-muted">Judul</label>
+                        <input type="text" name="title" id="title" class="form-control rounded-3" placeholder="Masukan judul">
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="end_time" class="mb-2">Berakhir</label>
-                        <input type="text" name="end_time" id="end_time" class="form-control-purple w-full" placeholder="Pilih waktu berakhir">
+                    <div class="col-12 mt-3">
+                        <label for="description" class="mb-1 text-muted">Deskripsi</label>
+                        <textarea name="description" id="description" class="form-control rounded-3" placeholder="Masukan deskripsi" style="height: 80px"></textarea>
                     </div>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="timer" class="mb-2">Waktu Persoal (Detik)</label>
-                        <input type="number" name="timer" id="timer" class="form-control-purple w-full" placeholder="Masukan durasi kuis">
+                    <div class="col-md-6 mt-3">
+                        <label for="start_time" class="mb-1 text-muted">Mulai</label>
+                        <input type="text" name="start_time" id="start_time" class="form-control rounded-3" placeholder="Pilih waktu mulai">
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="access_code" class="mb-2">Kode Akses</label>
-                        <div class="d-flex">
-                            <input type="text" name="access_code" id="access_code" class="form-control-purple w-full" readonly>
-                            <button type="button" id="refresh_code" class="btn btn-light ms-2"><i class="fas fa-refresh"></i></button>
+                    <div class="col-md-6 mt-3">
+                        <label for="end_time" class="mb-1 text-muted">Berakhir</label>
+                        <input type="text" name="end_time" id="end_time" class="form-control rounded-3" placeholder="Pilih waktu berakhir">
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <label for="timer" class="mb-1 text-muted">Waktu Persoal (Detik)</label>
+                        <input type="number" name="timer" id="timer" class="form-control rounded-3" placeholder="Masukan durasi kuis">
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <label for="access_code" class="mb-1 text-muted">Kode Akses</label>
+                        <div class="input-group">
+                            <input type="text" name="access_code" id="access_code" class="form-control rounded-start-3" readonly>
+                            <button type="button" id="refresh_code" class="btn btn-outline-secondary rounded-end-3" title="Generate kode baru">
+                                <i class="fas fa-refresh"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="apply_timer" name="apply_timer">
-                        <label class="form-check-label" for="apply_timer">Apakah Anda ingin menerapkan timer di semua soal?</label>
+                    <div class="col-12 d-flex flex-wrap gap-3 align-items-center mt-3">
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="apply_timer" name="apply_timer">
+                            <label class="form-check-label text-muted" for="apply_timer">Terapkan timer di semua soal</label>
+                        </div>
+                        <div class="form-check me-3">
+                            <input class="form-check-input" type="checkbox" id="is_public" name="is_public">
+                            <label class="form-check-label text-muted" for="is_public">Sesi terlihat oleh semua peserta</label>
+                        </div>
+                        <div class="ms-auto text-muted small">
+                            <strong>ID Sesi:</strong> <span id="session_id"></span>
+                        </div>
                     </div>
-                    <div class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" id="is_public" name="is_public">
-                        <label class="form-check-label" for="is_public">
-                            Apakah sesi ini akan terlihat oleh semua peserta?
-                        </label>
+                    <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                        <button class="btn btn-danger border" id="cancel_button"><i class="fas fa-times me-2"></i>Cancel</button>
+                        <button class="btn btn-success" id="save_button"><i class="fas fa-check me-2"></i>Simpan</button>
+                        <button class="btn btn-warning" hidden id="edit_button"><i class="fas fa-check me-2"></i>Simpan</button>
                     </div>
                 </div>
-                <div class="text-muted">
-                    <strong>ID Sesi:</strong> <span id="session_id"></span>
-                </div>
-            </div>
-            <div class="d-flex justify-content-end gap-2 mt-5">
-                <button class="btn btn-secondary" id="cancel_button"><i class="fas fa-times me-2"></i> Cencel</button>
-                <button class="btn btn-success" id="save_button"><i class="fas fa-check me-2"></i> Simpan</button>
-                <button class="btn btn-warning" hidden id="edit_button"><i class="fas fa-check me-2"></i> Simpan</button>
             </div>
         </div>
-        <div id="list-quiz-sessions" class="mt-4">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h4 class="fw-semibold" style="color: #5E5E5E;">Daftar Sesi Kuis</h4>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end align-items-center gap-3 flex-wrap">
+                <!-- Search Bar -->
+                <div class="input-group shadow-sm" style="max-width: 300px; border-radius: 8px; border: 1px solid #E7E7E7;">
+                    <span class="input-group-text bg-white border-0" style="border-radius: 8px 0 0 8px;">
+                        <i class="fas fa-search text-muted" style="opacity: 0.6;"></i>
+                    </span>
+                    <input type="text" id="searchQuizSession" class="form-control border-0"
+                        placeholder="Cari kuis ..." onkeyup="filterSessions()"
+                        style="border-radius: 0 8px 8px 0; font-size: 0.95rem;">
+                </div>
+            </div>
 
+        </div>
+        <div id="list-quiz-sessions" class="mt-3 row g-3">
+            <!-- List sesi quiz akan di-render di sini -->
         </div>
     </div>
 
@@ -167,8 +173,9 @@
 
     <script>
         const apiClient = new HttpClient('{{ route("quiz-session.index") }}');
-        let selectedSession ;
+        let selectedSession;
         let classrooms = [];
+        let allSessions = []; // Untuk pencarian
 
         document.addEventListener("DOMContentLoaded", function () {
             // Inisialisasi Datepicker
@@ -196,7 +203,8 @@
                 apiClient.request('GET', '')
                     .then(response => {
                         if (response.response && response.response.length > 0) {
-                            renderCard(response.response);
+                            allSessions = response.response; // simpan semua sesi
+                            renderCard(allSessions);
                         } else {
                             document.getElementById("list-quiz-sessions").innerHTML =
                                 "<p class='text-center text-muted'>Tidak ada sesi kuis.</p>";
@@ -280,65 +288,89 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                 let container = document.getElementById("list-quiz-sessions");
                 container.innerHTML = ""; // Kosongkan kontainer sebelum menambahkan data baru
 
+                if (data.length === 0) {
+                    container.innerHTML = "<p class='text-center text-muted'>Tidak ada sesi kuis yang ditemukan.</p>";
+                    return;
+                }
+
                 data.forEach(session => {
                     let card = document.createElement("div");
-                    card.classList.add("quiz-session", "card-purple", "d-flex", "flex-wrap", "align-items-center",
-                        "justify-content-between", "p-3", "rounded", "mb-3");
-
                     let baseUrl = "{{ url('/quiz-session') }}";
+                    let rankUrl = "{{ url('') }}";
 
+                    card.classList.add("col-12", "col-md-6");
                     card.innerHTML = `
-                        <div class="quiz-session card-purple d-flex flex-wrap flex-md-nowrap align-items-center justify-content-between p-3 rounded w-full">
-                            <div class="d-flex flex-column">
-                                <h5 class="fw-bold text-white mb-2">
-                                    <span class="mr-2">${session.title}</span>
-                                    <span class="ml-2 me-2 badge ${session.is_public == 1 ? 'bg-success' : 'bg-danger'}">
+                        <div class="quiz-session text-start d-flex justify-content-between p-3 w-full h-100 shadow-sm bg-white rounded-4 border" style="border-radius:16px">
+                            <div class="d-flex flex-column w-full">
+                                <div class="d-flex justify-content-between w-full mb-2">
+                                    <p class="mt-1 mb-0" style="color:#577DC5;font-size:0.7rem"><strong>CODE:</strong> ${session.access_code}<br><strong>ID:</strong> ${session.session_id}</p>
+                                    <div class="dropdown d-flex justify-content-end mb-2">
+                                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-three-dots text-dark"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="${rankUrl}/quiz-rank/${session.id}" class="dropdown-item">
+                                                    <i class="fas fa-chart-bar me-2"></i> Rank
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item copy-btn">
+                                                    <i class="bi bi-link-45deg me-2"></i> Copy
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <a href="${baseUrl}/${session.id}" class="dropdown-item">
+                                                    <i class="fas fa-file-alt me-2"></i> Quiz
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item text-warning edit-btn">
+                                                    <i class="bi bi-pencil me-2"></i> Edit
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item text-danger delete-btn">
+                                                    <i class="bi bi-trash me-2"></i> Delete
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item" onclick="openClassroomModal(${session.id})">
+                                                    <i class="fas fa-chalkboard me-2"></i> Class
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                    <h5 class="fw-bold text-dark mb-2">${session.title}</h5>
+                                    <span class="badge ${session.is_public == 1 ? 'bg-success' : 'bg-secondary'} align-self-center" style="font-size:0.85em;">
                                         ${session.is_public == 1 ? 'Public' : 'Private'}
                                     </span>
-                                </h5>
-                                <p class="text-light mb-2">${session.description}</p>
-                                <div class="d-flex flex-wrap gap-2 gap-md-3 text-white text-sm">
-                                    <span>
-                                        <i class="bi bi-calendar"></i>
-                                        ${session.start_time.split(" ")[0]} ${session.start_time.split(" ")[1].substring(0, 5)} -
-                                        ${session.end_time.split(" ")[0]} ${session.end_time.split(" ")[1].substring(0, 5)}
+                                </div>
+                                <p class="text-muted mb-2 text-sm">${session.description}</p>
+                                <div class="d-flex flex-wrap gap-2 gap-md-3 text-muted text-sm" style="font-size: 0.7rem;">
+                                    <span class="text-start w-100">
+                                        <i class="bi bi-calendar me-2"></i>
+                                        ${(() => {
+                                            const [date, time] = session.start_time.split(" ");
+                                            const [year, month, day] = date.split("-");
+                                            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year} ${time ? time.substring(0, 5) : 'N/A'}`;
+                                        })()}
+                                        -
+                                        ${(() => {
+                                            const [date, time] = session.end_time.split(" ");
+                                            const [year, month, day] = date.split("-");
+                                            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year} ${time ? time.substring(0, 5) : 'N/A'}`;
+                                        })()}
                                     </span>
-                                    <span><i class="bi bi-clock"></i> ${session.timer} per soal</span>
-                                    <span><i class="bi bi-people"></i> 0 peserta</span>
+                                    <span><i class="bi bi-clock me-2"></i> ${session.timer} per soal</span>
+                                    <span><i class="bi bi-people me-2"></i> ${session.attempts_count ?? 0} peserta</span>
                                 </div>
-                            </div>
-                            <div class="text-end mt-3 mt-md-0">
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-success mb-2 w-md-auto" id="class-btn" onclick="openClassroomModal(${session.id})">
-                                        <i class="fas fa-chalkboard me-2"></i> Class
-                                    </button>
-
-                                    <button class="btn btn-secondary mb-2 w-md-auto copy-btn">
-                                        <i class="bi bi-link-45deg me-2"></i> Copy
-                                    </button>
-
-                                    <!-- Quiz Button (diperbaiki URL-nya) -->
-                                    <a href="${baseUrl}/${session.id}" class="btn btn-primary mb-2 w-md-auto quiz-btn">
-                                        <i class="fas fa-file-alt me-2"></i> Quiz
-                                    </a>
-
-                                    <!-- Edit Button -->
-                                    <button class="btn btn-warning mb-2 w-md-auto edit-btn">
-                                        <i class="bi bi-pencil me-2"></i> Edit
-                                    </button>
-
-                                    <!-- Delete Button -->
-                                    <button class="btn btn-danger mb-2 w-md-auto delete-btn">
-                                        <i class="bi bi-trash me-2"></i> Delete
-                                    </button>
-                                </div>
-                                <p class="text-muted mt-1 mb-0"><strong>Code:</strong> ${session.access_code}</p>
-                                <p class="text-muted text-sm mb-0"><strong>ID:</strong> ${session.session_id}</p>
                             </div>
                         </div>
                     `;
 
-                    // Tambahkan event listener ke tombol-tombol
                     card.querySelector(".copy-btn").addEventListener("click", function () {
                         copySessionInfo(session);
                     });
@@ -464,6 +496,17 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
 
             fetchApi();
         });
+
+        // Fungsi pencarian quiz
+        function filterSessions() {
+            let searchText = document.getElementById("searchQuizSession").value.toLowerCase();
+            let filteredSessions = allSessions.filter(session =>
+                (session.title && session.title.toLowerCase().includes(searchText)) ||
+                (session.description && session.description.toLowerCase().includes(searchText)) ||
+                (session.access_code && session.access_code.toLowerCase().includes(searchText))
+            );
+            renderCard(filteredSessions);
+        }
 
         $(document).ready(function () {
             // Ambil data classroom

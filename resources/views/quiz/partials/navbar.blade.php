@@ -1,7 +1,25 @@
+<style>
+@media (max-width: 768px) {
+    .navbar-mediko-quiz .btn-blue.go-to-tryout-desktop {
+        display: none !important;
+    }
+    .navbar-mediko-quiz .dropdown-menu .go-to-tryout-mobile {
+        display: block !important;
+    }
+    .navbar-mediko-quiz .dropdown-menu {
+        min-width: 180px;
+    }
+}
+@media (min-width: 769px) {
+    .navbar-mediko-quiz .dropdown-menu .go-to-tryout-mobile {
+        display: none !important;
+    }
+}
+</style>
 <nav class="navbar navbar-mediko-quiz" id="navbar">
     <div class="d-flex justify-content-between align-items-center w-full">
         <div>
-            <button type="button" class="hamburger-button" id="hamburger-button">
+            <button type="button" class="hamburger-button" style="color: #256EF8;" id="hamburger-button">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -9,12 +27,12 @@
         <div class="flex gap-4 align-items-center">
             <div class="button-notifications position-relative">
                 <button type="button" class="btn btn-transparent position-relative p-0" id="notification-button">
-                    <i id="bell-icon" class="fas fa-bell text-white" style="font-size: 20px"></i>
+                    <i id="bell-icon" class="fas fa-bell" style="font-size: 20px;color: #256EF8;"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-badge" style="display: none;">
                         0
                         <span class="visually-hidden">unread messages</span>
                     </span>
-                    <span id="loading-spinner" class="spinner-border spinner-border-sm text-white" style="display: none;"></span>
+                    <span id="loading-spinner" class="spinner-border spinner-border-sm" style="display: none;color: #256EF8;"></span>
                 </button>
 
                 <div class="notification-card" id="notification-card" style="display: none;">
@@ -30,16 +48,19 @@
             </div>
             <!-- Profile Dropdown -->
             <div class="dropdown" id="dropdown-profile">
-                <button class="dropdown-toggle" id="dropdown-button">
+                <button class="dropdown-toggle" id="dropdown-button" style="border-color: #256EF8;color: #256EF8;">
                     {{ Auth::user()->name }}
                 </button>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="{{ route('profile.index', ['id' => auth()->id()]) }}" class="dropdown-item">Profile</a>
-                    <a href="#" id="logout-button" class="dropdown-item">Log Out</a>
+                    <a href="{{ route('dashboard.index') }}" class="dropdown-item go-to-tryout-mobile" style="color: #256EF8; display: none;">
+                        Go To Tryout
+                    </a>
+                    <a href="{{ route('profile.index', ['id' => auth()->id()]) }}" style="color: #256EF8;" class="dropdown-item">Profile</a>
+                    <a href="#" id="logout-button" class="dropdown-item" style="color: #256EF8;">Log Out</a>
                 </div>
             </div>
 
-            <a href="{{ route('dashboard.index') }}" class="btn btn-primary"><i class="fas fa-file-alt me-2"></i> Go To Tryout</a>
+            <a href="{{ route('dashboard.index') }}" class="btn btn-blue go-to-tryout-desktop"><i class="fas fa-file-alt me-2"></i> Go To Tryout</a>
         </div>
     </div>
 </nav>

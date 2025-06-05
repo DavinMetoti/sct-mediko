@@ -2,22 +2,34 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="mb-4">
-            <input type="text" id="searchQuestion" class="form-control" placeholder="Cari soal...">
+        <div class="row mt-2">
+            <div class="col-md-9">
+                <h4 class="fw-semibold mt-4" style="color: #5E5E5E;">Daftar kuis dalam bank</h4>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group mt-4" style="border: 1px solid #E7E7E7 !important; border-radius: 8px !important;">
+                    <span class="input-group-text bg-white border-0" style="border-radius: 8px 0 0 8px;">
+                        <i class="fas fa-search text-muted" style="opacity: 0.6;"></i>
+                    </span>
+                    <input type="text" id="searchQuestion" class="form-control border-0 input-placeholder"
+                        placeholder="Cari kuis ..."
+                        style="background: #FFFFFF; border-radius: 8px !important;">
+                </div>
+            </div>
         </div>
 
         @if ($quizQuestions->isEmpty())
             <p class="text-center">Tidak ada pertanyaan dalam kuis ini.</p>
         @else
-            <div id="quizQuestionsContainer">
+            <div id="quizQuestionsContainer" class="mt-4">
                 @foreach ($quizQuestions as $question)
-                    <div class="card-quiz mb-4 quiz-item">
+                    <div class="card p-4 rounded-4 mb-4 quiz-item">
                         <div class="row">
                             <div class="col-md-10">
                                 {!! $question->clinical_case !!}
                             </div>
                             <div class="col-md-2 text-md-end text-start mt-2 mt-md-0">
-                                <a href="{{ route('quiz-question.edit', $question->id) }}" class="btn btn-warning btn-sm me-2">
+                                <a href="{{ route('quiz-question.edit', $question->id) }}" class="btn btn-orange btn-sm me-2 rounded-2">
                                     <i class="fas fa-pencil me-2"></i>Edit
                                 </a>
                                 <button class="btn btn-danger btn-sm deleteQuiz" data-id="{{ $question->id }}">
@@ -27,17 +39,17 @@
                         </div>
 
                         @if ($question->answers->isNotEmpty())
-                            <ul class="list-group mt-2">
+                            <div class="row row-cols-2 row-cols-md-5 g-2 mt-2 text-center">
                                 @foreach ($question->answers as $answer)
-                                    <li class="list-group-item d-flex justify-content-between align-items-center
-                                        @if($answer->score == 1) list-group-item-success fw-bold @endif">
-                                        <span>{{ $answer->answer }}</span>
-                                        @if ($answer->score == 1)
-                                            <i class="fas fa-check-circle text-success ms-2"></i>
-                                        @endif
-                                    </li>
+                                    <div class="col">
+                                        <div class="list-group-item d-flex justify-content-center align-items-center rounded-4 w-100 h-100
+                                            @if($answer->score == 1) fw-bold @endif"
+                                            style="aspect-ratio:1/1; min-height:80px; border:1px solid #e3e3e3; background:{{ $answer->score == 1 ? '#E9F6EA' : '#f9f9f9' }};">
+                                            <span>{{ $answer->answer }}</span>
+                                        </div>
+                                    </div>
                                 @endforeach
-                            </ul>
+                            </div>
                         @else
                             <p class="text-muted">Belum ada jawaban untuk pertanyaan ini.</p>
                         @endif

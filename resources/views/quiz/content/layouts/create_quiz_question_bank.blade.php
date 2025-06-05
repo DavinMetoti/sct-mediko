@@ -2,21 +2,29 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="row align-items-center py-2">
-            <!-- Tombol Tambah (di atas saat mobile) -->
-            <div class="col-md-2 order-1 order-md-2">
-                <button class="btn btn-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#addBankModal">
-                    Tambah Bank
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="fw-semibold" style="color: #5E5E5E;">Daftar Bank Kuis</h4>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end align-items-center gap-3 flex-wrap">
+                <!-- Search Bar -->
+                <div class="input-group shadow-sm" style="max-width: 300px; border-radius: 8px; border: 1px solid #E7E7E7;">
+                    <span class="input-group-text bg-white border-0" style="border-radius: 8px 0 0 8px;">
+                        <i class="fas fa-search text-muted" style="opacity: 0.6;"></i>
+                    </span>
+                    <input type="text" id="searchBank" class="form-control border-0"
+                        placeholder="Cari bank ..." onkeyup="filterSessions()"
+                        style="border-radius: 0 8px 8px 0; font-size: 0.95rem;">
+                </div>
+
+                <!-- Add Button -->
+                <button data-bs-toggle="modal" data-bs-target="#addBankModal" class="btn btn-green d-flex align-items-center">
+                    <i class="fas fa-plus me-2"></i>Tambah
                 </button>
             </div>
 
-            <!-- Input Pencarian (di bawah saat mobile) -->
-            <div class="col-md-10 order-2 order-md-1 mt-md-0 mt-3">
-                <input type="text" class="form-control py-2" id="searchBank" placeholder="Cari...">
-            </div>
         </div>
-
-        <div id="diplayCardQuizQuestionBank" class="row mt-5">
+        <div id="diplayCardQuizQuestionBank" class="row mt-3">
 
         </div>
     </div>
@@ -104,27 +112,24 @@
                 filteredData.forEach(bank => {
                     htmlContent += `
                         <div class="col-md-4">
-                            <div class="card-quiz mb-3 shadow">
+                            <div class="mb-3" style="border-radius: 16px; background-color: white;padding: 20px;">
                                 <div class="d-flex justify-content-between">
-                                    <h5 class="card-title fw-bold text-sm text-md-lg">${bank.name}</h5>
-                                    <h6 class="card-title text-sm text-md-lg">${formatDate(bank.created_at)}</h6>
-                                </div>
-                                <div class="d-md-flex justify-content-between mt-md-3 mt-2">
-                                    <div class="text-sm">Jumlah Soal: ${bank.questions_count}</div>
-                                    <div class="d-flex gap-2 mt-3 mt-md-0">
-                                        <button class="btn btn-danger btn-sm deleteBank" data-id="${bank.id}">
-                                            <i class="fas me-2 fa-trash"></i> Hapus
-                                        </button>
-                                        <button class="btn btn-warning btn-sm editBank" data-id="${bank.id}" data-name="${bank.name}">
-                                            <i class="fas me-2 fa-pencil"></i> Edit
-                                        </button>
-                                        <a href="/quiz-question-bank/${bank.id}"
-                                        class="btn btn-success btn-sm showBank"
-                                        data-id="${bank.id}"
-                                        ${bank.questions_count == 0 ? 'disabled' : ''}>
-                                            <i class="fas me-2 fa-list"></i> Soal
-                                        </a>
+                                    <h5 class="card-title text-dark fw-bold text-sm text-md-lg mb-1">${bank.name}</h5>
                                     </div>
+                                <div class="d-md-flex gap-2 mb-3">
+                                    <div class="text-muted text-sm"><i class="bi bi-calendar-date me-2"></i>${formatDate(bank.created_at)}</div>
+                                    <div class="text-muted text-sm"><i class="bi bi-stopwatch-fill me-2"></i>${bank.questions_count} Soal</div>
+                                </div>
+                                <div class="d-flex gap-2 mt-3 mt-md-0 justify-content-end">
+                                    <a href="/quiz-question-bank/${bank.id}" style="border-radius:8px" class="btn btn-success btn-sm showBank" data-id="${bank.id}" ${bank.questions_count == 0 ? 'disabled' : ''}>
+                                        <i class="fas me-2 fa-list"></i> Soal
+                                    </a>
+                                    <button style="border-radius:8px" class="btn btn-warning btn-sm editBank" data-id="${bank.id}" data-name="${bank.name}">
+                                        <i class="fas me-2 fa-pencil"></i> Edit
+                                    </button>
+                                    <button style="border-radius:8px" class="btn btn-danger btn-sm deleteBank" data-id="${bank.id}">
+                                        <i class="fas me-2 fa-trash"></i> Hapus
+                                    </button>
                                 </div>
                             </div>
                         </div>

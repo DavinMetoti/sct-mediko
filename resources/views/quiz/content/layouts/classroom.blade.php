@@ -2,27 +2,33 @@
 
 @section('quiz-content')
 <div class="quiz-container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold mb-0">Classroom</h3>
-        <button class="btn btn-primary" onclick="openCreateModal()">
-            <i class="fas fa-plus me-2"></i>Tambah Classroom
-        </button>
+    <div class="row">
+        <div class="col-md-6">
+            <h4 class="fw-semibold" style="color: #5E5E5E;">Classroom</h4>
+        </div>
+        <div class="col-md-6 d-flex justify-content-end align-items-center gap-3 flex-wrap">
+            <button id="save-question" onclick="openCreateModal()" class="btn btn-green d-flex align-items-center">
+                <i class="fas fa-plus me-2"></i>Tambah
+            </button>
+        </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped" id="classroom-table" style="width:100%">
-            <thead class="bg-white text-white">
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Mulai</th>
-                    <th>Selesai</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card bg-light mt-3 p-3 rounded-4">
+        <div class="table-responsive">
+            <table class="table table-striped" id="classroom-table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Mulai</th>
+                        <th>Selesai</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -169,13 +175,26 @@ let sessions = [];
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'name', name: 'name' },
-                { data: 'start_time', name: 'start_time' },
-                { data: 'end_time', name: 'end_time' },
+                {
+                    data: 'start_time', name: 'start_time',
+                    render: function(data, type, row) {
+                        if (!data) return '';
+                        // Format: 25 Maret 2025 12:00
+                        return moment(data).locale('id').format('D MMMM YYYY HH:mm');
+                    }
+                },
+                {
+                    data: 'end_time', name: 'end_time',
+                    render: function(data, type, row) {
+                        if (!data) return '';
+                        return moment(data).locale('id').format('D MMMM YYYY HH:mm');
+                    }
+                },
                 {
                     data: 'is_active',
                     name: 'is_active',
                 },
-                { data: 'action', name: 'action', orderable: false, searchable: false, width: '10%' },
+                { data: 'action', name: 'action', orderable: false, searchable: false, width: '15%' },
             ],
             language: {
                 emptyTable: "Tidak ada data kelas tersedia"

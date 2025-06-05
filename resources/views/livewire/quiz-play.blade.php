@@ -20,26 +20,26 @@
     </div>
 
     <div class="quiz-header p-3 d-flex align-items-center justify-content-between">
-        <div class="card-quiz p-2 rounded-sm">
-            <button class="h-100 px-2" onclick="confirmExit()">
+            <button class="btn" style="background-color: #699AF5;color: #fff;font-size: 1rem;font-weight:bold" onclick="confirmExit()">
                 <i class="fas fa-times"></i>
             </button>
-        </div>
         <span class="quiz-title font-weight-bold">
             @if($attempt)
-                Quiz: {{ $session->title }}
+                {{ $session->title }} |
+                <span style="border-radius:24px;background-color: #6695EB;color: #fff;font-size: 0.8rem;font-weight:bold;padding: 4px 10px">
+                    {{ $currentQuestion ? (array_search($currentQuestion->id, $shownQuestions ?? []) + 1) : ($totalQuestions ?? 0) }}/{{ $totalQuestions ?? 0 }}
+                </span>
             @else
                 <span class="text-muted">Creating a game...</span>
             @endif
         </span>
 
         <div class="header-right d-md-flex d-none gap-2">
-            <div class="card-quiz p-2 rounded-sm">
-                <button><span id="quiz-timer" class="mr-2"></span><i class="fas fa-clock"></i></button>
-            </div>
-            <div class="card-quiz p-2 text-center rounded-sm">
-                <button class="h-100 px-2" onclick="toggleFullscreen()"><i class="fas fa-expand"></i></button>
-            </div>
+            <button class="btn" style="background-color: #699AF5;color: #fff;font-size: 1rem;font-weight:bold">
+                <i class="bi bi-stopwatch-fill me-2"></i>
+                <span id="quiz-timer"></span>
+            </button>
+            <button class="btn" style="background-color: #699AF5;color: #fff;font-size: 1rem;font-weight:bold" onclick="toggleFullscreen()"><i class="fas fa-expand"></i></button>
         </div>
     </div>
 
@@ -55,42 +55,37 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-9" id="quiz-question" data-id="{{ $currentQuestion->id }}" wire:key="quiz-question">
-                    <div class="card-purple p-4 rounded shadow-sm">
+                    <div class="p-4 rounded shadow-sm" style="background-color: #0000001A;">
                         @if ($currentQuestion)
-                            <div class="text-center" style="color: white !important;">{!! $currentQuestion->clinical_case !!}</div>
-                        @else
-                            <p class="text-muted">All questions have been displayed.</p>
-                        @endif
-                    </div>
-                    <div class="row mt-3 align-items-stretch">
-                        @foreach (['initial_hypothesis', 'new_information', 'answers'] as $key => $type)
-                            <div class="col-md-4 mt-md-0 mt-3">
-                                <p class="text-sm" style="height: 2rem;">
+                            <div class="text-start" style="color: white !important;">{!! $currentQuestion->clinical_case !!}</div>
+                            @foreach (['initial_hypothesis', 'new_information', 'answers'] as $key => $type)
+                                <p class="text-sm mt-3 fw-bold">
                                     {{ $currentQuestion->columnTitle->{'column_' . ($key + 1)} }}
                                 </p>
-                                <div class="card-purple p-3 d-flex align-items-center justify-content-center flex-column">
+                                <div class="p-2 d-flex align-items-center justify-content-center flex-column" style="background-color: #23488E;border-radius: 8px; color: white;">
                                     @if ($type === 'answers')
-                                        <div class="row">
+                                        <div class="d-flex justify-content-center align-items-stretch w-100" style="gap: 12px;">
                                             @foreach ($currentQuestion->answers as $index => $answer)
-                                                <div class="col-md-12 mb-3">
-                                                    <label class="w-100">
-                                                        <div class="card text-white card-hover"
-                                                             style="background-color: {{ ['#2D70AE', '#2E9DA6', '#EFA929', '#D5546D', 'rgb(84, 157, 213)'][$index] }};">
-                                                            <div class="card-body d-flex align-items-center gap-2">
-                                                                <input type="radio" name="answer" data-id="{{ $answer->id }}" value="{{ $answer->score }}" class="answer-input d-none">
-                                                                <span>{{ $answer->answer }}</span>
-                                                            </div>
+                                                <label class="d-flex flex-column align-items-center justify-content-center m-0 p-0"
+                                                       style="flex: 1 1 0; max-width: 20%; aspect-ratio: 1 / 1; min-width: 0;">
+                                                    <div class="card text-white card-hover text-center w-100 h-100"
+                                                        style="background-color: {{ ['#2D70AE', '#2E9DA6', '#EFA929', '#D5546D', 'rgb(84, 157, 213)'][$index] }};
+                                                               border-radius: 12px; cursor:pointer; display: flex; align-items: center; justify-content: center; height: 100%;">
+                                                        <div class="card-body d-flex flex-column align-items-center justify-content-center gap-2 p-3 w-100 h-100"
+                                                             style="height: 100%; width: 100%;">
+                                                            <input type="radio" name="answer" data-id="{{ $answer->id }}" value="{{ $answer->score }}" class="answer-input d-none">
+                                                            <span style="font-size: 1rem; word-break: break-word;">{{ $answer->answer }}</span>
                                                         </div>
-                                                    </label>
-                                                </div>
+                                                    </div>
+                                                </label>
                                             @endforeach
                                         </div>
                                     @else
-                                        <div class="w-100 text-center">
+                                        <div class="w-100">
                                             {{ $currentQuestion->$type }}
                                         </div>
                                         @if ($type === 'new_information' && !empty($currentQuestion->uploaded_image_base64))
-                                            <div class="mt-2 text-center w-100">
+                                            <div class="mt-2 w-100">
                                                 <img
                                                     src="{{ $currentQuestion->uploaded_image_base64 }}"
                                                     alt="Informasi Baru Gambar"
@@ -101,12 +96,14 @@
                                         @endif
                                     @endif
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        @else
+                            <p class="text-muted">All questions have been displayed.</p>
+                        @endif
                     </div>
                 </div>
-                <div class="col-md-3 mt-md-0 mt-5 mb-3">
-                    <h4 class="fw-bold"><i class="fa-solid fa-ranking-star me-2 text-warning"></i> Live Rankings</h4>
+                <div class="col-md-3 mt-md-0 mt-5 mb-3 p-4 rounded shadow-sm" style="background-color: #0000001A;">
+                    <h6 class="fw-bold text-center"><i class="fa-solid fa-ranking-star me-2 text-warning"></i> Live Leaderboard</h6>
                     <div class="quiz-container-rank"></div>
                 </div>
             </div>
@@ -344,52 +341,70 @@
 
     function displaySessionRank(attempts) {
         const container = document.querySelector('.quiz-container-rank');
-        const prevRanks = {};
+        container.innerHTML = '';
 
-        container.querySelectorAll('.rank-item').forEach((item, i) => {
-            const name = item.querySelector('h5')?.innerText;
-            if (name) {
-                prevRanks[name] = i + 1;
-            }
-        });
+        const currentAttemptId = @json($attempt->id);
+
+        const rankStyles = [
+            { bg: "#AB972F", shadow: "inset 8px 0 0  #FFD700" }, // Gold
+            { bg: "#8B8B8B", shadow: "inset 8px 0 0  #C0C0C0" }, // Silver
+            { bg: "#9A6632", shadow: "inset 8px 0 0  #CD7F32" }, // Bronze
+        ];
 
         if (!attempts || attempts.length === 0) {
             container.innerHTML = `<p class="text-center">No rankings available.</p>`;
             return;
         }
 
-        container.innerHTML = '';
-        // Ambil id attempt user saat ini
-        const currentAttemptId = @json($attempt->id);
-
         attempts.forEach((rank, index) => {
-            const rankElement = document.createElement('div');
-            rankElement.classList.add('rank-item', 'p-2', 'rounded', 'd-flex', 'align-items-center');
+            let fontWeight = "normal";
+            let fontColor = "#fff";
+            let border = "none";
+            let borderRadius = "8px";
+            let bgColor = "#24437E"; // default blue
+            let boxShadow = "";
 
-            if (prevRanks[rank.name] && prevRanks[rank.name] > index + 1) {
-                rankElement.classList.add('rank-up');
+            // Top 3
+            if (index < 3) {
+                bgColor = rankStyles[index].bg;
+                boxShadow = rankStyles[index].shadow;
+                fontWeight = "bold";
             }
 
-            // Gunakan id untuk membedakan user sendiri
-            let cardBg = ["#FFD700", "#C0C0C0", "#CD7F32", "#888"][index] || "#888";
+            // Highlight user's own attempt
             if (rank.id == currentAttemptId) {
-                cardBg = "#2D70AE";
+                border = "none";
+                boxShadow += "inset 8px 0 0 ";
             }
 
-            rankElement.innerHTML = `
-                <div class="rank-card w-100 p-2 d-flex justify-content-between align-items-center" style="background-color: ${cardBg};">
-                    <div class="d-flex gap-2 align-items-center">
-                        <h3 class="m-0">#${index + 1}</h3>
-                        <div>
-                            <h5 class="m-0">${rank.name}</h5>
-                            <p class="m-0">Score: ${rank.percentage_score}</p>
-                        </div>
-                    </div>
+            const style = `
+                background: ${bgColor};
+                color: ${fontColor};
+                border-radius: ${borderRadius};
+                margin-bottom: 10px;
+                box-shadow: ${boxShadow};
+                border: ${border};
+                transition: box-shadow 0.2s;
+                padding: 0;
+                font-size: 1rem;
+            `;
+
+            const html = `
+                <div class="w-100 d-flex align-items-center" style="min-height: 40px; padding: 0 24px;">
+                    <span style="font-size: 1.1rem; font-weight: bold; margin-right: 16px;">${index + 1}.</span>
+                    <h5 style="font-size: 0.9rem; font-weight: ${fontWeight}; flex: 1; margin: 0;">${rank.name}</h5>
                 </div>
             `;
+
+            const rankElement = document.createElement('div');
+            rankElement.className = 'rank-item';
+            rankElement.style = style;
+            rankElement.innerHTML = html;
+
             container.appendChild(rankElement);
         });
     }
+
 
     function showZoomImageModal(src) {
         var modalImg = document.getElementById('zoomImageModalImg');

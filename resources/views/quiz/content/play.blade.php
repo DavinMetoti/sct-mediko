@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 <style>
+    .min-h-screen {
+        background: radial-gradient(circle, #5087EE 5%, #2266E5 100%) !important;
+    }
     .ql-toolbar .ql-picker-label,
     .ql-toolbar .ql-stroke,
     .ql-toolbar .ql-fill {
@@ -156,17 +159,16 @@
     }
 
     .quiz-container-rank {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 10px;
-            background-color: #2E0052;
+            max-width: 100%;
+            margin: 10px auto;
+            padding: 2px;
             border-radius: 10px;
             color: white;
-            max-height: 500px;
+            max-height: 510px;
             overflow-y: auto;
         }
         .rank-item {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             border-radius: 8px;
             padding: 15px;
             display: flex;

@@ -2,125 +2,113 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="d-flex justify-content-between align-items-center w-100 rounded shadow-sm mb-4">
-            <h3 class="fw-bold m-0">Edit Soal</h3>
-            <div class="row g-3 align-items-center">
-                <div class="col-md-7">
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                        <input type="text" class="form-control w-full" id="timer" name="timer" placeholder="Timer (detik)">
-                    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="fw-semibold" style="color: #5E5E5E;">Edit Soal Kuis</h4>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end align-items-center gap-3 flex-wrap">
+                <div class="input-group shadow-sm" style="max-width: 300px; border-radius: 8px; border: 1px solid #E7E7E7;">
+                    <span class="input-group-text bg-white border-0" style="border-radius: 8px 0 0 8px;">
+                        <i class="bi bi-stopwatch-fill text-muted" style="opacity: 0.6;"></i>
+                    </span>
+                    <input type="text" class="form-control border-0" id="timer" name="timer" placeholder="Timer (detik)" style="border-radius: 0 8px 8px 0; font-size: 0.95rem;">
                 </div>
-                <div class="col-md-5 text-md-end">
-                    <button class="btn btn-success px-4 py-2" id="save-question"><i class="fas fa-save me-2"></i>Simpan</button>
-                </div>
+                <button class="btn btn-green d-flex align-items-center" id="save-question">
+                    <i class="fas fa-save me-2"></i>Simpan
+                </button>
             </div>
         </div>
-
-        <div class="row card-purple">
-            <div class="col-md-12 mb-3 pb-3 pb-md-0">
-                <div class="card-purple">
-                    <div class="form-group">
-                        <label for="editor" class="form-label fw-bold">Pertanyaan</label>
+        <div class="card shadow-sm border-0 p-3 rounded-4 mb-4 mt-3">
+            <div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="editor" class="mb-1 text-muted">Pertanyaan</label>
                         <div id="editor"></div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-12 mt-5 pt-5"></div>
-            <div class="col-md-12 mb-4 pt-5 pt-md-0 mt-5">
-                <div class="card-purple">
-                    <div class="form-group">
-                        <label for="bank-soal mb-2 fw-bold">Bank Soal</label>
-                        <select class="form-control-purple w-full" id="bank-soal" name="bank_soal">
-                            <option value="" disabled selected>Pilih Bank Soal</option>
-                        </select>
+                    <div class="col-12 mt-5"></div>
+                    <div class="col-12 mt-5">
+                        <label for="bank-soal" class="mb-1 text-muted">Bank Soal</label>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <select class="form-control rounded-3" id="bank-soal" name="bank_soal">
+                                    <option value="" disabled selected>Pilih Bank Soal</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-success w-100" id="btn-new-bank"><i class="fas fa-plus me-2"></i>New Bank</button>
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control rounded-3 d-none" id="new-bank" name="new_bank" placeholder="Tambahkan nama bank disini" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card-purple">
-                    <div class="form-group">
-                        <label for="bank-soal mb-2 fw-bold">Bidang</label>
-                        <select class="form-control-purple w-full" id="medical-field" name="medical_field">
+                    <div class="col-md-6 mt-3">
+                        <label for="medical-field" class="mb-1 text-muted">Bidang</label>
+                        <select class="form-control rounded-3" id="medical-field" name="medical_field">
                             <option value="" disabled selected>Pilih Bidang</option>
                         </select>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card-purple">
-                    <div class="form-group">
-                        <label for="bank-soal mb-2 fw-bold">Judul Kolom</label>
-                        <select name="column-title" id="column-title" class="form-control-purple w-full">
+                    <div class="col-md-6 mt-3">
+                        <label for="column-title" class="mb-1 text-muted">Judul Kolom</label>
+                        <select name="column-title" id="column-title" class="form-control rounded-3">
                             <option value="">Pilih Judul Kolom</option>
                             @foreach($columnTitle as $column)
                                 <option value="{{ $column->id }}" class="text-black">{{ $column->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                </div>
-            </div>
-            <!-- Tambahkan select Keterangan Panelis -->
-            <div class="col-md-6 mb-4">
-                <div class="card-purple">
-                    <div class="form-group">
-                        <label for="panelist-desc" class="fw-bold">Keterangan Panelis</label>
-                        <select id="panelist-desc" class="form-control-purple w-full">
+                    <div class="col-md-6 mt-3">
+                        <label for="initial-hypothesis" class="mb-1 text-muted">Hipotesis Awal</label>
+                        <input class="form-control rounded-3" id="initial-hypothesis" name="initial_hypothesis" />
+
+                        <label for="panelist-desc" class="fw-bold mt-4 text-muted">Keterangan Panelis</label>
+                        <select id="panelist-desc" class="form-control rounded-3">
                             <option value="">Pilih Keterangan Panelis</option>
                         </select>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card-purple">
-                    <div class="form-group">
-                        <label for="bank-soal mb-2 fw-bold">Hipotesis Awal</label>
-                        <input class="form-control-purple w-full" id="initial-hypothesis" name="initial_hypothesis" />
+                    <div class="col-md-6 mt-3">
+                        <label for="new-information" class="mb-1 text-muted">Informasi Baru</label>
+                        <input class="form-control rounded-3" id="new-information" name="new_information" />
+
+                        <label for="upload-file" class="mt-3 mb-1 text-muted">Unggah File</label>
+                        <input type="file"
+                            class="form-control rounded-3"
+                            id="upload-file"
+                            name="uploaded_file"
+                            accept=".jpg, .jpeg, .png" />
+
+                        <small class="form-text text-muted" style="font-size: 0.7rem;">
+                            Hanya file dengan format <strong>.jpg</strong>, <strong>.jpeg</strong>, atau <strong>.png</strong> yang diizinkan.
+                        </small>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card-purple">
-                    <div class="form-group">
-                        <label for="new-information" class="mb-2 fw-bold">Informasi Baru</label>
-                        <input class="form-control-purple w-full" id="new-information" name="new_information" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="text-right mb-2">Sisa panelis : <span id="panelis">10</span></div>
-                <div class="row">
-                    @for($i = 1; $i <= 5; $i++)
-                    <div class="col-md-{{ $i == 1 ? '12' : '6 col-12' }} mb-4">
-                        <div class="card text-white card-hover"
-                            style="background-color:
-                                {{ $i == 1 ? '#2D70AE' : ($i == 2 ? '#2E9DA6' : ($i == 3 ? '#EFA929' : ($i == 4 ? '#D5546D' : 'rgb(84, 157, 213)'))) }};
-                                width: 100%;">
-                            <div class="card-header border-0 shadow-0">
-                                <div class="flex justify-content-between align-items-center">
-                                    <div class="flex align-items-center">
-                                        <div class="fw-medium text-md">
-                                            Jawaban dengan nilai {{ $i - 3 }}
+                    <div class="col-12 mt-3">
+                        <div class="text-end mb-2">Sisa panelis : <span id="panelis">10</span></div>
+                        <div class="row">
+                            @for($i = 1; $i <= 5; $i++)
+                            <div class="col-md-6 col-12 mb-4">
+                                <div class="card text-white card-hover" style="background-color: {{ ['#2D70AE','#2E9DA6','#EFA929','#D5546D','rgb(84, 157, 213)'][$i-1] }}; width: 100%;">
+                                    <div class="card-header border-0 shadow-0">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="fw-medium text-md">Jawaban dengan nilai {{ -3 + $i }}</div>
+                                            <input type="number" class="form-control d-none" id="value_{{ $i }}" value="{{ -3 + $i }}" placeholder="Type Here">
+                                        </div>
+                                    </div>
+                                    <div class="card-body d-flex align-items-center justify-content-between">
+                                        <input type="text" class="form-control custom-input text-white bg-transparent border-0" id="answer_{{ $i }}" placeholder="Type Here">
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <h6 class="text-sm">Masukan pilihan panelis</h6>
+                                        <div class="d-flex gap-1">
+                                            <button class="btn btn-primary btn-decrease">-</button>
+                                            <input type="text" class="form-control text-center mx-2 counter-input" id="score_{{ $i }}" value="0" style="width: 50px;" readonly>
+                                            <button class="btn btn-primary btn-increase">+</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <input type="text" class="form-control custom-input text-white bg-transparent border-0"
-                                    id="answer_{{ $i }}" placeholder="Type Here">
-                            </div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <h6 class="text-sm">Masukan pilihan panelis</h6>
-                                <div class="flex gap-1">
-                                    <button class="btn btn-primary btn-decrease">-</button>
-                                    <input type="text" class="form-control text-center mx-2 counter-input"
-                                        id="score_{{ $i }}" value="0" style="width: 50px;" readonly>
-                                    <button class="btn btn-primary btn-increase">+</button>
-                                </div>
-                            </div>
+                            @endfor
                         </div>
                     </div>
-                    @endfor
                 </div>
             </div>
         </div>

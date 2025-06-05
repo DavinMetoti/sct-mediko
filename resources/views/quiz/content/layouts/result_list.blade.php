@@ -1,49 +1,64 @@
-@php
-    use Illuminate\Support\Str;
-    $softColors = ['#E57373', '#F06292', '#BA68C8', '#64B5F6', '#4DB6AC', '#81C784', '#FFD54F', '#FF8A65'];
-@endphp
-
 @extends('quiz.content.index')
 
 @section('quiz-content')
-    <h3 class="fw-bold">Daftar Pembahasan</h3>
+    <div class="row">
+        <div class="col-md-9">
+            <h4 class="fw-semibold" style="color: #5E5E5E;">Pembahasan</h4>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group" style="border: 1px solid #E7E7E7 !important; border-radius: 8px !important;">
+                <span class="input-group-text bg-white border-0" style="border-radius: 8px 0 0 8px;">
+                    <i class="fas fa-search text-muted" style="opacity: 0.6;"></i>
+                </span>
+                <input type="text" id="searchQuiz" class="form-control border-0 input-placeholder"
+                    placeholder="Cari kuis ..."
+                    style="background: #FFFFFF; border-radius: 8px !important;">
+            </div>
+        </div>
+    </div>
     <div class="row mt-4" id="list-question">
-        @foreach ($quizResult as $result)
+        @forelse ($quizResult as $result)
             @php
-                $randomColor = $softColors[array_rand($softColors)];
+                $nilai = $result->questions_count > 0 ? ($result->score / $result->questions_count) * 100 : 0;
+                $nilaiColor = $nilai < 70 ? '#C73232' : '#32C75F';
             @endphp
-            <div class="col-md-3 col-sm-6 mb-4 quiz-item" data-title="{{ strtolower($result->session->title) }}">
-                <div class="quiz-card card shadow-lg border-0"
-                    style="border-radius: 12px; overflow: hidden; cursor: pointer;">
-
-                    <div class="position-relative" style="background: {{ $randomColor }}; height: 150px; border-radius: 12px 12px 0 0;">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
-                            style="position: absolute; bottom: 0; left: 0; width: 100%;">
-                            <path fill="#ffffff" fill-opacity="1"
-                                d="M0,128L120,144C240,160,480,192,720,197.3C960,203,1200,181,1320,170.7L1440,160L1440,320L1320,320C1200,320,960,320,720,320C480,320,240,320,120,320L0,320Z">
-                            </path>
-                        </svg>
+            <div class="col-md-3 col-sm-6 mb-4 quiz-item"
+                data-title="{{ strtolower($result->session->title) }}"
+                data-name="{{ strtolower($result->name) }}">
+                <div class="quiz-card card shadow-lg border-0 h-100 d-flex flex-column"
+                    style="border-radius: 12px; overflow: hidden; cursor: pointer; max-height: 320px; min-height: 320px; display: flex; flex-direction: column;">
+                    <div class="position-relative" style="background-image: url('{{ secure_asset('assets/images/petern.png') }}'); background-size: cover; min-height: 140px; border-radius: 12px 12px 0 0;">
+                        <span class="badge bg-light position-absolute top-0 start-0 m-2 px-2 py-1"
+                              style="color: {{ $nilaiColor }};font-size: 14px; font-weight: 700;border-radius: 8px;">
+                            Nilai {{ number_format($nilai, 1) }}
+                        </span>
                     </div>
-
-                    <span class="badge bg-light text-dark position-absolute top-0 start-0 m-2 px-2 py-1">
-                        {{ $result->created_at->diffForHumans() }}
-                    </span>
-                    <span class="badge bg-light text-dark position-absolute top-0 end-0 m-2 px-2 py-1">
-                        {{ $result->name }}
-                    </span>
-
-                    <div class="d-flex justify-content-between align-items-center px-3 mb-3">
-                        <h6 class="fw-bold text-dark mb-0">{{ $result->session->title }}</h6>
-                        <div class="badge bg-success rounded-pill px-2 py-1">
-                            score {{ $result->session->questions->count() > 0 ? number_format(($result->score / $result->session->questions->count()) * 100, 1) : 0 }}
-                        </div>
+                    <div class="row mt-3 px-3">
+                        <h6 class="fw-semibold text-dark mb-0">{{ $result->session->title }}</h6>
                     </div>
-
-                    <div class="pb-3 px-3">
-                        <a href="{{ route('quiz-play.edit', ['quiz_play' => $result->id]) }}" class="btn btn-primary w-full rounded-pill">Pembahasan</a>
+                    <div class="d-flex flex-column gap-2 px-3 mt-1">
+                        <small style="font-size: 12px;" class="text-muted"><i class="fas fa-user me-1"></i>{{ $result->name }}</small>
+                        <small style="font-size: 12px;" class="text-muted"><i class="fas fa-clock me-1"></i>{{ $result->created_at->diffForHumans() }}</small>
+                    </div>
+                    <div class="mt-auto pb-3 px-3">
+                        <a href="{{ route('quiz-play.edit', ['quiz_play' => $result->id]) }}" class="btn btn-orange w-full">Pembahasan</a>
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="col-12 text-center text-muted py-5">
+                Tidak ada quiz yang tersedia.
+            </div>
+        @endforelse
     </div>
+    <script>
+        document.getElementById('searchQuiz').addEventListener('input', function() {
+            const search = this.value.toLowerCase();
+            document.querySelectorAll('.quiz-item').forEach(function(item) {
+                const title = item.getAttribute('data-title');
+                const name = item.getAttribute('data-name');
+                item.style.display = (title.includes(search) || name.includes(search)) ? '' : 'none';
+            });
+        });
+    </script>
 @endsection

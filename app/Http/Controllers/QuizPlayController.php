@@ -9,7 +9,7 @@ use App\Models\QuizUserAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-
+use Spatie\Browsershot\Browsershot;
 
 class QuizPlayController extends Controller
 {
@@ -30,7 +30,7 @@ class QuizPlayController extends Controller
             abort(403, 'Invalid or expired token');
         }
 
-        $session = $attempt->session()->with('classrooms')->first();
+        $session = $attempt->session()->with('classrooms')->withCount('questions')->first();
 
         $now = Carbon::now();
 
@@ -193,14 +193,60 @@ class QuizPlayController extends Controller
         ]);
     }
 
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function print(string $id)
     {
+        // Jika ada parameter preview, tampilkan HTML untuk Browsershot
+        if (request()->has('preview')) {
+            $attempt = \App\Models\QuizAttempt::with([
+                'session.questions' => function ($query) {
+                    $query->orderBy('id', 'asc');
+                },
+                'session.questions.columnTitle',
+                'session.questions.answers',
+                'userAnswer'
+            ])->findOrFail($id);
 
+            $printDate = now()->format('d-m-Y H:i');
+            return view('quiz.print.index', compact('attempt', 'printDate'));
+        }
+
+        // Header HTML dengan logo dan judul quiz
+        $attempt = \App\Models\QuizAttempt::with([
+            'session'
+        ])->findOrFail($id);
+
+        $logoPath = public_path('assets/images/logo-mediko.webp');
+        $logoBase64 = '';
+        if (file_exists($logoPath)) {
+            $logoBase64 = 'data:image/webp;base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
+        $footerHtml = '<div style="width:100%;font-size:11px;padding:4px 24px 0 24px;display:flex;justify-content:space-between;">
+            <span>Cetak: '.now()->format('d-m-Y H:i').'</span>
+            <span>Halaman <span class="pageNumber"></span> / <span class="totalPages"></span></span>
+        </div>';
+
+        try {
+            $pdf = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print', ['id' => $id, 'preview' => 1]))
+                ->setOption('args', ['--no-sandbox'])
+                ->waitUntilNetworkIdle()
+                ->showBrowserHeaderAndFooter()
+                ->format('A4')
+                ->margins(5, 10, 10, 10)
+                ->showBackground()
+                ->footerHtml($footerHtml)
+                ->pdf();
+
+            return response()->json([
+                'success' => true,
+                'file' => base64_encode($pdf),
+                'filename' => "hasil-kuiz-".$attempt->name.".pdf"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal generate PDF: ' . $e->getMessage()
+            ]);
+        }
     }
 }

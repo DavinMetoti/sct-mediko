@@ -2,19 +2,31 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="d-flex justify-content-between align-items-center w-100 rounded shadow-sm mb-4">
-            <h3 class="fw-bold m-0">Daftar Sesi Quiz</h3>
-            <a href="{{ route('quiz-session.create') }}" class="btn btn-success px-4 py-2" id="save-question">
-                <i class="fas fa-plus me-2"></i>Tambah
-            </a>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="fw-semibold" style="color: #5E5E5E;">Daftar Sesi Kuis</h4>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end align-items-center gap-3 flex-wrap">
+                <!-- Search Bar -->
+                <div class="input-group shadow-sm" style="max-width: 300px; border-radius: 8px; border: 1px solid #E7E7E7;">
+                    <span class="input-group-text bg-white border-0" style="border-radius: 8px 0 0 8px;">
+                        <i class="fas fa-search text-muted" style="opacity: 0.6;"></i>
+                    </span>
+                    <input type="text" id="searchQuizSession" class="form-control border-0"
+                        placeholder="Cari kuis ..." onkeyup="filterSessions()"
+                        style="border-radius: 0 8px 8px 0; font-size: 0.95rem;">
+                </div>
+
+                <!-- Add Button -->
+                <a href="{{ route('quiz-session.create') }}" class="btn btn-green d-flex align-items-center">
+                    <i class="fas fa-plus me-2"></i>Tambah
+                </a>
+            </div>
+
         </div>
 
-        <!-- Input pencarian -->
-        <div class="mb-3">
-            <input type="text" id="searchQuizSession" class="form-control" placeholder="Cari sesi quiz..." onkeyup="filterSessions()">
-        </div>
 
-        <div id="list-quiz-sessions" class="mt-4"></div>
+        <div id="list-quiz-sessions" class="mt-2 row g-3"></div>
     </div>
 
     <script src="{{ secure_asset('assets/js/module.js') }}"></script>
@@ -106,37 +118,17 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                     let baseUrl = "{{ url('/quiz-session') }}";
                     let rankUrl = "{{ url('') }}";
 
-                    card.classList.add("quiz-session", "card-purple", "d-flex", "flex-wrap", "align-items-center",
-                        "justify-content-between", "p-3", "rounded", "mb-3");
-
-                        card.innerHTML = `
-                            <div class="quiz-session card-purple d-flex flex-wrap flex-md-nowrap align-items-center justify-content-between p-3 rounded w-full">
-                                <div class="d-flex flex-column">
-                                    <h5 class="fw-bold text-white mb-2">${session.title}</h5>
-                                    <p class="text-light mb-2">${session.description}</p>
-                                    <div class="d-flex flex-wrap gap-2 gap-md-3 text-white text-sm">
-                                        <span>
-                                            <i class="bi bi-calendar"></i>
-                                            ${(() => {
-                                                const [date, time] = session.start_time.split(" ");
-                                                const [year, month, day] = date.split("-");
-                                                return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year} ${time ? time.substring(0, 5) : 'N/A'}`;
-                                            })()}
-                                            -
-                                            ${(() => {
-                                                const [date, time] = session.end_time.split(" ");
-                                                const [year, month, day] = date.split("-");
-                                                return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year} ${time ? time.substring(0, 5) : 'N/A'}`;
-                                            })()}
-                                        </span>
-                                        <span><i class="bi bi-clock"></i> ${session.timer} per soal</span>
-                                        <span><i class="bi bi-people"></i> ${session.attempts_count} peserta</span>
-                                    </div>
-                                </div>
-                                <div class="text-end mt-3 mt-md-0">
+                    card.classList.add(
+                        "col-12", "col-md-6"
+                    );
+                    card.innerHTML = `
+                        <div class="quiz-session text-start d-flex justify-content-between p-3 w-full h-100" style="background-color: white;border-radius:16px">
+                            <div class="d-flex flex-column w-full">
+                                <div class="d-flex justify-content-between w-full mb-2">
+                                    <p class="mt-1 mb-0" style="color:#577DC5;font-size:0.7rem"><strong>CODE:</strong> ${session.access_code}<br><strong>ID:</strong> ${session.session_id}</p>
                                     <div class="dropdown d-flex justify-content-end mb-2">
-                                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-three-dots"></i>
+                                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-three-dots text-dark"></i>
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
@@ -161,11 +153,30 @@ Ayo bergabung dan bermain quiz di MedikoQuiz! Mari bersenang-senang bersama tema
                                             </li>
                                         </ul>
                                     </div>
-                                    <p class="text-muted mt-1 mb-0"><strong>Code:</strong> ${session.access_code}</p>
-                                    <p class="text-muted text-sm mb-0"><strong>ID:</strong> ${session.session_id}</p>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-2">${session.title}</h6>
+                                <p class="text-muted mb-2 text-sm">${session.description}</p>
+                                <div class="d-flex flex-wrap gap-2 gap-md-3 text-muted text-sm" style="font-size: 0.7rem;">
+                                    <span class="text-start w-100">
+                                        <i class="bi bi-calendar me-2"></i>
+                                        ${(() => {
+                                            const [date, time] = session.start_time.split(" ");
+                                            const [year, month, day] = date.split("-");
+                                            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year} ${time ? time.substring(0, 5) : 'N/A'}`;
+                                        })()}
+                                        -
+                                        ${(() => {
+                                            const [date, time] = session.end_time.split(" ");
+                                            const [year, month, day] = date.split("-");
+                                            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year} ${time ? time.substring(0, 5) : 'N/A'}`;
+                                        })()}
+                                    </span>
+                                    <span><i class="bi bi-clock me-2"></i> ${session.timer} per soal</span>
+                                    <span><i class="bi bi-people me-2"></i> ${session.attempts_count} peserta</span>
                                 </div>
                             </div>
-                        `;
+                        </div>
+                    `;
 
 
                     card.querySelector(".copy-btn").addEventListener("click", function () {

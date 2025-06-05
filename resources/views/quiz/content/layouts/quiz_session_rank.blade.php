@@ -7,18 +7,35 @@
 @extends('quiz.content.index')
 
 @section('quiz-content')
-    <h3 class="fw-bold">Session Result : {{ $session->title }}</h3>
-    <div class="mb-3 text-muted">
-        <strong>Waktu Classroom:</strong>
-        <span id="classroom-time-range"></span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-3 rounded-4 shadow sticky-top" style="top: 24px; z-index: 10; background: linear-gradient(135deg, #f8fafc 60%, #e3f2fd 100%); border: 1px solid #e3e3e3;">
+                <h5 class="fw-bold mb-3" style="color: #24437E;">
+                    <i class="fa-solid fa-trophy text-warning me-2"></i>
+                    {{ $session->title }}
+                </h5>
+                <div class="mb-3 text-muted" style="font-size: 1.05rem;">
+                    <strong class="text-primary">Waktu Classroom:</strong>
+                    <span id="classroom-time-range" class="ms-1"></span>
+                </div>
+                <div class="flex flex-column mb-3">
+                    <label for="filterClassroom" class="form-label fw-semibold" style="color: #24437E;">
+                        <i class="fa-solid fa-filter me-1"></i>Filter Classroom:
+                    </label>
+                    <select id="filterClassroom" class="form-select border-primary" style="max-width:300px;display:inline-block; background: #f4f8fb;">
+                        <option value="">Semua Classroom</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="rank-group-container"></div>
+        </div>
     </div>
-    <div class="flex flex-column mb-3">
-        <label for="filterClassroom" class="form-label">Filter Classroom:</label>
-        <select id="filterClassroom" class="form-select" style="max-width:300px;display:inline-block;">
-            <option value="">Semua Classroom</option>
-        </select>
-    </div>
-    <div id="rank-group-container"></div>
+
+    @php
+        $currentAttemptId = isset($attempt) ? $attempt->id : null;
+    @endphp
 
     <script src="{{ secure_asset('assets/js/module.js') }}"></script>
     <script>
@@ -32,15 +49,25 @@
         const apiUrl = "{{ route('quiz-rank', ['id' => $quizSessionId]) }}";
         let allAttempts = [];
         let classroomMap = {};
+        let lastRankDataJson = null; // Tambahkan untuk menyimpan snapshot data terakhir
 
-        function fetchSessionRank() {
+        function fetchSessionRank(forceUpdate = false) {
             $.ajax({
                 url: apiUrl,
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    const newRankList = data.sessionRankList || [];
+                    const newRankJson = JSON.stringify(newRankList);
+
+                    // Jika bukan forceUpdate dan data tidak berubah, jangan update tampilan
+                    if (!forceUpdate && lastRankDataJson === newRankJson) {
+                        return;
+                    }
+                    lastRankDataJson = newRankJson;
+
                     toastr.success("Data rangking berhasil diambil", "", { timeOut: 3000 });
-                    allAttempts = data.sessionRankList || [];
+                    allAttempts = newRankList;
                     buildClassroomMap(allAttempts);
                     populateClassroomFilter();
                     displaySessionRankGrouped(allAttempts);
@@ -83,6 +110,7 @@
 
         socket.on('receive-message', (data) => {
             console.log('Received:', data);
+            // Hanya update jika data berubah
             fetchSessionRank();
         });
 
@@ -113,13 +141,38 @@
 
             // Show classroom time range if filter is selected
             if (selectedClassroom && classroomMap[selectedClassroom]) {
+                // Format tanggal ke "20 Mei 2025, 12:00"
+                function formatDateRange(start, end) {
+                    if (!start || !end) return '';
+                    const months = [
+                        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                    ];
+                    const startDate = new Date(start.replace(' ', 'T'));
+                    const endDate = new Date(end.replace(' ', 'T'));
+                    const day1 = startDate.getDate();
+                    const month1 = months[startDate.getMonth()];
+                    const year1 = startDate.getFullYear();
+                    const time1 = startDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    const day2 = endDate.getDate();
+                    const month2 = months[endDate.getMonth()];
+                    const year2 = endDate.getFullYear();
+                    const time2 = endDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    // Jika tanggal sama bulan sama tahun sama, tampilkan satu tanggal rentang waktu
+                    if (day1 === day2 && month1 === month2 && year1 === year2) {
+                        return `${day1} ${month1} ${year1}, ${time1} - ${time2}`;
+                    } else {
+                        return `${day1} ${month1} ${year1}, ${time1} - ${day2} ${month2} ${year2}, ${time2}`;
+                    }
+                }
                 $('#classroom-time-range').text(
-                    (classroomMap[selectedClassroom].start_time ?? '') +
-                    ' - ' +
-                    (classroomMap[selectedClassroom].end_time ?? '')
+                    formatDateRange(classroomMap[selectedClassroom].start_time, classroomMap[selectedClassroom].end_time)
                 );
+                $('#classroom-time-range').parent().show();
             } else {
                 $('#classroom-time-range').text('');
+                // Hide the parent div if filter kosong
+                $('#classroom-time-range').parent().hide();
             }
 
             Object.keys(grouped).forEach(cid => {
@@ -128,7 +181,20 @@
                 let classroomTime = '';
                 if (cid !== 'Tanpa Classroom' && classroomMap[cid]) {
                     classroomTitle = classroomMap[cid].name;
-                    classroomTime = (classroomMap[cid].start_time ?? '') + ' - ' + (classroomMap[cid].end_time ?? '');
+                    // Format tanggal ke "20 Mei 2025, waktu"
+                    function formatDateRange(start, end) {
+                        if (!start) return '';
+                        const months = [
+                            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                        ];
+                        const startDate = new Date(start.replace(' ', 'T'));
+                        const day = startDate.getDate();
+                        const month = months[startDate.getMonth()];
+                        const year = startDate.getFullYear();
+                        return `${day} ${month} ${year}, ${startDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
+                    }
+                    classroomTime = formatDateRange(classroomMap[cid].start_time, classroomMap[cid].end_time);
                 } else if (cid !== 'Tanpa Classroom') {
                     classroomTitle = `Classroom #${cid}`;
                 }
@@ -137,74 +203,90 @@
                 groupDiv.classList.add('mb-4');
 
                 groupDiv.innerHTML = `
-                    <h4 class="fw-bold mb-1">${classroomTitle}</h4>
-                    ${classroomTime ? `<div class="text-muted mb-2" style="font-size:0.95em;">${classroomTime}</div>` : ''}
-                    <div class="quiz-container-rank"></div>
+                    <div class="quiz-container-rank card p-3 mb-2">
+                        <div class="mb-2">
+                            <h6 class="fw-bold text-center text-dark">
+                                <i class="fa-solid fa-ranking-star me-2 text-warning"></i> Live Leaderboard
+                            </h6>
+                            <h4 class="fw-bold mb-1" style="font-size:1.15rem;">${classroomTitle}</h4>
+                            ${classroomTime ? `<div class="text-muted" style="font-size:0.95em;">${classroomTime}</div>` : ''}
+                        </div>
+                        <div class="rank-list"></div>
+                    </div>
                 `;
 
                 container.appendChild(groupDiv);
 
-                // Render rank for this group
-                displaySessionRank(grouped[cid], groupDiv.querySelector('.quiz-container-rank'));
+                // Render rank for this group ke .rank-list
+                displaySessionRank(grouped[cid], groupDiv.querySelector('.rank-list'));
             });
         }
 
         function displaySessionRank(attempts, container) {
             if (!container) return;
-            const prevRanks = {};
-            container.querySelectorAll('.rank-item').forEach((item, i) => {
-                const name = item.querySelector('h5')?.innerText;
-                if (name) {
-                    prevRanks[name] = i + 1;
-                }
-            });
-
             container.innerHTML = '';
 
-            if (attempts && attempts.length > 0) {
-                attempts.forEach((rank, index) => {
-                    const rankElement = document.createElement('div');
-                    rankElement.classList.add('rank-item', 'p-2', 'rounded', 'd-flex', 'align-items-center', 'animate-rank');
+            const currentAttemptId = @json($currentAttemptId);
 
-                    if (prevRanks[rank.name] && prevRanks[rank.name] > index + 1) {
-                        rankElement.classList.add('rank-up');
-                    }
+            const rankStyles = [
+                { bg: "#AB972F", shadow: "inset 8px 0 0  #FFD700" }, // Gold
+                { bg: "#8B8B8B", shadow: "inset 8px 0 0  #C0C0C0" }, // Silver
+                { bg: "#9A6632", shadow: "inset 8px 0 0  #CD7F32" }, // Bronze
+            ];
 
-                    if (index === 0) {
-                        rankElement.style.backgroundColor = '#FFD700';
-                    } else if (index === 1) {
-                        rankElement.style.backgroundColor = '#C0C0C0';
-                    } else if (index === 2) {
-                        rankElement.style.backgroundColor = '#CD7F32';
-                    } else {
-                        rankElement.style.backgroundColor = '#888';
-                    }
-
-                    const crownIcon = index === 0
-                        ? `<span class="d-inline-flex justify-content-center align-items-center bg-white text-warning rounded-circle"
-                                style="width: 40px; height: 40px; aspect-ratio: 1/1;">
-                                <i class="fas fa-crown text-xl"></i>
-                            </span>`
-                        : '';
-
-                    rankElement.innerHTML = `
-                        <div class="rank-card w-100 p-2 d-flex justify-content-between align-items-center">
-                            <div class="d-flex gap-2 align-items-center">
-                                <h3 class="m-0">#${index + 1}</h3>
-                                <div>
-                                    <h5 class="m-0">${rank.name}</h5>
-                                    <p class="m-0">Score: ${rank.percentage_score}</p>
-                                </div>
-                            </div>
-                            ${crownIcon}
-                        </div>
-                    `;
-
-                    container.appendChild(rankElement);
-                });
-            } else {
+            if (!attempts || attempts.length === 0) {
                 container.innerHTML = `<p class="text-center">No rankings available.</p>`;
+                return;
             }
+
+            attempts.forEach((rank, index) => {
+                let fontWeight = "normal";
+                let fontColor = "#fff";
+                let border = "none";
+                let borderRadius = "8px";
+                let bgColor = "#24437E"; // default blue
+                let boxShadow = "";
+
+                // Top 3
+                if (index < 3) {
+                    bgColor = rankStyles[index].bg;
+                    boxShadow = rankStyles[index].shadow;
+                    fontWeight = "bold";
+                }
+
+                // Highlight user's own attempt
+                if (rank.id == currentAttemptId) {
+                    border = "2px solid #fff";
+                    boxShadow += "inset 8px 0 0 #00BFFF";
+                }
+
+                const style = `
+                    background: ${bgColor};
+                    color: ${fontColor};
+                    border-radius: ${borderRadius};
+                    margin-bottom: 10px;
+                    box-shadow: ${boxShadow};
+                    border: ${border};
+                    transition: box-shadow 0.2s;
+                    padding: 0;
+                    font-size: 1rem;
+                `;
+
+                const html = `
+                    <div class="w-100 d-flex align-items-center" style="min-height: 40px; padding: 0 24px;">
+                        <span style="font-size: 1.1rem; font-weight: bold; margin-right: 16px;">${index + 1}.</span>
+                        <h5 style="font-size: 0.9rem; font-weight: ${fontWeight}; flex: 1; margin: 0;">${rank.name}</h5>
+                        <span style="font-size: 0.9rem; margin-left: 12px;">${rank.percentage_score}</span>
+                    </div>
+                `;
+
+                const rankElement = document.createElement('div');
+                rankElement.className = 'rank-item';
+                rankElement.style = style;
+                rankElement.innerHTML = html;
+
+                container.appendChild(rankElement);
+            });
         }
 
         fetchSessionRank();

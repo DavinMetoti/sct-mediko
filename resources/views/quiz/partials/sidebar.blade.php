@@ -1,35 +1,33 @@
 <div class="sidebar sidebar-mediko-quiz" style="overflow: hidden;" id="sidebar">
-    <div class="flex justify-content-center mb-3 header-icon w-full h-full py-2">
+    <div class="flex justify-content-start header-icon w-full h-full pt-4">
         <a class="flex items-center">
-            <div class="flex justify-content-center gap-2 p-2 rounded-lg bg-white shadow-md">
-                <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="63%">
-            </div>
+            <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="63%">
         </a>
     </div>
     <div class="menu">
         <div class="header-menu mt-2">
             <div class="header-menu-title mb-2">
-                <h5>Beranda</h5>
+                <h5>Menu Utama</h5>
             </div>
         </div>
         <div class="w-full menu-title">
             <a href="{{ route('quiz.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz.index') ? 'active' : '' }}">
-                <i class="fas fa-home me-3" style="width: 24px;text-align:center;"></i>
-                <span>Dashboard</span>
+                <i class="fas fa-home me-2" style="width: 24px;text-align:center;"></i>
+                <span>Beranda</span>
             </a>
         </div>
         @can('viewAny', [App\Models\User::class,'quiz-session.index'])
         <div class="w-full menu-title">
             <a href="{{ route('quiz-session.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz-session.index') ? 'active' : '' }}">
-                <i class="fas fa-calendar me-3" style="width: 24px;text-align:center;"></i>
-                <span>Quiz Sesi</span>
+                <i class="fas fa-calendar me-2" style="width: 24px;text-align:center;"></i>
+                <span>Sesi Kuis</span>
             </a>
         </div>
         @endcan
         @can('viewAny', [App\Models\User::class,'quiz-question-bank.index'])
         <div class="w-full menu-title">
             <a href="{{ route('quiz-question-bank.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz-question-bank.index') ? 'active' : '' }}">
-                <i class="fas fa-bank me-3" style="width: 24px;text-align:center;"></i>
+                <i class="fas fa-bank me-2" style="width: 24px;text-align:center;"></i>
                 <span>Bank Soal</span>
             </a>
         </div>
@@ -37,24 +35,24 @@
         @can('viewAny', [App\Models\User::class,'quiz-question.index'])
         <div class="w-full menu-title">
             <a href="{{ route('quiz-question.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz-question.index') ? 'active' : '' }}">
-                <i class="fas fa-bullseye me-3" style="width: 24px;text-align:center;"></i>
-                <span>Buat Quiz</span>
+                <i class="fas fa-bullseye me-2" style="width: 24px;text-align:center;"></i>
+                <span>Buat Kuis</span>
             </a>
         </div>
         @endcan
         @can('viewAny', [App\Models\User::class,'quiz-result.index'])
         <div class="w-full menu-title">
             <a href="{{ route('quiz-result.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz-result.index') ? 'active' : '' }}">
-                <i class="fas fa-check me-3" style="width: 24px;text-align:center;"></i>
-                <span>Pembahasaan</span>
+                <i class="bi bi-card-checklist me-2" style="width: 24px;text-align:center;"></i>
+                <span>Pembahasan</span>
             </a>
         </div>
         @endcan
         @can('viewAny', [App\Models\User::class,'quiz-classroom.index'])
         <div class="w-full menu-title">
             <a href="{{ route('quiz-classroom.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('quiz-classroom.index') ? 'active' : '' }}">
-                <i class="fas fa-chalkboard me-3" style="width: 24px;text-align:center;"></i>
-                <span>Classroom</span>
+                <i class="fas fa-chalkboard me-2" style="width: 24px;text-align:center;"></i>
+                <span>Kelas</span>
             </a>
         </div>
         @endcan
@@ -66,15 +64,15 @@
         <div class="w-full menu-title">
             <a href="{{ route('library.index', ['filter' => 'all']) }}"
             class="flex align-items-center justify-content-start {{ request('filter') === 'all' ? 'active' : '' }}">
-                <i class="bi bi-collection me-3" style="width: 24px; text-align:center;"></i>
+                <i class="bi bi-grid-fill me-2" style="width: 24px; text-align:center;"></i>
                 <span>Semua</span>
             </a>
         </div>
         <div class="w-full menu-title">
             <a href="{{ route('library.index', ['filter' => 'like']) }}"
             class="flex align-items-center justify-content-start {{ request()->get('filter') === 'like' ? 'active' : '' }}">
-                <i class="bi bi-heart me-3" style="width: 24px; text-align:center;"></i>
-                <span>Suka</span>
+                <i class="bi bi-heart me-2" style="width: 24px; text-align:center;"></i>
+                <span>Disukai</span>
             </a>
         </div>
 
@@ -83,16 +81,14 @@
                 <div class="w-full menu-title">
                     <a href="{{ route('library.show', $collection->id) }}"
                     class="flex align-items-center justify-content-start {{ request()->segment(2) == $collection->id ? 'active' : '' }}">
-                        <i class="bi bi-folder me-3" style="width: 24px; text-align:center;"></i>
+                        <i class="bis bi-folder-fill me-2" style="width: 24px; text-align:center;"></i>
                         <span>{{ $collection->folder_name }}</span>
                     </a>
                 </div>
             @endforeach
         @else
             <div class="text-center text-muted mt-3">
-                <i class="bi bi-folder-x" style="font-size: 1.5rem;"></i>
-                <p class="mt-2">Belum ada koleksi</p>
-                <button class="btn btn-success px-3 py-2" data-bs-toggle="modal" data-bs-target="#addCollectionModal">
+                <button class="btn btn-green w-full" data-bs-toggle="modal" data-bs-target="#addCollectionModal">
                     <i class="fas fa-folder-plus me-2"></i>Tambah Koleksi
                 </button>
             </div>
@@ -100,34 +96,35 @@
     </div>
 
     <div class="footer">
-        <div class="text-center text-white" style="font-size: 12px">© 2024 MEDIKO.ID All rights reserved.</div>
+        <div class="text-center" style="font-size: 12px">© 2024 MEDIKO.ID Hak cipta dilindungi undang-undang.</div>
     </div>
 </div>
 
 <!-- Modal Tambah Koleksi -->
 <div class="modal fade" id="addCollectionModal" tabindex="-1" aria-labelledby="addCollectionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="addCollectionModalLabel">Tambah Koleksi Baru</h5>
-                    <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="collectionForm">
-                        <div class="mb-3">
-                            <label for="folderName" class="form-label fw-bold">Nama Koleksi</label>
-                            <input type="text" class="form-control" id="folderName" placeholder="Masukkan nama koleksi">
-                            <div class="invalid-feedback">Nama koleksi tidak boleh kosong.</div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success" id="saveCollection">Simpan</button>
-                </div>
-            </div>
-        </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <div class="modal-header bg-white border-0 rounded-top-4 px-4 pt-4">
+        <h5 class="modal-title fw-semibold text-dark" id="addCollectionModalLabel">Tambah Koleksi Baru</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body px-4 pt-0 pb-3">
+        <form id="collectionForm" novalidate>
+          <div class="mb-3">
+            <label for="folderName" class="form-label fw-semibold">Nama Koleksi</label>
+            <input type="text" class="form-control form-control-lg rounded-3" id="folderName" placeholder="Masukkan nama koleksi" required>
+            <div class="invalid-feedback">Nama koleksi tidak boleh kosong.</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0 px-4 pb-4">
+        <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-success px-4" id="saveCollection">Simpan</button>
+      </div>
     </div>
+  </div>
+</div>
+
 
 <script src="{{ secure_asset('assets/js/module.js') }}"></script>
 

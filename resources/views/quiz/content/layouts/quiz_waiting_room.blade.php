@@ -2,45 +2,59 @@
 
 @section('quiz-content')
     <div class="quiz-header p-3 d-flex align-items-center justify-content-between">
-        <div class="card-quiz p-2 rounded-sm">
-            <button class="header-btn" onclick="confirmExit()"><i class="fas fa-times"></i></button>
-        </div>
-
-        <span class="quiz-title">Creating a game...</span>
+        <button class="btn" style="background-color: #699AF5;color: #fff;font-size: 1rem;font-weight:bold" onclick="confirmExit()"><i class="fas fa-times"></i></button>
 
         <div class="header-right d-flex gap-2">
-            <div class="card-quiz p-2 rounded-sm">
-                <button class="header-btn"><i class="fas fa-cog"></i></button>
-            </div>
-            <div class="card-quiz p-2 rounded-sm">
-                <button class="header-btn"><i class="fas fa-expand"></i></button>
-            </div>
+            <button class="btn" style="background-color: #699AF5;color: #fff;align-items: center;font-weight:bold"><i class="bi bi-key-fill me-2 text-lg"></i><span>{{ $session->access_code }}</span></button>
+            <button class="btn" style="background-color: #699AF5;color: #fff;font-size: 0.8rem;font-weight:bold"><i class="fas fa-expand"></i></button>
         </div>
     </div>
-
     <div class="quiz-container p-3">
-        <div class="row">
-            <div class="col-md-4 m-auto">
-                <div class="card-quiz p-3" style="background-color: rgba(255, 255, 255, 0.22)  !important;">
-                    <label for="username">Masukkan Nama Anda</label>
+        <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+                <div class="text-center mb-5">
+                    <h3 class="fw-bold">{{ $session->title }}</h3>
+                </div>
+                <div class="card-quiz p-3" style="background-color: #305FB5 !important; width:100%; max-width:400px;">
+                    <label for="username" class="mb-2" style="font-weight: 400 !important;">Masukkan Nama Anda</label>
                     <div class="input-group">
-                        <input type="text" id="username" class="form-control text-uppercase" style="font-size: 1.5rem;" value="{{ auth()->user()->name??'' }}">
+                        <input type="text" id="username" class="form-control text-uppercase border-0" style="border-top-left-radius:12px;border-bottom-left-radius:12px;background-color: #5A8DEB !important;color: #fff !important;" value="{{ auth()->user()->name??'' }}">
                         <div class="input-group-append">
-                            <button class="btn btn-secondary" id="shuffle-btn" style="height: 100% !important;" onclick="shuffleName()">
-                                <i id="shuffle-icon" class="fas fa-refresh text-xl"></i>
+                            <button class="btn" id="shuffle-btn" style="border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:12px;border-bottom-right-radius:12px;background-color: #5A8DEB !important;color: #fff !important;" onclick="shuffleName()">
+                                <i id="shuffle-icon" class="fas fa-repeat text-xl"></i>
                             </button>
                         </div>
                     </div>
                     <input type="hidden" id="quiz-token" value="{{ $token }}">
 
-                    <div class="mt-3">
-                        <label for="classroom_id">Pilih Classroom</label>
-                        <select id="classroom_id" class="form-control">
-                            <option value="">-- Pilih Classroom --</option>
+                    <div class="mt-3 mb-3">
+                        <label for="classroom_id" class="mb-2" style="font-weight: 400 !important;">Pilih Kelas</label>
+                        <select id="classroom_id" class="form-control border-0 py-2" style="border-radius:12px;background-color: #5A8DEB !important;color: #fff !important;">
+                            <option value="">-- Pilih Kelas --</option>
                         </select>
                     </div>
 
-                    <button class="btn btn-primary mt-3 w-full" style="font-size: 1.5rem;" onclick="startQuiz()">Start</button>
+                    <button class="btn btn-orange w-full" style="border-radius:12px;" onclick="startQuiz()"><i class="fas fa-play me-2"></i>Mulai Mengerjakan</button>
+                </div>
+                <div class="d-flex gap-2 mt-4">
+                    <div class="flex align-items-center gap-2" style="background-color:#528BF5; color:#fff; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.9rem; margin-top: 1rem;">
+                        <div>
+                            <i class="bi bi-stopwatch-fill me-2 text-2xl"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 16px;font-weight: 600;">Waktu</div>
+                            <div style="font-size: 12px;font-weight: 400;">{{ $session->timer }} menit</div>
+                        </div>
+                    </div>
+                    <div class="flex align-items-center gap-2" style="background-color:#528BF5; color:#fff; padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.9rem; margin-top: 1rem;">
+                        <div>
+                            <i class="bi bi-question-square me-2 text-2xl"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 16px;font-weight: 600;">Pertanyaan</div>
+                            <div style="font-size: 12px;font-weight: 400;">{{ $session->questions_count }} soal</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

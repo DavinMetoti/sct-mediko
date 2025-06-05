@@ -2,28 +2,34 @@
 
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="card-purple p-3">
-            <div class="row">
-                <div class="col-md-8">
-                    <select class="form-control-purple w-full" id="bank-soal" name="bank_soal">
-                        <option value="" disabled selected>Pilih Bank Soal</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <div class="d-flex justify-content-between mt-2 mt-md-0">
-                        <button class="btn btn-primary" id="search-button">
-                            <i class="fas fa-search me-2"></i>Search
-                        </button>
-                        <button class="btn btn-success" id="attach-button">
-                            <i class="fas fa-check me-2"></i>Simpan
-                        </button>
+        <div class="row mt-2 align-items-center">
+            <div class="col-md-6 d-flex align-items-center">
+                <h4 class="fw-semibold my-3" style="color: #5E5E5E;">Daftar Kuis</h4>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-2 w-100">
+                    <div class="input-group flex-grow-1" style="border: 1px solid #E7E7E7 !important; border-radius: 8px !important;">
+                        <span class="input-group-text bg-white border-0" style="border-radius: 8px 0 0 8px;">
+                            <i class="fas fa-search text-muted" style="opacity: 0.6;"></i>
+                        </span>
+                        <select class="form-select border-0 input-placeholder" style="background: #FFFFFF; border-radius: 8px !important;" id="bank-soal" name="bank_soal">
+                            <option value="" disabled selected>Pilih Bank Soal</option>
+                        </select>
                     </div>
+                    <button class="btn btn-blue d-flex align-items-center px-3" id="search-button">
+                        <i class="fas fa-search me-2"></i>Cari
+                    </button>
+                    <button class="btn btn-green d-flex align-items-center px-3" id="attach-button">
+                        <i class="fas fa-check me-2"></i>Simpan
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="mt-4" id="list-question">
-
+        <div class="mt-4">
+            <div id="list-question" class="row row-cols-1 row-cols-md-2 g-3">
+                <!-- Card soal akan diisi di sini -->
+            </div>
         </div>
     </div>
 
@@ -96,14 +102,16 @@
                                 existingIds.add(question.id);
 
                                 let questionCard = document.createElement('div');
-                                questionCard.classList.add('card-purple', 'mt-3', 'p-3', 'd-flex', 'flex-column');
-                                questionCard.setAttribute('data-index', index);
-                                questionCard.setAttribute('data-id', question.id);
+                                questionCard.classList.add('col'); // Bootstrap col
                                 questionCard.innerHTML = `
-                                    <strong>${question.medical_field.name}</strong>
-                                    <p>${question.clinical_case}</p>
-                                    <div class="d-flex justify-content-end mt-2">
-                                        <button class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i></button>
+                                    <div class="card p-3 mt-3 d-flex flex-column h-100 rounded-4" data-index="${index}" data-id="${question.id}">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <strong>${question.medical_field.name}</strong>
+                                                <p>${question.clinical_case}</p>
+                                            </div>
+                                            <button class="btn btn-sm btn-danger btn-delete ms-2"><i class="fas fa-trash"></i></button>
+                                        </div>
                                     </div>
                                 `;
 
@@ -149,7 +157,7 @@
 
 
                         let selectedQuestions = new Set(
-                            [...document.querySelectorAll('#list-question .card-purple')]
+                            [...document.querySelectorAll('#list-question .card .p-3')]
                                 .map(el => el.getAttribute('data-id'))
                         );
 
@@ -237,19 +245,21 @@
             }
 
 
-            let existingIds = new Set([...listQuestionDiv.querySelectorAll('.card-purple')].map(el => el.getAttribute('data-id')));
+            let existingIds = new Set([...listQuestionDiv.querySelectorAll('.col .card.p-3')].map(el => el.getAttribute('data-id')));
 
             selectedQuestions.forEach((question, index) => {
                 if (!existingIds.has(question.id)) {
                     let questionCard = document.createElement('div');
-                    questionCard.classList.add('card-purple', 'mt-3', 'p-3', 'd-flex', 'flex-column');
-                    questionCard.setAttribute('data-index', index);
-                    questionCard.setAttribute('data-id', question.id);
+                    questionCard.classList.add('col');
                     questionCard.innerHTML = `
-                        <strong>${question.medical_field}</strong>
-                        <p>${question.clinical_case}</p>
-                        <div class="d-flex justify-content-end mt-2">
-                            <button class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i></button>
+                        <div class="card p-3 mt-3 d-flex flex-column h-100 rounded-4" data-index="${index}" data-id="${question.id}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>${question.medical_field}</strong>
+                                    <p>${question.clinical_case}</p>
+                                </div>
+                                <button class="btn btn-sm btn-danger btn-delete ms-2"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     `;
                     listQuestionDiv.appendChild(questionCard);
@@ -289,7 +299,7 @@
             let selectedQuestionIds = [];
 
 
-            document.querySelectorAll('#list-question .card-purple').forEach(card => {
+            document.querySelectorAll('#list-question .col .card.p-3').forEach(card => {
                 selectedQuestionIds.push(card.getAttribute('data-id'));
             });
 
@@ -336,7 +346,7 @@
         let isDataChanged = false;
 
         function getSnapshot() {
-            return Array.from(listQuestionDiv.children).map(el => el.getAttribute('data-id'));
+            return Array.from(listQuestionDiv.querySelectorAll('.col .card.p-3')).map(el => el.getAttribute('data-id'));
         }
 
         const observer = new MutationObserver(() => {

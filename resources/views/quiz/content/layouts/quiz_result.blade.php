@@ -8,191 +8,183 @@
                         display: none !important;
                     }
                 }
+                .custom-table-quiz th,
+                .custom-table-quiz td {
+                    border: solid 1px rgba(172, 194, 234, 0.71) !important;
+                    font-size: 0.92rem !important;
+                }
             </style>
             <div class="quiz-header py-3 d-flex align-items-center justify-content-between">
-                <div class="card-quiz p-2 rounded-sm">
-                    <button class="h-100 px-2" onclick="confirmExit()">
+                    <button class="btn" style="background-color: #699AF5;color: #fff;font-size: 1rem;font-weight:bold" onclick="confirmExit()">
                         <i class="fas fa-times"></i>
                     </button>
-                </div>
                 <span class="quiz-title font-weight-bold">
                     @if($attempt)
-                        Quiz: {{ $attempt->session->title }}
+                        {{ $attempt->session->title }}
                     @else
                         <span class="text-muted">Creating a game...</span>
                     @endif
                 </span>
 
                 <div class="header-right d-md-flex d-none gap-2">
-                    <div class="card-quiz p-2 text-center rounded-sm">
-                        <button class="h-100 px-2" onclick="toggleFullscreen()"><i class="fas fa-expand"></i></button>
-                    </div>
+                    <button class="btn" style="background-color: #699AF5;color: #fff;font-size: 1rem;font-weight:bold" onclick="toggleFullscreen()"><i class="fas fa-expand"></i></button>
                 </div>
             </div>
             @if($attempt)
-                <div class="card p-4 shadow">
-                    <p><strong>Nama Peserta:</strong> {{ $attempt->name ?? 'Tidak Diketahui' }}</p>
-                    <p><strong>Total Soal:</strong> {{ $attempt->session->questions->count() }}</p>
-                    <p><strong>Skor Akhir:</strong> {{ number_format(($attempt->score / $attempt->session->questions->count()) * 100, 2) }}</p>
-                    <button onclick="window.print()" class="btn btn-primary mt-3">Print</button>
-                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div style="background-color: #204281; padding: 20px; border-radius: 10px;">
+                            <p style="color: #ACC2EA;">Nama Peserta <br><span class="fw-semibold text-white"> {{ $attempt->name ?? 'Tidak Diketahui' }}</span></p>
+                            <p style="color: #ACC2EA;">Total Soal <br><span class="fw-semibold text-white"> {{ $attempt->session->questions->count() }}</span></p>
+                            <p style="color: #ACC2EA;">Skor Akhir <br><span class="fw-semibold text-white"> {{ number_format(($attempt->score / $attempt->session->questions->count()) * 100, 2) }}</span></p>
+                            <button onclick="startPrint()" class="btn btn-orange w-full mt-3" style="border-radius: 8px; position: relative;">
+                                <span id="print-btn-text">Print</span>
+                                <span id="print-spinner" style="display:none;position:absolute;right:16px;top:50%;transform:translateY(-50%);">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-9" style="max-height: 90vh; overflow-y: auto;">
+                        <div>
+                            @php
+                                $allSelectedAnswers = $attempt->userAnswer->groupBy('quiz_question_id')->map(function ($answers) {
+                                    return $answers->pluck('quiz_answer_id')->toArray();
+                                })->flatten()->toArray();
+                            @endphp
+                            @foreach ($attempt->session->questions as $idx => $question)
+                                <ul class="list-group pb-3 mb-2">
+                                    <li class="list-group-item border-0" style="background-color: #204281; padding: 20px; border-radius: 10px;">
+                                        <div>
+                                            <p class="mb-2 text-white fw-semibold">Pertanyaan {{ $idx + 1 }}</p>
+                                        </div>
+                                        <div class="text-white mb-3">
+                                            {!! preg_replace('/style="[^"]*"/i', '', $question->clinical_case) !!}
+                                        </div>
+                                        <p class="mb-2 text-white fw-semibold">{{$question->columnTitle->column_1}}</p>
+                                        <div class="text-white mb-3 p-2" style="background-color: #23488E;border-radius: 8px;">
+                                            {!! preg_replace('/style="[^"]*"/i', '', $question->initial_hypothesis) !!}
+                                        </div>
+                                        <p class="mb-2 text-white fw-semibold">{{$question->columnTitle->column_2}}</p>
+                                        <div class="text-white mb-3 p-2" style="background-color: #23488E;border-radius: 8px;">
+                                            {!! preg_replace('/style="[^"]*"/i', '', $question->new_information) !!}
+                                            @if ($question->uploaded_image_base64)
+                                                <img src="{{ $question->uploaded_image_base64 }}" width="400rem" alt="Informasi Baru Gambar">
+                                            @endif
+                                        </div>
+                                        {{-- Rationale dan Skor Likert Table --}}
+                                        @php
+                                            // Group answers by value
+                                            $valueCounts = collect([-2, -1, 0, 1, 2])->mapWithKeys(function($v) use ($question) {
+                                                return [$v => $question->answers->where('value', $v)->sum('panelist')];
+                                            });
+                                            $totalPanelist = $valueCounts->max(); // jumlah tertinggi valueCounts
+                                            $valueBobot = $valueCounts->map(function($count) use ($totalPanelist) {
+                                                return $totalPanelist ? ($count . '/' . $totalPanelist) : '0/0';
+                                            });
+                                            $valueSkor = collect([-2, -1, 0, 1, 2])->mapWithKeys(function($v) use ($question) {
+                                                $answer = $question->answers->where('value', $v)->first();
+                                                return [$v => $answer ? $answer->score : 0];
+                                            });
+                                            // User answer & score
+                                            $userAnswer = $question->answers->first(function($a) use ($allSelectedAnswers) {
+                                                return in_array($a->id, $allSelectedAnswers);
+                                            });
+                                        @endphp
+                                        <div class="mt-3 mb-2">
+                                        <strong class="text-white">Rationale dan Skor Likert</strong>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm text-center align-middle custom-table-quiz">
+                                                    <thead>
+                                                        <tr>
+                                                            <th rowspan="2" class="text-white">Keterangan</th>
+                                                            <th colspan="5" class="text-white">Pilihan Jawaban</th>
+                                                            <th rowspan="2" class="text-white">Jawaban Anda</th>
+                                                            <th rowspan="2" class="text-white">Skor Anda</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-white">-2</th>
+                                                            <th class="text-white">-1</th>
+                                                            <th class="text-white">0</th>
+                                                            <th class="text-white">1</th>
+                                                            <th class="text-white">2</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-white">Jawaban Panel</td>
+                                                            <td class="text-white">{{ $valueCounts[-2] }}</td>
+                                                            <td class="text-white">{{ $valueCounts[-1] }}</td>
+                                                            <td class="text-white">{{ $valueCounts[0] }}</td>
+                                                            <td class="text-white">{{ $valueCounts[1] }}</td>
+                                                            <td class="text-white">{{ $valueCounts[2] }}</td>
+                                                            <td class="text-white" rowspan="3" class="align-middle">
+                                                                {{ $userAnswer ? $userAnswer->value : '-' }}
+                                                            </td>
+                                                            <td class="text-white" rowspan="3" class="align-middle">
+                                                                {{ $userAnswer ? $userAnswer->score : '-' }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-white">Bobot</td>
+                                                            <td class="text-white">{{ $valueBobot[-2] }}</td>
+                                                            <td class="text-white">{{ $valueBobot[-1] }}</td>
+                                                            <td class="text-white">{{ $valueBobot[0] }}</td>
+                                                            <td class="text-white">{{ $valueBobot[1] }}</td>
+                                                            <td class="text-white">{{ $valueBobot[2] }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-white">Skor</td>
+                                                            <td class="text-white">{{ $valueSkor[-2] }}</td>
+                                                            <td class="text-white">{{ $valueSkor[-1] }}</td>
+                                                            <td class="text-white">{{ $valueSkor[0] }}</td>
+                                                            <td class="text-white">{{ $valueSkor[1] }}</td>
+                                                            <td class="text-white">{{ $valueSkor[2] }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
 
-                <h3 class="mt-4">Detail Jawaban:</h3>
-                <ul class="list-group pb-5">
-                @php
-                    $allSelectedAnswers = $attempt->userAnswer->groupBy('quiz_question_id')->map(function ($answers) {
-                        return $answers->pluck('quiz_answer_id')->toArray();
-                    })->flatten()->toArray();
-                @endphp
-                @foreach ($attempt->session->questions as $idx => $question)
-                    <li class="list-group-item">
-                        <strong>Pertanyaan {{ $idx + 1 }}:</strong>
-                        <div style="color: black !important;">
-                            {!! preg_replace('/style="[^"]*"/i', '', $question->clinical_case) !!}
-                        </div>
-                        <strong>{{$question->columnTitle->column_1}}</strong>
-                        <div style="color: black !important;">
-                            {!! preg_replace('/style="[^"]*"/i', '', $question->initial_hypothesis) !!}
-                        </div>
-                        <strong>{{$question->columnTitle->column_2}}</strong>
-                        <div style="color: black !important;">
-                            {!! preg_replace('/style="[^"]*"/i', '', $question->new_information) !!}
-                            @if ($question->uploaded_image_base64)
-                                <img src="{{ $question->uploaded_image_base64 }}" width="400rem" alt="Informasi Baru Gambar">
-                            @endif
-                        </div>
+                                        {{-- Distribusi Jawaban Peserta --}}
+                                        <div class="mb-2">
+                                            <strong class="text-white">Distribusi Jawaban Peserta</strong>
+                                                @foreach ($question->answers as $answer)
+                                                    <div class="text-white mb-2 p-2" style="{{ $answer->score == 1 ? 'background-color: #E9F6EA;border-radius: 8px;' : 'background-color: #23488E;border-radius: 8px;' }}">
+                                                        <div class="d-flex align-items-center justify-content-between" style="@if ($answer->score == 1) color: #44A047 !important; font-weight: 500; @endif">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div style="background-color: #699AF5;color: #fff;font-size: 14px;width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                                                    {{ $answer->value }}
+                                                                </div>
+                                                                <span>{{ $answer->answer }}</span>
+                                                            </div>
+                                                            @if( in_array($answer->id, $allSelectedAnswers) )
+                                                                <div>
+                                                                    <span class="badge bg-info text-white">
+                                                                        Pilihan Anda
+                                                                    </span>
+                                                                </div>
+                                                            @endif
 
-                        {{-- Rationale dan Skor Likert Table --}}
-                        @php
-                            // Group answers by value
-                            $valueCounts = collect([-2, -1, 0, 1, 2])->mapWithKeys(function($v) use ($question) {
-                                return [$v => $question->answers->where('value', $v)->sum('panelist')];
-                            });
-                            $totalPanelist = $valueCounts->max(); // jumlah tertinggi valueCounts
-                            $valueBobot = $valueCounts->map(function($count) use ($totalPanelist) {
-                                return $totalPanelist ? ($count . '/' . $totalPanelist) : '0/0';
-                            });
-                            $valueSkor = collect([-2, -1, 0, 1, 2])->mapWithKeys(function($v) use ($question) {
-                                $answer = $question->answers->where('value', $v)->first();
-                                return [$v => $answer ? $answer->score : 0];
-                            });
-                            // User answer & score
-                            $userAnswer = $question->answers->first(function($a) use ($allSelectedAnswers) {
-                                return in_array($a->id, $allSelectedAnswers);
-                            });
-                        @endphp
-                        <div class="mt-3 mb-2">
-                            <strong>Rationale dan Skor Likert</strong>
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-sm text-center align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2">Keterangan</th>
-                                            <th colspan="5">Pilihan Jawaban</th>
-                                            <th rowspan="2">Jawaban Anda</th>
-                                            <th rowspan="2">Skor Anda</th>
-                                        </tr>
-                                        <tr>
-                                            <th>-2</th>
-                                            <th>-1</th>
-                                            <th>0</th>
-                                            <th>1</th>
-                                            <th>2</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Jawaban Panel</td>
-                                            <td>{{ $valueCounts[-2] }}</td>
-                                            <td>{{ $valueCounts[-1] }}</td>
-                                            <td>{{ $valueCounts[0] }}</td>
-                                            <td>{{ $valueCounts[1] }}</td>
-                                            <td>{{ $valueCounts[2] }}</td>
-                                            <td rowspan="3" class="align-middle">
-                                                {{ $userAnswer ? $userAnswer->value : '-' }}
-                                            </td>
-                                            <td rowspan="3" class="align-middle">
-                                                {{ $userAnswer ? $userAnswer->score : '-' }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Bobot</td>
-                                            <td>{{ $valueBobot[-2] }}</td>
-                                            <td>{{ $valueBobot[-1] }}</td>
-                                            <td>{{ $valueBobot[0] }}</td>
-                                            <td>{{ $valueBobot[1] }}</td>
-                                            <td>{{ $valueBobot[2] }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Skor</td>
-                                            <td>{{ $valueSkor[-2] }}</td>
-                                            <td>{{ $valueSkor[-1] }}</td>
-                                            <td>{{ $valueSkor[0] }}</td>
-                                            <td>{{ $valueSkor[1] }}</td>
-                                            <td>{{ $valueSkor[2] }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        {{-- Distribusi Jawaban Peserta --}}
-                        <div class="mb-2">
-                            <strong>Distribusi Jawaban Peserta</strong>
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Skala</th>
-                                            <th>Jawaban</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($question->answers->sortBy('value') as $answer)
-                                            <tr>
-                                                <td>{{ $answer->value }}</td>
-                                                <td>{{ $answer->answer }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        {{-- Jawaban peserta --}}
-                        <div class="mt-2" id="question_{{ $question->id }}">
-                            @foreach ($question->answers as $answer)
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        name="question_{{ $question->id }}[]"
-                                        class="form-check-input"
-                                        data-id="{{ $answer->id }}"
-                                        {{ in_array($answer->id, $allSelectedAnswers) ? 'checked' : 'disabled' }}
-                                    >
-                                    <label class="form-check-label"
-                                        style="@if ($answer->score == 1) color: green; font-weight: bold; @endif">
-                                        {{ $answer->answer }}
-                                    </label>
-                                </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                    </li>
+                                </ul>
                             @endforeach
-                        </div>
-                        <div class="mt-1 mb-2">
-                            <span class="badge bg-info">
-                                Skor anda: {{ $userAnswer ? $userAnswer->score : '-' }}
-                            </span>
-                        </div>
-                    </li>
-                @endforeach
 
-                </ul>
-                <div class="mb-2 card">
-                    <strong>Penjelasan Skoring:</strong>
-                    <ul style="margin-bottom:0;">
-                        <li>Skor dihitung berdasarkan distribusi jawaban panel ahli</li>
-                        <li>Bobot merupakan proporsi jawaban panel terhadap nilai tertinggi panelis</li>
-                        <li>Skor akhir dihitung berdasarkan bobot jawaban yang dipilih peserta</li>
-                    </ul>
+                            <div class="mb-2" style="background-color: #204281; padding: 20px; border-radius: 10px;">
+                                <strong>Penjelasan Skoring:</strong>
+                                <ul style="margin-bottom:0;padding-left: 10px;">
+                                    <li>1. Skor dihitung berdasarkan distribusi jawaban panel ahli</li>
+                                    <li>2. Bobot merupakan proporsi jawaban panel terhadap nilai tertinggi panelis</li>
+                                    <li>3. Skor akhir dihitung berdasarkan bobot jawaban yang dipilih peserta</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             @else
                 <p class="text-center mt-4">Tidak ada data hasil kuis.</p>
             @endif
@@ -230,6 +222,48 @@
                     document.msExitFullscreen();
                 }
             }
+        }
+
+        function startPrint() {
+            var btn = document.querySelector('button[onclick="startPrint()"]');
+            var spinner = document.getElementById('print-spinner');
+            var btnText = document.getElementById('print-btn-text');
+            btn.disabled = true;
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Printing...';
+
+            fetch('{{ route('quiz-play.print', ['id' => $attempt->id]) }}', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    throw new Error('Gagal generate PDF');
+                }
+                const data = await response.json();
+                if (data.success && data.file) {
+                    // Download PDF dari base64
+                    const link = document.createElement('a');
+                    link.href = 'data:application/pdf;base64,' + data.file;
+                    link.download = data.filename || 'quiz-result.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    btnText.textContent = 'Print';
+                    spinner.style.display = 'none';
+                    btn.disabled = false;
+                } else {
+                    throw new Error(data.message || 'Gagal generate PDF');
+                }
+            })
+            .catch(function(err) {
+                btnText.textContent = 'Print';
+                spinner.style.display = 'none';
+                btn.disabled = false;
+                alert(err.message || 'Gagal generate PDF');
+            });
         }
     </script>
 @endsection

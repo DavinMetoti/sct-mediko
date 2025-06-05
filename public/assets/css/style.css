@@ -11,7 +11,7 @@
 }
 
 body{
-    background-color: #f2f7ff !important;
+    background-color: #E7F0FF !important;
     font-family: 'Poppins', sans-serif !important;
 
 }
@@ -59,6 +59,25 @@ input[type=number] {
     background-color: #4cc9fe7e !important;
 }
 
+.btn-green {
+    background-color: #E9F6EA !important;
+    color: #44A047 !important;
+}
+
+.input-placeholder::placeholder {
+    color: #888;
+    font-size: 0.9rem;
+    opacity: 0.6;
+}
+
+.input-placeholder-white::placeholder {
+    color: #ffffff;
+    text-transform: capitalize;
+    font-size: 0.9rem;
+    opacity: 1;
+}
+
+
 
 .flex-grow-1 {
     flex-grow: 1;
@@ -79,38 +98,47 @@ input[type=number] {
 }
 
 .sidebar-mediko-quiz{
-    background-color: #2D0A56 !important;
-    height: 100%;
+    top: 24px !important;
+    left: 24px !important;
+    border-radius: 16px;
+    height: 95% !important;
 }
 
 .sidebar-mediko-quiz::-webkit-scrollbar-thumb {
-    background: white !important;
     border-radius: 5px;
   }
 
 .sidebar-mediko-quiz a {
-    color: white !important;
+    color: #5E5E5E !important;
+    opacity: 0.7 !important;
 }
 
 .sidebar-mediko-quiz .footer {
-    background-color: #2D0A56 !important;
     border-top: none !important;
-    color: white !important;
+    color: #A8A8A8 !important;
 }
 
 .sidebar-mediko-quiz .header-menu h5 {
-    color: white !important;
+    color: #A8A8A8 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
 }
 
 .sidebar-mediko-quiz .menu-title a:hover,
 .sidebar-mediko-quiz .menu-title a.active {
-    color: #2D0A56 !important;
-    background-color: white !important;
-    font-weight: bold;
+    color: #007bff !important;
+    background-color: #E7F0FF !important;
+    font-weight: normal !important;
 }
 
 .sidebar-mediko-quiz .header-icon {
-    background-color: #2D0A56 !important;
+    text-align: center;
+    padding: 24px;
+    background-color: #ffffff !important;
+}
+
+.sidebar-mediko-quiz.hide {
+    transform: translateX(-124%) !important;
 }
 
 .sidebar.hide {
@@ -187,7 +215,11 @@ input[type=number] {
 }
 
 .navbar-mediko-quiz {
-    background-color: #2D0A56 !important;
+    top: 24px !important;
+    left: calc(var(--sidebar-width) + 48px) !important;
+    width: calc(100vw - (var(--sidebar-width) + 72px)) !important;
+    background-color: white !important;
+    border-radius: 16px;
 }
 
 .btn-primary {
@@ -197,6 +229,16 @@ input[type=number] {
 
 .btn-primary:hover {
     background-color: #56a9c7 !important;
+}
+
+.btn-blue {
+    background-color: #256EF840 !important;
+    color: #256EF8;
+}
+
+.btn-orange {
+    background-color: #F9B31D !important;
+    color: white;
 }
 
 .btn-warning {
@@ -209,8 +251,9 @@ input[type=number] {
 }
 
 .navbar.full {
-    width: 100vw;
-    left: 0;
+
+    width: 97vw !important;
+    left: 24 !important;
 }
 
 .navbar .hamburger-button {
@@ -228,11 +271,13 @@ input[type=number] {
     width: calc(100vw - var(--sidebar-width));
     padding: 20px 0;
     transition: all 0.5s ease-out;
-    background-color: #f2f7ff;
+    background-color: #E7F0FF;
 }
 
 .content-mediko-quiz {
-    background-color: #3B1171 !important;
+    left: calc(var(--sidebar-width) + 25px) !important;
+    width: calc(100vw - (var(--sidebar-width) + 25px)) !important;
+    top: 95px !important;
 }
 
 .content.expanded {
@@ -242,8 +287,8 @@ input[type=number] {
 }
 
 .content.content-mediko-quiz.expanded {
-    left: 0;
-    width: 100vw;
+    left: 0 !important;
+    width: 100vw !important;
     transition: all 0.5s ease-out;
 }
 
@@ -312,7 +357,37 @@ input[type=number] {
 
 @media (max-width: 768px) {
     .notification-card {
-        width: 200px;
+        right: -150px;
+        max-width: 100vw;
+    }
+
+    .navbar-mediko-quiz {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        background-color: white !important;
+        border-radius: 0px !important;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+
+    .navbar.full {
+        width: 100vw !important;
+        left: 0 !important;
+    }
+
+    .sidebar-mediko-quiz{
+        padding-top: 40px;
+        top: 24px !important;
+        left: 0 !important;
+        border-radius: 16px;
+        height: 100%;
+    }
+
+    .content-mediko-quiz {
+        left: 0 !important;
+        width: 100% !important;
+        top: 95px !important;
     }
 }
 

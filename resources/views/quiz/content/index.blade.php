@@ -1,39 +1,10 @@
 @extends('layouts.app')
 
 <style>
-    .ql-toolbar .ql-picker-label,
-    .ql-toolbar .ql-stroke,
-    .ql-toolbar .ql-fill {
-        color: white !important;
-        stroke: white !important;
-        border-radius: 12px !important;
-    }
-    .ql-picker,
-    .ql-picker-options,
-    .ql-picker-item,
-    .ql-picker-label {
-    color: black !important;
-    fill: black !important;
-    stroke: black !important;
-    }
-
-    .ql-picker-item svg .ql-stroke {
-    stroke: black !important;
-    }
-
-
     .card .card-body {
         position: relative;
         overflow: hidden; /* Mencegah efek keluar dari card */
     }
-
-    .dt-info{
-        color: white !important;
-    }
-    .dt-search label{
-        color: white !important;
-    }
-
 
     .card .card-body::before {
         content: "";
@@ -128,11 +99,9 @@
     }
 
     .quiz-container-rank {
-            max-width: 800px;
-            margin: 20px auto;
             padding: 10px;
-            background-color: #2E0052;
-            border-radius: 10px;
+            background-color: white;
+            border-radius: 16px !important;
             color: white;
         }
         .rank-item {
@@ -204,8 +173,8 @@
 
 @section('content')
     <div class="min-h-screen">
-        @include('quiz.partials.sidebar')  {{-- Sidebar Quiz --}}
-        @include('quiz.partials.navbar')   {{-- Navbar Quiz --}}
+        @include('quiz.partials.sidebar')
+        @include('quiz.partials.navbar')
 
         <div class="content content-mediko-quiz text-white min-h-screen">
             <div class="container-fluid">
