@@ -227,6 +227,7 @@ class QuizPlayController extends Controller
         </div>';
 
         try {
+            putenv('HOME=/tmp');
             $pdf = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print', ['id' => $id, 'preview' => 1]))
                 ->setNodeBinary('/usr/bin/node')
                 ->setNpmBinary('/usr/bin/npm')
