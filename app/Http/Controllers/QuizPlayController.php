@@ -228,14 +228,15 @@ class QuizPlayController extends Controller
 
         try {
             $pdf = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print', ['id' => $id, 'preview' => 1]))
-                ->setOption('args', ['--no-sandbox'])
                 ->setNodeBinary('/usr/bin/node')
                 ->setNpmBinary('/usr/bin/npm')
+                ->setOption('args', ['--no-sandbox']) // opsional, bisa disatukan di bawah
                 ->noSandbox()
+                ->setOption('executablePath', '/usr/bin/chromium-browser') // sesuaikan path jika berbeda
                 ->waitUntilNetworkIdle()
                 ->showBrowserHeaderAndFooter()
                 ->format('A4')
-                ->margins(5, 10, 10, 10)
+                ->margins(5, 10, 10, 10) // top, right, bottom, left dalam mm
                 ->showBackground()
                 ->footerHtml($footerHtml)
                 ->pdf();
@@ -243,7 +244,7 @@ class QuizPlayController extends Controller
             return response()->json([
                 'success' => true,
                 'file' => base64_encode($pdf),
-                'filename' => "hasil-kuiz-".$attempt->name.".pdf"
+                'filename' => "hasil-kuiz-" . ($attempt->name ?? 'tanpa-nama') . ".pdf"
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -251,5 +252,6 @@ class QuizPlayController extends Controller
                 'message' => 'Gagal generate PDF: ' . $e->getMessage()
             ]);
         }
+
     }
 }
