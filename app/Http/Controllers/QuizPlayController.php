@@ -230,14 +230,12 @@ class QuizPlayController extends Controller
             $pdf = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print', ['id' => $id, 'preview' => 1]))
                 ->setNodeBinary('/usr/bin/node')
                 ->setNpmBinary('/usr/bin/npm')
-                ->setOption('args', ['--no-sandbox']) // opsional, bisa disatukan di bawah
                 ->setChromePath('/usr/bin/google-chrome')
                 ->addChromiumArguments([
                     '--no-sandbox',
                     '--disable-gpu',
-                    '--user-data-dir=/tmp/chrome', // 👈 fix utama di sini
+                    '--user-data-dir=/tmp/chrome',
                 ])
-                ->noSandbox()
                 ->waitUntilNetworkIdle()
                 ->showBrowserHeaderAndFooter()
                 ->format('A4')
