@@ -66,7 +66,7 @@
                                     @if ($type === 'answers')
                                         <div class="row g-2 w-100">
                                             @foreach ($currentQuestion->answers as $index => $answer)
-                                                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex" style="flex:1 0 20%;max-width:20%;">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex">
                                                     <label class="d-flex flex-column align-items-center justify-content-center m-0 p-0 w-100 h-100"
                                                            style="flex: 1 1 0; min-width: 0;">
                                                         <div class="card text-white card-hover text-center w-100 h-100"
@@ -415,4 +415,38 @@
         modal.show();
     }
 </script>
+
+<style>
+/* Responsive fix for answer cards */
+@media (max-width: 575.98px) {
+    .quiz-container .row > [class^='col-'] {
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+}
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .quiz-container .row > [class^='col-'] {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .quiz-container .row > [class^='col-'] {
+        max-width: 33.3333%;
+        flex: 0 0 33.3333%;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .quiz-container .row > [class^='col-'] {
+        max-width: 25%;
+        flex: 0 0 25%;
+    }
+}
+@media (min-width: 1200px) {
+    .quiz-container .row > [class^='col-'] {
+        max-width: 16.6667%;
+        flex: 0 0 16.6667%;
+    }
+}
+</style>
 
