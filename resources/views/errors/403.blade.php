@@ -12,7 +12,14 @@
             </svg>
         </div>
         <h1 class="display-4 fw-bold mb-2 text-warning">Akses Ditolak</h1>
-        <p class="lead mb-4 text-secondary">Anda tidak memiliki izin untuk mengakses halaman ini.</p>
+        <p class="lead mb-4 text-secondary">
+            {{-- Tampilkan pesan dari abort jika ada --}}
+            @if(isset($exception) && $exception->getMessage())
+                {{ $exception->getMessage() }}
+            @else
+                Anda tidak memiliki izin untuk mengakses halaman ini.
+            @endif
+        </p>
         <a href="{{ url('/') }}" class="btn btn-warning px-4 py-2 shadow text-white">Kembali ke Beranda</a>
     </div>
 </div>

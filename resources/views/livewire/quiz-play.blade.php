@@ -64,20 +64,22 @@
                                 </p>
                                 <div class="p-2 d-flex align-items-center justify-content-center flex-column" style="background-color: #23488E;border-radius: 8px; color: white;">
                                     @if ($type === 'answers')
-                                        <div class="d-flex justify-content-center align-items-stretch w-100" style="gap: 12px;">
+                                        <div class="row g-2 w-100">
                                             @foreach ($currentQuestion->answers as $index => $answer)
-                                                <label class="d-flex flex-column align-items-center justify-content-center m-0 p-0"
-                                                       style="flex: 1 1 0; max-width: 20%; aspect-ratio: 1 / 1; min-width: 0;">
-                                                    <div class="card text-white card-hover text-center w-100 h-100"
-                                                        style="background-color: {{ ['#2D70AE', '#2E9DA6', '#EFA929', '#D5546D', 'rgb(84, 157, 213)'][$index] }};
-                                                               border-radius: 12px; cursor:pointer; display: flex; align-items: center; justify-content: center; height: 100%;">
-                                                        <div class="card-body d-flex flex-column align-items-center justify-content-center gap-2 p-3 w-100 h-100"
-                                                             style="height: 100%; width: 100%;">
-                                                            <input type="radio" name="answer" data-id="{{ $answer->id }}" value="{{ $answer->score }}" class="answer-input d-none">
-                                                            <span style="font-size: 1rem; word-break: break-word;">{{ $answer->answer }}</span>
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex" style="flex:1 0 20%;max-width:20%;">
+                                                    <label class="d-flex flex-column align-items-center justify-content-center m-0 p-0 w-100 h-100"
+                                                           style="flex: 1 1 0; min-width: 0;">
+                                                        <div class="card text-white card-hover text-center w-100 h-100"
+                                                            style="background-color: {{ ['#2D70AE', '#2E9DA6', '#EFA929', '#D5546D', 'rgb(84, 157, 213)'][$index] }};
+                                                                   border-radius: 12px; cursor:pointer; display: flex; align-items: center; justify-content: center; height: 100%;">
+                                                            <div class="card-body d-flex flex-column align-items-center justify-content-center gap-2 p-3 w-100 h-100"
+                                                                 style="height: 100%; width: 100%;">
+                                                                <input type="radio" name="answer" data-id="{{ $answer->id }}" value="{{ $answer->score }}" class="answer-input d-none">
+                                                                <span style="font-size: 1rem; word-break: break-word;">{{ $answer->answer }}</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </label>
+                                                    </label>
+                                                </div>
                                             @endforeach
                                         </div>
                                     @else
