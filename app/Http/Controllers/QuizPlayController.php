@@ -231,7 +231,12 @@ class QuizPlayController extends Controller
                 ->setNodeBinary('/usr/bin/node')
                 ->setNpmBinary('/usr/bin/npm')
                 ->setOption('args', ['--no-sandbox']) // opsional, bisa disatukan di bawah
-                ->setChromePath('/usr/bin/google-chrome') // atau '/usr/bin/chromium-browser'
+                ->setChromePath('/usr/bin/google-chrome')
+                ->addChromiumArguments([
+                    '--no-sandbox',
+                    '--disable-gpu',
+                    '--user-data-dir=/tmp/chrome', // 👈 fix utama di sini
+                ])
                 ->noSandbox()
                 ->waitUntilNetworkIdle()
                 ->showBrowserHeaderAndFooter()
