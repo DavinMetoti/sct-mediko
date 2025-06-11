@@ -416,37 +416,3 @@
     }
 </script>
 
-<style>
-/* Responsive fix for answer cards */
-@media (max-width: 575.98px) {
-    .quiz-container .row > [class^='col-'] {
-        max-width: 100%;
-        flex: 0 0 100%;
-    }
-}
-@media (min-width: 576px) and (max-width: 767.98px) {
-    .quiz-container .row > [class^='col-'] {
-        max-width: 50%;
-        flex: 0 0 50%;
-    }
-}
-@media (min-width: 768px) and (max-width: 991.98px) {
-    .quiz-container .row > [class^='col-'] {
-        max-width: 33.3333%;
-        flex: 0 0 33.3333%;
-    }
-}
-@media (min-width: 992px) and (max-width: 1199.98px) {
-    .quiz-container .row > [class^='col-'] {
-        max-width: 25%;
-        flex: 0 0 25%;
-    }
-}
-@media (min-width: 1200px) {
-    .quiz-container .row > [class^='col-'] {
-        max-width: 16.6667%;
-        flex: 0 0 16.6667%;
-    }
-}
-</style>
-
