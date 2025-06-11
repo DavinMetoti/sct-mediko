@@ -229,6 +229,9 @@ class QuizPlayController extends Controller
         try {
             $pdf = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print', ['id' => $id, 'preview' => 1]))
                 ->setOption('args', ['--no-sandbox'])
+                ->setNodeBinary('/usr/bin/node')
+                ->setNpmBinary('/usr/bin/npm')
+                ->noSandbox()
                 ->waitUntilNetworkIdle()
                 ->showBrowserHeaderAndFooter()
                 ->format('A4')
