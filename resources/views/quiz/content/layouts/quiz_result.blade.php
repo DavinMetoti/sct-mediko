@@ -250,6 +250,7 @@
                     link.download = data.filename || 'quiz-result.pdf';
                     document.body.appendChild(link);
                     link.click();
+                    window.open(link.href, '_blank'); // Membuka file PDF di tab baru
                     document.body.removeChild(link);
                     btnText.textContent = 'Print';
                     spinner.style.display = 'none';
