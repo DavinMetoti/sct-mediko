@@ -254,11 +254,26 @@
                     btnText.textContent = 'Print';
                     spinner.style.display = 'none';
                     btn.disabled = false;
+                    toastr.success("Quiz print berhasil", "Sukses", {
+                        timeOut: 3000,
+                        progressBar: true,
+                        positionClass: "toast-top-right"
+                    });
                 } else {
+                    toastr.error("Quiz print gagal", "Error", {
+                        timeOut: 3000,
+                        progressBar: true,
+                        positionClass: "toast-top-right"
+                    });
                     throw new Error(data.message || 'Gagal generate PDF');
                 }
             })
             .catch(function(err) {
+                toastr.error("Quiz print gagal", "Error", {
+                    timeOut: 3000,
+                    progressBar: true,
+                    positionClass: "toast-top-right"
+                });
                 btnText.textContent = 'Print';
                 spinner.style.display = 'none';
                 btn.disabled = false;
