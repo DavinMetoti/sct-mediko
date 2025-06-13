@@ -32,6 +32,12 @@
             </div>
             @if($attempt)
                 <div class="row">
+                    <div class="col-12">
+                        <!-- message print success -->
+                        <div id="print-success-message" class="alert alert-success d-none" role="alert">
+                            Quiz print berhasil! File PDF telah diunduh.
+                        </div>
+                    </div>
                     <div class="col-md-3">
                         <div style="background-color: #204281; padding: 20px; border-radius: 10px;">
                             <p style="color: #ACC2EA;">Nama Peserta <br><span class="fw-semibold text-white"> {{ $attempt->name ?? 'Tidak Diketahui' }}</span></p>
@@ -228,6 +234,7 @@
             var btn = document.querySelector('button[onclick="startPrint()"]');
             var spinner = document.getElementById('print-spinner');
             var btnText = document.getElementById('print-btn-text');
+            var successMsg = document.getElementById('print-success-message');
             btn.disabled = true;
             spinner.style.display = 'inline-block';
             btnText.textContent = 'Printing...';
@@ -255,6 +262,13 @@
                     btnText.textContent = 'Print';
                     spinner.style.display = 'none';
                     btn.disabled = false;
+                    // Tampilkan pesan sukses print
+                    if(successMsg) {
+                        successMsg.classList.remove('d-none');
+                        setTimeout(() => {
+                            successMsg.classList.add('d-none');
+                        }, 3500);
+                    }
                     toastr.success("Quiz print berhasil", "Sukses", {
                         timeOut: 3000,
                         progressBar: true,

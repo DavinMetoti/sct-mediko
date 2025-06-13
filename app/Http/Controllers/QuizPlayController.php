@@ -228,7 +228,10 @@ class QuizPlayController extends Controller
 
         try {
             putenv('HOME=/tmp');
-            $browsershot = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print', ['id' => $id, 'preview' => 1]))
+            $pdf = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print', ['id' => $id, 'preview' => 1]))
+                ->setNodeBinary('/usr/bin/node')
+                ->setNpmBinary('/usr/bin/npm')
+                ->setChromePath('/usr/bin/google-chrome')
                 ->addChromiumArguments([
                     '--no-sandbox',
                     '--disable-gpu',
@@ -239,20 +242,8 @@ class QuizPlayController extends Controller
                 ->format('A4')
                 ->margins(5, 10, 10, 10) // top, right, bottom, left dalam mm
                 ->showBackground()
-                ->footerHtml($footerHtml);
-
-            // Jika ada custom path di ENV, gunakan
-            if (env('NODE_BINARY')) {
-                $browsershot->setNodeBinary(env('NODE_BINARY'));
-            }
-            if (env('NPM_BINARY')) {
-                $browsershot->setNpmBinary(env('NPM_BINARY'));
-            }
-            if (env('CHROME_PATH')) {
-                $browsershot->setChromePath(env('CHROME_PATH'));
-            }
-
-            $pdf = $browsershot->pdf();
+                ->footerHtml($footerHtml)
+                ->pdf();
 
             return response()->json([
                 'success' => true,
