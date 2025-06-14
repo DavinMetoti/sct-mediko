@@ -258,4 +258,70 @@ class QuizPlayController extends Controller
         }
 
     }
+
+    public function printRationale(string $id)
+    {
+        // Jika ada parameter preview, tampilkan HTML untuk Browsershot
+        if (request()->has('preview')) {
+            $attempt = \App\Models\QuizAttempt::with([
+                'session.questions' => function ($query) {
+                    $query->orderBy('id', 'asc');
+                },
+                'session.questions.columnTitle',
+                'session.questions.answers',
+                'userAnswer'
+            ])->findOrFail($id);
+
+            $printDate = now()->format('d-m-Y H:i');
+            return view('quiz.print.rationale', compact('attempt', 'printDate'));
+        }
+
+        // Header HTML dengan logo dan judul quiz
+        $attempt = \App\Models\QuizAttempt::with([
+            'session'
+        ])->findOrFail($id);
+
+        $logoPath = public_path('assets/images/logo-mediko.webp');
+        $logoBase64 = '';
+        if (file_exists($logoPath)) {
+            $logoBase64 = 'data:image/webp;base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
+        $footerHtml = '<div style="width:100%;font-size:11px;padding:4px 24px 0 24px;display:flex;justify-content:space-between;">
+            <span>Cetak: '.now()->format('d-m-Y H:i').'</span>
+            <span>Halaman <span class="pageNumber"></span> / <span class="totalPages"></span></span>
+        </div>';
+
+        try {
+            putenv('HOME=/tmp');
+            $pdf = \Spatie\Browsershot\Browsershot::url(route('quiz-play.print-rationale', ['id' => $id, 'preview' => 1]))
+                ->setNodeBinary('/usr/bin/node')
+                ->setNpmBinary('/usr/bin/npm')
+                ->setChromePath('/usr/bin/google-chrome')
+                ->addChromiumArguments([
+                    '--no-sandbox',
+                    '--disable-gpu',
+                    '--user-data-dir=/tmp/chrome',
+                ])
+                ->waitUntilNetworkIdle()
+                ->showBrowserHeaderAndFooter()
+                ->format('A4')
+                ->margins(5, 10, 10, 10) // top, right, bottom, left dalam mm
+                ->showBackground()
+                ->footerHtml($footerHtml)
+                ->pdf();
+
+            return response()->json([
+                'success' => true,
+                'file' => base64_encode($pdf),
+                'filename' => "hasil-kuiz-" . ($attempt->name ?? 'tanpa-nama') . ".pdf"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal generate PDF: ' . $e->getMessage()
+            ]);
+        }
+
+    }
 }

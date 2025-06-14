@@ -141,4 +141,5 @@ Route::middleware('auth')->resource('library-folder', LibraryFolderController::c
 Route::middleware('auth')->resource('quiz-result', QuizResultController::class);
 Route::middleware('auth')->resource('quiz-classroom', ClassroomController::class);
 Route::get('quiz-play/{id}/print', [QuizPlayController::class, 'print'])->name('quiz-play.print');
+Route::get('quiz-play/{id}/print-rationale', [QuizPlayController::class, 'printRationale'])->name('quiz-play.print-rationale');
 

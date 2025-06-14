@@ -19,17 +19,23 @@ class LoginController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            $deviceId = hash('sha256', request()->userAgent());
+        $deviceId = hash('sha256', request()->userAgent());
 
-            $existingDevice = UserDevice::where('user_id', $user->id)
-                ->where('device_id', $deviceId)
-                ->exists();
+        // Cari device yang sudah terdaftar
+        $existingDevice = UserDevice::where('device_id', $deviceId)->first();
 
-            if ($existingDevice) {
+        if ($existingDevice) {
+            // Login otomatis user terkait device
+            $user = $existingDevice->user;
+            if ($user) {
+                Auth::login($user);
                 return redirect($user->accessRole->access == "private" ? route('dashboard.index') : route('student.index'));
             }
+        }
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            return redirect($user->accessRole->access == "private" ? route('dashboard.index') : route('student.index'));
         }
 
         return view('auth.login');

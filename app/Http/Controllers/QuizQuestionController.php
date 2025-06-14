@@ -56,7 +56,8 @@ class QuizQuestionController extends Controller
                 'answer.*.score' => 'required|numeric|min:0|max:1',
                 'answer.*.panelist' => 'required|integer',
                 'uploaded_image_base64' => 'nullable|string',
-                'new_bank'=>'nullable|string'
+                'new_bank'=>'nullable|string',
+                'rationale' => 'nullable|string',
             ]);
 
             // Jika new_bank diisi, buat bank baru dan gunakan id-nya
@@ -98,6 +99,7 @@ class QuizQuestionController extends Controller
                     'timer' => $validated['timer'],
                     'explanation' => $validated['explanation'] ?? null,
                     'uploaded_image_base64' => $validated['uploaded_image_base64'] ?? null,
+                    'rationale' => $validated['rationale'] ?? null,
                 ]);
 
                 // Hapus jawaban lama dan simpan jawaban baru
@@ -118,6 +120,7 @@ class QuizQuestionController extends Controller
                     'created_by' => auth()->id(),
                     'explanation' => $validated['explanation'] ?? null,
                     'uploaded_image_base64' => $validated['uploaded_image_base64'] ?? null,
+                    'rationale' => $validated['rationale'] ?? null,
                 ]);
 
                 // Simpan jawaban ke dalam tabel `quiz_answers`
@@ -194,6 +197,7 @@ class QuizQuestionController extends Controller
                 'answer.*.score' => 'required|numeric|min:0|max:1',
                 'answer.*.panelist' => 'required|integer',
                 'uploaded_image_base64' => 'nullable|string',
+                'rationale' => 'nullable|string',
             ]);
 
             $quizQuestion = QuizQuestion::findOrFail($id);
@@ -209,6 +213,7 @@ class QuizQuestionController extends Controller
                 'explanation' => $validated['explanation'] ?? null,
                 'updated_by' => auth()->id(),
                 'uploaded_image_base64' => $validated['uploaded_image_base64'] ?? null,
+                'rationale' => $validated['rationale'] ?? null,
             ]);
 
             $quizQuestion->answers()->delete();

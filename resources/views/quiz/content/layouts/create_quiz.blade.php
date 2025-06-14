@@ -32,6 +32,12 @@
                         <div id="editor"></div>
                     </div>
                     <div class="col-12 mt-5"></div>
+                    <div class="col-12 mt-3"></div>
+                    <div class="col-12 mt-3">
+                        <label for="rationale-editor" class="mb-1 text-muted">Rationale</label>
+                        <div id="rationale-editor"></div>
+                    </div>
+                    <div class="col-12 mt-5"></div>
                     <div class="col-12 mt-5">
                         <label for="bank-soal" class="mb-1 text-muted">Bank Soal</label>
                         <div class="row g-2">
@@ -129,6 +135,9 @@
             const question = new QuillEditor('#editor', {}, (content) => {
                 localStorage.setItem('editorContent', content);
             });
+            const rationaleEditor = new QuillEditor('#rationale-editor', {}, (content) => {
+                localStorage.setItem('rationaleContent', content);
+            });
 
             const panelistDescriptions = {
                 'DIAGNOSIS': [
@@ -224,6 +233,9 @@
             // Restore Quill editor content
             if (localStorage.getItem('editorContent')) {
                 question.setContent(localStorage.getItem('editorContent'));
+            }
+            if (localStorage.getItem('rationaleContent')) {
+                rationaleEditor.setContent(localStorage.getItem('rationaleContent'));
             }
 
             // Restore answer fields
@@ -434,6 +446,7 @@
 
                 const collectAndSendData = (base64Image = null) => {
                     const clinical_case = question.getContent();
+                    const rationale = rationaleEditor.getContent();
                     const quiz_question_bank = $('#bank-soal').val();
                     const medical_field = $('#medical-field').val();
                     const column_title = $('#column-title').val();
@@ -469,6 +482,7 @@
                         'timer': timer,
                         'answer': answers,
                         'uploaded_image_base64': base64Image,
+                        'rationale': rationale,
                         'new_bank': $('#new-bank').val()
                     };
 
@@ -504,7 +518,8 @@
                                 'initial-hypothesis',
                                 'new-information',
                                 'timer',
-                                'editorContent'
+                                'editorContent',
+                                'rationaleContent'
                             ];
                             fields.forEach(id => localStorage.removeItem(id));
                             for (let i = 1; i <= 5; i++) {

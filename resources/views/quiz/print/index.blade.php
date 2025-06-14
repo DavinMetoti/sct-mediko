@@ -242,6 +242,10 @@
                     </tbody>
                 </table>
             </div>
+            @if($question->rationale)
+                <div class="section-title" style="margin-top:14px;">Rationale</div>
+                <div class="bg-panel">{!! preg_replace('/style="[^"]*"/i', '', $question->rationale) !!}</div>
+            @endif
             <div class="section-title" style="margin-top:14px;">Distribusi Jawaban Peserta</div>
             <div style="page-break-inside: avoid;">
                 @foreach ($question->answers as $answer)

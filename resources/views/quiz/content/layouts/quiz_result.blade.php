@@ -1,7 +1,7 @@
 @extends('quiz.content.play')
 @section('quiz-content')
     <div class="quiz-container">
-        <div class="container">
+        <div class="md-container">
             <style>
                 @media print {
                     button, .card-quiz {
@@ -44,14 +44,22 @@
                             <p style="color: #ACC2EA;">Total Soal <br><span class="fw-semibold text-white"> {{ $attempt->session->questions->count() }}</span></p>
                             <p style="color: #ACC2EA;">Skor Akhir <br><span class="fw-semibold text-white"> {{ number_format(($attempt->score / $attempt->session->questions->count()) * 100, 2) }}</span></p>
                             <button onclick="startPrint()" class="btn btn-orange w-full mt-3" style="border-radius: 8px; position: relative;">
+                                <i class="fas fa-print me-2"></i>
                                 <span id="print-btn-text">Print</span>
+                                <span id="print-spinner" style="display:none;position:absolute;right:16px;top:50%;transform:translateY(-50%);">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                            </button>
+                            <button onclick="startPrintRationale()" class="btn btn-danger w-full mt-3" style="border-radius: 8px; position: relative;">
+                                <i class="fas fa-file-alt me-2"></i>
+                                <span id="print-btn-text">Print Rationale</span>
                                 <span id="print-spinner" style="display:none;position:absolute;right:16px;top:50%;transform:translateY(-50%);">
                                     <i class="fas fa-spinner fa-spin"></i>
                                 </span>
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-9" style="max-height: 90vh; overflow-y: auto;">
+                    <div class="col-md-9  mt-4 mt-md-0" style="max-height: 90vh; overflow-y: auto;">
                         <div>
                             @php
                                 $allSelectedAnswers = $attempt->userAnswer->groupBy('quiz_question_id')->map(function ($answers) {
@@ -150,6 +158,12 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            @if($question->rationale)
+                                            <strong class="text-white">Rationale:</strong>
+                                                <div class="mt-3 p-3" style="background-color: #23488E; border-radius: 8px;">
+                                                    <div class="text-white">{!! preg_replace('/style="[^"]*"/i', '', $question->rationale) !!}</div>
+                                                </div>
+                                            @endif
                                         </div>
 
                                         {{-- Distribusi Jawaban Peserta --}}
@@ -195,6 +209,27 @@
                 <p class="text-center mt-4">Tidak ada data hasil kuis.</p>
             @endif
         </div>
+    </div>
+
+    <!-- Modal Bootstrap untuk pesan rationale tidak tersedia -->
+    <div class="modal fade" id="noRationaleModal" tabindex="-1" aria-labelledby="noRationaleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 18px;">
+          <div class="modal-body text-dark text-center  py-4 px-4" style="background: #f8fafc; border-radius: 18px;">
+            <div class="d-flex justify-content-center">
+                <img src="{{ asset('assets/images/Feeling sorry-pana.png') }}" alt="Rationale Not Available" style="width: 120px; margin-bottom: 18px; opacity: 0.85;text-align: center;">
+            </div>
+            <h5 class="fw-bold mb-2" style="color: #23488E;">Rationale Belum Tersedia</h5>
+            <p class="mb-3" style="color: #555; font-size: 1.05rem;">
+                Mohon maaf, rationale untuk soal-soal pada sesi ini belum tersedia.<br>
+                Silakan hubungi admin atau pembuat soal untuk informasi lebih lanjut.
+            </p>
+            <button type="button" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm" data-bs-dismiss="modal" style="font-weight: 500;">
+                <i class="fas fa-arrow-left me-2"></i> Kembali
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -292,6 +327,84 @@
                 btnText.textContent = 'Print';
                 spinner.style.display = 'none';
                 btn.disabled = false;
+                alert(err.message || 'Gagal generate PDF');
+            });
+        }
+
+        function startPrintRationale() {
+            const questions = @json($attempt->session->questions);
+            let hasRationale = false;
+            if (questions && Array.isArray(questions)) {
+                hasRationale = questions.some(q => q.rationale && q.rationale.trim() !== "");
+            } else if (questions && typeof questions === 'object') {
+                hasRationale = Object.values(questions).some(q => q.rationale && q.rationale.trim() !== "");
+            }
+            if (!hasRationale) {
+                var modal = new bootstrap.Modal(document.getElementById('noRationaleModal'));
+                modal.show();
+                return;
+            }
+
+            // Download file PDF dengan fetch
+            var btn = document.querySelector('button[onclick="startPrintRationale()"]');
+            var spinner = btn ? btn.querySelector('#print-spinner') : null;
+            var btnText = btn ? btn.querySelector('#print-btn-text') : null;
+            if (btn && spinner && btnText) {
+                btn.disabled = true;
+                spinner.style.display = 'inline-block';
+                btnText.textContent = 'Printing...';
+            }
+
+            fetch("{{ route('quiz-play.print-rationale', ['id' => $attempt->id]) }}", {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(async response => {
+                if (!response.ok) {
+                    throw new Error('Gagal generate PDF');
+                }
+                const data = await response.json();
+                if (data.success && data.file) {
+                    // Download PDF dari base64
+                    const link = document.createElement('a');
+                    link.href = 'data:application/pdf;base64,' + data.file;
+                    link.download = data.filename || 'quiz-rationale.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    window.open(link.href, '_blank');
+                    document.body.removeChild(link);
+                    if (btn && spinner && btnText) {
+                        btnText.textContent = 'Print Rationale';
+                        spinner.style.display = 'none';
+                        btn.disabled = false;
+                    }
+                    toastr.success("Print rationale berhasil", "Sukses", {
+                        timeOut: 3000,
+                        progressBar: true,
+                        positionClass: "toast-top-right"
+                    });
+                } else {
+                    toastr.error("Print rationale gagal", "Error", {
+                        timeOut: 3000,
+                        progressBar: true,
+                        positionClass: "toast-top-right"
+                    });
+                    throw new Error(data.message || 'Gagal generate PDF');
+                }
+            })
+            .catch(function(err) {
+                toastr.error("Print rationale gagal", "Error", {
+                    timeOut: 3000,
+                    progressBar: true,
+                    positionClass: "toast-top-right"
+                });
+                if (btn && spinner && btnText) {
+                    btnText.textContent = 'Print Rationale';
+                    spinner.style.display = 'none';
+                    btn.disabled = false;
+                }
                 alert(err.message || 'Gagal generate PDF');
             });
         }

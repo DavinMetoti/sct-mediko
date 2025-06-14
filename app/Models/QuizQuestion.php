@@ -19,7 +19,8 @@ class QuizQuestion extends Model
         'timer',
         'created_by',
         'explanation',
-        'uploaded_image_base64'
+        'uploaded_image_base64',
+        'rationale',
     ];
 
     /**

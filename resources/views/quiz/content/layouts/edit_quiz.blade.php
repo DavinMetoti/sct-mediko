@@ -26,6 +26,12 @@
                         <div id="editor"></div>
                     </div>
                     <div class="col-12 mt-5"></div>
+                    <div class="col-12 mt-3"></div>
+                    <div class="col-12 mt-3">
+                        <label for="rationale-editor" class="mb-1 text-muted">Rationale</label>
+                        <div id="rationale-editor"></div>
+                    </div>
+                    <div class="col-12 mt-5"></div>
                     <div class="col-12 mt-5">
                         <label for="bank-soal" class="mb-1 text-muted">Bank Soal</label>
                         <div class="row g-2">
@@ -122,6 +128,9 @@
             const question = new QuillEditor('#editor', {}, (content) => {
                 // No localStorage
             });
+            const rationaleEditor = new QuillEditor('#rationale-editor', {}, (content) => {
+                // No localStorage
+            });
 
             // Restore form values from questions only (no localStorage)
             const fields = [
@@ -160,6 +169,7 @@
             // Restore Quill editor content from questions only
             if (questions) {
                 question.setContent(questions.clinical_case);
+                rationaleEditor.setContent(questions.rationale || '');
             }
 
             // Restore answer fields from questions only
@@ -321,6 +331,7 @@
 
             $('#save-question').on('click', () => {
                 const clinical_case = question.getContent();
+                const rationale = rationaleEditor.getContent();
                 const quiz_question_bank = $('#bank-soal').val();
                 const medical_field = $('#medical-field').val();
                 const column_title = $('#column-title').val();
@@ -350,6 +361,7 @@
                     'initial_hypothesis': initial_hypothesis,
                     'new_information': new_information,
                     'timer': timer,
+                    'rationale': rationale,
                     'answer': answers
                 };
                 const pathSegments = window.location.pathname.split('/');
