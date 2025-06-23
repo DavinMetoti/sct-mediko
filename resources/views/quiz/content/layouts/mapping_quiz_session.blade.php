@@ -277,7 +277,7 @@
             let target = event.target;
 
             if (target.classList.contains('btn-delete')) {
-                let questionCard = target.closest('.card-purple');
+                let questionCard = target.closest('.card');
 
                 if (questionCard) {
                     let questionId = questionCard.getAttribute('data-id');
