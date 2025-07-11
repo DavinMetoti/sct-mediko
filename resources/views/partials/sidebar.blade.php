@@ -215,6 +215,6 @@
     </div>
 
     <div class="footer">
-        <div class="text-center text-gray-500" style="font-size: 12px">© 2024 MEDIKO.ID All rights reserved.</div>
+        <div class="text-center text-white" style="font-size: 12px">© 2024 MEDIKO.ID All rights reserved.</div>
     </div>
 </div>

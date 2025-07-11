@@ -291,6 +291,10 @@ input[type=number] {
     width: calc(100vw - (var(--sidebar-width) + 72px)) !important;
     background-color: white !important;
     border-radius: 16px;
+    background: white !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
 .btn-primary {
@@ -1192,7 +1196,7 @@ table.dataTable tbody tr:hover {
 
 /* Modern Logo Container */
 .modern-logo-container {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 16px;
     padding: 16px 20px;
@@ -1202,7 +1206,7 @@ table.dataTable tbody tr:hover {
 }
 
 .modern-logo-container:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 1);
     transform: translateY(-2px);
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
 }
@@ -1210,7 +1214,7 @@ table.dataTable tbody tr:hover {
 .logo-image {
     width: 120px;
     height: auto;
-    filter: brightness(1.1);
+    filter: brightness(1);
     transition: all 0.3s ease;
 }
 
@@ -1253,4 +1257,120 @@ table.dataTable tbody tr:hover {
     background: white;
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+}
+
+/* Override modern styles for quiz-specific elements */
+.sidebar-mediko-quiz {
+    background-color: var(--background-color) !important;
+    background: var(--background-color) !important;
+    box-shadow: var(--shadow-color) 0px 3px 8px !important;
+    border-right: none !important;
+    backdrop-filter: none !important;
+}
+
+.sidebar-mediko-quiz .header-icon {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+}
+
+.sidebar-mediko-quiz .modern-logo-container {
+    background: #ffffff !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+}
+
+.sidebar-mediko-quiz .modern-logo-container:hover {
+    background: #ffffff !important;
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.sidebar-mediko-quiz .header-menu h5 {
+    color: #A8A8A8 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+.sidebar-mediko-quiz .menu-title a {
+    color: #5E5E5E !important;
+    opacity: 0.7 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    animation: none !important;
+    transform: none !important;
+}
+
+.sidebar-mediko-quiz .menu-title a::before {
+    display: none !important;
+}
+
+.sidebar-mediko-quiz .menu-title a::after {
+    display: none !important;
+}
+
+.sidebar-mediko-quiz .menu-title a:hover,
+.sidebar-mediko-quiz .menu-title a.active {
+    color: #007bff !important;
+    background-color: #E7F0FF !important;
+    font-weight: normal !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.sidebar-mediko-quiz .menu-title a:hover i,
+.sidebar-mediko-quiz .menu-title a.active i {
+    transform: none !important;
+    color: #007bff !important;
+}
+
+.sidebar-mediko-quiz .footer {
+    background: var(--background-color) !important;
+    border-top: none !important;
+    color: #A8A8A8 !important;
+    backdrop-filter: none !important;
+}
+
+.sidebar-mediko-quiz .menu {
+    scrollbar-width: auto !important;
+    scrollbar-color: auto !important;
+}
+
+.sidebar-mediko-quiz .menu::-webkit-scrollbar {
+    width: auto !important;
+}
+
+.sidebar-mediko-quiz .menu::-webkit-scrollbar-track {
+    background: auto !important;
+}
+
+.sidebar-mediko-quiz .menu::-webkit-scrollbar-thumb {
+    background: auto !important;
+    border-radius: 5px !important;
+}
+
+.sidebar-mediko-quiz .menu::-webkit-scrollbar-thumb:hover {
+    background: auto !important;
+}
+
+/* Override modern navbar styles for quiz-specific elements */
+.navbar-mediko-quiz {
+    background: white !important;
+    backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Override content styles for quiz */
+.content-mediko-quiz {
+    top: 95px !important;
 }
