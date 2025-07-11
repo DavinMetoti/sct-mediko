@@ -39,14 +39,43 @@
                 </div>
             </div>
 
-            <!-- @unless(config('app.env') === 'production')
-                <a href="{{ route('quiz.index') }}" class="btn-quiz">
-                    <i class="fas fa-play me-2"></i> Go To Quiz
-                </a>
-            @endunless -->
-            <a href="{{ route('quiz.index') }}" class="btn-quiz">
-                <i class="fas fa-play me-2"></i> Go To Quiz
-            </a>
+            <!-- Quiz Dropdown -->
+            <div class="dropdown modern-dropdown" id="dropdown-quiz">
+                <button class="dropdown-toggle modern-btn-quiz" id="quiz-dropdown-button">
+                    <div class="btn-content">
+                        <i class="fas fa-play-circle me-2"></i> 
+                        <span>Quiz Center</span>
+                        <i class="fas fa-chevron-down ms-2 dropdown-arrow"></i>
+                    </div>
+                </button>
+                <div class="dropdown-menu modern-dropdown-menu" id="quiz-dropdown-menu">
+                    <div class="dropdown-header">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Learning Center
+                    </div>
+                    <a href="{{ route('quiz.index') }}" class="dropdown-item modern-dropdown-item">
+                        <div class="item-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="item-content">
+                            <div class="item-title">Quiz Challenge</div>
+                            <div class="item-subtitle">Test your knowledge</div>
+                        </div>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item modern-dropdown-item">
+                        <div class="item-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="item-content">
+                            <div class="item-title">Medmaster Deck</div>
+                            <div class="item-subtitle">Study cards collection</div>
+                        </div>
+                        <i class="fas fa-arrow-right item-arrow"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -237,5 +266,63 @@
     document.getElementById('close-notification-card').addEventListener('click', () => {
         const notificationCard = document.getElementById('notification-card');
         notificationCard.style.display = 'none';
+    });
+
+    // Modern Quiz Dropdown functionality
+    document.getElementById('quiz-dropdown-button').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const quizDropdown = document.getElementById('dropdown-quiz');
+        const quizDropdownMenu = document.getElementById('quiz-dropdown-menu');
+        const profileDropdownMenu = document.getElementById('dropdown-menu');
+        const notificationCard = document.getElementById('notification-card');
+        
+        // Close other dropdowns
+        profileDropdownMenu.style.display = 'none';
+        notificationCard.style.display = 'none';
+        
+        // Toggle quiz dropdown with animation
+        if (quizDropdownMenu.classList.contains('show')) {
+            quizDropdownMenu.classList.remove('show');
+            quizDropdown.classList.remove('active');
+            setTimeout(() => {
+                quizDropdownMenu.style.display = 'none';
+            }, 300);
+        } else {
+            quizDropdownMenu.style.display = 'flex';
+            quizDropdown.classList.add('active');
+            setTimeout(() => {
+                quizDropdownMenu.classList.add('show');
+            }, 10);
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        const quizDropdown = document.getElementById('dropdown-quiz');
+        const quizDropdownMenu = document.getElementById('quiz-dropdown-menu');
+        
+        if (!quizDropdown.contains(event.target)) {
+            quizDropdownMenu.classList.remove('show');
+            quizDropdown.classList.remove('active');
+            setTimeout(() => {
+                quizDropdownMenu.style.display = 'none';
+            }, 300);
+        }
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    document.getElementById('quiz-dropdown-menu').addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
+
+    // Add hover effects for dropdown items
+    document.querySelectorAll('.modern-dropdown-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            item.style.transform = 'translateX(4px)';
+        });
+        
+        item.addEventListener('mouseleave', () => {
+            item.style.transform = 'translateX(0)';
+        });
     });
 </script>

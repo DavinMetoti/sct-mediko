@@ -1,8 +1,8 @@
 <div class="sidebar" style="overflow: hidden;" id="sidebar">
-    <div class="flex justify-content-center mb-3 header-icon w-full h-full py-2">
+    <div class="flex justify-content-center mb-4 header-icon w-full py-3">
         <a class="flex items-center">
-            <div class="flex justify-content-center gap-2 p-2 rounded-lg bg-white shadow-md">
-                <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="63%">
+            <div class="modern-logo-container">
+                <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" class="logo-image">
             </div>
         </a>
     </div>
