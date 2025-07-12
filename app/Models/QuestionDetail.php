@@ -77,4 +77,9 @@ class QuestionDetail extends Model
         return $this->belongsTo(QuestionDetail::class);
     }
 
+    public function flashCards()
+    {
+        return $this->hasMany(QuestionDetailFlashCard::class, 'question_detail_id');
+    }
+
 }

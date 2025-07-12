@@ -55,11 +55,14 @@ class QuestionDetailController extends Controller
                 'rationale' => 'required|string',
             ]);
 
-            QuestionDetail::create($validated);
+            $questionDetail = QuestionDetail::create($validated);
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Detail pertanyaan berhasil ditambahkan',
+                'data' => [
+                    'id' => $questionDetail->id
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -176,5 +179,122 @@ class QuestionDetailController extends Controller
         return view('admin.question_detail_edit', compact('questionDetail','topics','questionBank','medicalFields','columnTitle'));
     }
 
+    /**
+     * Upload flashcard PDF for panelist
+     */
+    public function uploadFlashcard(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'panelist' => 'required|string',
+                'flashcard_file' => 'required|file|mimes:pdf|max:10240', // 10MB max
+                'question_detail_id' => 'required|integer|exists:question_details,id',
+            ]);
+
+            $file = $request->file('flashcard_file');
+            $panelist = $validated['panelist'];
+            $questionDetailId = $validated['question_detail_id'];
+
+            // Ensure flashcards directory exists
+            $flashcardsPath = storage_path('app/public/flashcards');
+            if (!is_dir($flashcardsPath)) {
+                mkdir($flashcardsPath, 0755, true);
+            }
+
+            // Create filename with timestamp
+            $timestamp = now()->format('YmdHis');
+            $filename = "flashcard_panelist_{$panelist}_{$timestamp}.pdf";
+            
+            // Store file in public/storage/flashcards directory
+            $path = $file->storeAs('flashcards', $filename, 'public');
+
+            // Create flashcard record
+            $flashcard = new \App\Models\QuestionDetailFlashCard();
+            $flashcard->question_detail_id = $questionDetailId; // Required, must exist
+            $flashcard->path = $path;
+            $flashcard->panelist = $panelist;
+            $flashcard->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Flashcard berhasil diupload',
+                'data' => [
+                    'id' => $flashcard->id,
+                    'path' => $path,
+                    'panelist' => $panelist,
+                    'question_detail_id' => $questionDetailId,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    /**
+     * Get flashcards for a question detail
+     */
+    public function getFlashcards(string $id)
+    {
+        try {
+            $questionDetail = QuestionDetail::findOrFail($id);
+            $flashcards = $questionDetail->flashCards()->orderBy('panelist')->get();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $flashcards->map(function($flashcard) {
+                    return [
+                        'id' => $flashcard->id,
+                        'panelist' => $flashcard->panelist,
+                        'path' => $flashcard->path,
+                        'url' => asset('storage/' . $flashcard->path),
+                        'created_at' => $flashcard->created_at->format('d/m/Y H:i'),
+                    ];
+                })
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    /**
+     * Get flashcards by panelist value
+     */
+    public function getFlashcardsByPanelist(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'panelist' => 'required|string',
+            ]);
+
+            $flashcards = \App\Models\QuestionDetailFlashCard::where('panelist', $validated['panelist'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $flashcards->map(function($flashcard) {
+                    return [
+                        'id' => $flashcard->id,
+                        'panelist' => $flashcard->panelist,
+                        'path' => $flashcard->path,
+                        'url' => asset('storage/' . $flashcard->path),
+                        'created_at' => $flashcard->created_at->format('d/m/Y H:i'),
+                        'question_detail_id' => $flashcard->question_detail_id,
+                    ];
+                })
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+    }
 
 }

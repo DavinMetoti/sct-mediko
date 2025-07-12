@@ -214,5 +214,27 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * Check if user is still authenticated
+     */
+    public function checkAuth(Request $request)
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            return response()->json([
+                'authenticated' => true,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email
+                ]
+            ], 200);
+        }
+
+        return response()->json([
+            'authenticated' => false
+        ], 401);
+    }
+
 
 }

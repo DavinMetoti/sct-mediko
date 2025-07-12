@@ -1,7 +1,25 @@
-<nav class="navbar" id="navbar">
+<style>
+@media (max-width: 768px) {
+    .navbar-mediko-quiz .btn-blue.go-to-tryout-desktop {
+        display: none !important;
+    }
+    .navbar-mediko-quiz .dropdown-menu .go-to-tryout-mobile {
+        display: block !important;
+    }
+    .navbar-mediko-quiz .dropdown-menu {
+        min-width: 180px;
+    }
+}
+@media (min-width: 769px) {
+    .navbar-mediko-quiz .dropdown-menu .go-to-tryout-mobile {
+        display: none !important;
+    }
+}
+</style>
+<nav class="navbar navbar-mediko-quiz" id="navbar">
     <div class="d-flex justify-content-between align-items-center w-full">
         <div>
-            <button type="button" class="hamburger-button" id="hamburger-button">
+            <button type="button" class="hamburger-button" style="color: #256EF8;" id="hamburger-button">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -9,12 +27,12 @@
         <div class="flex gap-4 align-items-center">
             <div class="button-notifications position-relative">
                 <button type="button" class="btn btn-transparent position-relative p-0" id="notification-button">
-                    <i id="bell-icon" class="fas fa-bell text-white" style="font-size: 20px"></i>
+                    <i id="bell-icon" class="fas fa-bell" style="font-size: 20px;color: #256EF8;"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-badge" style="display: none;">
                         0
                         <span class="visually-hidden">unread messages</span>
                     </span>
-                    <span id="loading-spinner" class="spinner-border spinner-border-sm text-white" style="display: none;"></span>
+                    <span id="loading-spinner" class="spinner-border spinner-border-sm" style="display: none;color: #256EF8;"></span>
                 </button>
 
                 <div class="notification-card" id="notification-card" style="display: none;">
@@ -30,52 +48,22 @@
             </div>
             <!-- Profile Dropdown -->
             <div class="dropdown" id="dropdown-profile">
-                <button class="dropdown-toggle" id="dropdown-button">
+                <button class="dropdown-toggle" id="dropdown-button" style="border-color: #256EF8;color: #256EF8;">
                     {{ Auth::user()->name }}
                 </button>
                 <div class="dropdown-menu" id="dropdown-menu">
-                    <a href="{{ route('profile.index', ['id' => auth()->id()]) }}" class="dropdown-item">Profile</a>
-                    <a href="#" id="logout-button" class="dropdown-item">Log Out</a>
+                    <a href="{{ route('dashboard.index') }}" class="dropdown-item go-to-tryout-mobile" style="color: #256EF8; display: none;">
+                        Go To Tryout
+                    </a>
+                    <a href="{{ route('profile.index', ['id' => auth()->id()]) }}" style="color: #256EF8;" class="dropdown-item">Profile</a>
+                    <a href="{{ route('medmastery.history') }}" style="color: #256EF8;" class="dropdown-item">
+                        <i class="fas fa-history me-2"></i>Riwayat Quiz
+                    </a>
+                    <a href="#" id="logout-button" class="dropdown-item" style="color: #256EF8;">Log Out</a>
                 </div>
             </div>
 
-            <!-- Quiz Dropdown -->
-            <div class="dropdown modern-dropdown" id="dropdown-quiz">
-                <button class="dropdown-toggle modern-btn-quiz" id="quiz-dropdown-button">
-                    <div class="btn-content">
-                        <i class="fas fa-play-circle me-2"></i> 
-                        <span>Quiz Center</span>
-                        <i class="fas fa-chevron-down ms-2 dropdown-arrow"></i>
-                    </div>
-                </button>
-                <div class="dropdown-menu modern-dropdown-menu" id="quiz-dropdown-menu">
-                    <div class="dropdown-header">
-                        <i class="fas fa-graduation-cap me-2"></i>
-                        Learning Center
-                    </div>
-                    <a href="{{ route('quiz.index') }}" class="dropdown-item modern-dropdown-item">
-                        <div class="item-icon">
-                            <i class="fas fa-play-circle"></i>
-                        </div>
-                        <div class="item-content">
-                            <div class="item-title">Quiz Challenge</div>
-                            <div class="item-subtitle">Test your knowledge</div>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ route('medmastery.index') }}" class="dropdown-item modern-dropdown-item">
-                        <div class="item-icon">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-                        <div class="item-content">
-                            <div class="item-title">Medmaster Deck</div>
-                            <div class="item-subtitle">Study cards collection</div>
-                        </div>
-                        <i class="fas fa-arrow-right item-arrow"></i>
-                    </a>
-                </div>
-            </div>
+            <a href="{{ route('dashboard.index') }}" class="btn btn-blue go-to-tryout-desktop"><i class="fas fa-file-alt me-2"></i> Go To Tryout</a>
         </div>
     </div>
 </nav>
@@ -103,12 +91,7 @@
 <script>
     const confirmationModal = new ConfirmationModal();
 
-    document.getElementById('logout-button').addEventListener('click', (e) => {
-        e.preventDefault();
-        // Close dropdown first
-        document.getElementById('dropdown-menu').style.display = 'none';
-        document.getElementById('dropdown-profile').classList.remove('active');
-        
+    document.getElementById('logout-button').addEventListener('click', () => {
         confirmationModal.open({
             message: 'Apakah anda yakin ingin logout?',
             severity: 'warn',
@@ -271,113 +254,5 @@
     document.getElementById('close-notification-card').addEventListener('click', () => {
         const notificationCard = document.getElementById('notification-card');
         notificationCard.style.display = 'none';
-    });
-
-    // Profile Dropdown functionality
-    document.getElementById('dropdown-button').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const profileDropdown = document.getElementById('dropdown-profile');
-        const profileDropdownMenu = document.getElementById('dropdown-menu');
-        const quizDropdownMenu = document.getElementById('quiz-dropdown-menu');
-        const notificationCard = document.getElementById('notification-card');
-        
-        // Close other dropdowns
-        quizDropdownMenu.classList.remove('show');
-        document.getElementById('dropdown-quiz').classList.remove('active');
-        setTimeout(() => {
-            quizDropdownMenu.style.display = 'none';
-        }, 300);
-        notificationCard.style.display = 'none';
-        
-        // Toggle profile dropdown
-        if (profileDropdownMenu.style.display === 'block') {
-            profileDropdownMenu.style.display = 'none';
-            profileDropdown.classList.remove('active');
-        } else {
-            profileDropdownMenu.style.display = 'block';
-            profileDropdown.classList.add('active');
-        }
-    });
-
-    // Modern Quiz Dropdown functionality
-    document.getElementById('quiz-dropdown-button').addEventListener('click', (e) => {
-        e.stopPropagation();
-        const quizDropdown = document.getElementById('dropdown-quiz');
-        const quizDropdownMenu = document.getElementById('quiz-dropdown-menu');
-        const profileDropdownMenu = document.getElementById('dropdown-menu');
-        const notificationCard = document.getElementById('notification-card');
-        
-        // Close other dropdowns
-        profileDropdownMenu.style.display = 'none';
-        document.getElementById('dropdown-profile').classList.remove('active');
-        notificationCard.style.display = 'none';
-        
-        // Toggle quiz dropdown with animation
-        if (quizDropdownMenu.classList.contains('show')) {
-            quizDropdownMenu.classList.remove('show');
-            quizDropdown.classList.remove('active');
-            setTimeout(() => {
-                quizDropdownMenu.style.display = 'none';
-            }, 300);
-        } else {
-            quizDropdownMenu.style.display = 'flex';
-            quizDropdown.classList.add('active');
-            setTimeout(() => {
-                quizDropdownMenu.classList.add('show');
-            }, 10);
-        }
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (event) => {
-        const quizDropdown = document.getElementById('dropdown-quiz');
-        const quizDropdownMenu = document.getElementById('quiz-dropdown-menu');
-        const profileDropdown = document.getElementById('dropdown-profile');
-        const profileDropdownMenu = document.getElementById('dropdown-menu');
-        const notificationCard = document.getElementById('notification-card');
-        
-        // Close quiz dropdown if clicked outside
-        if (!quizDropdown.contains(event.target)) {
-            quizDropdownMenu.classList.remove('show');
-            quizDropdown.classList.remove('active');
-            setTimeout(() => {
-                quizDropdownMenu.style.display = 'none';
-            }, 300);
-        }
-        
-        // Close profile dropdown if clicked outside
-        if (!profileDropdown.contains(event.target)) {
-            profileDropdownMenu.style.display = 'none';
-            profileDropdown.classList.remove('active');
-        }
-        
-        // Close notification card if clicked outside
-        if (!event.target.closest('#notification-button') && !event.target.closest('#notification-card')) {
-            notificationCard.style.display = 'none';
-        }
-    });
-
-    // Prevent dropdown from closing when clicking inside
-    document.getElementById('quiz-dropdown-menu').addEventListener('click', (event) => {
-        event.stopPropagation();
-    });
-    
-    document.getElementById('dropdown-menu').addEventListener('click', (event) => {
-        // Allow logout and profile links to work normally
-        if (event.target.id === 'logout-button' || event.target.closest('a[href]')) {
-            return;
-        }
-        event.stopPropagation();
-    });
-
-    // Add hover effects for dropdown items
-    document.querySelectorAll('.modern-dropdown-item').forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.style.transform = 'translateX(4px)';
-        });
-        
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'translateX(0)';
-        });
     });
 </script>

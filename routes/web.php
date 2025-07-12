@@ -13,6 +13,10 @@ use App\Http\Controllers\ListInvoiceController;
 use App\Http\Controllers\ListPakcageController;
 use App\Http\Controllers\ListStudentController;
 use App\Http\Controllers\MedicalFieldController;
+use App\Http\Controllers\MedMasteryController;
+use App\Http\Controllers\MedMasteryCategoryController;
+use App\Http\Controllers\MedMasteryQuestionController;
+use App\Http\Controllers\MedMasterySegmantationController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaymentController;
@@ -52,6 +56,7 @@ Route::get('register', [LoginController::class, 'register'])->name('register');
 Route::post('login/check', [LoginController::class, 'login'])->name('login.check');
 Route::post('register/store', [LoginController::class, 'registerStore'])->name('register.store');
 Route::post('logout', [LoginController::class, 'logout'])->name('login.logout');
+Route::get('check-auth', [LoginController::class, 'checkAuth'])->name('check.auth');
 Route::post('/send-otp', [OtpController::class, 'sendOtp'])->name('send.otp');
 Route::get('/verify-otp', [OtpController::class, 'showVerifyOtpPage'])
     ->middleware(OtpAccessMiddleware::class)
@@ -69,6 +74,16 @@ Route::middleware('auth')->resource('tryout', TryoutController::class);
 Route::middleware('auth')->resource('task-history', TaskHistoryController::class);
 Route::middleware('auth')->resource('tryout-archive', HistoryTryoutController::class);
 Route::middleware('auth')->resource('list-package', ListPakcageController::class);
+// Route khusus untuk quiz (harus di atas resource route)
+Route::middleware('auth')->post('medmastery-quiz/start/{categoryId}', [MedMasteryController::class, 'startQuiz'])->name('medmastery.quiz.start');
+Route::middleware('auth')->post('medmastery-quiz/submit/{categoryId}', [MedMasteryController::class, 'submitQuiz'])->name('medmastery.quiz.submit');
+Route::middleware('auth')->post('medmastery-quiz/restart/{categoryId}', [MedMasteryController::class, 'restartQuiz'])->name('medmastery.quiz.restart');
+Route::middleware('auth')->get('medmastery-quiz/result/{categoryId}/{answerId}', [MedMasteryController::class, 'showQuizResult'])->name('medmastery.quiz.result');
+Route::middleware('auth')->get('medmastery/history', [MedMasteryController::class, 'userHistory'])->name('medmastery.history');
+Route::middleware('auth')->get('medmastery/history/{answerId}', [MedMasteryController::class, 'userHistoryDetail'])->name('medmastery.history.detail');
+// Route khusus untuk siswa melihat detail kategori
+Route::middleware('auth')->get('medmastery/category/{id}', [MedMasteryController::class, 'showCategory'])->name('medmastery.category.show');
+Route::middleware('auth')->resource('medmastery', MedMasteryController::class)->except(['show', 'edit', 'update', 'destroy']);
 Route::middleware('auth')->resource('payment', PaymentController::class);
 Route::middleware('auth')->resource('admin/dashboard', AdminController::class);
 Route::middleware('auth')->resource('dashboard/student', StudentController::class);
@@ -79,6 +94,9 @@ Route::middleware('auth')->resource('admin/broadcast', BroadcastController::clas
 Route::middleware('auth')->resource('admin/question', QuestionController::class);
 Route::middleware('auth')->resource('admin/medical-field', MedicalFieldController::class);
 Route::middleware('auth')->resource('admin/question-detail', QuestionDetailController::class);
+Route::middleware('auth')->post('admin/question-detail/upload-flashcard', [QuestionDetailController::class, 'uploadFlashcard'])->name('question-detail.upload-flashcard');
+Route::middleware('auth')->get('admin/question-detail/{id}/flashcards', [QuestionDetailController::class, 'getFlashcards'])->name('question-detail.flashcards');
+Route::middleware('auth')->get('admin/flashcards/by-panelist', [QuestionDetailController::class, 'getFlashcardsByPanelist'])->name('flashcards.by-panelist');
 Route::middleware('auth')->resource('admin/sub-topic', SubTopicController::class);
 Route::middleware('auth')->resource('admin/topic', TopicController::class);
 Route::middleware('auth')->resource('admin/setting', SettingController::class);
@@ -87,6 +105,10 @@ Route::middleware('auth')->resource('admin/question-detail-type', QuestionDetail
 Route::middleware('auth')->resource('admin/question-bank', QuestionBankController::class);
 Route::middleware('auth')->resource('admin/column-title', ColumnTitleController::class);
 Route::middleware('auth')->resource('admin/list-invoice', ListInvoiceController::class);
+Route::middleware('auth')->resource('admin/medmastery-segmentation', MedMasterySegmantationController::class);
+Route::middleware('auth')->resource('admin/medmastery-category', MedMasteryCategoryController::class);
+Route::middleware('auth')->resource('admin/medmastery-question', MedMasteryQuestionController::class);
+
 
 // --- Pindahkan semua route custom quiz-* sebelum resource quiz ---
 Route::middleware('auth')->get('questions/list', [QuestionController::class, 'showQuestion'])->name('question-list.index');

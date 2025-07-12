@@ -105,4 +105,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Package::class, 'package_user', 'user_id', 'package_id');
     }
+
+    public function medMasteryAnswers()
+    {
+        return $this->hasMany(MedMasteryAnswer::class, 'user_id');
+    }
 }

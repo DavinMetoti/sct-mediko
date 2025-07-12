@@ -175,7 +175,8 @@ class TryoutController extends Controller
             'medicalField',
             'subTopic',
             'questionType',
-            'columnTitle'
+            'columnTitle',
+            'flashCards'
         ])->findOrFail($id);
 
         $questionDetail->makeHidden('panelist_answers_distribution');

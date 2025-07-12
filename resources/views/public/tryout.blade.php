@@ -66,7 +66,7 @@
                             <div class="text-gray-600">
                                 Sisa Waktu: <span id="timer" class="font-medium"></span>
                             </div>
-                            <a href="{{ $formReport->first()->value }}" target="_blank" class="btn btn-danger d-inline-flex align-items-center">
+                            <a href="{{ $formReport->first()->value ?? '#' }}" target="_blank" class="btn btn-danger d-inline-flex align-items-center">
                                 <i class="fas fa-flag"></i>
                             </a>
                         </div>
@@ -118,6 +118,12 @@
                                                             <div class="fw-medium">-2</div>
                                                             <div class="text-sm text-gray-600" id="minus_two"></div>
                                                         </div>
+                                                        <div class="ml-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary flashcard-btn d-flex align-items-center gap-1" data-panelist="-2" title="Lihat Flashcard PDF">
+                                                                <i class="fas fa-file-pdf"></i>
+                                                                <span class="d-none d-sm-inline">Flashcard</span>
+                                                            </button>
+                                                        </div>
                                                     </label>
                                                     <label class="flex items-center space-x-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                                         <div class="flex items-center justify-center">
@@ -126,6 +132,12 @@
                                                         <div class="flex-1">
                                                             <div class="fw-medium">-1</div>
                                                             <div class="text-sm text-gray-600" id="minus_one"></div>
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary flashcard-btn d-flex align-items-center gap-1" data-panelist="-1" title="Lihat Flashcard PDF">
+                                                                <i class="fas fa-file-pdf"></i>
+                                                                <span class="d-none d-sm-inline">Flashcard</span>
+                                                            </button>
                                                         </div>
                                                     </label>
                                                     <label class="flex items-center space-x-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
@@ -136,6 +148,12 @@
                                                             <div class="fw-medium">0</div>
                                                             <div class="text-sm text-gray-600" id="zero"></div>
                                                         </div>
+                                                        <div class="ml-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary flashcard-btn d-flex align-items-center gap-1" data-panelist="0" title="Lihat Flashcard PDF">
+                                                                <i class="fas fa-file-pdf"></i>
+                                                                <span class="d-none d-sm-inline">Flashcard</span>
+                                                            </button>
+                                                        </div>
                                                     </label>
                                                     <label class="flex items-center space-x-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                                         <div class="flex items-center justify-center">
@@ -145,6 +163,12 @@
                                                             <div class="fw-medium">+1</div>
                                                             <div class="text-sm text-gray-600" id="one"></div>
                                                         </div>
+                                                        <div class="ml-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary flashcard-btn d-flex align-items-center gap-1" data-panelist="1" title="Lihat Flashcard PDF">
+                                                                <i class="fas fa-file-pdf"></i>
+                                                                <span class="d-none d-sm-inline">Flashcard</span>
+                                                            </button>
+                                                        </div>
                                                     </label>
                                                     <label class="flex items-center space-x-3 p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                                                         <div class="flex items-center justify-center">
@@ -153,6 +177,12 @@
                                                         <div class="flex-1">
                                                             <div class="font-medium">+2</div>
                                                             <div class="text-sm text-gray-600" id="two"></div>
+                                                        </div>
+                                                        <div class="ml-2">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary flashcard-btn d-flex align-items-center gap-1" data-panelist="2" title="Lihat Flashcard PDF">
+                                                                <i class="fas fa-file-pdf"></i>
+                                                                <span class="d-none d-sm-inline">Flashcard</span>
+                                                            </button>
                                                         </div>
                                                     </label>
                                                 </div>
@@ -213,6 +243,126 @@
     </div>
   </div>
 </div>
+
+<!-- Flashcard PDF Modal -->
+<div class="modal fade" id="flashcardPdfModal" tabindex="-1" aria-labelledby="flashcardPdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="flashcardPdfModalLabel">Flashcard</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center align-items-center" style="min-height: 400px;">
+                <!-- Loading spinner with card flip animation -->
+                <div id="loadingSpinner" class="flashcard-loading">
+                    <div class="card-flip">
+                        <div class="card-front">
+                            <i class="fas fa-file-pdf fa-3x text-primary"></i>
+                            <p class="mt-2">Loading PDF...</p>
+                        </div>
+                        <div class="card-back">
+                            <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+                            <p class="mt-2">Please wait...</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- PDF Viewer with protection -->
+                <object id="pdfViewer" 
+                        data="" 
+                        type="application/pdf" 
+                        style="width: 100%; height: 600px; display: none;"
+                        oncontextmenu="return false;">
+                    <p>Browser Anda tidak mendukung tampilan PDF. <a href="#" onclick="alert('Download tidak diizinkan'); return false;">Coba browser lain</a></p>
+                </object>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Flashcard loading animation */
+.flashcard-loading {
+    perspective: 1000px;
+}
+
+.card-flip {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: flip 2s infinite linear;
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+@keyframes flip {
+    0% { transform: rotateY(0deg); }
+    50% { transform: rotateY(180deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+/* Button animation */
+.flashcard-btn {
+    transition: all 0.3s ease;
+    display: none !important; /* Hidden by default */
+}
+
+.flashcard-btn.show {
+    display: inline-flex !important; /* Show when needed */
+}
+
+.flashcard-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+
+/* PDF Protection */
+#pdfViewer {
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Disable print for the modal */
+@media print {
+    #flashcardPdfModal {
+        display: none !important;
+    }
+}
+
+/* Disable right click on PDF viewer */
+#flashcardPdfModal .modal-body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+</style>
 
 @endsection
 
@@ -364,6 +514,12 @@
                 $('#zero').text(question_tryout.question_type.zero);
                 $('#one').text(question_tryout.question_type.one);
                 $('#two').text(question_tryout.question_type.two);
+
+                // Handle flashcard buttons - check for both flash_cards and flashCards
+                const flashcards = question_tryout.flash_cards || question_tryout.flashCards || [];
+                console.log('Question data:', question_tryout);
+                console.log('Flashcards found:', flashcards);
+                handleFlashcardButtons(flashcards);
 
                 if (activeQuestion !== null) {
                     $('#question-' + activeQuestion).removeClass('bg-primary text-white');
@@ -534,6 +690,121 @@
         }
     }
 
+    // Function to handle flashcard buttons visibility
+    function handleFlashcardButtons(flashcards) {
+        // Hide all flashcard buttons first and remove previous data
+        $('.flashcard-btn').removeClass('show').removeData('flashcard-path');
+        
+        // Only show buttons for panelists that have flashcards
+        if (flashcards && flashcards.length > 0) {
+            console.log('Processing flashcards:', flashcards);
+            
+            flashcards.forEach(function(flashcard) {
+                // Convert panelist to string for consistent comparison
+                const panelistStr = String(flashcard.panelist);
+                const btn = $(`.flashcard-btn[data-panelist="${panelistStr}"]`);
+                console.log(`Looking for button with panelist "${panelistStr}":`, btn.length);
+                
+                if (btn.length > 0) {
+                    btn.addClass('show');
+                    btn.data('flashcard-path', flashcard.path);
+                    console.log(`Showing button for panelist ${panelistStr} with path: ${flashcard.path}`);
+                }
+            });
+        } else {
+            console.log('No flashcards available for this question');
+        }
+        
+        // Debug: Log which buttons are currently visible
+        const visibleButtons = $('.flashcard-btn.show');
+        console.log(`${visibleButtons.length} flashcard buttons are now visible`);
+    }
 
+    // Handle flashcard button click
+    $(document).on('click', '.flashcard-btn', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const flashcardPath = $(this).data('flashcard-path');
+        const panelist = $(this).data('panelist');
+        
+        console.log('Button clicked for panelist:', panelist);
+        console.log('Flashcard path:', flashcardPath);
+        
+        if (flashcardPath) {
+            showFlashcardPdf(flashcardPath, panelist);
+        } else {
+            console.error('No flashcard path found for panelist:', panelist);
+        }
+    });
 
+    // Function to show flashcard PDF with loading animation
+    function showFlashcardPdf(flashcardPath, panelist) {
+        const modal = $('#flashcardPdfModal');
+        const pdfViewer = $('#pdfViewer');
+        const loadingSpinner = $('#loadingSpinner');
+        
+        // Update modal title
+        $('#flashcardPdfModalLabel').text(`Flashcard PDF - Panelist ${panelist}`);
+        
+        // Show modal with loading animation
+        modal.modal('show');
+        loadingSpinner.show();
+        pdfViewer.hide();
+        
+        // Construct PDF URL with disable download parameter
+        const pdfUrl = `{{ asset('storage') }}/${flashcardPath}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+        
+        // Add protection against keyboard shortcuts
+        modal.off('keydown').on('keydown', function(e) {
+            // Disable Ctrl+S (Save), Ctrl+P (Print), F12 (DevTools)
+            if ((e.ctrlKey && (e.key === 's' || e.key === 'p')) || e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Simulate loading delay and load PDF
+        setTimeout(function() {
+            pdfViewer.attr('data', pdfUrl);
+            
+            // Hide loading and show PDF after a short delay
+            setTimeout(function() {
+                loadingSpinner.hide();
+                pdfViewer.show();
+            }, 1000);
+        }, 500);
+    }
+
+    // Reset modal when closed
+    $('#flashcardPdfModal').on('hidden.bs.modal', function() {
+        $('#pdfViewer').attr('data', '').hide();
+        $('#loadingSpinner').show();
+        $('.alert-danger', '#flashcardPdfModal .modal-body').remove();
+        $(this).off('keydown'); // Remove event listeners
+    });
+
+    // Additional PDF protection when modal is shown
+    $('#flashcardPdfModal').on('shown.bs.modal', function() {
+        // Disable right-click context menu
+        $('#flashcardPdfModal').on('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Disable text selection
+        $('#flashcardPdfModal').on('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Disable drag
+        $('#flashcardPdfModal').on('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        // Focus the modal to ensure keyboard events are captured
+        $(this).focus();
+    });
 </script>

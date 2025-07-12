@@ -110,6 +110,10 @@
                                         <div>Distribusi Jawaban Panelis</div>
                                         <div>Sisa panelis: <span id="remaining-panelists">10</span></div>
                                     </label>
+                                    <div class="alert alert-info mb-3">
+                                        <i class="fas fa-info-circle"></i> 
+                                        <strong>Catatan:</strong> Upload flashcard PDF akan tersedia setelah soal disimpan.
+                                    </div>
                                     <div style="border: rgba(128, 128, 128, 0.567) 1px solid;border-radius: 7px" class="p-2">
                                         <div class="d-flex justify-content-between mb-2">
 
@@ -125,6 +129,9 @@
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" id="input-panelis-1" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 upload-flashcard-btn" data-panelist="-2" disabled>
+                                                        <i class="fas fa-upload"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
@@ -136,6 +143,9 @@
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" id="input-panelis-2" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 upload-flashcard-btn" data-panelist="-1" disabled>
+                                                        <i class="fas fa-upload"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
@@ -147,6 +157,9 @@
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" id="input-panelis-3" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 upload-flashcard-btn" data-panelist="0" disabled>
+                                                        <i class="fas fa-upload"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
@@ -158,6 +171,9 @@
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" id="input-panelis-4" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 upload-flashcard-btn" data-panelist="1" disabled>
+                                                        <i class="fas fa-upload"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center" style="padding-bottom:15px;padding-top:10px;">
@@ -169,6 +185,9 @@
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" id="input-panelis-5" style="max-width: 3rem" class="form-control mx-2 text-center value" value="0" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 upload-flashcard-btn" data-panelist="2" disabled>
+                                                        <i class="fas fa-upload"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -182,6 +201,40 @@
         </div>
     </div>
 </div>
+
+<!-- Flashcard Upload Modal -->
+<div class="modal fade" id="flashcardModal" tabindex="-1" aria-labelledby="flashcardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="flashcardModalLabel">Upload Flashcard PDF</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="flashcardForm" enctype="multipart/form-data">
+                    <input type="hidden" id="panelistValue" name="panelist">
+                    <input type="hidden" id="questionDetailIdValue" name="question_detail_id">
+                    
+                    <div class="mb-3">
+                        <label for="flashcard_file" class="form-label">Pilih File PDF</label>
+                        <input type="file" class="form-control" id="flashcard_file" name="flashcard_file" accept=".pdf" required>
+                        <div class="form-text">File harus berformat PDF, maksimal 10MB</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Panelist</label>
+                        <input type="text" class="form-control" id="panelistDisplay" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="uploadFlashcardBtn">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @include('partials.script')
@@ -401,6 +454,16 @@
                 data: JSON.stringify(data),
                 success: function (response) {
                     toastSuccess(response.message);
+                    
+                    // Simpan question_detail_id untuk upload flashcard
+                    if (response.data && response.data.id) {
+                        window.questionDetailId = response.data.id;
+                        // Aktifkan tombol flashcard
+                        $('.upload-flashcard-btn').prop('disabled', false);
+                        $('.alert-info').removeClass('alert-info').addClass('alert-success')
+                            .html('<i class="fas fa-check-circle"></i> <strong>Soal berhasil disimpan!</strong> Sekarang Anda dapat mengupload flashcard PDF.');
+                    }
+                    
                     $('#clinical-case').val('');
                     $('#initial-hypothesis').val('');
                     $('#new-information').val('');
@@ -433,6 +496,88 @@
             });
         }
 
+
+        // Global variable untuk menyimpan question_detail_id
+        window.questionDetailId = null;
+
+        // Handle flashcard upload button click
+        $('.upload-flashcard-btn').on('click', function() {
+            if (!window.questionDetailId) {
+                toastError('Silakan simpan soal terlebih dahulu sebelum mengupload flashcard.');
+                return;
+            }
+
+            const panelist = $(this).data('panelist');
+            const panelistText = getPanelistText(panelist);
+            
+            $('#panelistValue').val(panelist);
+            $('#questionDetailIdValue').val(window.questionDetailId);
+            $('#panelistDisplay').val(panelistText);
+            
+            $('#flashcardModal').modal('show');
+        });
+
+        // Handle upload flashcard
+        $('#uploadFlashcardBtn').on('click', function() {
+            const form = document.getElementById('flashcardForm');
+            const formData = new FormData(form);
+            const file = $('#flashcard_file')[0].files[0];
+            
+            if (!file) {
+                toastError('Silakan pilih file PDF terlebih dahulu.');
+                return;
+            }
+
+            if (file.type !== 'application/pdf') {
+                toastError('File harus berformat PDF.');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) { // 10MB
+                toastError('Ukuran file maksimal 10MB.');
+                return;
+            }
+
+            const panelist = $('#panelistValue').val();
+            const questionDetailId = $('#questionDetailIdValue').val();
+
+            formData.append('panelist', panelist);
+            formData.append('flashcard_file', file);
+            formData.append('question_detail_id', questionDetailId);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            $.ajax({
+                url: '{{ route('question-detail.upload-flashcard') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    toastSuccess(response.message);
+                    $('#flashcardForm')[0].reset();
+                    $('#flashcardModal').modal('hide');
+                },
+                error: function(xhr) {
+                    let message = 'Terjadi kesalahan saat mengupload flashcard.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
+                    }
+                    toastError(message);
+                }
+            });
+        });
+
+        // Helper function untuk mendapatkan text panelist
+        function getPanelistText(panelist) {
+            const panelistMap = {
+                '-2': 'Sangat tidak mungkin (-2)',
+                '-1': 'Tidak mungkin (-1)',
+                '0': 'Tidak mendukung ataupun menyikirkan (0)',
+                '1': 'Mungkin (1)',
+                '2': 'Sangat mungkin (2)'
+            };
+            return panelistMap[panelist] || panelist;
+        }
     });
 
 </script>

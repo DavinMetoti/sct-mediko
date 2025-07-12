@@ -139,6 +139,9 @@ $questionDetailPanelis = array_combine(
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[-2] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 flashcard-btn" data-panelist="-2" data-bs-toggle="modal" data-bs-target="#flashcardModal">
+                                                        <i class="fas fa-file-pdf"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
@@ -150,6 +153,9 @@ $questionDetailPanelis = array_combine(
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[-1] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 flashcard-btn" data-panelist="-1" data-bs-toggle="modal" data-bs-target="#flashcardModal">
+                                                        <i class="fas fa-file-pdf"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
@@ -161,6 +167,9 @@ $questionDetailPanelis = array_combine(
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[0] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 flashcard-btn" data-panelist="0" data-bs-toggle="modal" data-bs-target="#flashcardModal">
+                                                        <i class="fas fa-file-pdf"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: rgba(128, 128, 128, 0.567) 1px solid;padding-bottom:15px;padding-top:10px;">
@@ -172,6 +181,9 @@ $questionDetailPanelis = array_combine(
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[1] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 flashcard-btn" data-panelist="1" data-bs-toggle="modal" data-bs-target="#flashcardModal">
+                                                        <i class="fas fa-file-pdf"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center" style="padding-bottom:15px;padding-top:10px;">
@@ -183,6 +195,9 @@ $questionDetailPanelis = array_combine(
                                                     <button class="btn btn-outline-secondary btn-sm decrement">−</button>
                                                     <input type="text" style="max-width: 3rem" class="form-control mx-2 text-center value" value="{{ $questionDetailPanelis[2] }}" min="0" max="10" readonly>
                                                     <button class="btn btn-outline-secondary btn-sm increment">+</button>
+                                                    <button class="btn btn-outline-primary btn-sm ms-2 flashcard-btn" data-panelist="2" data-bs-toggle="modal" data-bs-target="#flashcardModal">
+                                                        <i class="fas fa-file-pdf"></i> Flashcard
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -197,6 +212,45 @@ $questionDetailPanelis = array_combine(
     </div>
 </div>
 @endsection
+
+<!-- Modal untuk Upload Flashcard -->
+<div class="modal fade" id="flashcardModal" tabindex="-1" aria-labelledby="flashcardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="flashcardModalLabel">Flashcard PDF - Panelis <span id="currentPanelist"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Existing Flashcards -->
+                <div id="existingFlashcards" class="mb-4">
+                    <h6>Flashcard yang sudah diupload:</h6>
+                    <div id="flashcardList" class="border rounded p-3 mb-3" style="max-height: 200px; overflow-y: auto;">
+                        <p class="text-muted">Memuat...</p>
+                    </div>
+                </div>
+
+                <!-- Upload New Flashcard -->
+                <div>
+                    <h6>Upload Flashcard Baru:</h6>
+                    <form id="flashcardForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="flashcardFile" class="form-label">Pilih File PDF</label>
+                            <input type="file" class="form-control" id="flashcardFile" accept=".pdf" required>
+                            <div class="form-text">Hanya file PDF yang diperbolehkan. Maksimal 10MB.</div>
+                        </div>
+                        <input type="hidden" id="panelistValue" value="">
+                        <input type="hidden" id="questionDetailId" value="{{ $questionDetail->id }}">
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="uploadFlashcard">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @include('partials.script')
 <script>
@@ -434,6 +488,115 @@ $questionDetailPanelis = array_combine(
                 reader.onerror = error => reject(error);
             });
         }
+
+        // Handle flashcard modal
+        $('.flashcard-btn').on('click', function() {
+            const panelistValue = $(this).data('panelist');
+            $('#panelistValue').val(panelistValue);
+            $('#currentPanelist').text(panelistValue);
+            
+            // Load existing flashcards for this panelist
+            loadFlashcards(panelistValue);
+        });
+
+        // Function to load existing flashcards
+        function loadFlashcards(panelist) {
+            const questionDetailId = $('#questionDetailId').val();
+            
+            $.ajax({
+                url: '{{ route('question-detail.flashcards', ':id') }}'.replace(':id', questionDetailId),
+                type: 'GET',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        const flashcards = response.data.filter(fc => fc.panelist == panelist);
+                        displayFlashcards(flashcards);
+                    }
+                },
+                error: function(error) {
+                    $('#flashcardList').html('<p class="text-danger">Gagal memuat flashcard.</p>');
+                }
+            });
+        }
+
+        // Function to display flashcards
+        function displayFlashcards(flashcards) {
+            if (flashcards.length === 0) {
+                $('#flashcardList').html('<p class="text-muted">Belum ada flashcard untuk panelis ini.</p>');
+                return;
+            }
+
+            let html = '';
+            flashcards.forEach(function(flashcard) {
+                html += `
+                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                        <div>
+                            <small class="text-muted">Uploaded: ${flashcard.created_at}</small><br>
+                            <span>Panelis ${flashcard.panelist}</span>
+                        </div>
+                        <div>
+                            <a href="${flashcard.url}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i> Lihat PDF
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+            $('#flashcardList').html(html);
+        }
+
+        // Handle flashcard upload
+        $('#uploadFlashcard').on('click', async function() {
+            const fileInput = $('#flashcardFile')[0];
+            const panelistValue = $('#panelistValue').val();
+            const questionDetailId = $('#questionDetailId').val();
+            
+            if (!fileInput.files[0]) {
+                toastError('Silakan pilih file PDF terlebih dahulu.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            
+            // Validate file type
+            if (file.type !== 'application/pdf') {
+                toastError('Hanya file PDF yang diperbolehkan.');
+                return;
+            }
+
+            // Validate file size (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                toastError('Ukuran file maksimal 10MB.');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('panelist', panelistValue);
+                formData.append('flashcard_file', file);
+                formData.append('question_detail_id', questionDetailId);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                $.ajax({
+                    url: '{{ route('question-detail.upload-flashcard') }}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        toastSuccess(response.message);
+                        $('#flashcardForm')[0].reset();
+                        // Refresh flashcard list
+                        loadFlashcards(panelistValue);
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                        toastError(error.responseJSON?.message || 'Terjadi kesalahan saat mengupload flashcard.');
+                    }
+                });
+            } catch (error) {
+                toastError('Terjadi kesalahan saat memproses file.');
+            }
+        });
 
     });
 
