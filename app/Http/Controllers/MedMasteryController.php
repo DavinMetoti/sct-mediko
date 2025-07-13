@@ -99,7 +99,8 @@ class MedMasteryController extends Controller
         ]);
 
         $request->validate([
-            'question_count' => 'required|integer|min:1|max:50'
+            'question_count' => 'required|numeric|min:1|max:50',
+            'quiz_mode' => 'required|in:new'
         ]);
 
         $category = MedmasteryCategory::findOrFail($categoryId);
@@ -109,59 +110,41 @@ class MedMasteryController extends Controller
         // Create a unique session key for this quiz
         $sessionKey = 'quiz_session_' . $categoryId . '_' . ($user ? $user->id : 'guest');
         
-        // Check if there's an existing quiz session for this category and user
+        // Clear any existing session for new quiz
         if (session()->has($sessionKey)) {
-            $sessionData = session($sessionKey);
-            
-            // Verify the session is still valid (same question count and category)
-            if ($sessionData['question_count'] == $questionCount && 
-                $sessionData['category_id'] == $categoryId) {
-                
-                // Get questions from session
-                $questionIds = $sessionData['question_ids'];
-                $questions = MedMasteryQuestion::whereIn('id', $questionIds)
-                    ->orderByRaw('FIELD(id, ' . implode(',', $questionIds) . ')')
-                    ->get();
-                    
-                Log::info('Using existing quiz session', [
-                    'session_key' => $sessionKey,
-                    'question_ids' => $questionIds
-                ]);
-            } else {
-                // Session exists but parameters changed, clear it
-                session()->forget($sessionKey);
-                $questions = null;
-            }
+            session()->forget($sessionKey);
+            Log::info('Cleared existing session for new quiz', ['session_key' => $sessionKey]);
         }
         
-        // If no valid session, create new questions
-        if (!isset($questions) || $questions->isEmpty()) {
-            $questions = MedMasteryQuestion::active()
-                ->byCategory($categoryId)
-                ->inRandomOrder()
-                ->limit($questionCount)
-                ->get();
-                
-            if ($questions->isEmpty()) {
-                return redirect()->back()->with('error', 'Tidak ada soal tersedia untuk kategori ini.');
-            }
+        // Create new questions set
+        $questions = MedMasteryQuestion::active()
+            ->byCategory($categoryId)
+            ->inRandomOrder()
+            ->limit($questionCount)
+            ->get();
             
-            // Store question IDs in session
-            $questionIds = $questions->pluck('id')->toArray();
-            session([
-                $sessionKey => [
-                    'category_id' => $categoryId,
-                    'question_count' => $questionCount,
-                    'question_ids' => $questionIds,
-                    'created_at' => now()->timestamp
-                ]
-            ]);
-            
-            Log::info('Created new quiz session', [
-                'session_key' => $sessionKey,
-                'question_ids' => $questionIds
-            ]);
+        if ($questions->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada soal tersedia untuk kategori ini.');
         }
+        
+        // Store question IDs in session
+        $questionIds = $questions->pluck('id')->toArray();
+        session([
+            $sessionKey => [
+                'category_id' => $categoryId,
+                'question_count' => $questionCount,
+                'total_questions' => $questionCount,
+                'question_ids' => $questionIds,
+                'quiz_mode' => 'new',
+                'created_at' => now()->timestamp
+            ]
+        ]);
+        
+        Log::info('Created new quiz session', [
+            'session_key' => $sessionKey,
+            'question_ids' => $questionIds,
+            'mode' => 'new'
+        ]);
 
         $userRole = $user ? $user->accessRole : null;
         

@@ -178,7 +178,7 @@
                         <h5 class="text-muted mb-3">Belum ada kategori</h5>
                         <p class="text-muted mb-4">Mulai dengan menambahkan kategori pertama Anda.</p>
                         <a href="{{ route('medmastery-category.create') }}" class="btn btn-green">
-                            <i class="fas fa-plus me-2"></i>Tambah Kategori Pertama
+                            <i class="fas fa-plus me-2 text-white"></i><span class="text-white">Tambah Kategori Pertama</span>
                         </a>
                     </div>
                 @endif

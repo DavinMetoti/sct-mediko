@@ -86,7 +86,6 @@
             padding: 10px;
             background-color: white;
             border-radius: 16px !important;
-            color: white;
         }
         .rank-item {
             margin-bottom: 10px;

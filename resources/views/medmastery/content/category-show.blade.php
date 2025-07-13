@@ -346,7 +346,9 @@
         opacity: 0.8;
     }
     
+    .count-option.selected .count-number,
     .count-option.selected .count-label {
+        color: white;
         opacity: 1;
     }
     
@@ -540,11 +542,16 @@
                                     Mulai Latihan
                                 </h4>
                                 
-                                <form action="{{ route('medmastery.quiz.start', $category->id) }}" method="POST" class="practice-form">
+
+                                
+                                <!-- Quiz Configuration Form -->
+                                <form action="{{ route('medmastery.quiz.start', $category->id) }}" method="POST" class="practice-form" id="quizForm">
                                     @csrf
                                     <input type="hidden" name="question_count" id="selectedCount" value="" required>
+                                    <input type="hidden" name="quiz_mode" value="new" required>
                                     
-                                    <div class="mb-3">
+                                    <!-- Question Count Selection -->
+                                    <div class="mb-3" id="questionCountSection">
                                         <label class="form-label">
                                             <i class="fas fa-question-circle"></i>
                                             Jumlah Soal yang Ingin Dikerjakan
@@ -576,7 +583,7 @@
                                     
                                     <button type="submit" class="btn btn-primary btn-lg mb-3" id="startButton" disabled>
                                         <i class="fas fa-play"></i>
-                                        Pilih Jumlah Soal
+                                        <span id="startButtonText">Pilih Jumlah Soal</span>
                                     </button>
                                 </form>
                             </div>
@@ -666,65 +673,69 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Practice form with box selection - support multiple forms
-    const practiceForms = document.querySelectorAll('.practice-form');
+    const countOptions = document.querySelectorAll('.count-option');
+    const selectedCountInput = document.getElementById('selectedCount');
+    const startButton = document.getElementById('startButton');
+    const startButtonText = document.getElementById('startButtonText');
     
-    practiceForms.forEach(function(practiceForm) {
-        const countOptions = practiceForm.querySelectorAll('.count-option');
-        const selectedCountInput = practiceForm.querySelector('#selectedCount');
-        const submitButton = practiceForm.querySelector('#startButton');
-        
-        if (countOptions.length > 0 && selectedCountInput && submitButton) {
-            // Handle count option selection
-            countOptions.forEach(function(option) {
-                option.addEventListener('click', function() {
-                    // Remove selected class from all options
-                    countOptions.forEach(opt => opt.classList.remove('selected'));
-                    
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                    
-                    // Set hidden input value
-                    const count = this.getAttribute('data-count');
-                    selectedCountInput.value = count;
-                    
-                    // Update button text and enable it
-                    const label = this.querySelector('.count-label').textContent;
-                    const number = this.querySelector('.count-number').textContent;
-                    
-                    submitButton.innerHTML = `<i class="fas fa-play"></i> Mulai Kerjakan ${number} ${label}`;
-                    submitButton.disabled = false;
-                    submitButton.classList.remove('btn-secondary');
-                    submitButton.classList.add('btn-primary');
-                });
-            });
+    let selectedCount = null;
+    
+    // Handle question count selection
+    countOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const count = this.getAttribute('data-count');
             
-            // Form validation
-            practiceForm.addEventListener('submit', function(e) {
-                if (!selectedCountInput.value) {
-                    e.preventDefault();
-                    
-                    // Highlight all options briefly to show user needs to select
-                    countOptions.forEach(option => {
-                        option.style.animation = 'pulse 0.5s ease-in-out';
-                        setTimeout(() => {
-                            option.style.animation = '';
-                        }, 500);
-                    });
-                    
-                    return false;
-                }
-                
-                // Show loading state
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat Soal...';
-            });
+            // Remove selected class from all options
+            countOptions.forEach(opt => opt.classList.remove('selected'));
             
-            // Initialize button state
-            submitButton.classList.remove('btn-primary');
-            submitButton.classList.add('btn-secondary');
-        }
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            
+            selectedCount = count;
+            if (selectedCountInput) {
+                selectedCountInput.value = count;
+            }
+            
+            updateStartButton();
+        });
     });
+    
+    function updateStartButton() {
+        if (!startButton) return;
+        
+        if (selectedCount) {
+            startButton.disabled = false;
+            startButton.classList.remove('btn-secondary');
+            startButton.classList.add('btn-primary');
+            
+            const buttonText = 'Mulai Quiz (' + selectedCount + ' soal)';
+            startButton.innerHTML = '<i class="fas fa-play"></i> ' + buttonText;
+        } else {
+            startButton.disabled = true;
+            startButton.classList.remove('btn-primary');
+            startButton.classList.add('btn-secondary');
+            
+            startButton.innerHTML = '<i class="fas fa-play"></i> Pilih Jumlah Soal';
+        }
+    }
+    
+    // Form submission validation
+    const quizForm = document.getElementById('quizForm');
+    if (quizForm) {
+        quizForm.addEventListener('submit', function(e) {
+            if (!selectedCount) {
+                e.preventDefault();
+                alert('Silakan pilih jumlah soal terlebih dahulu.');
+                return;
+            }
+            
+            // Show loading state
+            if (startButton) {
+                startButton.disabled = true;
+                startButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat Quiz...';
+            }
+        });
+    }
     
     // Add smooth animations to cards
     const infoCards = document.querySelectorAll('.info-card');

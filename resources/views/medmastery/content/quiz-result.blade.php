@@ -5,62 +5,62 @@
 @section('content')
 <style>
     .result-container {
-        max-width: 1000px;
+        max-width: 900px;
         margin: 0 auto;
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
     }
     
     .result-header {
         background: linear-gradient(135deg, #10b981, #059669);
         color: white;
-        border-radius: 16px;
-        padding: 2rem;
-        margin-bottom: 2rem;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
         text-align: center;
     }
     
     .result-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
     }
     
     .result-subtitle {
-        font-size: 1.2rem;
+        font-size: 1rem;
         opacity: 0.9;
     }
     
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
     }
     
     .stat-card {
         background: white;
-        border-radius: 16px;
-        padding: 2rem;
+        border-radius: 12px;
+        padding: 1.25rem;
         text-align: center;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
         border: 1px solid #e2e8f0;
         transition: all 0.3s ease;
     }
     
     .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     }
     
     .stat-icon {
-        width: 60px;
-        height: 60px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1rem;
-        font-size: 1.5rem;
+        margin: 0 auto 0.75rem;
+        font-size: 1.1rem;
         color: white;
     }
     
@@ -81,31 +81,32 @@
     }
     
     .stat-number {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 1.5rem;
+        font-weight: 600;
         color: #2d3748;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
     }
     
     .stat-label {
         color: #64748b;
         font-weight: 500;
+        font-size: 0.85rem;
     }
     
     .answers-section {
         background: white;
-        border-radius: 16px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
         border: 1px solid #e2e8f0;
     }
     
     .section-title {
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1.2rem;
+        font-weight: 600;
         color: #2d3748;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -113,48 +114,51 @@
     
     .answer-item {
         background: #f8fafc;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+        border-radius: 10px;
+        padding: 1.25rem;
+        margin-bottom: 1rem;
         border: 1px solid #e2e8f0;
     }
     
     .answer-header {
         display: flex;
-        justify-content: between;
+        justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
         gap: 1rem;
     }
     
     .question-number {
         background: linear-gradient(135deg, #667eea, #764ba2);
         color: white;
-        width: 35px;
-        height: 35px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 700;
+        font-weight: 600;
+        font-size: 0.85rem;
         flex-shrink: 0;
     }
     
     .question-text {
         flex: 1;
-        font-weight: 600;
+        font-weight: 500;
         color: #374151;
-        line-height: 1.5;
+        line-height: 1.4;
+        font-size: 0.95rem;
     }
     
     .answer-text {
         background: white;
         border: 1px solid #d1d5db;
         border-radius: 8px;
-        padding: 1rem;
+        padding: 0.875rem;
         color: #4b5563;
-        line-height: 1.6;
-        min-height: 80px;
+        line-height: 1.5;
+        min-height: 60px;
+        font-size: 0.9rem;
     }
     
     .answer-text.empty {
@@ -163,26 +167,28 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 0.85rem;
     }
     
     .action-buttons {
         display: flex;
-        gap: 1rem;
+        gap: 0.75rem;
         justify-content: center;
         flex-wrap: wrap;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
     }
     
     .btn {
-        padding: 0.75rem 1.5rem;
-        border-radius: 12px;
-        font-weight: 600;
+        padding: 0.625rem 1.25rem;
+        border-radius: 10px;
+        font-weight: 500;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
         transition: all 0.3s ease;
         border: 2px solid transparent;
+        font-size: 0.9rem;
     }
     
     .btn-primary {
@@ -192,8 +198,8 @@
     
     .btn-primary:hover {
         background: linear-gradient(135deg, #5a67d8, #6b46c1);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
         color: white;
         text-decoration: none;
     }
@@ -218,8 +224,8 @@
     
     .btn-success:hover {
         background: linear-gradient(135deg, #059669, #047857);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
         color: white;
         text-decoration: none;
     }
@@ -227,14 +233,14 @@
     .completion-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
         background: linear-gradient(135deg, #10b981, #059669);
         color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
+        padding: 0.4rem 0.85rem;
+        border-radius: 16px;
+        font-weight: 500;
+        font-size: 0.8rem;
+        margin-bottom: 0.75rem;
     }
     
     @media (max-width: 768px) {
@@ -243,15 +249,15 @@
         }
         
         .result-header {
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
         
         .result-title {
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
         
         .answers-section {
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
         
         .answer-header {
@@ -264,28 +270,39 @@
             flex-direction: column;
             align-items: stretch;
         }
+        
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        
+        .stat-card {
+            padding: 1rem;
+        }
     }
     
     .summary-info {
         background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
         border: 1px solid #0ea5e9;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
+        border-radius: 10px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
     }
     
     .summary-info h4 {
         color: #0c4a6e;
-        margin-bottom: 1rem;
+        margin-bottom: 0.875rem;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
+        font-size: 1.1rem;
+        font-weight: 600;
     }
     
     .summary-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.875rem;
     }
     
     .summary-item {
@@ -293,47 +310,49 @@
     }
     
     .summary-value {
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1.25rem;
+        font-weight: 600;
         color: #0c4a6e;
     }
     
     .summary-label {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: #0369a1;
         font-weight: 500;
+        margin-top: 0.125rem;
     }
     
     /* Score related styles */
     .score-section {
         background: linear-gradient(135deg, #f59e0b, #d97706);
         color: white;
-        border-radius: 16px;
-        padding: 2rem;
-        margin-bottom: 2rem;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
         text-align: center;
     }
     
     .final-score {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
+        font-size: 2.25rem;
+        font-weight: 600;
+        margin-bottom: 0.375rem;
     }
     
     .score-label {
-        font-size: 1.2rem;
+        font-size: 1rem;
         opacity: 0.9;
     }
     
     .question-score {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin-top: 0.5rem;
+        gap: 0.35rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 14px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-top: 0.4rem;
+        margin-left: 0.5rem;
     }
     
     .score-full {
@@ -355,9 +374,9 @@
         display: inline-flex;
         align-items: center;
         gap: 0.25rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 12px;
-        font-size: 0.8rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
         font-weight: 500;
         margin-left: 0.5rem;
     }
