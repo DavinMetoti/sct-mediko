@@ -79,6 +79,8 @@ Route::middleware('auth')->post('medmastery-quiz/start/{categoryId}', [MedMaster
 Route::middleware('auth')->post('medmastery-quiz/submit/{categoryId}', [MedMasteryController::class, 'submitQuiz'])->name('medmastery.quiz.submit');
 Route::middleware('auth')->post('medmastery-quiz/restart/{categoryId}', [MedMasteryController::class, 'restartQuiz'])->name('medmastery.quiz.restart');
 Route::middleware('auth')->get('medmastery-quiz/result/{categoryId}/{answerId}', [MedMasteryController::class, 'showQuizResult'])->name('medmastery.quiz.result');
+Route::middleware('auth')->get('medmastery-quiz/wrong-count/{categoryId}', [MedMasteryController::class, 'getWrongQuestionsCount'])->name('medmastery.quiz.wrong-count');
+Route::middleware('auth')->get('medmastery-quiz/debug-wrong/{categoryId}', [MedMasteryController::class, 'debugWrongQuestions'])->name('medmastery.quiz.debug-wrong');
 Route::middleware('auth')->get('medmastery/history', [MedMasteryController::class, 'userHistory'])->name('medmastery.history');
 Route::middleware('auth')->get('medmastery/history/{answerId}', [MedMasteryController::class, 'userHistoryDetail'])->name('medmastery.history.detail');
 // Route khusus untuk siswa melihat detail kategori

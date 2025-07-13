@@ -1804,10 +1804,12 @@
                 <textarea 
                     name="answers[{{ $question->id }}]" 
                     id="answer_{{ $question->id }}" 
-                    class="answer-input"
+                    class="answer-input form-control"
                     placeholder="Ketik jawaban Anda di sini..."
                     data-question-id="{{ $question->id }}"
                     data-question-index="{{ $index }}"
+                    rows="5"
+                    required
                 ></textarea>
                 <div class="answer-counter">
                     <span id="counter_{{ $question->id }}">0 karakter</span>
@@ -1974,12 +1976,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const answeredCountElement = document.getElementById('answeredCount');
     
     function updateProgress() {
+        // Check if required elements exist
+        if (!progressBar || !progressText || !answeredCountElement) {
+            console.warn('Progress elements not found, skipping update');
+            return;
+        }
+        
         // Get progress from localStorage
         const sessionKey = 'quiz_progress_{{ $category->id }}';
         let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
         
+        // Also count from actual form inputs
+        let actualAnsweredCount = 0;
+        if (answerInputs && answerInputs.length > 0) {
+            answerInputs.forEach(function(input) {
+                if (input && input.value && input.value.trim()) {
+                    actualAnsweredCount++;
+                }
+            });
+        }
+        
         // Count answered questions from localStorage
-        answeredCount = Object.keys(progress.answers || {}).length;
+        const localStorageCount = Object.keys(progress.answers || {}).length;
+        
+        // Use the higher count to be safe
+        answeredCount = Math.max(actualAnsweredCount, localStorageCount);
+        
+        console.log('Progress update:', {
+            actualAnsweredCount: actualAnsweredCount,
+            localStorageCount: localStorageCount,
+            finalAnsweredCount: answeredCount
+        });
         
         // Update progress bar based on answered questions
         const progressPercentage = (answeredCount / totalQuestions) * 100;
@@ -1995,78 +2022,117 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update question indicators based on current state
     function updateQuestionIndicators() {
-        const sessionKey = 'quiz_progress_{{ $category->id }}';
-        let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
-        const answers = progress.answers || {};
-        
-        // Update each indicator
-        const indicators = document.querySelectorAll('.question-indicator');
-        indicators.forEach(indicator => {
-            const questionNum = parseInt(indicator.getAttribute('data-question'));
-            const questionId = indicator.getAttribute('data-question-id');
+        try {
+            const sessionKey = 'quiz_progress_{{ $category->id }}';
+            let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
+            const answers = progress.answers || {};
             
-            // Remove all status classes
-            indicator.classList.remove('current', 'answered', 'unanswered', 'incomplete');
-            
-            if (questionNum === currentQuestion) {
-                indicator.classList.add('current');
-            } else if (answers[questionId] && answers[questionId].trim().length > 0) {
-                indicator.classList.add('answered');
-            } else {
-                indicator.classList.add('unanswered');
+            // Update each indicator
+            const indicators = document.querySelectorAll('.question-indicator');
+            if (indicators.length === 0) {
+                console.warn('No question indicators found');
+                return;
             }
-        });
-        
-        // Update quick nav buttons state
-        updateQuickNavButtons();
+            
+            indicators.forEach(indicator => {
+                const questionNum = parseInt(indicator.getAttribute('data-question'));
+                const questionId = indicator.getAttribute('data-question-id');
+                
+                if (!questionNum || !questionId) {
+                    console.warn('Invalid indicator data:', { questionNum, questionId });
+                    return;
+                }
+                
+                // Remove all status classes
+                indicator.classList.remove('current', 'answered', 'unanswered', 'incomplete');
+                
+                if (questionNum === currentQuestion) {
+                    indicator.classList.add('current');
+                } else {
+                    // Check both localStorage and actual input value
+                    const inputElement = document.querySelector(`[data-question-id="${questionId}"]`);
+                    const hasAnswer = (answers[questionId] && answers[questionId].trim().length > 0) || 
+                                     (inputElement && inputElement.value && inputElement.value.trim().length > 0);
+                    
+                    if (hasAnswer) {
+                        indicator.classList.add('answered');
+                    } else {
+                        indicator.classList.add('unanswered');
+                    }
+                }
+            });
+            
+            // Update quick nav buttons state
+            updateQuickNavButtons();
+        } catch (error) {
+            console.error('Error updating question indicators:', error);
+        }
     }
     
     // Update quick navigation buttons
     function updateQuickNavButtons() {
-        const sessionKey = 'quiz_progress_{{ $category->id }}';
-        let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
-        const answers = progress.answers || {};
-        
-        const firstUnansweredBtn = document.getElementById('goToFirstUnanswered');
-        const nextUnansweredBtn = document.getElementById('goToNextUnanswered');
-        const lastAnsweredBtn = document.getElementById('goToLastAnswered');
-        
-        // Find first unanswered question
-        let firstUnanswered = null;
-        let nextUnanswered = null;
-        let lastAnswered = null;
-        
-        for (let i = 1; i <= totalQuestions; i++) {
-            const questionId = document.querySelector(`[data-question="${i}"]`).getAttribute('data-question-id');
-            const hasAnswer = answers[questionId] && answers[questionId].trim().length > 0;
+        try {
+            const sessionKey = 'quiz_progress_{{ $category->id }}';
+            let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
+            const answers = progress.answers || {};
             
-            if (!hasAnswer && !firstUnanswered) {
-                firstUnanswered = i;
+            const firstUnansweredBtn = document.getElementById('goToFirstUnanswered');
+            const nextUnansweredBtn = document.getElementById('goToNextUnanswered');
+            const lastAnsweredBtn = document.getElementById('goToLastAnswered');
+            
+            // Check if buttons exist
+            if (!firstUnansweredBtn || !nextUnansweredBtn || !lastAnsweredBtn) {
+                console.warn('Some quick nav buttons not found');
+                return;
             }
             
-            if (!hasAnswer && i > currentQuestion && !nextUnanswered) {
-                nextUnanswered = i;
+            // Find first unanswered question
+            let firstUnanswered = null;
+            let nextUnanswered = null;
+            let lastAnswered = null;
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionIndicator = document.querySelector(`[data-question="${i}"]`);
+                if (!questionIndicator) {
+                    console.warn('Question indicator not found for question:', i);
+                    continue;
+                }
+                
+                const questionId = questionIndicator.getAttribute('data-question-id');
+                if (!questionId) {
+                    console.warn('Question ID not found for question:', i);
+                    continue;
+                }
+                
+                // Check both localStorage and actual input value
+                const inputElement = document.querySelector(`[data-question-id="${questionId}"]`);
+                const hasAnswer = (answers[questionId] && answers[questionId].trim().length > 0) || 
+                                 (inputElement && inputElement.value && inputElement.value.trim().length > 0);
+                
+                if (!hasAnswer && !firstUnanswered) {
+                    firstUnanswered = i;
+                }
+                
+                if (!hasAnswer && i > currentQuestion && !nextUnanswered) {
+                    nextUnanswered = i;
+                }
+                
+                if (hasAnswer) {
+                    lastAnswered = i;
+                }
             }
             
-            if (hasAnswer) {
-                lastAnswered = i;
-            }
-        }
-        
-        // Update button states
-        if (firstUnansweredBtn) {
+            // Update button states
             firstUnansweredBtn.disabled = !firstUnanswered;
             firstUnansweredBtn.onclick = firstUnanswered ? () => showQuestion(firstUnanswered) : null;
-        }
-        
-        if (nextUnansweredBtn) {
+            
             nextUnansweredBtn.disabled = !nextUnanswered;
             nextUnansweredBtn.onclick = nextUnanswered ? () => showQuestion(nextUnanswered) : null;
-        }
-        
-        if (lastAnsweredBtn) {
+            
             lastAnsweredBtn.disabled = !lastAnswered;
             lastAnsweredBtn.onclick = lastAnswered ? () => showQuestion(lastAnswered) : null;
+        } catch (error) {
+            console.error('Error updating quick nav buttons:', error);
         }
     }
     
@@ -2082,6 +2148,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show specific question
     function showQuestion(questionNumber) {
+        // Validate questionNumber
+        if (!questionNumber || questionNumber < 1 || questionNumber > totalQuestions) {
+            console.error('Invalid question number:', questionNumber);
+            return;
+        }
+        
         // Hide all questions
         questionCards.forEach(card => {
             card.classList.remove('active');
@@ -2089,17 +2161,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show target question
         const targetCard = document.getElementById('question-' + questionNumber);
-        if (targetCard) {
-            targetCard.classList.add('active');
+        if (!targetCard) {
+            console.error('Question card not found for question:', questionNumber);
+            return;
         }
         
+        targetCard.classList.add('active');
+        
         // Update navigation buttons in current question
-        const currentCard = targetCard;
-        const prevBtn = currentCard.querySelector('#prevBtn');
-        const nextBtn = currentCard.querySelector('#nextBtn');
+        const prevBtn = targetCard.querySelector('#prevBtn');
+        const nextBtn = targetCard.querySelector('#nextBtn');
         
         if (prevBtn) {
             prevBtn.disabled = questionNumber === 1;
+        }
+        
+        if (nextBtn) {
+            nextBtn.disabled = questionNumber === totalQuestions;
         }
         
         currentQuestion = questionNumber;
@@ -2268,33 +2346,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 counter.textContent = length + ' karakter';
             }
             
-            // Track answered questions (removed indicator dot logic)
-            if (this.value.trim().length > 0) {
-                if (!answeredQuestions.has(questionId)) {
-                    answeredQuestions.add(questionId);
-                    answeredCount++;
-                }
-                
-                // Enable explanation button and hide warning when answer is provided
-                const explanationBtn = document.querySelector(`[data-question-id="${questionId}"].show-explanation-btn`);
-                const warningElement = document.getElementById('warning-' + questionId);
-                if (explanationBtn && !explanationBtn.classList.contains('btn-success')) {
+            // Track answered questions and update answeredCount
+            const wasAnswered = answeredQuestions.has(questionId);
+            const isAnswered = this.value.trim().length > 0;
+            
+            if (isAnswered && !wasAnswered) {
+                answeredQuestions.add(questionId);
+                answeredCount++;
+            } else if (!isAnswered && wasAnswered) {
+                answeredQuestions.delete(questionId);
+                answeredCount--;
+            }
+            
+            // Enable/disable explanation button and show/hide warning
+            const explanationBtn = document.querySelector(`[data-question-id="${questionId}"].show-explanation-btn`);
+            const warningElement = document.getElementById('warning-' + questionId);
+            
+            if (explanationBtn && !explanationBtn.classList.contains('btn-success')) {
+                if (isAnswered) {
                     explanationBtn.disabled = false;
                     explanationBtn.classList.remove('disabled-no-answer');
                     if (warningElement) {
                         warningElement.classList.remove('show');
                     }
-                }
-            } else {
-                if (answeredQuestions.has(questionId)) {
-                    answeredQuestions.delete(questionId);
-                    answeredCount--;
-                }
-                
-                // Disable explanation button and show warning when answer is removed
-                const explanationBtn = document.querySelector(`[data-question-id="${questionId}"].show-explanation-btn`);
-                const warningElement = document.getElementById('warning-' + questionId);
-                if (explanationBtn && !explanationBtn.classList.contains('btn-success')) {
+                } else {
                     explanationBtn.disabled = true;
                     explanationBtn.classList.add('disabled-no-answer');
                     if (warningElement) {
@@ -2311,15 +2386,66 @@ document.addEventListener('DOMContentLoaded', function() {
         input.addEventListener('input', function() {
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
-                localStorage.setItem('quiz_' + questionId, this.value);
-            }, 1000);
+                // Save to main progress object
+                const sessionKey = 'quiz_progress_' + categoryId;
+                let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
+                if (!progress.answers) progress.answers = {};
+                
+                if (this.value.trim()) {
+                    progress.answers[questionId] = this.value.trim();
+                } else {
+                    delete progress.answers[questionId];
+                }
+                
+                progress.timestamp = Date.now();
+                progress.categoryId = categoryId;
+                progress.currentQuestion = currentQuestion;
+                progress.totalQuestions = totalQuestions;
+                
+                localStorage.setItem(sessionKey, JSON.stringify(progress));
+            }, 500);
         });
+    });
+    
+    // Initialize answered questions count from localStorage
+    answeredCount = 0;
+    const quizSessionKey = 'quiz_progress_' + categoryId;
+    const initialProgress = JSON.parse(localStorage.getItem(quizSessionKey) || '{}');
+    if (initialProgress.answers) {
+        Object.keys(initialProgress.answers).forEach(questionId => {
+            if (initialProgress.answers[questionId] && initialProgress.answers[questionId].trim()) {
+                answeredQuestions.add(questionId);
+                answeredCount++;
+            }
+        });
+    }
+    
+    // Load initial progress for each input
+    answerInputs.forEach(function(input) {
+        const questionId = input.getAttribute('data-question-id');
         
-        // Load from localStorage if available
-        const savedAnswer = localStorage.getItem('quiz_' + questionId);
-        if (savedAnswer) {
-            input.value = savedAnswer;
+        // Try to load from main progress first
+        const progress = JSON.parse(localStorage.getItem(quizSessionKey) || '{}');
+        
+        if (progress.answers && progress.answers[questionId]) {
+            input.value = progress.answers[questionId];
             input.dispatchEvent(new Event('input'));
+        } else {
+            // Fallback: try individual localStorage key
+            const savedAnswer = localStorage.getItem('quiz_' + questionId);
+            if (savedAnswer) {
+                input.value = savedAnswer;
+                input.dispatchEvent(new Event('input'));
+                
+                // Migrate to main progress object
+                if (!progress.answers) progress.answers = {};
+                progress.answers[questionId] = savedAnswer;
+                progress.timestamp = Date.now();
+                progress.categoryId = categoryId;
+                progress.totalQuestions = totalQuestions;
+                localStorage.setItem(quizSessionKey, JSON.stringify(progress));
+                localStorage.removeItem('quiz_' + questionId); // Clean up old key
+            }
         }
     });
     
@@ -2373,33 +2499,211 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('quizForm').addEventListener('submit', function(e) {
         const submitBtn = e.target.querySelector('#submitQuizBtn') || document.getElementById('submitQuizBtn');
         
-        if (answeredCount === 0) {
-            e.preventDefault();
-            alert('Silakan jawab minimal 1 pertanyaan sebelum submit.');
-            return;
+        // Before creating FormData, let's ensure all localStorage answers are set in the form
+        const sessionKey = 'quiz_progress_' + categoryId;
+        const progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
+        
+        console.log('=== PRE-SUBMIT SYNC ===');
+        if (progress.answers) {
+            Object.keys(progress.answers).forEach(questionId => {
+                const input = document.querySelector(`[data-question-id="${questionId}"]`);
+                const inputByName = document.querySelector(`textarea[name="answers[${questionId}]"]`);
+                const inputById = document.getElementById(`answer_${questionId}`);
+                
+                console.log(`Question ${questionId}:`, {
+                    'data-question-id': input ? 'found' : 'not found',
+                    'name selector': inputByName ? 'found' : 'not found', 
+                    'id selector': inputById ? 'found' : 'not found',
+                    'localStorage value': progress.answers[questionId]
+                });
+                
+                // Try all possible selectors
+                const targetInput = input || inputByName || inputById;
+                if (targetInput && progress.answers[questionId]) {
+                    console.log(`Syncing answer for question ${questionId}:`, progress.answers[questionId]);
+                    targetInput.value = progress.answers[questionId];
+                } else {
+                    console.warn(`No input found for question ${questionId}`);
+                }
+            });
         }
         
-        const confirmSubmit = confirm(`Anda telah menjawab ${answeredCount} dari ${totalQuestions} pertanyaan. Yakin ingin submit sekarang?`);
-        if (!confirmSubmit) {
-            e.preventDefault();
-            return;
-        }
+        // Also ensure all current textarea values are saved
+        console.log('=== CHECKING ALL TEXTAREAS ===');
+        const allTextareas = document.querySelectorAll('textarea[name^="answers["]');
+        console.log('Found textareas:', allTextareas.length);
         
-        // Clear localStorage
+        allTextareas.forEach(function(textarea, index) {
+            const name = textarea.getAttribute('name');
+            const value = textarea.value;
+            const questionId = textarea.getAttribute('data-question-id');
+            console.log(`Textarea ${index + 1}: name="${name}", questionId="${questionId}", value="${value}"`);
+        });
+        
         answerInputs.forEach(function(input) {
             const questionId = input.getAttribute('data-question-id');
-            localStorage.removeItem('quiz_' + questionId);
+            if (input.value && input.value.trim()) {
+                console.log(`Current textarea value for question ${questionId}:`, input.value.trim());
+            }
         });
-        localStorage.removeItem('quiz_progress_' + categoryId);
         
-        // Show loading state
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+        console.log('=== FORM SUBMISSION DEBUG ===');
+        
+        // FORCE SYNC: Make sure ALL localStorage answers are in textareas before FormData creation
+        console.log('=== FORCE SYNC BEFORE FORMDATA ===');
+        if (progress.answers) {
+            Object.keys(progress.answers).forEach(questionId => {
+                const textarea = document.querySelector(`textarea[name="answers[${questionId}]"]`);
+                if (textarea) {
+                    textarea.value = progress.answers[questionId];
+                    console.log(`Force synced question ${questionId}: "${progress.answers[questionId]}"`);
+                    
+                    // Ensure textarea has form attribute
+                    if (!textarea.form) {
+                        console.warn(`Textarea for question ${questionId} not associated with form`);
+                        textarea.setAttribute('form', 'quizForm');
+                    }
+                } else {
+                    console.error(`Textarea not found for question ${questionId}`);
+                }
+            });
         }
         
-        // Clear timer
-        clearInterval(timerInterval);
+        // Small delay to ensure DOM is updated
+        setTimeout(function() {
+            const allTextareas = document.querySelectorAll('textarea[name^="answers["]');
+            const answersData = {};
+            
+            // Get all answers directly from textareas 
+            allTextareas.forEach(function(textarea) {
+                const name = textarea.getAttribute('name');
+                const value = textarea.value;
+                if (name && value && value.trim()) {
+                    const questionId = name.match(/answers\[(\d+)\]/)[1];
+                    answersData[questionId] = value.trim();
+                }
+            });
+            
+            const actualAnsweredCount = Object.keys(answersData).length;
+            console.log(actualAnsweredCount, 'questions answered out of', totalQuestions);
+            
+            if (actualAnsweredCount === 0) {
+                alert('Silakan jawab minimal 1 pertanyaan sebelum submit.');
+                console.log('Submission blocked: No valid answers found');
+                return;
+            }
+            
+            const confirmSubmit = confirm(`Anda telah menjawab ${actualAnsweredCount} dari ${totalQuestions} pertanyaan. Yakin ingin submit sekarang?`);
+            if (!confirmSubmit) {
+                return;
+            }
+            
+            // Create finalFormData with manual population
+            const finalFormData = new FormData();
+            
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                             document.querySelector('input[name="_token"]')?.value ||
+                             '{{ csrf_token() }}';
+            finalFormData.append('_token', csrfToken);
+            
+            // Add all answers manually from answersData
+            Object.keys(answersData).forEach(function(questionId) {
+                finalFormData.append(`answers[${questionId}]`, answersData[questionId]);
+                console.log(`Added to finalFormData: answers[${questionId}] = "${answersData[questionId]}"`);
+            });
+            
+            // Add self assessments if any
+            allTextareas.forEach(function(textarea) {
+                if (textarea.name && textarea.name.includes('self_assessment[') && textarea.value) {
+                    finalFormData.append(textarea.name, textarea.value);
+                    console.log(`Added self assessment: ${textarea.name} = "${textarea.value}"`);
+                }
+            });
+            
+            console.log('Final FormData contents:');
+            for (let pair of finalFormData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+            
+            // Clear localStorage
+            answerInputs.forEach(function(input) {
+                const questionId = input.getAttribute('data-question-id');
+                localStorage.removeItem('quiz_' + questionId);
+            });
+            localStorage.removeItem('quiz_progress_' + categoryId);
+            
+            // Show loading state
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            }
+            
+            // Clear timer
+            clearInterval(timerInterval);
+            
+            // Submit via fetch with finalFormData
+            fetch('{{ route("medmastery.quiz.submit", $category->id) }}', {
+                method: 'POST',
+                body: finalFormData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+                
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    // If it's not JSON (probably HTML redirect), handle as success
+                    console.log('Response is not JSON, probably a redirect page');
+                    return { success: true, redirect: response.url };
+                }
+            })
+            .then(data => {
+                console.log('Quiz submitted successfully:', data);
+                
+                // If data is undefined (due to redirect handling above), don't process further
+                if (!data) {
+                    return;
+                }
+                
+                if (data.success) {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        location.reload();
+                    }
+                } else {
+                    throw new Error(data.message || 'Submit failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting quiz:', error);
+                alert('Terjadi kesalahan saat submit quiz: ' + error.message);
+                
+                // Reset submit button
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Submit Quiz';
+                }
+            });
+
+        }.bind(this), 100); // 100ms delay
+        
+        // Prevent default submission initially
+        e.preventDefault();
+        return;
     });
     
     // Keyboard shortcuts
@@ -2486,10 +2790,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Initial setup
-    showQuestion(1);
-    updateProgress();
-    initQuestionIndicatorNavigation();
+    // Initial setup - with error checking
+    function initializeQuiz() {
+        // Check if required elements exist
+        if (questionCards.length === 0) {
+            console.error('No question cards found! Quiz cannot be initialized.');
+            return;
+        }
+        
+        if (totalQuestions <= 0) {
+            console.error('Invalid total questions count:', totalQuestions);
+            return;
+        }
+        
+        console.log('Initializing quiz with', questionCards.length, 'question cards');
+        
+        // Show first question
+        showQuestion(1);
+        updateProgress();
+        initQuestionIndicatorNavigation();
+    }
+    
+    // Initialize quiz after DOM is ready
+    initializeQuiz();
 });
 </script>
 @endsection

@@ -368,6 +368,146 @@
         50% { transform: scale(1.05); border-color: #f56565; }
         100% { transform: scale(1); }
     }
+    
+    /* Quiz Mode Selection Styles */
+    .quiz-mode-options {
+        margin-bottom: 1.5rem;
+    }
+    
+    .quiz-mode-btn {
+        border-radius: 16px;
+        padding: 1.25rem 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #4a5568;
+        text-align: center;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .quiz-mode-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border-color: #cbd5e0;
+        background: #f8fafc;
+        color: #2d3748;
+    }
+    
+    .quiz-mode-btn.active {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-color: #667eea;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .quiz-mode-btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+        background: #f1f5f9;
+        color: #94a3b8;
+    }
+    
+    .quiz-mode-btn .mode-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .quiz-mode-btn .mode-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+    
+    .quiz-mode-btn .mode-subtitle {
+        font-size: 0.8rem;
+        opacity: 0.8;
+        line-height: 1.2;
+    }
+    
+    .quiz-mode-btn.active .mode-subtitle {
+        opacity: 0.9;
+    }
+    
+    /* Special styling for wrong mode button */
+    .quiz-mode-btn[data-mode="wrong"] {
+        border-color: #fbbf24;
+    }
+    
+    .quiz-mode-btn[data-mode="wrong"]:hover {
+        border-color: #f59e0b;
+        background: #fffbeb;
+        color: #92400e;
+    }
+    
+    .quiz-mode-btn[data-mode="wrong"].active {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border-color: #f59e0b;
+    }
+    
+    /* Special styling for new mode button */
+    .quiz-mode-btn[data-mode="new"] {
+        border-color: #10b981;
+    }
+    
+    .quiz-mode-btn[data-mode="new"]:hover {
+        border-color: #059669;
+        background: #ecfdf5;
+        color: #047857;
+    }
+    
+    .quiz-mode-btn[data-mode="new"].active {
+        background: linear-gradient(135deg, #10b981, #059669);
+        border-color: #10b981;
+    }
+    
+    /* Loading state for wrong count */
+    .wrong-count-loading {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid #e2e8f0;
+        border-top: 2px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Responsive design for quiz mode buttons */
+    @media (max-width: 768px) {
+        .quiz-mode-options {
+            flex-direction: column;
+        }
+        
+        .quiz-mode-btn {
+            min-height: 80px;
+            padding: 1rem;
+        }
+        
+        .quiz-mode-btn .mode-icon {
+            font-size: 1.25rem;
+        }
+        
+        .quiz-mode-btn .mode-title {
+            font-size: 0.9rem;
+        }
+        
+        .quiz-mode-btn .mode-subtitle {
+            font-size: 0.75rem;
+        }
+    }
 </style>
 
 <div class="quiz-container">
@@ -542,13 +682,39 @@
                                     Mulai Latihan
                                 </h4>
                                 
-
+                                <!-- Quiz Mode Selection -->
+                                <div class="mb-4">
+                                    <label class="form-label">
+                                        <i class="fas fa-gamepad"></i>
+                                        Mode Latihan
+                                    </label>
+                                    <div class="quiz-mode-options d-flex gap-3 mb-3">
+                                        <button type="button" class="btn quiz-mode-btn flex-fill" data-mode="new" 
+                                                title="Latihan dengan soal-soal baru yang belum pernah dikerjakan">
+                                            <div class="mode-icon">
+                                                <i class="fas fa-plus-circle"></i>
+                                            </div>
+                                            <div class="mode-title">Pertanyaan Baru</div>
+                                            <div class="mode-subtitle">Latihan dengan soal-soal fresh</div>
+                                        </button>
+                                        <button type="button" class="btn quiz-mode-btn flex-fill" data-mode="wrong" id="wrongModeBtn"
+                                                title="Mengulang soal-soal yang pernah dijawab salah untuk memperbaiki pemahaman">
+                                            <div class="mode-icon">
+                                                <i class="fas fa-redo-alt"></i>
+                                            </div>
+                                            <div class="mode-title">Kerjakan yang Salah</div>
+                                            <div class="mode-subtitle" id="wrongCount">
+                                                <span class="wrong-count-loading"></span> Loading...
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
                                 
                                 <!-- Quiz Configuration Form -->
                                 <form action="{{ route('medmastery.quiz.start', $category->id) }}" method="POST" class="practice-form" id="quizForm">
                                     @csrf
                                     <input type="hidden" name="question_count" id="selectedCount" value="" required>
-                                    <input type="hidden" name="quiz_mode" value="new" required>
+                                    <input type="hidden" name="quiz_mode" id="selectedMode" value="" required>
                                     
                                     <!-- Question Count Selection -->
                                     <div class="mb-3" id="questionCountSection">
@@ -675,10 +841,49 @@
 document.addEventListener('DOMContentLoaded', function() {
     const countOptions = document.querySelectorAll('.count-option');
     const selectedCountInput = document.getElementById('selectedCount');
+    const selectedModeInput = document.getElementById('selectedMode');
     const startButton = document.getElementById('startButton');
-    const startButtonText = document.getElementById('startButtonText');
+    const quizModeButtons = document.querySelectorAll('.quiz-mode-btn');
+    const wrongModeBtn = document.getElementById('wrongModeBtn');
+    const wrongCount = document.getElementById('wrongCount');
+    const questionCountSection = document.getElementById('questionCountSection');
     
     let selectedCount = null;
+    let selectedMode = null;
+    let wrongQuestionsCount = 0;
+    
+    // Load wrong questions count
+    loadWrongQuestionsCount();
+    
+    // Handle quiz mode selection
+    quizModeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const mode = this.getAttribute('data-mode');
+            
+            // Remove active class from all buttons
+            quizModeButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            selectedMode = mode;
+            if (selectedModeInput) {
+                selectedModeInput.value = mode;
+            }
+            
+            // Update question count options based on mode
+            updateQuestionCountOptions(mode);
+            
+            // Reset selected count
+            selectedCount = null;
+            if (selectedCountInput) {
+                selectedCountInput.value = '';
+            }
+            countOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            updateStartButton();
+        });
+    });
     
     // Handle question count selection
     countOptions.forEach(option => {
@@ -700,22 +905,159 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    function loadWrongQuestionsCount() {
+        // AJAX call to get wrong questions count
+        console.log('Loading wrong questions count for category {{ $category->id }}');
+        
+        fetch(`/medmastery-quiz/wrong-count/{{ $category->id }}`, {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Wrong questions count data:', data);
+            wrongQuestionsCount = data.count || 0;
+            
+            if (wrongQuestionsCount === 0) {
+                wrongModeBtn.classList.add('disabled');
+                wrongCount.innerHTML = 'Tidak ada soal yang salah';
+            } else {
+                wrongModeBtn.classList.remove('disabled');
+                wrongCount.innerHTML = `${wrongQuestionsCount} soal tersedia untuk diulang`;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading wrong questions count:', error);
+            wrongCount.innerHTML = '<span class="text-danger">Error loading data</span>';
+            wrongModeBtn.classList.add('disabled');
+            
+            // Optional: Load debug info for troubleshooting
+            console.log('Attempting to load debug info...');
+            fetch(`/medmastery-quiz/debug-wrong/{{ $category->id }}`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(debugData => {
+                console.log('Debug data:', debugData);
+            })
+            .catch(debugError => {
+                console.error('Debug error:', debugError);
+            });
+        });
+    }
+    
+    function updateQuestionCountOptions(mode) {
+        const totalQuestions = {{ $category->active_questions_count ?? 0 }};
+        const defaultOptions = [10, 25, 50];
+        
+        // Clear existing options
+        const container = document.querySelector('.question-count-options');
+        container.innerHTML = '';
+        
+        if (mode === 'wrong') {
+            // For wrong mode, show options based on wrong questions count
+            if (wrongQuestionsCount > 0) {
+                const availableOptions = defaultOptions.filter(count => count <= wrongQuestionsCount);
+                
+                availableOptions.forEach(count => {
+                    const option = createCountOption(count, 'soal');
+                    container.appendChild(option);
+                });
+                
+                // Add "all wrong" option if different from standard options
+                if (wrongQuestionsCount > 0 && wrongQuestionsCount <= 50 && !availableOptions.includes(wrongQuestionsCount)) {
+                    const option = createCountOption(wrongQuestionsCount, 'semua salah');
+                    container.appendChild(option);
+                }
+            } else {
+                container.innerHTML = '<div class="text-center text-muted p-3"><i class="fas fa-info-circle me-2"></i>Tidak ada soal yang salah untuk dikerjakan ulang</div>';
+            }
+        } else {
+            // For new mode, show standard options
+            defaultOptions.forEach(count => {
+                if (count <= totalQuestions) {
+                    const option = createCountOption(count, 'soal');
+                    container.appendChild(option);
+                }
+            });
+            
+            if (totalQuestions > 0 && totalQuestions < 50) {
+                const option = createCountOption(totalQuestions, 'semua');
+                container.appendChild(option);
+            }
+        }
+        
+        // Re-attach event listeners
+        attachCountOptionListeners();
+    }
+    
+    function createCountOption(count, label) {
+        const div = document.createElement('div');
+        div.className = 'count-option';
+        div.setAttribute('data-count', count);
+        div.innerHTML = `
+            <div class="count-number">${count}</div>
+            <div class="count-label">${label}</div>
+        `;
+        return div;
+    }
+    
+    function attachCountOptionListeners() {
+        const newCountOptions = document.querySelectorAll('.count-option');
+        newCountOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const count = this.getAttribute('data-count');
+                
+                // Remove selected class from all options
+                newCountOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                
+                selectedCount = count;
+                if (selectedCountInput) {
+                    selectedCountInput.value = count;
+                }
+                
+                updateStartButton();
+            });
+        });
+    }
+    
     function updateStartButton() {
         if (!startButton) return;
         
-        if (selectedCount) {
+        if (selectedMode && selectedCount) {
             startButton.disabled = false;
             startButton.classList.remove('btn-secondary');
             startButton.classList.add('btn-primary');
             
-            const buttonText = 'Mulai Quiz (' + selectedCount + ' soal)';
-            startButton.innerHTML = '<i class="fas fa-play"></i> ' + buttonText;
+            const modeText = selectedMode === 'wrong' ? 'Kerjakan Ulang' : 'Mulai Quiz';
+            const buttonText = `${modeText} (${selectedCount} soal)`;
+            startButton.innerHTML = `<i class="fas fa-play"></i> ${buttonText}`;
         } else {
             startButton.disabled = true;
             startButton.classList.remove('btn-primary');
             startButton.classList.add('btn-secondary');
             
-            startButton.innerHTML = '<i class="fas fa-play"></i> Pilih Jumlah Soal';
+            if (!selectedMode) {
+                startButton.innerHTML = '<i class="fas fa-play"></i> Pilih Mode Latihan';
+            } else if (!selectedCount) {
+                startButton.innerHTML = '<i class="fas fa-play"></i> Pilih Jumlah Soal';
+            }
         }
     }
     
@@ -723,9 +1065,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const quizForm = document.getElementById('quizForm');
     if (quizForm) {
         quizForm.addEventListener('submit', function(e) {
-            if (!selectedCount) {
+            if (!selectedMode || !selectedCount) {
                 e.preventDefault();
-                alert('Silakan pilih jumlah soal terlebih dahulu.');
+                alert('Silakan pilih mode latihan dan jumlah soal terlebih dahulu.');
                 return;
             }
             
