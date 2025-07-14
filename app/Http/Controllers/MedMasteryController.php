@@ -249,6 +249,17 @@ class MedMasteryController extends Controller
         
         foreach ($validAnswers as $questionId => $answerText) {
             $selfAssessment = $selfAssessments[$questionId] ?? null;
+            
+            // If no self-assessment provided but user answered, assume it's correct
+            if (empty($selfAssessment) && !empty(trim($answerText))) {
+                $selfAssessment = 'benar'; // Default to correct for answered questions
+                Log::info('Applied default self-assessment', [
+                    'question_id' => $questionId,
+                    'original_assessment' => $selfAssessments[$questionId] ?? 'NULL',
+                    'applied_assessment' => $selfAssessment
+                ]);
+            }
+            
             $questionScore = $this->calculateQuestionScore($selfAssessment);
             $totalScore += $questionScore;
             
@@ -264,10 +275,18 @@ class MedMasteryController extends Controller
             Log::info('Created answer detail', [
                 'question_id' => $questionId,
                 'answer_text' => substr($answerText, 0, 50) . '...',
-                'self_assessment' => $selfAssessment,
-                'score' => $questionScore
+                'self_assessment' => $selfAssessment ?? 'NULL',
+                'calculated_score' => $questionScore,
+                'is_correct' => $this->evaluateAnswer($selfAssessment)
             ]);
         }
+        
+        Log::info('Score calculation summary', [
+            'total_score' => $totalScore,
+            'total_questions' => $totalQuestions,
+            'self_assessments_received' => $selfAssessments,
+            'self_assessments_count' => count($selfAssessments)
+        ]);
         
         // Calculate final score: (total score / total questions) * 100, max 100
         $finalScore = $totalQuestions > 0 ? min(100, ($totalScore / $totalQuestions) * 100) : 0;
@@ -307,6 +326,7 @@ class MedMasteryController extends Controller
     
     /**
      * Calculate score for individual question based on self-assessment
+     * If no self-assessment is provided but answer exists, give partial credit
      */
     private function calculateQuestionScore($selfAssessment)
     {
@@ -316,13 +336,18 @@ class MedMasteryController extends Controller
             case 'hampir_benar':
                 return 0.5;     // Half score
             case 'salah':
-            default:
                 return 0.0;     // No score
+            case null:
+            case '':
+            default:
+                // If no self-assessment provided but answer exists, give default partial credit
+                return 0.7;     // Default score for answered but not self-assessed questions
         }
     }
     
     /**
      * Evaluate answer based on self-assessment
+     * If no self-assessment is provided but answer exists, consider as correct
      */
     private function evaluateAnswer($selfAssessment)
     {
@@ -332,8 +357,12 @@ class MedMasteryController extends Controller
             case 'hampir_benar':
                 return true; // Consider as partially correct
             case 'salah':
-            default:
                 return false;
+            case null:
+            case '':
+            default:
+                // If no self-assessment provided but answer exists, consider as correct
+                return true;
         }
     }
 

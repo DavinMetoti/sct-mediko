@@ -2621,6 +2621,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
+            // Add default self-assessment for answers that don't have explicit assessment
+            Object.keys(answersData).forEach(function(questionId) {
+                const assessmentInput = document.getElementById(`assessment_${questionId}`);
+                if (!assessmentInput || !assessmentInput.value) {
+                    // Default to 'benar' (correct) for answered questions without explicit assessment
+                    finalFormData.append(`self_assessment[${questionId}]`, 'benar');
+                    console.log(`Added default self assessment for question ${questionId}: benar`);
+                }
+            });
+            
             console.log('Final FormData contents:');
             for (let pair of finalFormData.entries()) {
                 console.log(pair[0] + ': ' + pair[1]);
