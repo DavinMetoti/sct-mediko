@@ -91,10 +91,12 @@
                                                 <button class="btn btn-sm btn-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
                                                         style="width: 32px; height: 32px;" 
                                                         type="button" 
-                                                        data-bs-toggle="dropdown">
+                                                        data-bs-toggle="dropdown"
+                                                        data-bs-boundary="viewport"
+                                                        data-bs-reference="parent">
                                                     <i class="fas fa-ellipsis-v text-muted" style="font-size: 0.75rem;"></i>
                                                 </button>
-                                                <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 12px;">
+                                                <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 12px; z-index: 1050;">
                                                     <li>
                                                         <a class="dropdown-item d-flex align-items-center" href="{{ route('medmastery-category.edit', $category->id) }}">
                                                             <i class="fas fa-edit text-primary me-2" style="width: 16px;"></i>
@@ -198,6 +200,20 @@
     
     .card:hover .icon-container {
         transform: scale(1.1);
+    }
+    
+    /* Ensure dropdown doesn't get clipped by card overflow */
+    .card {
+        overflow: visible !important;
+    }
+    
+    .card-body {
+        overflow: visible !important;
+    }
+    
+    /* Make sure dropdown menu appears above everything */
+    .dropdown-menu {
+        z-index: 1050 !important;
     }
     
     .btn-green {

@@ -1,7 +1,7 @@
 <div class="sidebar sidebar-mediko-quiz" style="overflow: hidden;" id="sidebar">
     <div class="flex justify-content-start header-icon w-full h-full pt-4">
         <a class="flex items-center">
-            <img src="{{ secure_asset('/assets/images/logo-mediko.webp') }}" alt="logo mediko" width="63%">
+            <img src="{{ secure_asset('/assets/images/logo_fc_mediko.jpg') }}" alt="logo mediko" width="63%">
         </a>
     </div>
     <div class="menu">
