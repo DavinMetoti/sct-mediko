@@ -202,6 +202,31 @@
         align-items: center;
         gap: 0.25rem;
     }
+    
+    .visibility-indicator {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        backdrop-filter: blur(5px);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .visibility-public {
+        background: rgba(59, 130, 246, 0.9);
+        color: white;
+    }
+    
+    .visibility-private {
+        background: rgba(107, 114, 128, 0.9);
+        color: white;
+    }
 
     @media (max-width: 768px) {
         .filter-container {
@@ -224,21 +249,29 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-1" style="color: #2d3748; font-weight: 600;">Pertanyaan Saya</h2>
-            <p class="text-muted mb-0">Kelola pertanyaan yang Anda buat untuk pembelajaran medis</p>
+            <h2 class="mb-1" style="color: #2d3748; font-weight: 600;">Pertanyaan</h2>
+            <p class="text-muted mb-0">Kelola pertanyaan untuk pembelajaran medis</p>
         </div>
         <a href="{{ route('medmastery-question.create') }}" class="btn-create">
-            <i class="fas fa-plus"></i>Tambah Pertanyaan Saya
+            <i class="fas fa-plus"></i>Tambah Pertanyaan
         </a>
     </div>
     
     <!-- Filter Section -->
     <div class="filter-container">
         <form method="GET" action="{{ route('medmastery-question.index') }}" class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label fw-semibold">Kategori Saya</label>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Tampilkan</label>
+                <select name="visibility" class="form-select">
+                    <option value="my" {{ request('visibility') == 'my' ? 'selected' : '' }}>Pertanyaan Saya</option>
+                    <option value="public" {{ request('visibility') == 'public' ? 'selected' : '' }}>Pertanyaan Public</option>
+                    <option value="all" {{ request('visibility') == 'all' ? 'selected' : '' }}>Semua Pertanyaan</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Kategori</label>
                 <select name="category_id" class="form-select">
-                    <option value="">Semua Kategori Saya</option>
+                    <option value="">Semua Kategori</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
                             {{ $category->name }} ({{ $category->segmentation->name ?? 'No Segmentation' }})
@@ -246,7 +279,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label class="form-label fw-semibold">Status</label>
                 <select name="status" class="form-select">
                     <option value="">Semua Status</option>
@@ -254,9 +287,9 @@
                     <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label class="form-label fw-semibold">Pencarian</label>
-                <input type="text" name="search" class="form-control" placeholder="Cari pertanyaan saya..." value="{{ request('search') }}">
+                <input type="text" name="search" class="form-control" placeholder="Cari pertanyaan..." value="{{ request('search') }}">
             </div>
             <div class="col-md-1 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">
@@ -296,8 +329,16 @@
                         @endif
                         
                         <!-- Owner Indicator -->
-                        <div class="owner-indicator">
-                            <i class="fas fa-user-check"></i>
+                        @if($question->creator_id === Auth::id())
+                            <div class="owner-indicator">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                        @endif
+                        
+                        <!-- Visibility Indicator -->
+                        <div class="visibility-indicator {{ $question->is_public ? 'visibility-public' : 'visibility-private' }}">
+                            <i class="fas {{ $question->is_public ? 'fa-globe' : 'fa-lock' }}"></i>
+                            {{ $question->is_public ? 'Public' : 'Private' }}
                         </div>
                         
                         <!-- Question Header with Color -->
@@ -324,7 +365,7 @@
                             <div class="question-footer">
                                 <div class="question-creator">
                                     <i class="fas fa-user-edit"></i>
-                                    Dibuat oleh Anda
+                                    {{ $question->creator_id === Auth::id() ? 'Dibuat oleh Anda' : 'Dibuat oleh ' . $question->creator->name }}
                                 </div>
                                 <div class="question-date">
                                     {{ $question->created_at->format('d M Y') }}
@@ -349,18 +390,21 @@
             <h3 class="empty-title">Belum Ada Pertanyaan</h3>
             @if($categories->count() > 0)
                 <p class="empty-description">
-                    Anda belum membuat pertanyaan apapun. Mulai dengan membuat pertanyaan pertama Anda.
+                    @if(request('visibility') == 'my')
+                        Anda belum membuat pertanyaan apapun. Mulai dengan membuat pertanyaan pertama Anda.
+                    @elseif(request('visibility') == 'public')
+                        Belum ada pertanyaan public yang tersedia.
+                    @else
+                        Belum ada pertanyaan yang tersedia.
+                    @endif
                 </p>
                 <a href="{{ route('medmastery-question.create') }}" class="btn-create">
-                    <i class="fas fa-plus"></i>Buat Pertanyaan Pertama Saya
+                    <i class="fas fa-plus"></i>Buat Pertanyaan Baru
                 </a>
             @else
                 <p class="empty-description">
-                    Anda perlu membuat kategori terlebih dahulu sebelum dapat membuat pertanyaan.
+                    Belum ada kategori yang tersedia untuk membuat pertanyaan. Silakan hubungi administrator untuk menambahkan kategori.
                 </p>
-                <a href="{{ route('medmastery-category.create') }}" class="btn-create">
-                    <i class="fas fa-plus"></i>Buat Kategori Terlebih Dahulu
-                </a>
             @endif
         </div>
     @endif

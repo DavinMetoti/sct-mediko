@@ -483,6 +483,23 @@
                 <div class="help-text">Tentukan apakah pertanyaan ini akan aktif atau tidak</div>
             </div>
 
+            <div class="input-group">
+                <label>Visibilitas Pertanyaan</label>
+                <div class="switch-container">
+                    <!-- Hidden input untuk memastikan nilai dikirim saat checkbox tidak dicentang -->
+                    <input type="hidden" name="is_public" value="0">
+                    <label class="form-switch">
+                        <input type="checkbox" name="is_public" id="is_public" value="1" {{ old('is_public', $question->is_public) ? 'checked' : '' }}>
+                        <span class="slider"></span>
+                    </label>
+                    <span id="visibilityText">{{ $question->is_public ? 'Public' : 'Private' }}</span>
+                </div>
+                <div class="help-text">
+                    <strong>Private:</strong> Hanya Anda yang dapat melihat pertanyaan ini<br>
+                    <strong>Public:</strong> Semua pengguna dapat melihat pertanyaan ini
+                </div>
+            </div>
+
             <div class="btn-group">
                 <button type="reset" class="btn btn-secondary">
                     <i class="fas fa-undo"></i>Reset
@@ -505,6 +522,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadContainer = document.querySelector('.pdf-upload-container');
     const statusSwitch = document.getElementById('is_active');
     const statusText = document.getElementById('statusText');
+    const visibilitySwitch = document.getElementById('is_public');
+    const visibilityText = document.getElementById('visibilityText');
     const originalPdfPreview = pdfPreview.innerHTML;
     
     // Handle file selection
@@ -585,6 +604,11 @@ document.addEventListener('DOMContentLoaded', function() {
         statusText.textContent = this.checked ? 'Aktif' : 'Tidak Aktif';
     });
     
+    // Visibility switch functionality
+    visibilitySwitch.addEventListener('change', function() {
+        visibilityText.textContent = this.checked ? 'Public' : 'Private';
+    });
+    
     // Character count for textareas
     const questionText = document.getElementById('question_text');
     const explanation = document.getElementById('explanation');
@@ -620,6 +644,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('explanation').value = `{{ addslashes($question->explanation) }}`;
         document.getElementById('is_active').checked = {{ $question->is_active ? 'true' : 'false' }};
         statusText.textContent = '{{ $question->is_active ? "Aktif" : "Tidak Aktif" }}';
+        document.getElementById('is_public').checked = {{ $question->is_public ? 'true' : 'false' }};
+        visibilityText.textContent = '{{ $question->is_public ? "Public" : "Private" }}';
         
         // Reset PDF preview
         pdfPreview.innerHTML = originalPdfPreview;

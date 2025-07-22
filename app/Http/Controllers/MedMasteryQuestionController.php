@@ -18,8 +18,22 @@ class MedMasteryQuestionController extends Controller
     {
         $query = MedMasteryQuestion::with(['category.segmentation', 'creator']);
 
-        // Only show questions created by the current user
-        $query->where('creator_id', Auth::id());
+        // Show questions based on visibility
+        $visibility = $request->input('visibility', 'my');
+        
+        if ($visibility === 'my') {
+            // Only show questions created by the current user
+            $query->where('creator_id', Auth::id());
+        } elseif ($visibility === 'public') {
+            // Show all public questions
+            $query->where('is_public', true);
+        } elseif ($visibility === 'all') {
+            // Show user's own questions AND public questions
+            $query->where(function($q) {
+                $q->where('creator_id', Auth::id())
+                  ->orWhere('is_public', true);
+            });
+        }
 
         // Filter by category if provided
         if ($request->filled('category_id')) {
@@ -45,9 +59,8 @@ class MedMasteryQuestionController extends Controller
 
         $questions = $query->orderBy('created_at', 'desc')->paginate(12);
         
-        // Only show categories created by the current user
+        // Show all categories to all users
         $categories = MedmasteryCategory::with('segmentation')
-            ->where('created_by', Auth::id())
             ->orderBy('name')
             ->get();
 
@@ -59,9 +72,8 @@ class MedMasteryQuestionController extends Controller
      */
     public function create()
     {
-        // Only show categories created by the current user
+        // Show all categories to all users
         $categories = MedmasteryCategory::with('segmentation')
-            ->where('created_by', Auth::id())
             ->orderBy('name')
             ->get();
             
@@ -78,6 +90,7 @@ class MedMasteryQuestionController extends Controller
             'question_text' => 'required|string|max:2000',
             'explanation' => 'required|string|max:5000',
             'explanation_pdf' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
+            'is_public' => 'nullable|boolean',
         ], [
             'medmastery_category_id.required' => 'Kategori harus dipilih',
             'medmastery_category_id.exists' => 'Kategori yang dipilih tidak valid',
@@ -90,16 +103,15 @@ class MedMasteryQuestionController extends Controller
             'explanation_pdf.max' => 'Ukuran file maksimal 10MB'
         ]);
 
-        // Validate that user owns the selected category
+        // Allow users to use any available category
         $category = MedmasteryCategory::where('id', $request->medmastery_category_id)
-            ->where('created_by', Auth::id())
             ->first();
 
         if (!$category) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Anda tidak memiliki akses untuk membuat pertanyaan di kategori ini.');
+                ->with('error', 'Kategori yang dipilih tidak valid.');
         }
 
         $pdfPath = null;
@@ -118,6 +130,7 @@ class MedMasteryQuestionController extends Controller
             'explanation_pdf_path' => $pdfPath,
             'creator_id' => Auth::id(),
             'is_active' => $request->is_active == '1' ? true : false,
+            'is_public' => $request->is_public == '1' ? true : false,
         ]);
 
         return redirect()
@@ -132,8 +145,8 @@ class MedMasteryQuestionController extends Controller
     {
         $question = MedMasteryQuestion::with(['category.segmentation', 'creator'])->findOrFail($id);
         
-        // Check if user owns this question
-        if ($question->creator_id !== Auth::id()) {
+        // Check if user can view this question (own question or public question)
+        if ($question->creator_id !== Auth::id() && !$question->is_public) {
             return redirect()
                 ->route('medmastery-question.index')
                 ->with('error', 'Anda tidak memiliki akses untuk melihat pertanyaan ini.');
@@ -156,9 +169,8 @@ class MedMasteryQuestionController extends Controller
                 ->with('error', 'Anda tidak memiliki akses untuk mengedit pertanyaan ini.');
         }
         
-        // Only show categories created by the current user
+        // Show all categories to all users
         $categories = MedmasteryCategory::with('segmentation')
-            ->where('created_by', Auth::id())
             ->orderBy('name')
             ->get();
             
@@ -184,6 +196,7 @@ class MedMasteryQuestionController extends Controller
             'question_text' => 'required|string|max:2000',
             'explanation' => 'required|string|max:5000',
             'explanation_pdf' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
+            'is_public' => 'nullable|boolean',
         ], [
             'medmastery_category_id.required' => 'Kategori harus dipilih',
             'medmastery_category_id.exists' => 'Kategori yang dipilih tidak valid',
@@ -196,16 +209,15 @@ class MedMasteryQuestionController extends Controller
             'explanation_pdf.max' => 'Ukuran file maksimal 10MB'
         ]);
 
-        // Validate that user owns the selected category
+        // Allow users to use any available category
         $category = MedmasteryCategory::where('id', $request->medmastery_category_id)
-            ->where('created_by', Auth::id())
             ->first();
 
         if (!$category) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Anda tidak memiliki akses untuk menggunakan kategori ini.');
+                ->with('error', 'Kategori yang dipilih tidak valid.');
         }
 
         $pdfPath = $question->explanation_pdf_path;
@@ -228,6 +240,7 @@ class MedMasteryQuestionController extends Controller
             'explanation' => $request->explanation,
             'explanation_pdf_path' => $pdfPath,
             'is_active' => $request->is_active == '1' ? true : false,
+            'is_public' => $request->is_public == '1' ? true : false,
         ]);
 
         return redirect()

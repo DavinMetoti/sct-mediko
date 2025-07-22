@@ -347,7 +347,7 @@
                 @else
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>Belum ada kategori!</strong> Anda perlu membuat kategori terlebih dahulu sebelum dapat membuat pertanyaan.
+                        <strong>Belum ada kategori!</strong> Belum ada kategori yang tersedia. Silakan hubungi administrator atau buat kategori baru.
                         <br>
                         <a href="{{ route('medmastery-category.create') }}" class="btn btn-sm btn-primary mt-2">
                             <i class="fas fa-plus"></i> Buat Kategori Baru
@@ -427,7 +427,7 @@
                 @enderror
             </div>
 
-            <div class="input-group">
+            <div class="input-group d-flex flex-column">
                 <label>Status Pertanyaan</label>
                 <div class="switch-container">
                     <!-- Hidden input untuk memastikan nilai dikirim saat checkbox tidak dicentang -->
@@ -439,6 +439,23 @@
                     <span id="statusText">Aktif</span>
                 </div>
                 <div class="help-text">Tentukan apakah pertanyaan ini akan langsung aktif atau tidak</div>
+            </div>
+
+            <div class="input-group d-flex flex-column">
+                <label>Visibilitas Pertanyaan</label>
+                <div class="switch-container">
+                    <!-- Hidden input untuk memastikan nilai dikirim saat checkbox tidak dicentang -->
+                    <input type="hidden" name="is_public" value="0">
+                    <label class="form-switch">
+                        <input type="checkbox" name="is_public" id="is_public" value="1" {{ old('is_public', false) ? 'checked' : '' }}>
+                        <span class="slider"></span>
+                    </label>
+                    <span id="visibilityText">Private</span>
+                </div>
+                <div class="help-text">
+                    <strong>Private:</strong> Hanya Anda yang dapat melihat pertanyaan ini<br>
+                    <strong>Public:</strong> Semua pengguna dapat melihat pertanyaan ini
+                </div>
             </div>
 
             <div class="btn-group">
@@ -463,6 +480,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadContainer = document.querySelector('.pdf-upload-container');
     const statusSwitch = document.getElementById('is_active');
     const statusText = document.getElementById('statusText');
+    const visibilitySwitch = document.getElementById('is_public');
+    const visibilityText = document.getElementById('visibilityText');
     
     // Handle file selection
     fileInput.addEventListener('change', function(e) {
@@ -543,6 +562,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Status switch functionality
     statusSwitch.addEventListener('change', function() {
         statusText.textContent = this.checked ? 'Aktif' : 'Tidak Aktif';
+    });
+    
+    // Visibility switch functionality
+    visibilitySwitch.addEventListener('change', function() {
+        visibilityText.textContent = this.checked ? 'Public' : 'Private';
     });
     
     // Character count for textareas

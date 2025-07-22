@@ -15,10 +15,12 @@ class MedMasteryQuestion extends Model
         'explanation_pdf_path',
         'creator_id',
         'is_active',
+        'is_public',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_public' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -41,6 +43,16 @@ class MedMasteryQuestion extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->where('is_public', true);
+    }
+
+    public function scopePrivate($query)
+    {
+        return $query->where('is_public', false);
     }
 
     public function scopeByCategory($query, $categoryId)
