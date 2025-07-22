@@ -83,6 +83,7 @@ Route::middleware('auth')->get('medmastery-quiz/wrong-count/{categoryId}', [MedM
 Route::middleware('auth')->get('medmastery-quiz/debug-wrong/{categoryId}', [MedMasteryController::class, 'debugWrongQuestions'])->name('medmastery.quiz.debug-wrong');
 Route::middleware('auth')->get('medmastery/history', [MedMasteryController::class, 'userHistory'])->name('medmastery.history');
 Route::middleware('auth')->get('medmastery/history/{answerId}', [MedMasteryController::class, 'userHistoryDetail'])->name('medmastery.history.detail');
+Route::middleware('auth')->get('medmastery/performance', [MedMasteryController::class, 'userPerformance'])->name('medmastery.performance');
 // Route khusus untuk siswa melihat detail kategori
 Route::middleware('auth')->get('medmastery/category/{id}', [MedMasteryController::class, 'showCategory'])->name('medmastery.category.show');
 Route::middleware('auth')->resource('medmastery', MedMasteryController::class)->except(['show', 'edit', 'update', 'destroy']);

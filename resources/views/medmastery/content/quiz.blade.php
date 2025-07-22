@@ -605,401 +605,38 @@
         cursor: not-allowed;
     }
     
-    @media (max-width: 768px) {
-        .quiz-container {
-            padding: 1rem 0.5rem;
-        }
-        
-        .quiz-header {
-            padding: 1.5rem;
-        }
-        
-        .quiz-title {
-            font-size: 1.5rem;
-        }
-        
-        .quiz-info {
-            gap: 1rem;
-        }
-        
-        .question-card {
-            padding: 1.5rem;
-        }
-        
-        .quiz-navigation {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        
-        .quiz-timer {
-            position: relative;
-            top: auto;
-            right: auto;
-            margin-bottom: 1rem;
-        }
-        
-        .question-indicators {
-            justify-content: center;
-        }
-        
-        .quick-nav-buttons {
-            justify-content: center;
-        }
-        
-        .status-legend {
-            justify-content: center;
-        }
-    }
-    
-    .answer-counter {
-        font-size: 0.9rem;
-        color: #64748b;
-        margin-top: 0.5rem;
-        text-align: right;
-    }
-    
-    .question-card.answered {
-        border-left: 4px solid #10b981;
-    }
-    
-    .question-card.current {
-        border-left: 4px solid {{ $category->segmentation->color ?? '#667eea' }};
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    }
-    
-    .question-navigation {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 1.5rem;
-        flex-wrap: wrap;
-    }
-    
-    .nav-info {
-        text-align: center;
-        flex: 1;
-    }
-    
-    .question-counter {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #4a5568;
-        margin-bottom: 0.5rem;
-    }
-    
-    .btn-nav {
-        min-width: 120px;
-    }
-    
-    /* PDF Viewer Styles */
-    .explanation-section {
-        margin-top: 2rem;
-        padding: 1.5rem;
-        background: #f8fafc;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-    }
-    
-    .explanation-header {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .pdf-viewer {
-        width: 100%;
-        height: 400px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        background: white;
-        margin-bottom: 1rem;
-    }
-    
-    .answer-options {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 1rem;
-    }
-    
-    .answer-option {
-        padding: 0.75rem 1.5rem;
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        background: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: 500;
-        min-width: 120px;
-        text-align: center;
-    }
-    
-    .answer-option:hover {
-        border-color: #cbd5e0;
-        background: #f8fafc;
-    }
-    
-    .answer-option.selected {
-        border-color: #10b981;
-        background: #10b981;
-        color: white;
-    }
-    
-    .answer-option.wrong {
-        border-color: #ef4444;
-        background: #ef4444;
-        color: white;
-    }
-    
-    .answer-option.partial {
-        border-color: #f59e0b;
-        background: #f59e0b;
-        color: white;
-    }
-    
-    .answer-option.correct {
-        border-color: #10b981;
-        background: #10b981;
-        color: white;
-    }
-    
-    /* Explanation Trigger Styles */
-    .explanation-trigger {
-        margin-top: 1.5rem;
-        text-align: center;
-    }
-    
-    .show-explanation-btn {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
-        color: white;
-        border: none;
-        padding: 0.75rem 2rem;
-        border-radius: 12px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .show-explanation-btn:hover:not(:disabled) {
-        background: linear-gradient(135deg, #d97706, #b45309);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
-        color: white;
-    }
-    
-    .show-explanation-btn:disabled {
-        background: #94a3b8;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-        color: white;
-    }
-    
-    .show-explanation-btn.disabled-no-answer {
-        background: #94a3b8;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-        color: white;
-    }
-    
-    .answer-warning {
-        background: #fef3c7;
-        border: 1px solid #f59e0b;
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        margin-top: 0.5rem;
-        color: #92400e;
-        font-size: 0.9rem;
-        display: none;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    
-    .answer-warning.show {
-        display: flex;
-    }
-    
-    .answer-input:disabled {
-        background-color: #f8fafc;
-        border-color: #e2e8f0;
-        color: #64748b;
-        cursor: not-allowed;
-    }
-    
-    .explanation-section {
-        animation: slideDown 0.5s ease-out;
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @keyframes flash {
-        0%, 100% { background-color: #fef3c7; }
-        50% { background-color: #fbbf24; }
-    }
-    
-    /* Session Info Banner */
-    .session-info {
-        background: linear-gradient(135deg, #e0f2fe, #b3e5fc);
-        border: 1px solid #0288d1;
-        border-radius: 12px;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-    
-    .session-info-icon {
-        color: #0277bd;
-        font-size: 1.2rem;
-    }
-    
-    .session-info-text {
-        color: #01579b;
-        font-weight: 500;
-        flex: 1;
-    }
-    
-    .session-info-text small {
-        display: block;
-        font-weight: 400;
-        opacity: 0.8;
-        margin-top: 0.25rem;
-    }
-    
-    /* Question Status Indicators */
-    .question-status-nav {
-        background: white;
-        border-radius: 12px;
-        padding: 1rem;
+    .flip-card-container {
+        perspective: 1200px;
         margin-bottom: 2rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e2e8f0;
+        position: relative;
     }
-    
-    .status-nav-header {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+    .flip-card {
+        width: 100%;
+        transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+        transform-style: preserve-3d;
+        position: relative;
+        min-height: 400px;
     }
-    
-    .question-indicators {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
+    .flip-card.flipped {
+        transform: rotateY(180deg);
     }
-    
-    .question-indicator {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: 2px solid #e2e8f0;
-        background: white;
-        color: #64748b;
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        top: 0; left: 0;
+        backface-visibility: hidden;
+        min-height: 400px;
     }
-    
-    .question-indicator:hover {
-        border-color: #cbd5e0;
-        transform: translateY(-2px);
+    .flip-card-front {
+        z-index: 2;
     }
-    
-    .question-indicator.current {
-        border-color: {{ $category->segmentation->color ?? '#667eea' }};
-        background: {{ $category->segmentation->color ?? '#667eea' }};
-        color: white;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    /* Hide the front when flipped */
+    .flip-card.flipped .flip-card-front {
+        display: none;
     }
-    
-    .question-indicator.answered {
-        border-color: #10b981;
-        background: #10b981;
-        color: white;
-    }
-    
-    .question-indicator.unanswered {
-        border-color: #ef4444;
-        background: #ef4444;
-        color: white;
-    }
-    
-    .question-indicator.incomplete {
-        border-color: #f59e0b;
-        background: #f59e0b;
-        color: white;
-    }
-    
-    .status-legend {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-top: 1rem;
-        font-size: 0.8rem;
-    }
-    
-    .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    
-    .legend-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 3px;
-    }
-    
-    .quick-nav-buttons {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        flex-wrap: wrap;
-    }
-    
-    .quick-nav-btn {
-        padding: 0.5rem 1rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        background: white;
-        color: #64748b;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .quick-nav-btn:hover {
-        border-color: #cbd5e0;
-        background: #f8fafc;
-    }
-    
-    .quick-nav-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 3;
     }
     
     @media (max-width: 768px) {
@@ -1399,6 +1036,40 @@
         cursor: not-allowed;
     }
     
+    .flip-card-container {
+        perspective: 1200px;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    .flip-card {
+        width: 100%;
+        transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+        transform-style: preserve-3d;
+        position: relative;
+        min-height: 400px;
+    }
+    .flip-card.flipped {
+        transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        top: 0; left: 0;
+        backface-visibility: hidden;
+        min-height: 400px;
+    }
+    .flip-card-front {
+        z-index: 2;
+    }
+    /* Hide the front when flipped */
+    .flip-card.flipped .flip-card-front {
+        display: none;
+    }
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 3;
+    }
+    
     @media (max-width: 768px) {
         .quiz-container {
             padding: 1rem 0.5rem;
@@ -1674,6 +1345,1730 @@
         font-weight: 400;
         opacity: 0.8;
         margin-top: 0.25rem;
+    }
+    
+    /* Question Status Indicators */
+    .question-status-nav {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .status-nav-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .question-indicators {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .question-indicator {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+    }
+    
+    .question-indicator:hover {
+        border-color: #cbd5e0;
+        transform: translateY(-2px);
+    }
+    
+    .question-indicator.current {
+        border-color: {{ $category->segmentation->color ?? '#667eea' }};
+        background: {{ $category->segmentation->color ?? '#667eea' }};
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .question-indicator.answered {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .question-indicator.unanswered {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .question-indicator.incomplete {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .status-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+    }
+    
+    .quick-nav-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .quick-nav-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        color: #64748b;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .quick-nav-btn:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .quick-nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .flip-card-container {
+        perspective: 1200px;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    .flip-card {
+        width: 100%;
+        transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+        transform-style: preserve-3d;
+        position: relative;
+        min-height: 400px;
+    }
+    .flip-card.flipped {
+        transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        top: 0; left: 0;
+        backface-visibility: hidden;
+        min-height: 400px;
+    }
+    .flip-card-front {
+        z-index: 2;
+    }
+    /* Hide the front when flipped */
+    .flip-card.flipped .flip-card-front {
+        display: none;
+    }
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 3;
+    }
+    
+    @media (max-width: 768px) {
+        .quiz-container {
+            padding: 1rem 0.5rem;
+        }
+        
+        .quiz-header {
+            padding: 1.5rem;
+        }
+        
+        .quiz-title {
+            font-size: 1.5rem;
+        }
+        
+        .quiz-info {
+            gap: 1rem;
+        }
+        
+        .question-card {
+            padding: 1.5rem;
+        }
+        
+        .quiz-navigation {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .quiz-timer {
+            position: relative;
+            top: auto;
+            right: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .question-indicators {
+            justify-content: center;
+        }
+        
+        .quick-nav-buttons {
+            justify-content: center;
+        }
+        
+        .status-legend {
+            justify-content: center;
+        }
+    }
+    
+    .answer-counter {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        text-align: right;
+    }
+    
+    .question-card.answered {
+        border-left: 4px solid #10b981;
+    }
+    
+    .question-card.current {
+        border-left: 4px solid {{ $category->segmentation->color ?? '#667eea' }};
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .question-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .nav-info {
+        text-align: center;
+        flex: 1;
+    }
+    
+    .question-counter {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-nav {
+        min-width: 120px;
+    }
+    
+    /* PDF Viewer Styles */
+    .explanation-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .explanation-header {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .pdf-viewer {
+        width: 100%;
+        height: 400px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-options {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-option {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        min-width: 120px;
+        text-align: center;
+    }
+    
+    .answer-option:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .answer-option.selected {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .answer-option.wrong {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .answer-option.partial {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .answer-option.correct {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    /* Explanation Trigger Styles */
+    .explanation-trigger {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+    
+    .show-explanation-btn {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .show-explanation-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #d97706, #b45309);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        color: white;
+    }
+    
+    .show-explanation-btn:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .show-explanation-btn.disabled-no-answer {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .answer-warning {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        color: #92400e;
+        font-size: 0.9rem;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .answer-warning.show {
+        display: flex;
+    }
+    
+    .answer-input:disabled {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        color: #64748b;
+        cursor: not-allowed;
+    }
+    
+    .explanation-section {
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes flash {
+        0%, 100% { background-color: #fef3c7; }
+        50% { background-color: #fbbf24; }
+    }
+    
+    /* Session Info Banner */
+    .session-info {
+        background: linear-gradient(135deg, #e0f2fe, #b3e5fc);
+        border: 1px solid #0288d1;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .session-info-icon {
+        color: #0277bd;
+        font-size: 1.2rem;
+    }
+    
+    .session-info-text {
+        color: #01579b;
+        font-weight: 500;
+        flex: 1;
+    }
+    
+    .session-info-text small {
+        display: block;
+        font-weight: 400;
+        opacity: 0.8;
+        margin-top: 0.25rem;
+    }
+    
+    /* Question Status Indicators */
+    .question-status-nav {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .status-nav-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .question-indicators {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .question-indicator {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+    }
+    
+    .question-indicator:hover {
+        border-color: #cbd5e0;
+        transform: translateY(-2px);
+    }
+    
+    .question-indicator.current {
+        border-color: {{ $category->segmentation->color ?? '#667eea' }};
+        background: {{ $category->segmentation->color ?? '#667eea' }};
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .question-indicator.answered {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .question-indicator.unanswered {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .question-indicator.incomplete {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .status-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+    }
+    
+    .quick-nav-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .quick-nav-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        color: #64748b;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .quick-nav-btn:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .quick-nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .flip-card-container {
+        perspective: 1200px;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    .flip-card {
+        width: 100%;
+        transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+        transform-style: preserve-3d;
+        position: relative;
+        min-height: 400px;
+    }
+    .flip-card.flipped {
+        transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        top: 0; left: 0;
+        backface-visibility: hidden;
+        min-height: 400px;
+    }
+    .flip-card-front {
+        z-index: 2;
+    }
+    /* Hide the front when flipped */
+    .flip-card.flipped .flip-card-front {
+        display: none;
+    }
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 3;
+    }
+    
+    @media (max-width: 768px) {
+        .quiz-container {
+            padding: 1rem 0.5rem;
+        }
+        
+        .quiz-header {
+            padding: 1.5rem;
+        }
+        
+        .quiz-title {
+            font-size: 1.5rem;
+        }
+        
+        .quiz-info {
+            gap: 1rem;
+        }
+        
+        .question-card {
+            padding: 1.5rem;
+        }
+        
+        .quiz-navigation {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .quiz-timer {
+            position: relative;
+            top: auto;
+            right: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .question-indicators {
+            justify-content: center;
+        }
+        
+        .quick-nav-buttons {
+            justify-content: center;
+        }
+        
+        .status-legend {
+            justify-content: center;
+        }
+    }
+    
+    .answer-counter {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        text-align: right;
+    }
+    
+    .question-card.answered {
+        border-left: 4px solid #10b981;
+    }
+    
+    .question-card.current {
+        border-left: 4px solid {{ $category->segmentation->color ?? '#667eea' }};
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .question-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .nav-info {
+        text-align: center;
+        flex: 1;
+    }
+    
+    .question-counter {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-nav {
+        min-width: 120px;
+    }
+    
+    /* PDF Viewer Styles */
+    .explanation-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .explanation-header {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .pdf-viewer {
+        width: 100%;
+        height: 400px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-options {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-option {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        min-width: 120px;
+        text-align: center;
+    }
+    
+    .answer-option:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .answer-option.selected {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .answer-option.wrong {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .answer-option.partial {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .answer-option.correct {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    /* Explanation Trigger Styles */
+    .explanation-trigger {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+    
+    .show-explanation-btn {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .show-explanation-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #d97706, #b45309);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        color: white;
+    }
+    
+    .show-explanation-btn:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .show-explanation-btn.disabled-no-answer {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .answer-warning {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        color: #92400e;
+        font-size: 0.9rem;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .answer-warning.show {
+        display: flex;
+    }
+    
+    .answer-input:disabled {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        color: #64748b;
+        cursor: not-allowed;
+    }
+    
+    .explanation-section {
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes flash {
+        0%, 100% { background-color: #fef3c7; }
+        50% { background-color: #fbbf24; }
+    }
+    
+    /* Session Info Banner */
+    .session-info {
+        background: linear-gradient(135deg, #e0f2fe, #b3e5fc);
+        border: 1px solid #0288d1;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .session-info-icon {
+        color: #0277bd;
+        font-size: 1.2rem;
+    }
+    
+    .session-info-text {
+        color: #01579b;
+        font-weight: 500;
+        flex: 1;
+    }
+    
+    .session-info-text small {
+        display: block;
+        font-weight: 400;
+        opacity: 0.8;
+        margin-top: 0.25rem;
+    }
+    
+    /* Question Status Indicators */
+    .question-status-nav {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .status-nav-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .question-indicators {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .question-indicator {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+    }
+    
+    .question-indicator:hover {
+        border-color: #cbd5e0;
+        transform: translateY(-2px);
+    }
+    
+    .question-indicator.current {
+        border-color: {{ $category->segmentation->color ?? '#667eea' }};
+        background: {{ $category->segmentation->color ?? '#667eea' }};
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .question-indicator.answered {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .question-indicator.unanswered {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .question-indicator.incomplete {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .status-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+    }
+    
+    .quick-nav-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .quick-nav-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        color: #64748b;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .quick-nav-btn:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .quick-nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .flip-card-container {
+        perspective: 1200px;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    .flip-card {
+        width: 100%;
+        transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+        transform-style: preserve-3d;
+        position: relative;
+        min-height: 400px;
+    }
+    .flip-card.flipped {
+        transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        top: 0; left: 0;
+        backface-visibility: hidden;
+        min-height: 400px;
+    }
+    .flip-card-front {
+        z-index: 2;
+    }
+    /* Hide the front when flipped */
+    .flip-card.flipped .flip-card-front {
+        display: none;
+    }
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 3;
+    }
+    
+    @media (max-width: 768px) {
+        .quiz-container {
+            padding: 1rem 0.5rem;
+        }
+        
+        .quiz-header {
+            padding: 1.5rem;
+        }
+        
+        .quiz-title {
+            font-size: 1.5rem;
+        }
+        
+        .quiz-info {
+            gap: 1rem;
+        }
+        
+        .question-card {
+            padding: 1.5rem;
+        }
+        
+        .quiz-navigation {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .quiz-timer {
+            position: relative;
+            top: auto;
+            right: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .question-indicators {
+            justify-content: center;
+        }
+        
+        .quick-nav-buttons {
+            justify-content: center;
+        }
+        
+        .status-legend {
+            justify-content: center;
+        }
+    }
+    
+    .answer-counter {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        text-align: right;
+    }
+    
+    .question-card.answered {
+        border-left: 4px solid #10b981;
+    }
+    
+    .question-card.current {
+        border-left: 4px solid {{ $category->segmentation->color ?? '#667eea' }};
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .question-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .nav-info {
+        text-align: center;
+        flex: 1;
+    }
+    
+    .question-counter {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-nav {
+        min-width: 120px;
+    }
+    
+    /* PDF Viewer Styles */
+    .explanation-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .explanation-header {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .pdf-viewer {
+        width: 100%;
+        height: 400px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-options {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-option {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        min-width: 120px;
+        text-align: center;
+    }
+    
+    .answer-option:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .answer-option.selected {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .answer-option.wrong {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .answer-option.partial {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .answer-option.correct {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    /* Explanation Trigger Styles */
+    .explanation-trigger {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+    
+    .show-explanation-btn {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .show-explanation-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #d97706, #b45309);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        color: white;
+    }
+    
+    .show-explanation-btn:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .show-explanation-btn.disabled-no-answer {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .answer-warning {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        color: #92400e;
+        font-size: 0.9rem;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .answer-warning.show {
+        display: flex;
+    }
+    
+    .answer-input:disabled {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        color: #64748b;
+        cursor: not-allowed;
+    }
+    
+    .explanation-section {
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes flash {
+        0%, 100% { background-color: #fef3c7; }
+        50% { background-color: #fbbf24; }
+    }
+    
+    /* Session Info Banner */
+    .session-info {
+        background: linear-gradient(135deg, #e0f2fe, #b3e5fc);
+        border: 1px solid #0288d1;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .session-info-icon {
+        color: #0277bd;
+        font-size: 1.2rem;
+    }
+    
+    .session-info-text {
+        color: #01579b;
+        font-weight: 500;
+        flex: 1;
+    }
+    
+    .session-info-text small {
+        display: block;
+        font-weight: 400;
+        opacity: 0.8;
+        margin-top: 0.25rem;
+    }
+    
+    /* Question Status Indicators */
+    .question-status-nav {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .status-nav-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .question-indicators {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .question-indicator {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+    }
+    
+    .question-indicator:hover {
+        border-color: #cbd5e0;
+        transform: translateY(-2px);
+    }
+    
+    .question-indicator.current {
+        border-color: {{ $category->segmentation->color ?? '#667eea' }};
+        background: {{ $category->segmentation->color ?? '#667eea' }};
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .question-indicator.answered {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .question-indicator.unanswered {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .question-indicator.incomplete {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .status-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+    }
+    
+    .quick-nav-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .quick-nav-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        color: #64748b;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .quick-nav-btn:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .quick-nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .flip-card-container {
+        perspective: 1200px;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    .flip-card {
+        width: 100%;
+        transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+        transform-style: preserve-3d;
+        position: relative;
+        min-height: 400px;
+    }
+    .flip-card.flipped {
+        transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        top: 0; left: 0;
+        backface-visibility: hidden;
+        min-height: 400px;
+    }
+    .flip-card-front {
+        z-index: 2;
+    }
+    /* Hide the front when flipped */
+    .flip-card.flipped .flip-card-front {
+        display: none;
+    }
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 3;
+    }
+    
+    @media (max-width: 768px) {
+        .quiz-container {
+            padding: 1rem 0.5rem;
+        }
+        
+        .quiz-header {
+            padding: 1.5rem;
+        }
+        
+        .quiz-title {
+            font-size: 1.5rem;
+        }
+        
+        .quiz-info {
+            gap: 1rem;
+        }
+        
+        .question-card {
+            padding: 1.5rem;
+        }
+        
+        .quiz-navigation {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .quiz-timer {
+            position: relative;
+            top: auto;
+            right: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .question-indicators {
+            justify-content: center;
+        }
+        
+        .quick-nav-buttons {
+            justify-content: center;
+        }
+        
+        .status-legend {
+            justify-content: center;
+        }
+    }
+    
+    .answer-counter {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        text-align: right;
+    }
+    
+    .question-card.answered {
+        border-left: 4px solid #10b981;
+    }
+    
+    .question-card.current {
+        border-left: 4px solid {{ $category->segmentation->color ?? '#667eea' }};
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .question-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .nav-info {
+        text-align: center;
+        flex: 1;
+    }
+    
+    .question-counter {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-nav {
+        min-width: 120px;
+    }
+    
+    /* PDF Viewer Styles */
+    .explanation-section {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .explanation-header {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .pdf-viewer {
+        width: 100%;
+        height: 400px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-options {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+    
+    .answer-option {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        min-width: 120px;
+        text-align: center;
+    }
+    
+    .answer-option:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    .answer-option.selected {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    .answer-option.wrong {
+        border-color: #ef4444;
+        background: #ef4444;
+        color: white;
+    }
+    
+    .answer-option.partial {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    
+    .answer-option.correct {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+    }
+    
+    /* Explanation Trigger Styles */
+    .explanation-trigger {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+    
+    .show-explanation-btn {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .show-explanation-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #d97706, #b45309);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        color: white;
+    }
+    
+    .show-explanation-btn:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .show-explanation-btn.disabled-no-answer {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        color: white;
+    }
+    
+    .answer-warning {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.5rem;
+        color: #92400e;
+        font-size: 0.9rem;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .answer-warning.show {
+        display: flex;
+    }
+    
+    .answer-input:disabled {
+        background-color: #f8fafc;
+        border-color: #e2e8f0;
+        color: #64748b;
+        cursor: not-allowed;
+    }
+    
+    .explanation-section {
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes flash {
+        0%, 100% { background-color: #fef3c7; }
+        50% { background-color: #fbbf24; }
+    }
+    
+    /* Session Info Banner */
+    .session-info {
+        background: linear-gradient(135deg, #e0f2fe, #b3e5fc);
+        border: 1px solid #0288d1;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .session-info-icon {
+        color: #0277bd;
+        font-size: 1.2rem;
+    }
+    
+    .session-info-text {
+        color: #01579b;
+        font-weight: 500;
+        flex: 1;
+    }
+    
+    .session-info-text small {
+        display: block;
+        font-weight: 400;
+        opacity: 0.8;
+               margin-top: 0.25rem;
     }
 </style>
 
@@ -1784,110 +3179,187 @@
         @csrf
         
         @foreach($questions as $index => $question)
-        <div class="question-card {{ $index === 0 ? 'active' : '' }}" data-question="{{ $index + 1 }}" id="question-{{ $index + 1 }}">
-            <div class="question-header">
-                <div class="question-number">{{ $index + 1 }}</div>
-                <div class="ms-auto">
-                    <span class="badge bg-light text-dark">{{ $index + 1 }} dari {{ $questions->count() }}</span>
-                </div>
-            </div>
-            
-            <div class="question-text">
-                {!! nl2br(e($question->question_text)) !!}
-            </div>
-            
-            <div class="answer-section">
-                <label for="answer_{{ $question->id }}" class="form-label">
-                    <i class="fas fa-edit"></i>
-                    Jawaban Anda:
-                </label>
-                <textarea 
-                    name="answers[{{ $question->id }}]" 
-                    id="answer_{{ $question->id }}" 
-                    class="answer-input form-control"
-                    placeholder="Ketik jawaban Anda di sini..."
-                    data-question-id="{{ $question->id }}"
-                    data-question-index="{{ $index }}"
-                    rows="5"
-                    required
-                ></textarea>
-                <div class="answer-counter">
-                    <span id="counter_{{ $question->id }}">0 karakter</span>
-                </div>
-            </div>
-            
-            <!-- Show Explanation Button -->
-            @if($question->explanation_pdf_path)
-            <div class="explanation-trigger">
-                <button type="button" class="btn btn-outline show-explanation-btn disabled-no-answer" data-question-id="{{ $question->id }}" disabled>
-                    <i class="fas fa-eye"></i>
-                    Lihat Penjelasan
-                </button>
-                <div class="answer-warning show" id="warning-{{ $question->id }}">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Silakan jawab pertanyaan terlebih dahulu sebelum melihat penjelasan
-                </div>
-            </div>
-            
-            <!-- Explanation Section with PDF and Answer Options (Initially Hidden) -->
-            <div class="explanation-section" id="explanation-{{ $question->id }}" style="display: none;">
-                <div class="explanation-header">
-                    <i class="fas fa-file-pdf"></i>
-                    Penjelasan & Pembahasan
-                </div>
-                
-                <!-- PDF Viewer -->
-                <iframe 
-                    src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" 
-                    class="pdf-viewer"
-                    frameborder="0">
-                </iframe>
-                
-                <!-- Answer Options -->
-                <div class="answer-options">
-                    <div class="answer-option" data-value="salah" data-question-id="{{ $question->id }}">
-                        <i class="fas fa-times"></i>
-                        Salah
-                    </div>
-                    <div class="answer-option" data-value="hampir_benar" data-question-id="{{ $question->id }}">
-                        <i class="fas fa-adjust"></i>
-                        Hampir Benar
-                    </div>
-                    <div class="answer-option" data-value="benar" data-question-id="{{ $question->id }}">
-                        <i class="fas fa-check"></i>
-                        Benar
-                    </div>
-                </div>
-                
-                <!-- Hidden input to store self-assessment -->
-                <input type="hidden" name="self_assessment[{{ $question->id }}]" id="assessment_{{ $question->id }}" value="">
-            </div>
-            @endif
-            
-            <!-- Question Navigation -->
-            <div class="question-navigation">
-                <button type="button" class="btn btn-outline btn-nav" id="prevBtn" {{ $index === 0 ? 'disabled' : '' }}>
-                    <i class="fas fa-arrow-left"></i>
-                    Sebelumnya
-                </button>
-                
-                <div class="nav-info">
-                    <div class="question-counter">
-                        Pertanyaan {{ $index + 1 }} dari {{ $questions->count() }}
+        <div class="flip-card-container" id="flipContainer-{{ $question->id }}" style="display: {{ $index === 0 ? 'block' : 'none' }};">
+            <div class="flip-card" id="flipCard-{{ $question->id }}">
+                <!-- Front: Question Card -->
+                <div class="flip-card-front">
+                    <div class="question-card {{ $index === 0 ? 'active' : '' }}" data-question="{{ $index + 1 }}" id="question-{{ $index + 1 }}">
+                        <div class="question-header">
+                            <div class="question-number">{{ $index + 1 }}</div>
+                            <div class="ms-auto">
+                                <span class="badge bg-light text-dark">{{ $index + 1 }} dari {{ $questions->count() }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="question-text">
+                            {!! nl2br(e($question->question_text)) !!}
+                        </div>
+                        
+                        <div class="answer-section">
+                            <label for="answer_{{ $question->id }}" class="form-label">
+                                <i class="fas fa-edit"></i>
+                                Jawaban Anda:
+                            </label>
+                            <textarea 
+                                name="answers[{{ $question->id }}]" 
+                                id="answer_{{ $question->id }}" 
+                                class="answer-input form-control"
+                                placeholder="Ketik jawaban Anda di sini..."
+                                data-question-id="{{ $question->id }}"
+                                data-question-index="{{ $index }}"
+                                rows="5"
+                                required
+                            ></textarea>
+                            <div class="answer-counter">
+                                <span id="counter_{{ $question->id }}">0 karakter</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Show Explanation Button -->
+                        @if($question->explanation_pdf_path)
+                        <div class="explanation-trigger">
+                            <button type="button" class="btn btn-outline show-explanation-btn disabled-no-answer" data-question-id="{{ $question->id }}" disabled>
+                                <i class="fas fa-eye"></i>
+                                Lihat Penjelasan
+                            </button>
+                            <div class="answer-warning show" id="warning-{{ $question->id }}">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Silakan jawab pertanyaan terlebih dahulu sebelum melihat penjelasan
+                            </div>
+                        </div>
+                        @endif
+                        
+                        <!-- Question Navigation -->
+                        <div class="question-navigation">
+                            <button type="button" class="btn btn-outline btn-nav" id="prevBtn" {{ $index === 0 ? 'disabled' : '' }}>
+                                <i class="fas fa-arrow-left"></i>
+                                Sebelumnya
+                            </button>
+                            
+                            <div class="nav-info">
+                                <div class="question-counter">
+                                    Pertanyaan {{ $index + 1 }} dari {{ $questions->count() }}
+                                </div>
+                            </div>
+                            
+                            <div class="next-button-container" id="nextContainer-{{ $question->id }}" style="{{ $question->explanation_pdf_path ? 'display: none;' : '' }}">
+                                @if($index < $questions->count() - 1)
+                                    <button type="button" class="btn btn-primary btn-nav" id="nextBtn">
+                                        Selanjutnya
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                @else
+                                    <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtn">
+                                        <i class="fas fa-check"></i>
+                                        Selesai
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="next-button-container" id="nextContainer-{{ $question->id }}" style="{{ $question->explanation_pdf_path ? 'display: none;' : '' }}">
-                    @if($index < $questions->count() - 1)
-                        <button type="button" class="btn btn-primary btn-nav" id="nextBtn">
-                            Selanjutnya
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-                    @else
-                        <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtn">
-                            <i class="fas fa-check"></i>
-                            Selesai
-                        </button>
+                <!-- Back: Explanation Section -->
+                <div class="flip-card-back">
+                    @if($question->explanation_pdf_path)
+                    <div class="explanation-section" id="explanation-{{ $question->id }}">
+                        <div class="explanation-header">
+                            <i class="fas fa-file-pdf"></i>
+                            Penjelasan & Pembahasan
+                        </div>
+                        
+                        <!-- 1. Jawaban Anda (Your Answer) -->
+                        <div class="participant-answer mb-3">
+                            <strong>Jawaban Anda:</strong>
+                            <div style="background:#fffbe6;padding:1rem;border-radius:8px;border:1px solid #ffe58f;">
+                                <p style="margin-bottom:0;" id="participant-answer-{{ $question->id }}"></p>
+                            </div>
+                        </div>
+                        
+                        <!-- 2. Jawaban Benar (Correct Answer) -->
+                        <div class="correct-answer mb-3">
+                            <strong>Jawaban Benar:</strong>
+                            <div style="background:#f0f9f4;padding:1rem;border-radius:8px;border:1px solid #bbf7d0;">
+                                <p style="margin-bottom:0;">{{ $question->correct_answer ?? $question->explanation ?? 'Jawaban benar tidak tersedia' }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 3. PDF Viewer -->
+                        <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0"></iframe>
+                        
+                        <!-- Text explanation removed to avoid duplication, as it's now shown in "Jawaban Benar" section -->
+<div class="answer-options d-flex flex-row justify-content-between gap-2">
+    <div class="answer-option wrong" data-value="salah" data-question-id="{{ $question->id }}" style="background:#ef4444;color:white;border-color:#ef4444;">
+        <i class="fas fa-times"></i> Salah <span class="selected-indicator" id="selected-indicator-salah-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+    </div>
+    <div class="answer-option partial" data-value="hampir_benar" data-question-id="{{ $question->id }}" style="background:#f59e0b;color:white;border-color:#f59e0b;">
+        <i class="fas fa-adjust"></i> Hampir Benar <span class="selected-indicator" id="selected-indicator-hampir_benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+    </div>
+    <div class="answer-option correct" data-value="benar" data-question-id="{{ $question->id }}" style="background:#10b981;color:white;border-color:#10b981;">
+        <i class="fas fa-check"></i> Benar <span class="selected-indicator" id="selected-indicator-benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+    </div>
+                        </div>
+                        <input type="hidden" name="self_assessment[{{ $question->id }}]" id="assessment_{{ $question->id }}" value="">
+                        <div class="next-button-container" id="nextContainerExplanation-{{ $question->id }}" style="display:none;margin-top:1rem;text-align:center;">
+                            <button type="button" class="btn btn-primary btn-nav" onclick="showNextExplanation({{ $question->id }})">
+    Selanjutnya
+    <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var options = document.querySelectorAll('#explanation-{{ $question->id }} .answer-option');
+                            var nextBtnContainer = document.getElementById('nextContainerExplanation-{{ $question->id }}');
+                            var indicatorMap = {
+                                'salah': document.getElementById('selected-indicator-salah-{{ $question->id }}'),
+                                'hampir_benar': document.getElementById('selected-indicator-hampir_benar-{{ $question->id }}'),
+                                'benar': document.getElementById('selected-indicator-benar-{{ $question->id }}')
+                            };
+                            options.forEach(function(option) {
+                                option.addEventListener('click', function() {
+                                    options.forEach(function(opt) {
+                                        opt.classList.remove('selected');
+                                        opt.classList.remove('faded');
+                                    });
+                                    option.classList.add('selected');
+                                    options.forEach(function(opt) {
+                                        if (!opt.classList.contains('selected')) {
+                                            opt.classList.add('faded');
+                                        }
+                                    });
+                                    // Hide all indicators first
+                                    Object.values(indicatorMap).forEach(function(ind) {
+                                        if (ind) ind.style.display = 'none';
+                                    });
+                                    // Show indicator for selected
+                                    var value = option.getAttribute('data-value');
+                                    if (indicatorMap[value]) {
+                                        indicatorMap[value].style.display = 'inline-block';
+                                        if (value === 'benar') {
+                                            indicatorMap[value].innerHTML = '<i class="fas fa-check-circle"></i> Dipilih';
+                                        } else if (value === 'hampir_benar') {
+                                            indicatorMap[value].innerHTML = '<i class="fas fa-adjust"></i> Dipilih';
+                                        } else {
+                                            indicatorMap[value].innerHTML = '<i class="fas fa-times-circle"></i> Dipilih';
+                                        }
+                                    }
+                                    if (nextBtnContainer) nextBtnContainer.style.display = 'block';
+                                });
+                            });
+                        });
+                        </script>
+                    </div>
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var answerInput = document.getElementById('answer_{{ $question->id }}');
+                        var answerDisplay = document.getElementById('participant-answer-{{ $question->id }}');
+                        if (answerInput && answerDisplay) {
+                            answerDisplay.textContent = answerInput.value;
+                            answerInput.addEventListener('input', function() {
+                                answerDisplay.textContent = answerInput.value;
+                            });
+                        }
+                    });
+                    </script>
                     @endif
                 </div>
             </div>
@@ -1918,8 +3390,8 @@
 
 <script>
     // PHP data passed to JavaScript
-    const totalQuestions = {{ $questions->count() }};
-    const categoryId = {{ $category->id }};
+    const totalQuestions = {{ json_encode($questions->count()) }};
+    const categoryId = {{ json_encode($category->id) }};
 </script>
 
 <script>
@@ -1978,7 +3450,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateProgress() {
         // Check if required elements exist
         if (!progressBar || !progressText || !answeredCountElement) {
-            console.warn('Progress elements not found, skipping update');
             return;
         }
         
@@ -2002,12 +3473,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Use the higher count to be safe
         answeredCount = Math.max(actualAnsweredCount, localStorageCount);
         
-        console.log('Progress update:', {
-            actualAnsweredCount: actualAnsweredCount,
-            localStorageCount: localStorageCount,
-            finalAnsweredCount: answeredCount
-        });
-        
         // Update progress bar based on answered questions
         const progressPercentage = (answeredCount / totalQuestions) * 100;
         progressBar.style.width = progressPercentage + '%';
@@ -2030,7 +3495,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update each indicator
             const indicators = document.querySelectorAll('.question-indicator');
             if (indicators.length === 0) {
-                console.warn('No question indicators found');
                 return;
             }
             
@@ -2039,7 +3503,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const questionId = indicator.getAttribute('data-question-id');
                 
                 if (!questionNum || !questionId) {
-                    console.warn('Invalid indicator data:', { questionNum, questionId });
                     return;
                 }
                 
@@ -2065,7 +3528,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update quick nav buttons state
             updateQuickNavButtons();
         } catch (error) {
-            console.error('Error updating question indicators:', error);
+            // Error handling
         }
     }
     
@@ -2082,7 +3545,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Check if buttons exist
             if (!firstUnansweredBtn || !nextUnansweredBtn || !lastAnsweredBtn) {
-                console.warn('Some quick nav buttons not found');
                 return;
             }
             
@@ -2094,13 +3556,11 @@ document.addEventListener('DOMContentLoaded', function() {
             for (let i = 1; i <= totalQuestions; i++) {
                 const questionIndicator = document.querySelector(`[data-question="${i}"]`);
                 if (!questionIndicator) {
-                    console.warn('Question indicator not found for question:', i);
                     continue;
                 }
                 
                 const questionId = questionIndicator.getAttribute('data-question-id');
                 if (!questionId) {
-                    console.warn('Question ID not found for question:', i);
                     continue;
                 }
                 
@@ -2132,7 +3592,7 @@ document.addEventListener('DOMContentLoaded', function() {
             lastAnsweredBtn.disabled = !lastAnswered;
             lastAnsweredBtn.onclick = lastAnswered ? () => showQuestion(lastAnswered) : null;
         } catch (error) {
-            console.error('Error updating quick nav buttons:', error);
+            // Error handling
         }
     }
     
@@ -2150,19 +3610,38 @@ document.addEventListener('DOMContentLoaded', function() {
     function showQuestion(questionNumber) {
         // Validate questionNumber
         if (!questionNumber || questionNumber < 1 || questionNumber > totalQuestions) {
-            console.error('Invalid question number:', questionNumber);
             return;
         }
         
-        // Hide all questions
+        // Hide all flip-card-containers
+        const allContainers = document.querySelectorAll('.flip-card-container');
+        allContainers.forEach(container => {
+            container.style.display = 'none';
+        });
+        
+        // Hide all question cards
         questionCards.forEach(card => {
             card.classList.remove('active');
         });
         
-        // Show target question
+        // Show target question container
+        const questionId = document.querySelector(`.question-indicator[data-question="${questionNumber}"]`)?.getAttribute('data-question-id');
+        if (questionId) {
+            const targetContainer = document.getElementById('flipContainer-' + questionId);
+            if (targetContainer) {
+                targetContainer.style.display = 'block';
+                
+                // Make sure the flip card is not flipped (showing question, not explanation)
+                const flipCard = targetContainer.querySelector('.flip-card');
+                if (flipCard) {
+                    flipCard.classList.remove('flipped');
+                }
+            }
+        }
+        
+        // Show target question card
         const targetCard = document.getElementById('question-' + questionNumber);
         if (!targetCard) {
-            console.error('Question card not found for question:', questionNumber);
             return;
         }
         
@@ -2244,13 +3723,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('show-explanation-btn') || e.target.closest('.show-explanation-btn')) {
             const btn = e.target.classList.contains('show-explanation-btn') ? e.target : e.target.closest('.show-explanation-btn');
             const questionId = btn.getAttribute('data-question-id');
-            
-            // Check if button is already disabled to prevent multiple clicks
-            if (btn.disabled && btn.classList.contains('btn-success')) {
-                return;
-            }
-            
-            // Check if user has answered the question
             const answerTextarea = document.getElementById('answer_' + questionId);
             if (!answerTextarea || answerTextarea.value.trim().length === 0) {
                 // Show warning if no answer provided
@@ -2265,25 +3737,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return;
             }
-            
-            // Show the explanation section
-            const explanationSection = document.getElementById('explanation-' + questionId);
-            if (explanationSection) {
-                explanationSection.style.display = 'block';
-            }
-            
-            // Show the next/submit button
-            const nextContainer = document.getElementById('nextContainer-' + questionId);
-            if (nextContainer) {
-                nextContainer.style.display = 'block';
-            }
-            
-            // Hide warning
-            const warningElement = document.getElementById('warning-' + questionId);
-            if (warningElement) {
-                warningElement.classList.remove('show');
-            }
-            
+            flipToExplanation(questionId);
             // Disable the answer textarea for this question
             if (answerTextarea) {
                 answerTextarea.disabled = true;
@@ -2322,6 +3776,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Add flipToExplanation function
+    function flipToExplanation(questionId) {
+        const flipCard = document.getElementById('flipCard-' + questionId);
+        if (flipCard) {
+            flipCard.classList.add('flipped');
+        }
+    }
+
+    // Add flipBack function for completeness (already used in template)
+    window.flipBack = function(questionId) {
+        const flipCard = document.getElementById('flipCard-' + questionId);
+        if (flipCard) {
+            flipCard.classList.remove('flipped');
+        }
+    };
+
     // Indicator dot navigation (removed)
     // indicatorDots.forEach((dot, index) => {
     //     dot.addEventListener('click', function() {
@@ -2503,68 +3973,48 @@ document.addEventListener('DOMContentLoaded', function() {
         const sessionKey = 'quiz_progress_' + categoryId;
         const progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
         
-        console.log('=== PRE-SUBMIT SYNC ===');
+        
         if (progress.answers) {
             Object.keys(progress.answers).forEach(questionId => {
                 const input = document.querySelector(`[data-question-id="${questionId}"]`);
                 const inputByName = document.querySelector(`textarea[name="answers[${questionId}]"]`);
                 const inputById = document.getElementById(`answer_${questionId}`);
                 
-                console.log(`Question ${questionId}:`, {
-                    'data-question-id': input ? 'found' : 'not found',
-                    'name selector': inputByName ? 'found' : 'not found', 
-                    'id selector': inputById ? 'found' : 'not found',
-                    'localStorage value': progress.answers[questionId]
-                });
-                
                 // Try all possible selectors
                 const targetInput = input || inputByName || inputById;
                 if (targetInput && progress.answers[questionId]) {
-                    console.log(`Syncing answer for question ${questionId}:`, progress.answers[questionId]);
                     targetInput.value = progress.answers[questionId];
-                } else {
-                    console.warn(`No input found for question ${questionId}`);
                 }
             });
         }
         
         // Also ensure all current textarea values are saved
-        console.log('=== CHECKING ALL TEXTAREAS ===');
         const allTextareas = document.querySelectorAll('textarea[name^="answers["]');
-        console.log('Found textareas:', allTextareas.length);
         
         allTextareas.forEach(function(textarea, index) {
             const name = textarea.getAttribute('name');
             const value = textarea.value;
             const questionId = textarea.getAttribute('data-question-id');
-            console.log(`Textarea ${index + 1}: name="${name}", questionId="${questionId}", value="${value}"`);
         });
         
         answerInputs.forEach(function(input) {
             const questionId = input.getAttribute('data-question-id');
             if (input.value && input.value.trim()) {
-                console.log(`Current textarea value for question ${questionId}:`, input.value.trim());
+                // Process non-empty answers
             }
         });
         
-        console.log('=== FORM SUBMISSION DEBUG ===');
-        
         // FORCE SYNC: Make sure ALL localStorage answers are in textareas before FormData creation
-        console.log('=== FORCE SYNC BEFORE FORMDATA ===');
         if (progress.answers) {
             Object.keys(progress.answers).forEach(questionId => {
                 const textarea = document.querySelector(`textarea[name="answers[${questionId}]"]`);
                 if (textarea) {
                     textarea.value = progress.answers[questionId];
-                    console.log(`Force synced question ${questionId}: "${progress.answers[questionId]}"`);
                     
                     // Ensure textarea has form attribute
                     if (!textarea.form) {
-                        console.warn(`Textarea for question ${questionId} not associated with form`);
                         textarea.setAttribute('form', 'quizForm');
                     }
-                } else {
-                    console.error(`Textarea not found for question ${questionId}`);
                 }
             });
         }
@@ -2585,11 +4035,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             const actualAnsweredCount = Object.keys(answersData).length;
-            console.log(actualAnsweredCount, 'questions answered out of', totalQuestions);
             
             if (actualAnsweredCount === 0) {
                 alert('Silakan jawab minimal 1 pertanyaan sebelum submit.');
-                console.log('Submission blocked: No valid answers found');
                 return;
             }
             
@@ -2610,14 +4058,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add all answers manually from answersData
             Object.keys(answersData).forEach(function(questionId) {
                 finalFormData.append(`answers[${questionId}]`, answersData[questionId]);
-                console.log(`Added to finalFormData: answers[${questionId}] = "${answersData[questionId]}"`);
             });
             
             // Add self assessments if any
             allTextareas.forEach(function(textarea) {
                 if (textarea.name && textarea.name.includes('self_assessment[') && textarea.value) {
                     finalFormData.append(textarea.name, textarea.value);
-                    console.log(`Added self assessment: ${textarea.name} = "${textarea.value}"`);
                 }
             });
             
@@ -2627,14 +4073,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!assessmentInput || !assessmentInput.value) {
                     // Default to 'benar' (correct) for answered questions without explicit assessment
                     finalFormData.append(`self_assessment[${questionId}]`, 'benar');
-                    console.log(`Added default self assessment for question ${questionId}: benar`);
                 }
             });
-            
-            console.log('Final FormData contents:');
-            for (let pair of finalFormData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
             
             // Clear localStorage
             answerInputs.forEach(function(input) {
@@ -2662,9 +4102,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-                
                 // Check if response is JSON
                 const contentType = response.headers.get('content-type');
                 
@@ -2676,12 +4113,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     return response.json();
                 } else {
                     // If it's not JSON (probably HTML redirect), handle as success
-                    console.log('Response is not JSON, probably a redirect page');
                     return { success: true, redirect: response.url };
                 }
             })
             .then(data => {
-                console.log('Quiz submitted successfully:', data);
                 
                 // If data is undefined (due to redirect handling above), don't process further
                 if (!data) {
@@ -2699,7 +4134,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
-                console.error('Error submitting quiz:', error);
                 alert('Terjadi kesalahan saat submit quiz: ' + error.message);
                 
                 // Reset submit button
@@ -2796,7 +4230,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         } catch (e) {
-            console.error('Error restoring progress:', e);
+            // Error restoring progress - silently handle
         }
     }
     
@@ -2804,16 +4238,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeQuiz() {
         // Check if required elements exist
         if (questionCards.length === 0) {
-            console.error('No question cards found! Quiz cannot be initialized.');
             return;
         }
         
         if (totalQuestions <= 0) {
-            console.error('Invalid total questions count:', totalQuestions);
             return;
         }
-        
-        console.log('Initializing quiz with', questionCards.length, 'question cards');
         
         // Show first question
         showQuestion(1);
@@ -2823,6 +4253,58 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize quiz after DOM is ready
     initializeQuiz();
+    
+    // Define showNextExplanation function and make it globally accessible
+    window.showNextExplanation = function(questionId) {
+        // Find current question index
+        var currentContainer = document.getElementById('flipContainer-' + questionId);
+        if (!currentContainer) return;
+        
+        // Find all flip-card-containers
+        var allContainers = Array.from(document.querySelectorAll('.flip-card-container'));
+        
+        // Find current index
+        var currentIndex = allContainers.findIndex(function(el) {
+            return el.id === 'flipContainer-' + questionId;
+        });
+        
+        // Hide current
+        currentContainer.style.display = 'none';
+        
+        // Show next if exists
+        if (currentIndex < allContainers.length - 1) {
+            var nextContainer = allContainers[currentIndex + 1];
+            if (nextContainer) {
+                nextContainer.style.display = 'block';
+                
+                // If next card has a .flip-card, make sure it's not flipped
+                var nextFlipCard = nextContainer.querySelector('.flip-card');
+                if (nextFlipCard) {
+                    nextFlipCard.classList.remove('flipped');
+                }
+                
+                // Update the current question tracking
+                var nextQuestionNumber = currentIndex + 2; // +2 because currentIndex is 0-based and we want next
+                currentQuestion = nextQuestionNumber;
+                
+                // Update question cards active state
+                var questionCards = document.querySelectorAll('.question-card');
+                questionCards.forEach(function(card) {
+                    card.classList.remove('active');
+                });
+                
+                var nextQuestionCard = document.getElementById('question-' + nextQuestionNumber);
+                if (nextQuestionCard) {
+                    nextQuestionCard.classList.add('active');
+                }
+                
+                // Update progress and indicators
+                updateProgress();
+            }
+        } else {
+            // If this is the last question, could show completion message or return to first
+        }
+    };
 });
 </script>
 @endsection

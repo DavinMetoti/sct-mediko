@@ -18,6 +18,9 @@ class MedMasteryQuestionController extends Controller
     {
         $query = MedMasteryQuestion::with(['category.segmentation', 'creator']);
 
+        // Only show questions created by the current user
+        $query->where('creator_id', Auth::id());
+
         // Filter by category if provided
         if ($request->filled('category_id')) {
             $query->where('medmastery_category_id', $request->category_id);
@@ -41,7 +44,12 @@ class MedMasteryQuestionController extends Controller
         }
 
         $questions = $query->orderBy('created_at', 'desc')->paginate(12);
-        $categories = MedmasteryCategory::with('segmentation')->orderBy('name')->get();
+        
+        // Only show categories created by the current user
+        $categories = MedmasteryCategory::with('segmentation')
+            ->where('created_by', Auth::id())
+            ->orderBy('name')
+            ->get();
 
         return view('medmastery.content.question', compact('questions', 'categories'));
     }
@@ -51,7 +59,12 @@ class MedMasteryQuestionController extends Controller
      */
     public function create()
     {
-        $categories = MedmasteryCategory::with('segmentation')->orderBy('name')->get();
+        // Only show categories created by the current user
+        $categories = MedmasteryCategory::with('segmentation')
+            ->where('created_by', Auth::id())
+            ->orderBy('name')
+            ->get();
+            
         return view('medmastery.content.question-create', compact('categories'));
     }
 
@@ -76,6 +89,18 @@ class MedMasteryQuestionController extends Controller
             'explanation_pdf.mimes' => 'File harus berformat PDF',
             'explanation_pdf.max' => 'Ukuran file maksimal 10MB'
         ]);
+
+        // Validate that user owns the selected category
+        $category = MedmasteryCategory::where('id', $request->medmastery_category_id)
+            ->where('created_by', Auth::id())
+            ->first();
+
+        if (!$category) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Anda tidak memiliki akses untuk membuat pertanyaan di kategori ini.');
+        }
 
         $pdfPath = null;
 
@@ -106,6 +131,14 @@ class MedMasteryQuestionController extends Controller
     public function show(string $id)
     {
         $question = MedMasteryQuestion::with(['category.segmentation', 'creator'])->findOrFail($id);
+        
+        // Check if user owns this question
+        if ($question->creator_id !== Auth::id()) {
+            return redirect()
+                ->route('medmastery-question.index')
+                ->with('error', 'Anda tidak memiliki akses untuk melihat pertanyaan ini.');
+        }
+        
         return view('medmastery.content.question-show', compact('question'));
     }
 
@@ -115,7 +148,20 @@ class MedMasteryQuestionController extends Controller
     public function edit(string $id)
     {
         $question = MedMasteryQuestion::with(['category.segmentation'])->findOrFail($id);
-        $categories = MedmasteryCategory::with('segmentation')->orderBy('name')->get();
+        
+        // Check if user owns this question
+        if ($question->creator_id !== Auth::id()) {
+            return redirect()
+                ->route('medmastery-question.index')
+                ->with('error', 'Anda tidak memiliki akses untuk mengedit pertanyaan ini.');
+        }
+        
+        // Only show categories created by the current user
+        $categories = MedmasteryCategory::with('segmentation')
+            ->where('created_by', Auth::id())
+            ->orderBy('name')
+            ->get();
+            
         return view('medmastery.content.question-edit', compact('question', 'categories'));
     }
 
@@ -125,6 +171,13 @@ class MedMasteryQuestionController extends Controller
     public function update(Request $request, string $id)
     {
         $question = MedMasteryQuestion::findOrFail($id);
+
+        // Check if user owns this question
+        if ($question->creator_id !== Auth::id()) {
+            return redirect()
+                ->route('medmastery-question.index')
+                ->with('error', 'Anda tidak memiliki akses untuk mengedit pertanyaan ini.');
+        }
 
         $request->validate([
             'medmastery_category_id' => 'required|exists:medmastery_category,id',
@@ -142,6 +195,18 @@ class MedMasteryQuestionController extends Controller
             'explanation_pdf.mimes' => 'File harus berformat PDF',
             'explanation_pdf.max' => 'Ukuran file maksimal 10MB'
         ]);
+
+        // Validate that user owns the selected category
+        $category = MedmasteryCategory::where('id', $request->medmastery_category_id)
+            ->where('created_by', Auth::id())
+            ->first();
+
+        if (!$category) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Anda tidak memiliki akses untuk menggunakan kategori ini.');
+        }
 
         $pdfPath = $question->explanation_pdf_path;
 
@@ -176,6 +241,13 @@ class MedMasteryQuestionController extends Controller
     public function destroy(string $id)
     {
         $question = MedMasteryQuestion::findOrFail($id);
+
+        // Check if user owns this question
+        if ($question->creator_id !== Auth::id()) {
+            return redirect()
+                ->route('medmastery-question.index')
+                ->with('error', 'Anda tidak memiliki akses untuk menghapus pertanyaan ini.');
+        }
 
         // Delete PDF file if exists
         if ($question->explanation_pdf_path && Storage::disk('public')->exists($question->explanation_pdf_path)) {

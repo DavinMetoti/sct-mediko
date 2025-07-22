@@ -183,6 +183,24 @@
         font-size: 0.7rem;
         font-weight: 600;
         backdrop-filter: blur(5px);
+        z-index: 5;
+    }
+    
+    .owner-indicator {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        background: rgba(16, 185, 129, 0.9);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        backdrop-filter: blur(5px);
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
     }
 
     @media (max-width: 768px) {
@@ -206,11 +224,11 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-1" style="color: #2d3748; font-weight: 600;">Pertanyaan Medmastery</h2>
-            <p class="text-muted mb-0">Kelola bank pertanyaan untuk pembelajaran medis</p>
+            <h2 class="mb-1" style="color: #2d3748; font-weight: 600;">Pertanyaan Saya</h2>
+            <p class="text-muted mb-0">Kelola pertanyaan yang Anda buat untuk pembelajaran medis</p>
         </div>
         <a href="{{ route('medmastery-question.create') }}" class="btn-create">
-            <i class="fas fa-plus"></i>Tambah Pertanyaan
+            <i class="fas fa-plus"></i>Tambah Pertanyaan Saya
         </a>
     </div>
     
@@ -218,9 +236,9 @@
     <div class="filter-container">
         <form method="GET" action="{{ route('medmastery-question.index') }}" class="row g-3">
             <div class="col-md-4">
-                <label class="form-label fw-semibold">Kategori</label>
+                <label class="form-label fw-semibold">Kategori Saya</label>
                 <select name="category_id" class="form-select">
-                    <option value="">Semua Kategori</option>
+                    <option value="">Semua Kategori Saya</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
                             {{ $category->name }} ({{ $category->segmentation->name ?? 'No Segmentation' }})
@@ -238,7 +256,7 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label fw-semibold">Pencarian</label>
-                <input type="text" name="search" class="form-control" placeholder="Cari pertanyaan..." value="{{ request('search') }}">
+                <input type="text" name="search" class="form-control" placeholder="Cari pertanyaan saya..." value="{{ request('search') }}">
             </div>
             <div class="col-md-1 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">
@@ -277,6 +295,11 @@
                             </div>
                         @endif
                         
+                        <!-- Owner Indicator -->
+                        <div class="owner-indicator">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        
                         <!-- Question Header with Color -->
                         <div class="question-header">
                             <i class="fas fa-question-circle question-icon"></i>
@@ -300,8 +323,8 @@
                             
                             <div class="question-footer">
                                 <div class="question-creator">
-                                    <i class="fas fa-user"></i>
-                                    {{ $question->creator->name ?? 'Unknown' }}
+                                    <i class="fas fa-user-edit"></i>
+                                    Dibuat oleh Anda
                                 </div>
                                 <div class="question-date">
                                     {{ $question->created_at->format('d M Y') }}
@@ -324,12 +347,21 @@
                 <i class="fas fa-question-circle"></i>
             </div>
             <h3 class="empty-title">Belum Ada Pertanyaan</h3>
-            <p class="empty-description">
-                Mulai dengan membuat pertanyaan pertama untuk kategori medmastery.
-            </p>
-            <a href="{{ route('medmastery-question.create') }}" class="btn-create">
-                <i class="fas fa-plus"></i>Buat Pertanyaan Pertama
-            </a>
+            @if($categories->count() > 0)
+                <p class="empty-description">
+                    Anda belum membuat pertanyaan apapun. Mulai dengan membuat pertanyaan pertama Anda.
+                </p>
+                <a href="{{ route('medmastery-question.create') }}" class="btn-create">
+                    <i class="fas fa-plus"></i>Buat Pertanyaan Pertama Saya
+                </a>
+            @else
+                <p class="empty-description">
+                    Anda perlu membuat kategori terlebih dahulu sebelum dapat membuat pertanyaan.
+                </p>
+                <a href="{{ route('medmastery-category.create') }}" class="btn-create">
+                    <i class="fas fa-plus"></i>Buat Kategori Terlebih Dahulu
+                </a>
+            @endif
         </div>
     @endif
 </div>

@@ -290,6 +290,19 @@
     <div class="history-header">
         <h1 class="history-title">Riwayat Quiz</h1>
         <p class="history-subtitle">Lihat semua hasil quiz yang telah Anda kerjakan</p>
+        
+        <!-- Category Filter -->
+        @if(request('category'))
+        <div style="margin-top: 1rem;">
+            <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                <i class="fas fa-filter"></i>
+                Filter: {{ $quizResults->first()->category->name ?? 'Kategori' }}
+                <a href="{{ route('medmastery.history') }}" style="color: white; margin-left: 0.5rem;">
+                    <i class="fas fa-times"></i>
+                </a>
+            </span>
+        </div>
+        @endif
     </div>
     
     @if($quizResults->count() > 0)

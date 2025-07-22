@@ -32,7 +32,12 @@
         <div class="card mt-4 border-0 shadow-sm">
             <div class="card-header bg-white border-0 py-3">
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0 fw-semibold text-dark">Daftar Kategori Medmastery</h6>
+                    <div>
+                        <h6 class="mb-0 fw-semibold text-dark">Daftar Kategori Medmastery</h6>
+                        @if(auth()->check() && auth()->user()->accessRole && auth()->user()->accessRole->access === 'public')
+                            <small class="text-muted">Anda dapat membuat kategori baru, namun hanya dapat mengedit/menghapus kategori yang Anda buat sendiri.</small>
+                        @endif
+                    </div>
                     <span class="badge bg-light text-dark">{{ $categories->count() }} Total</span>
                 </div>
             </div>
@@ -88,6 +93,22 @@
                                                     </div>
                                                 </div>
                                             <div class="dropdown">
+                                                @php
+                                                    $canModify = false;
+                                                    if (auth()->check()) {
+                                                        $user = auth()->user();
+                                                        // Admin users can modify any category
+                                                        if ($user->accessRole && $user->accessRole->access === 'private') {
+                                                            $canModify = true;
+                                                        }
+                                                        // Regular users can only modify their own categories
+                                                        elseif ($category->created_by === $user->id) {
+                                                            $canModify = true;
+                                                        }
+                                                    }
+                                                @endphp
+                                                
+                                                @if($canModify)
                                                 <button class="btn btn-sm btn-light border-0 rounded-circle d-flex align-items-center justify-content-center" 
                                                         style="width: 32px; height: 32px;" 
                                                         type="button" 
@@ -113,6 +134,13 @@
                                                         </button>
                                                     </li>
                                                 </ul>
+                                                @else
+                                                <div class="d-flex align-items-center justify-content-center" 
+                                                     style="width: 32px; height: 32px;">
+                                                    <i class="fas fa-lock text-muted" style="font-size: 0.75rem;" 
+                                                       title="Anda tidak memiliki izin untuk mengubah kategori ini"></i>
+                                                </div>
+                                                @endif
                                             </div>
                                         </div>
 
@@ -123,6 +151,18 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="text-muted small">
                                                 <i class="fas fa-user me-1"></i>{{ $category->creator->name ?? 'Unknown' }}
+                                                @if(auth()->check() && $category->created_by === auth()->id())
+                                                    <span class="badge bg-primary ms-2" style="font-size: 0.7rem;">Milik Anda</span>
+                                                @endif
+                                                @if($category->access === 'private')
+                                                    <span class="badge bg-warning ms-2" style="font-size: 0.7rem;">
+                                                        <i class="fas fa-lock me-1"></i>Private
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-success ms-2" style="font-size: 0.7rem;">
+                                                        <i class="fas fa-globe me-1"></i>Public
+                                                    </span>
+                                                @endif
                                             </div>
                                             <small class="text-muted">{{ $category->created_at->format('d M Y') }}</small>
                                         </div>
@@ -131,6 +171,7 @@
                             </div>
 
                             <!-- Delete Modal -->
+                            @if($canModify)
                             <div class="modal fade" id="deleteModal{{ $category->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content border-0 shadow" style="border-radius: 16px;">
@@ -160,6 +201,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         @endforeach
                     </div>
 

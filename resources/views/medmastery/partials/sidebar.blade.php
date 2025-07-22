@@ -23,6 +23,12 @@
                 <span>Riwayat Quiz</span>
             </a>
         </div>
+        <div class="w-full menu-title">
+            <a href="{{ route('medmastery.performance') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('medmastery.performance*') ? 'active' : '' }}">
+                <i class="fas fa-chart-bar me-2" style="width: 24px;text-align:center;"></i>
+                <span>Performa</span>
+            </a>
+        </div>
         @endif
         @if(auth()->check() && auth()->user()->accessRole && auth()->user()->accessRole->access === 'private')
         <div class="w-full menu-title">
@@ -38,6 +44,20 @@
             </a>
         </div>
         <div class="w-full menu-title">
+            <a href="{{ route('medmastery-question.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('medmastery-question.*') ? 'active' : '' }}">
+                <i class="fas fa-question-circle me-2" style="width: 24px;text-align:center;"></i>
+                <span>Pertanyaan Medmastery</span>
+            </a>
+        </div>
+        @endif
+        @if(auth()->check() && auth()->user()->accessRole && auth()->user()->accessRole->access === 'public')
+        <div class="w-full menu-title">
+            <a href="{{ route('medmastery-category.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('medmastery-category.*') ? 'active' : '' }}">
+                <i class="fas fa-tags me-2" style="width: 24px;text-align:center;"></i>
+                <span>Kategori Medmastery</span>
+            </a>
+        </div>
+                <div class="w-full menu-title">
             <a href="{{ route('medmastery-question.index') }}" class="flex align-items-center justify-content-start {{ request()->routeIs('medmastery-question.*') ? 'active' : '' }}">
                 <i class="fas fa-question-circle me-2" style="width: 24px;text-align:center;"></i>
                 <span>Pertanyaan Medmastery</span>

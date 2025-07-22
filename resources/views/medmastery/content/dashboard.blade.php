@@ -447,6 +447,19 @@
                             
                             <!-- Category Header with Color -->
                             <div class="category-header">
+                                <!-- Access Level Indicator -->
+                                <div class="access-indicator">
+                                    @if($category->access === 'private')
+                                        <span class="badge bg-warning text-dark" title="Kategori Pribadi">
+                                            <i class="fas fa-lock"></i> Private
+                                        </span>
+                                    @else
+                                        <span class="badge bg-success" title="Kategori Publik">
+                                            <i class="fas fa-globe"></i> Public
+                                        </span>
+                                    @endif
+                                </div>
+                                
                                 <div class="category-icon-container">
                                     @if($category->icon)
                                         <img src="{{ $category->icon }}" 

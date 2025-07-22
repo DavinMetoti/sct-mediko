@@ -14,6 +14,7 @@ class MedmasteryCategory extends Model
         'description',
         'icon',
         'created_by',
+        'access',
     ];
 
     public function segmentation()

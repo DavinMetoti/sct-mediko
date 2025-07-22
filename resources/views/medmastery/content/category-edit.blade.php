@@ -367,6 +367,33 @@
                 @enderror
             </div>
 
+            <div class="input-group">
+                <label for="access">
+                    Tingkat Akses <span class="required">*</span>
+                </label>
+                <select class="form-input @error('access') is-invalid @enderror" 
+                        id="access" 
+                        name="access" 
+                        required>
+                    <option value="">Pilih tingkat akses...</option>
+                    <option value="public" {{ old('access', $category->access) == 'public' ? 'selected' : '' }}>
+                        Public - Dapat dilihat oleh semua pengguna
+                    </option>
+                    <option value="private" {{ old('access', $category->access) == 'private' ? 'selected' : '' }}>
+                        Private - Hanya dapat dilihat oleh Anda
+                    </option>
+                </select>
+                <div class="help-text">
+                    <strong>Public:</strong> Kategori akan terlihat untuk semua pengguna<br>
+                    <strong>Private:</strong> Kategori hanya terlihat untuk Anda sebagai pembuat
+                </div>
+                @error('access')
+                    <div class="invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i>{{ $message }}
+                    </div>
+                @enderror
+            </div>
+
             <div class="input-group d-flex flex-column">
                 <label for="icon">
                     Gambar Ikon Kategori

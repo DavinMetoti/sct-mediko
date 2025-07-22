@@ -331,18 +331,30 @@
                 <label for="medmastery_category_id">
                     Kategori <span class="required">*</span>
                 </label>
-                <select class="form-input @error('medmastery_category_id') is-invalid @enderror" 
-                        id="medmastery_category_id" 
-                        name="medmastery_category_id" 
-                        required>
-                    <option value="">Pilih Kategori</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('medmastery_category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }} ({{ $category->segmentation->name ?? 'No Segmentation' }})
-                        </option>
-                    @endforeach
-                </select>
-                <div class="help-text">Pilih kategori untuk pertanyaan ini</div>
+                @if($categories->count() > 0)
+                    <select class="form-input @error('medmastery_category_id') is-invalid @enderror" 
+                            id="medmastery_category_id" 
+                            name="medmastery_category_id" 
+                            required>
+                        <option value="">Pilih Kategori</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('medmastery_category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }} ({{ $category->segmentation->name ?? 'No Segmentation' }})
+                            </option>
+                        @endforeach
+                    </select>
+                    <div class="help-text">Pilih kategori untuk pertanyaan ini</div>
+                @else
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Belum ada kategori!</strong> Anda perlu membuat kategori terlebih dahulu sebelum dapat membuat pertanyaan.
+                        <br>
+                        <a href="{{ route('medmastery-category.create') }}" class="btn btn-sm btn-primary mt-2">
+                            <i class="fas fa-plus"></i> Buat Kategori Baru
+                        </a>
+                    </div>
+                    <input type="hidden" name="medmastery_category_id" value="">
+                @endif
                 @error('medmastery_category_id')
                     <div class="invalid-feedback">
                         <i class="fas fa-exclamation-circle"></i>{{ $message }}

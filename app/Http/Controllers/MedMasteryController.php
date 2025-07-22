@@ -17,15 +17,28 @@ class MedMasteryController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
+        
         $categories = MedmasteryCategory::with(['segmentation', 'creator'])
             ->withCount(['questions', 'activeQuestions'])
+            ->where(function($query) use ($user) {
+                $query->where('access', 'public');
+                
+                // If user is logged in, also show their private categories
+                if ($user) {
+                    $query->orWhere(function($q) use ($user) {
+                        $q->where('access', 'private')
+                          ->where('created_by', $user->id);
+                    });
+                }
+            })
             ->orderBy('created_at', 'desc')
             ->get();
             
         // Get user's quiz count if authenticated
         $userQuizCount = 0;
-        if (Auth::check()) {
-            $userQuizCount = MedMasteryAnswer::where('user_id', Auth::id())->count();
+        if ($user) {
+            $userQuizCount = MedMasteryAnswer::where('user_id', $user->id)->count();
         }
             
         return view('medmastery.content.dashboard', compact('categories', 'userQuizCount'));
@@ -407,7 +420,7 @@ class MedMasteryController extends Controller
     /**
      * Show user's quiz history/results
      */
-    public function userHistory()
+    public function userHistory(Request $request)
     {
         $user = Auth::user();
         
@@ -416,9 +429,15 @@ class MedMasteryController extends Controller
         }
 
         // Get user's quiz results with category information
-        $quizResults = MedMasteryAnswer::with(['category.segmentation', 'answerDetails.question'])
-            ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
+        $query = MedMasteryAnswer::with(['category.segmentation', 'answerDetails.question'])
+            ->where('user_id', $user->id);
+            
+        // Apply category filter if provided
+        if ($request->has('category') && !empty($request->category)) {
+            $query->where('med_mastery_category_id', $request->category);
+        }
+            
+        $quizResults = $query->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $userRole = $user->accessRole;
@@ -439,9 +458,8 @@ class MedMasteryController extends Controller
 
         // Get specific quiz result for this user
         $answer = MedMasteryAnswer::with(['category.segmentation', 'answerDetails.question'])
-            ->where('id', $answerId)
             ->where('user_id', $user->id)
-            ->firstOrFail();
+            ->findOrFail($answerId);
 
         $category = $answer->category;
         $userRole = $user->accessRole;
@@ -450,6 +468,92 @@ class MedMasteryController extends Controller
     }
 
     /**
+     * Show user's performance analytics across categories
+     */
+    public function userPerformance()
+    {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // Get all quiz results for this user with category information
+        $quizResults = MedMasteryAnswer::with(['category.segmentation', 'answerDetails.question'])
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Calculate performance by category
+        $categoryPerformance = $quizResults->groupBy('med_mastery_category_id')->map(function ($categoryQuizzes) {
+            $category = $categoryQuizzes->first()->category;
+            $totalQuizzes = $categoryQuizzes->count();
+            $avgScore = $categoryQuizzes->avg('score');
+            $bestScore = $categoryQuizzes->max('score');
+            $worstScore = $categoryQuizzes->min('score');
+            $latestQuiz = $categoryQuizzes->sortByDesc('created_at')->first();
+            $totalQuestions = $categoryQuizzes->sum('total_questions');
+            $totalAnswered = $categoryQuizzes->sum(function ($quiz) {
+                return $quiz->answerDetails->count();
+            });
+            
+            // Calculate improvement trend (last 3 quizzes vs first 3 quizzes)
+            $recentQuizzes = $categoryQuizzes->sortByDesc('created_at')->take(3);
+            $oldQuizzes = $categoryQuizzes->sortBy('created_at')->take(3);
+            $recentAvg = $recentQuizzes->avg('score') ?? 0;
+            $oldAvg = $oldQuizzes->avg('score') ?? 0;
+            $improvementTrend = $recentAvg - $oldAvg;
+            
+            return [
+                'category' => $category,
+                'total_quizzes' => $totalQuizzes,
+                'avg_score' => round($avgScore, 1),
+                'best_score' => round($bestScore, 1),
+                'worst_score' => round($worstScore, 1),
+                'latest_quiz' => $latestQuiz,
+                'total_questions' => $totalQuestions,
+                'total_answered' => $totalAnswered,
+                'completion_rate' => $totalQuestions > 0 ? round(($totalAnswered / $totalQuestions) * 100, 1) : 0,
+                'improvement_trend' => round($improvementTrend, 1),
+                'score_range' => round($bestScore - $worstScore, 1)
+            ];
+        })->sortByDesc('avg_score');
+
+        // Overall statistics
+        $overallStats = [
+            'total_quizzes' => $quizResults->count(),
+            'total_categories' => $categoryPerformance->count(),
+            'overall_avg_score' => round($quizResults->avg('score'), 1),
+            'best_category' => $categoryPerformance->first(),
+            'most_active_category' => $categoryPerformance->sortByDesc('total_quizzes')->first(),
+            'recent_performance' => $quizResults->take(5)->avg('score') ? round($quizResults->take(5)->avg('score'), 1) : 0,
+            'total_questions_attempted' => $quizResults->sum('total_questions'),
+            'total_questions_answered' => $quizResults->sum(function ($quiz) {
+                return $quiz->answerDetails->count();
+            })
+        ];
+
+        // Performance trend over time (last 10 quizzes)
+        $performanceTrend = $quizResults->take(10)->reverse()->values()->map(function ($quiz, $index) {
+            return [
+                'quiz_number' => $index + 1,
+                'score' => $quiz->score,
+                'date' => $quiz->created_at->format('M d'),
+                'category' => $quiz->category->name ?? 'Unknown'
+            ];
+        });
+
+        $userRole = $user->accessRole;
+        
+        return view('medmastery.content.user-performance', compact(
+            'categoryPerformance', 
+            'overallStats', 
+            'performanceTrend', 
+            'user', 
+            'userRole',
+            'quizResults'
+        ));
+    }    /**
      * Get count of wrong questions for a user in a specific category
      */
     public function getWrongQuestionsCount(string $categoryId)

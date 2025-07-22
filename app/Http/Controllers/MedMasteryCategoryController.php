@@ -21,9 +21,34 @@ class MedMasteryCategoryController extends Controller
             abort(403, 'Anda harus login terlebih dahulu.');
         }
         
-        if (!$user->accessRole || $user->accessRole->access !== 'private') {
-            abort(403, 'Halaman ini hanya dapat diakses oleh administrator. Siswa dapat mengakses konten melalui menu Medmaster Deck di /medmastery.');
+        // Allow both private and public users to access categories
+        // Private users have full access, public users have limited access
+    }
+
+    /**
+     * Check if user can modify/delete specific category
+     */
+    private function checkCategoryOwnership($categoryId)
+    {
+        $user = Auth::user();
+        
+        if (!$user) {
+            abort(403, 'Anda harus login terlebih dahulu.');
         }
+
+        $category = MedmasteryCategory::findOrFail($categoryId);
+        
+        // Private users (admins) can modify any category
+        if ($user->accessRole && $user->accessRole->access === 'private') {
+            return true;
+        }
+        
+        // Public users can only modify their own categories
+        if ($category->created_by !== $user->id) {
+            abort(403, 'Anda hanya dapat mengubah atau menghapus kategori yang Anda buat sendiri.');
+        }
+        
+        return true;
     }
 
     /**
@@ -33,8 +58,22 @@ class MedMasteryCategoryController extends Controller
     {
         $this->checkAdminAccess();
         
-        $categories = MedmasteryCategory::with(['segmentation', 'creator'])->get();
-        return view('medmastery.content.category', compact('categories'));
+        $user = Auth::user();
+        
+        // Filter categories based on access level
+        $categories = MedmasteryCategory::with(['segmentation', 'creator'])
+            ->where(function($query) use ($user) {
+                $query->where('access', 'public')
+                      ->orWhere(function($q) use ($user) {
+                          $q->where('access', 'private')
+                            ->where('created_by', $user->id);
+                      });
+            })
+            ->get();
+            
+        $userRole = $user ? $user->accessRole : null;
+        
+        return view('medmastery.content.category', compact('categories', 'user', 'userRole'));
     }
 
     /**
@@ -66,6 +105,7 @@ class MedMasteryCategoryController extends Controller
             ],
             'description' => 'nullable|string|max:1000',
             'icon' => 'required|image|mimes:png|max:2048',
+            'access' => 'required|in:public,private',
         ], [
             'medmastery_segmentation_id.required' => 'Bidang kedokteran harus dipilih.',
             'medmastery_segmentation_id.exists' => 'Bidang kedokteran yang dipilih tidak valid.',
@@ -77,6 +117,8 @@ class MedMasteryCategoryController extends Controller
             'icon.image' => 'File harus berupa gambar.',
             'icon.mimes' => 'Gambar harus berformat PNG.',
             'icon.max' => 'Ukuran gambar maksimal 2MB.',
+            'access.required' => 'Tingkat akses harus dipilih.',
+            'access.in' => 'Tingkat akses harus berupa public atau private.',
         ]);
 
         try {
@@ -94,6 +136,7 @@ class MedMasteryCategoryController extends Controller
                 'description' => $request->description,
                 'icon' => $iconBase64,
                 'created_by' => Auth::id(),
+                'access' => $request->access,
             ]);
 
             return redirect()->route('medmastery-category.index')
@@ -126,6 +169,7 @@ class MedMasteryCategoryController extends Controller
     public function edit(string $id)
     {
         $this->checkAdminAccess();
+        $this->checkCategoryOwnership($id);
         
         try {
             $category = MedmasteryCategory::findOrFail($id);
@@ -143,6 +187,7 @@ class MedMasteryCategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $this->checkAdminAccess();
+        $this->checkCategoryOwnership($id);
         $request->validate([
             'medmastery_segmentation_id' => 'required|exists:medmastery_segmentation,id',
             'name' => [
@@ -155,6 +200,7 @@ class MedMasteryCategoryController extends Controller
             ],
             'description' => 'nullable|string|max:1000',
             'icon' => 'nullable|image|mimes:png|max:2048',
+            'access' => 'required|in:public,private',
         ], [
             'medmastery_segmentation_id.required' => 'Bidang kedokteran harus dipilih.',
             'medmastery_segmentation_id.exists' => 'Bidang kedokteran yang dipilih tidak valid.',
@@ -165,6 +211,8 @@ class MedMasteryCategoryController extends Controller
             'icon.image' => 'File harus berupa gambar.',
             'icon.mimes' => 'Gambar harus berformat PNG.',
             'icon.max' => 'Ukuran gambar maksimal 2MB.',
+            'access.required' => 'Tingkat akses harus dipilih.',
+            'access.in' => 'Tingkat akses harus berupa public atau private.',
         ]);
 
         try {
@@ -174,6 +222,7 @@ class MedMasteryCategoryController extends Controller
                 'medmastery_segmentation_id' => $request->medmastery_segmentation_id,
                 'name' => $request->name,
                 'description' => $request->description,
+                'access' => $request->access,
             ];
 
             // Handle icon upload if new image is provided
@@ -201,6 +250,7 @@ class MedMasteryCategoryController extends Controller
     public function destroy(string $id)
     {
         $this->checkAdminAccess();
+        $this->checkCategoryOwnership($id);
         
         try {
             $category = MedmasteryCategory::findOrFail($id);
