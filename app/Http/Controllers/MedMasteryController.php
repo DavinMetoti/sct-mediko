@@ -90,11 +90,27 @@ class MedMasteryController extends Controller
     public function showCategory(string $id)
     {
         $category = MedmasteryCategory::with(['segmentation', 'creator'])
-            ->withCount(['questions', 'activeQuestions'])
             ->findOrFail($id);
         
         $user = Auth::user();
         $userRole = $user ? $user->accessRole : null;
+        
+        // Get accessible questions count based on visibility
+        $accessibleQuestionsCount = MedMasteryQuestion::where('medmastery_category_id', $id);
+        
+        if ($user) {
+            // For logged in users: own questions OR public questions
+            $accessibleQuestionsCount->where(function($q) use ($user) {
+                $q->where('creator_id', $user->id)
+                  ->orWhere('is_public', true);
+            });
+        } else {
+            // For guests: only public questions
+            $accessibleQuestionsCount->where('is_public', true);
+        }
+        
+        $category->accessible_questions_count = $accessibleQuestionsCount->count();
+        $category->accessible_active_questions_count = $accessibleQuestionsCount->where('is_active', true)->count();
         
         return view('medmastery.content.category-show', compact('category', 'user', 'userRole'));
     }
@@ -139,17 +155,41 @@ class MedMasteryController extends Controller
                 return redirect()->back()->with('error', 'Tidak ada soal yang salah untuk dikerjakan ulang.');
             }
             
-            // Get questions from wrong IDs
-            $questions = MedMasteryQuestion::active()
-                ->whereIn('id', $wrongQuestionIds)
-                ->inRandomOrder()
+            // Get questions from wrong IDs with proper visibility filtering
+            $questionsQuery = MedMasteryQuestion::active()
+                ->whereIn('id', $wrongQuestionIds);
+            
+            // Apply visibility filter: only show user's own questions OR public questions
+            if ($user) {
+                $questionsQuery->where(function($q) use ($user) {
+                    $q->where('creator_id', $user->id)  // User's own questions
+                      ->orWhere('is_public', true);      // OR public questions
+                });
+            } else {
+                // For guests, only show public questions
+                $questionsQuery->where('is_public', true);
+            }
+            
+            $questions = $questionsQuery->inRandomOrder()
                 ->limit($questionCount)
                 ->get();
         } else {
-            // Create new questions set (original logic)
-            $questions = MedMasteryQuestion::active()
-                ->byCategory($categoryId)
-                ->inRandomOrder()
+            // Create new questions set with proper visibility filtering
+            $questionsQuery = MedMasteryQuestion::active()
+                ->byCategory($categoryId);
+            
+            // Apply visibility filter: only show user's own questions OR public questions
+            if ($user) {
+                $questionsQuery->where(function($q) use ($user) {
+                    $q->where('creator_id', $user->id)  // User's own questions
+                      ->orWhere('is_public', true);      // OR public questions
+                });
+            } else {
+                // For guests, only show public questions
+                $questionsQuery->where('is_public', true);
+            }
+            
+            $questions = $questionsQuery->inRandomOrder()
                 ->limit($questionCount)
                 ->get();
         }
@@ -608,6 +648,11 @@ class MedMasteryController extends Controller
             ->where('med_mastery_answers.med_mastery_category_id', $categoryId)
             ->where('med_mastery_answer_details.score', '<', 1) // Score kurang dari 1 (salah)
             ->where('med_mastery_questions.is_active', true) // Only active questions
+            ->where(function($query) use ($userId) {
+                // Only include questions that user can access (own questions OR public questions)
+                $query->where('med_mastery_questions.creator_id', $userId)
+                      ->orWhere('med_mastery_questions.is_public', true);
+            })
             ->distinct()
             ->pluck('med_mastery_answer_details.med_mastery_question_id')
             ->toArray();

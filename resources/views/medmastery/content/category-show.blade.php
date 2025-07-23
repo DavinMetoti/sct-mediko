@@ -540,7 +540,7 @@
                     </div>
                     <div class="meta-item">
                         <i class="fas fa-question-circle"></i>
-                        <span>{{ $category->questions_count ?? 0 }} Pertanyaan</span>
+                        <span>{{ $category->accessible_questions_count ?? 0 }} Pertanyaan Tersedia</span>
                     </div>
                 </div>
             </div>
@@ -550,15 +550,15 @@
     <!-- Statistics -->
     <div class="stats-grid">
         <div class="stat-item">
-            <div class="stat-number">{{ $category->questions_count ?? 0 }}</div>
-            <div class="stat-label">Total Pertanyaan</div>
+            <div class="stat-number">{{ $category->accessible_questions_count ?? 0 }}</div>
+            <div class="stat-label">Total Pertanyaan Tersedia</div>
         </div>
         <div class="stat-item">
-            <div class="stat-number">{{ $category->active_questions_count ?? 0 }}</div>
+            <div class="stat-number">{{ $category->accessible_active_questions_count ?? 0 }}</div>
             <div class="stat-label">Pertanyaan Aktif</div>
         </div>
         <div class="stat-item">
-            <div class="stat-number">{{ ($category->questions_count ?? 0) - ($category->active_questions_count ?? 0) }}</div>
+            <div class="stat-number">{{ ($category->accessible_questions_count ?? 0) - ($category->accessible_active_questions_count ?? 0) }}</div>
             <div class="stat-label">Pertanyaan Nonaktif</div>
         </div>
     </div>
@@ -589,27 +589,27 @@
                     @endif
                 </h3>
                 <div class="info-content">
-                    @if(($category->questions_count ?? 0) > 0)
+                    @if(($category->accessible_questions_count ?? 0) > 0)
                         <div class="row g-3 mb-3">
                             <div class="col-md-4">
                                 <div class="text-center p-3 bg-light rounded">
-                                    <h4 class="text-primary mb-1">{{ $category->questions_count ?? 0 }}</h4>
-                                    <small class="text-muted">Total Pertanyaan</small>
+                                    <h4 class="text-primary mb-1">{{ $category->accessible_questions_count ?? 0 }}</h4>
+                                    <small class="text-muted">Total Pertanyaan Tersedia</small>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="text-center p-3 bg-light rounded">
-                                    <h4 class="text-success mb-1">{{ $category->active_questions_count ?? 0 }}</h4>
+                                    <h4 class="text-success mb-1">{{ $category->accessible_active_questions_count ?? 0 }}</h4>
                                     <small class="text-muted">Pertanyaan Aktif</small>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="text-center p-3 bg-light rounded">
                                     @if($userRole && $userRole->access == 'private')
-                                        <h4 class="text-warning mb-1">{{ ($category->questions_count ?? 0) - ($category->active_questions_count ?? 0) }}</h4>
+                                        <h4 class="text-warning mb-1">{{ ($category->accessible_questions_count ?? 0) - ($category->accessible_active_questions_count ?? 0) }}</h4>
                                         <small class="text-muted">Pertanyaan Nonaktif</small>
                                     @else
-                                        <h4 class="text-info mb-1">{{ $category->active_questions_count ?? 0 }}</h4>
+                                        <h4 class="text-info mb-1">{{ $category->accessible_active_questions_count ?? 0 }}</h4>
                                         <small class="text-muted">Siap Dikerjakan</small>
                                     @endif
                                 </div>
@@ -675,7 +675,7 @@
                         </button>
                     @else
                         <!-- User Actions -->
-                        @if(($category->questions_count ?? 0) > 0)
+                        @if(($category->accessible_questions_count ?? 0) > 0)
                             <div class="user-practice-section">
                                 <h4 class="mb-3">
                                     <i class="fas fa-play text-primary"></i>
@@ -725,7 +725,7 @@
                                         
                                         <div class="question-count-options">
                                             @php
-                                                $totalQuestions = $category->active_questions_count ?? 0;
+                                                $totalQuestions = $category->accessible_active_questions_count ?? 0;
                                                 $defaultOptions = [10, 25, 50];
                                             @endphp
                                             
@@ -960,7 +960,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateQuestionCountOptions(mode) {
-        const totalQuestions = {{ $category->active_questions_count ?? 0 }};
+        const totalQuestions = {{ $category->accessible_active_questions_count ?? 0 }};
         const defaultOptions = [10, 25, 50];
         
         // Clear existing options
