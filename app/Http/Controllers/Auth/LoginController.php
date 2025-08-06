@@ -172,7 +172,8 @@ class LoginController extends Controller
                 'username' => $validatedData['username'],
                 'id_access_role' => $validatedData['id_access_role'],
                 'password' => Hash::make($validatedData['password']),
-                'is_actived' => 0   ,
+                'is_actived' => 0,
+                'is_active' => false, 
             ]);
 
             return response()->json([
