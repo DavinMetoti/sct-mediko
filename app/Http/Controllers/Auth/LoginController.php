@@ -25,9 +25,8 @@ class LoginController extends Controller
         $existingDevice = UserDevice::where('device_id', $deviceId)->first();
 
         if ($existingDevice) {
-            // Login otomatis user terkait device
             $user = $existingDevice->user;
-            if ($user) {
+            if ($user && $user->session_token && session('session_token') === $user->session_token) {
                 Auth::login($user);
                 return redirect($user->accessRole->access == "private" ? route('dashboard.index') : route('student.index'));
             }
