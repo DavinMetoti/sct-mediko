@@ -26,7 +26,7 @@
                                 <option value="0">Tidak Aktif</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-none">
                             <label for="accessRoleFilter" class="form-label">Filter Akses:</label>
                             <select class="form-select" id="accessRoleFilter">
                                 <option value="">Semua Akses</option>
