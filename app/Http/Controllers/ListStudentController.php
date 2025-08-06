@@ -91,12 +91,26 @@ class ListStudentController extends Controller
         //
     }
 
-    public function getPublicUserData()
+    public function getPublicUserData(Request $request)
     {
         try {
-            $users = User::with(['accessRole', 'userDetail','packages'])->whereHas('accessRole', function ($query) {
+            $query = User::with(['accessRole', 'userDetail','packages'])->whereHas('accessRole', function ($query) {
                 $query->where('access', 'public');
-            })->get();
+            });
+
+            // Apply status filter
+            if ($request->filled('status_filter')) {
+                $query->where('is_actived', $request->status_filter);
+            }
+
+            // Apply access role filter
+            if ($request->filled('access_role_filter')) {
+                $query->whereHas('accessRole', function ($q) use ($request) {
+                    $q->where('name', $request->access_role_filter);
+                });
+            }
+
+            $users = $query->get();
 
             return DataTables::of($users)
                 ->addIndexColumn()

@@ -359,7 +359,7 @@
                     <i class="fas fa-lightbulb"></i>
                     Penjelasan
                 </h3>
-                <div class="content-text">{{ $question->explanation }}</div>
+                <div class="content-text">{!! $question->explanation !!}</div>
             </div>
 
             <!-- PDF Section -->

@@ -16,6 +16,31 @@
             </div>
             <div class="card">
                 <div class="card-body">
+                    <!-- Filter Section -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="statusFilter" class="form-label">Filter Status:</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">Semua Status</option>
+                                <option value="1">Aktif</option>
+                                <option value="0">Tidak Aktif</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="accessRoleFilter" class="form-label">Filter Akses:</label>
+                            <select class="form-select" id="accessRoleFilter">
+                                <option value="">Semua Akses</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Student">Student</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="button" class="btn btn-secondary me-2" id="resetFilter">
+                                <i class="fas fa-refresh"></i> Reset Filter
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="table-responsive">
                         <table class="table table-striped " id="userPublicTable">
                             <thead class="bg-secondary">
@@ -156,8 +181,10 @@
             ajax: {
                 url: '{{ route('admin.list-student.public') }}',
                 type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}'
+                data: function(d) {
+                    d._token = '{{ csrf_token() }}';
+                    d.status_filter = $('#statusFilter').val();
+                    d.access_role_filter = $('#accessRoleFilter').val();
                 },
                 error: function(xhr, error, thrown) {
                     console.error('Error fetching data:', xhr.responseText);
@@ -330,6 +357,17 @@
                     toastError('Failed to actived the user. Please try again.');
                 }
             });
+        });
+
+        // Filter functionality
+        $('#statusFilter, #accessRoleFilter').on('change', function() {
+            table.ajax.reload();
+        });
+
+        // Reset filter functionality
+        $('#resetFilter').on('click', function() {
+            $('#statusFilter').val('').trigger('change');
+            $('#accessRoleFilter').val('').trigger('change');
         });
 
     });

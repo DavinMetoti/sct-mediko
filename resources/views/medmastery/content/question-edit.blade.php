@@ -403,15 +403,15 @@
                 @enderror
             </div>
 
-            <div class="input-group">
-                <label for="explanation">
+            <div class="">
+                <label for="explanation" class="text-black">
                     Penjelasan <span class="required">*</span>
                 </label>
-                <textarea class="form-input form-textarea @error('explanation') is-invalid @enderror" 
+                <textarea class="form-input @error('explanation') is-invalid @enderror d-none" 
                           id="explanation" 
                           name="explanation" 
-                          placeholder="Berikan penjelasan detail untuk pertanyaan ini..."
                           required>{{ old('explanation', $question->explanation) }}</textarea>
+                <div id="explanation-editor" style="min-height: 200px; border: 2px solid #e2e8f0; border-radius: 8px;"></div>
                 <div class="help-text">Maksimal 5000 karakter - berikan penjelasan yang komprehensif</div>
                 @error('explanation')
                     <div class="invalid-feedback">
@@ -515,6 +515,98 @@
     </div>
 </div>
 
+@push('styles')
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script>
+        var quill; // Global variable untuk quill
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Quill editor
+            quill = new Quill('#explanation-editor', {
+                theme: 'snow',
+                placeholder: 'Berikan penjelasan detail untuk pertanyaan ini...',
+                modules: {
+                    toolbar: [
+                            [{ font: [] }, { size: [] }],
+                            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ color: [] }, { background: [] }],
+                            [{ script: 'sub' }, { script: 'super' }],
+                            [{ list: 'ordered' }, { list: 'bullet' }],
+                            [{ indent: '-1' }, { indent: '+1' }],
+                            [{ align: [] }],
+                            ['blockquote', 'code-block'],
+                            ['link', 'image', 'video'],
+                            ['clean']
+                    ]
+                }
+            });
+
+            quill.format('color', '#333333');
+
+            var explanationTextarea = document.getElementById('explanation');
+            
+            // Set initial content from the textarea
+            if (explanationTextarea.value) {
+                quill.root.innerHTML = explanationTextarea.value;
+            }
+
+            // Update hidden textarea when content changes
+            quill.on('text-change', function() {
+                var html = quill.root.innerHTML;
+                if (html === '<p><br></p>') {
+                    html = '';
+                }
+                explanationTextarea.value = html;
+                
+                // Update character counter
+                var textLength = quill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
+                updateQuillCharacterCounter(textLength);
+            });
+
+            // Handle form submission
+            document.getElementById('questionForm').addEventListener('submit', function() {
+                var html = quill.root.innerHTML;
+                if (html === '<p><br></p>') {
+                    html = '';
+                }
+                explanationTextarea.value = html;
+            });
+
+            // Add character counter for Quill
+            addQuillCharacterCounter();
+
+            function addQuillCharacterCounter() {
+                var editorContainer = document.getElementById('explanation-editor').parentNode;
+                var counter = document.createElement('div');
+                counter.id = 'quill-counter';
+                counter.className = 'help-text';
+                counter.style.textAlign = 'right';
+                counter.style.marginTop = '0.25rem';
+                
+                // Initial count
+                var initialLength = quill ? quill.getText().length - 1 : 0;
+                counter.textContent = initialLength + '/5000 karakter';
+                
+                // Insert after the editor
+                editorContainer.insertBefore(counter, editorContainer.querySelector('.help-text'));
+            }
+
+            function updateQuillCharacterCounter(length) {
+                var counter = document.getElementById('quill-counter');
+                if (counter) {
+                    counter.textContent = length + '/5000 karakter';
+                    counter.style.color = length > 4900 ? '#e53e3e' : '#718096';
+                }
+            }
+        });
+    </script>
+@endpush
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('explanation_pdf');
@@ -611,7 +703,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Character count for textareas
     const questionText = document.getElementById('question_text');
-    const explanation = document.getElementById('explanation');
     
     function addCharacterCounter(textarea, maxLength) {
         const counter = document.createElement('div');
@@ -631,7 +722,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     addCharacterCounter(questionText, 2000);
-    addCharacterCounter(explanation, 5000);
+    // Removed explanation counter as it's handled by Quill
     
     // Reset button functionality
     const resetBtn = document.querySelector('button[type="reset"]');

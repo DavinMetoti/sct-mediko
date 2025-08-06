@@ -3279,7 +3279,7 @@
                         <div class="correct-answer mb-3">
                             <strong>Jawaban Benar:</strong>
                             <div style="background:#f0f9f4;padding:1rem;border-radius:8px;border:1px solid #bbf7d0;">
-                                <p style="margin-bottom:0;">{{ $question->correct_answer ?? $question->explanation ?? 'Jawaban benar tidak tersedia' }}</p>
+                                <p style="margin-bottom:0;">{!! $question->correct_answer ?? $question->explanation ?? 'Jawaban benar tidak tersedia' !!}</p>
                             </div>
                         </div>
                         
