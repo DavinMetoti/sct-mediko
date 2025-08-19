@@ -159,7 +159,7 @@
         @include('medmastery.partials.sidebar')
         @include('medmastery.partials.navbar')
 
-        <div class="content content-mediko-quiz text-white min-h-screen">
+        <div class="content content-mediko-quiz min-h-screen">
             <div class="container-fluid">
                 <div id="toastiin-container"></div>
                 @yield('medmastery-content')
