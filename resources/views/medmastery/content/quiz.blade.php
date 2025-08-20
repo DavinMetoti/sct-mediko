@@ -3070,6 +3070,11 @@
         opacity: 0.8;
                margin-top: 0.25rem;
     }
+    
+    /* Hide quiz navigation when card is flipped */
+    .quiz-container:has(.flip-card.flipped) .quiz-navigation {
+        display: none;
+    }
 </style>
 
 <div class="quiz-container">
@@ -3635,6 +3640,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const flipCard = targetContainer.querySelector('.flip-card');
                 if (flipCard) {
                     flipCard.classList.remove('flipped');
+                    
+                    // Show the global navigation when showing a new question
+                    const quizNavigation = document.querySelector('.quiz-navigation');
+                    if (quizNavigation) {
+                        quizNavigation.style.display = 'flex';
+                    }
                 }
             }
         }
@@ -3781,6 +3792,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const flipCard = document.getElementById('flipCard-' + questionId);
         if (flipCard) {
             flipCard.classList.add('flipped');
+            
+            // Hide the global navigation when card is flipped
+            const quizNavigation = document.querySelector('.quiz-navigation');
+            if (quizNavigation) {
+                quizNavigation.style.display = 'none';
+            }
         }
     }
 
@@ -3789,6 +3806,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const flipCard = document.getElementById('flipCard-' + questionId);
         if (flipCard) {
             flipCard.classList.remove('flipped');
+            
+            // Show the global navigation when card is flipped back
+            const quizNavigation = document.querySelector('.quiz-navigation');
+            if (quizNavigation) {
+                quizNavigation.style.display = 'flex';
+            }
         }
     };
 
@@ -4281,6 +4304,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 var nextFlipCard = nextContainer.querySelector('.flip-card');
                 if (nextFlipCard) {
                     nextFlipCard.classList.remove('flipped');
+                    
+                    // Show the global navigation when going to next question
+                    var quizNavigation = document.querySelector('.quiz-navigation');
+                    if (quizNavigation) {
+                        quizNavigation.style.display = 'flex';
+                    }
                 }
                 
                 // Update the current question tracking
@@ -4306,5 +4335,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 });
+
+// Function to confirm and restart quiz
+function confirmRestartQuiz() {
+    const confirmed = confirm('Apakah Anda yakin ingin reset quiz? Semua jawaban dan progress akan hilang.');
+    if (confirmed) {
+        // Clear all localStorage data for this quiz
+        const sessionKey = 'quiz_progress_' + categoryId;
+        localStorage.removeItem(sessionKey);
+        
+        // Clear individual answer keys (fallback cleanup)
+        const answerInputs = document.querySelectorAll('.answer-input');
+        answerInputs.forEach(function(input) {
+            const questionId = input.getAttribute('data-question-id');
+            localStorage.removeItem('quiz_' + questionId);
+        });
+        
+        // Reload the page to start fresh
+        window.location.reload();
+    }
+}
 </script>
 @endsection
