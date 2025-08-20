@@ -3672,6 +3672,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         currentQuestion = questionNumber;
         updateProgress();
+        
+        // Ensure navigation is visible
+        ensureNavigationVisibility();
     }
     
     // Navigation event listeners
@@ -4272,6 +4275,9 @@ document.addEventListener('DOMContentLoaded', function() {
         showQuestion(1);
         updateProgress();
         initQuestionIndicatorNavigation();
+        
+        // Ensure navigation is visible initially
+        ensureNavigationVisibility();
     }
     
     // Initialize quiz after DOM is ready
@@ -4329,11 +4335,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Update progress and indicators
                 updateProgress();
+                
+                // Ensure navigation is visible for the new question
+                ensureNavigationVisibility();
             }
         } else {
-            // If this is the last question, could show completion message or return to first
+            // If this is the last question, show the quiz navigation again
+            var quizNavigation = document.querySelector('.quiz-navigation');
+            if (quizNavigation) {
+                quizNavigation.style.display = 'flex';
+            }
         }
     };
+    
+    // Function to check if any cards are flipped and show navigation if none are flipped
+    function ensureNavigationVisibility() {
+        const flippedCards = document.querySelectorAll('.flip-card.flipped');
+        const quizNavigation = document.querySelector('.quiz-navigation');
+        
+        if (flippedCards.length === 0 && quizNavigation) {
+            quizNavigation.style.display = 'flex';
+        }
+    }
 });
 
 // Function to confirm and restart quiz
