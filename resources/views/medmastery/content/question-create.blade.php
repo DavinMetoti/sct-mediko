@@ -371,7 +371,7 @@
                           name="question_text" 
                           required>{{ old('question_text') }}</textarea>
                 <div id="question-editor" style="min-height: 150px; border: 2px solid #e2e8f0; border-radius: 8px;"></div>
-                <div class="help-text">Maksimal 2000 karakter</div>
+                <div class="help-text">Tulis pertanyaan sedetail mungkin</div>
                 @error('question_text')
                     <div class="invalid-feedback">
                         <i class="fas fa-exclamation-circle"></i>{{ $message }}
@@ -388,7 +388,7 @@
                           name="explanation" 
                           required>{{ old('explanation') }}</textarea>
                 <div id="explanation-editor" style="min-height: 200px; border: 2px solid #e2e8f0; border-radius: 8px;"></div>
-                <div class="help-text">Maksimal 5000 karakter - berikan penjelasan yang komprehensif</div>
+                <div class="help-text">Berikan penjelasan yang komprehensif</div>
                 @error('explanation')
                     <div class="invalid-feedback">
                         <i class="fas fa-exclamation-circle"></i>{{ $message }}
@@ -549,10 +549,6 @@ document.addEventListener('DOMContentLoaded', function() {
             html = '';
         }
         questionTextarea.value = html;
-        
-        // Update character counter
-        var textLength = questionQuill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
-        updateQuestionCharacterCounter(textLength);
     });
 
     // Update hidden textarea when explanation content changes
@@ -562,10 +558,6 @@ document.addEventListener('DOMContentLoaded', function() {
             html = '';
         }
         explanationTextarea.value = html;
-        
-        // Update character counter
-        var textLength = explanationQuill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
-        updateExplanationCharacterCounter(textLength);
     });
 
     // Handle form submission
@@ -582,52 +574,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         explanationTextarea.value = explanationHtml;
     });
-
-    // Add character counters for both editors
-    addQuestionCharacterCounter();
-    addExplanationCharacterCounter();
-
-    function addQuestionCharacterCounter() {
-        var editorContainer = document.getElementById('question-editor').parentNode;
-        var counter = document.createElement('div');
-        counter.id = 'question-counter';
-        counter.className = 'help-text';
-        counter.style.textAlign = 'right';
-        counter.style.marginTop = '0.25rem';
-        counter.textContent = '0/2000 karakter';
-        
-        // Insert after the editor
-        editorContainer.insertBefore(counter, editorContainer.querySelector('.help-text'));
-    }
-
-    function updateQuestionCharacterCounter(length) {
-        var counter = document.getElementById('question-counter');
-        if (counter) {
-            counter.textContent = length + '/2000 karakter';
-            counter.style.color = length > 1900 ? '#e53e3e' : '#718096';
-        }
-    }
-
-    function addExplanationCharacterCounter() {
-        var editorContainer = document.getElementById('explanation-editor').parentNode;
-        var counter = document.createElement('div');
-        counter.id = 'explanation-counter';
-        counter.className = 'help-text';
-        counter.style.textAlign = 'right';
-        counter.style.marginTop = '0.25rem';
-        counter.textContent = '0/5000 karakter';
-        
-        // Insert after the editor
-        editorContainer.insertBefore(counter, editorContainer.querySelector('.help-text'));
-    }
-
-    function updateExplanationCharacterCounter(length) {
-        var counter = document.getElementById('explanation-counter');
-        if (counter) {
-            counter.textContent = length + '/5000 karakter';
-            counter.style.color = length > 4900 ? '#e53e3e' : '#718096';
-        }
-    }
 
     const fileInput = document.getElementById('explanation_pdf');
     const pdfPreview = document.getElementById('pdfPreview');
