@@ -353,7 +353,7 @@
                                 {{ $question->category->name }}
                             </div>
                             
-                            <div class="question-text">{{ $question->question_text }}</div>
+                            <div class="question-text">{!! $question->question_text !!}</div>
                             
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="status-badge {{ $question->is_active ? 'status-active' : 'status-inactive' }}">

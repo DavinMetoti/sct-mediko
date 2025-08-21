@@ -362,15 +362,15 @@
                 @enderror
             </div>
             
-            <div class="input-group">
-                <label for="question_text">
+            <div class="">
+                <label for="question_text" class="text-black">
                     Pertanyaan <span class="required">*</span>
                 </label>
-                <textarea class="form-input form-textarea @error('question_text') is-invalid @enderror" 
+                <textarea class="form-input @error('question_text') is-invalid @enderror d-none" 
                           id="question_text" 
                           name="question_text" 
-                          placeholder="Tuliskan pertanyaan yang akan diajukan..."
                           required>{{ old('question_text') }}</textarea>
+                <div id="question-editor" style="min-height: 150px; border: 2px solid #e2e8f0; border-radius: 8px;"></div>
                 <div class="help-text">Maksimal 2000 karakter</div>
                 @error('question_text')
                     <div class="invalid-feedback">
@@ -483,8 +483,31 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Quill editor
-    var quill = new Quill('#explanation-editor', {
+    // Initialize Quill editor for Question
+    var questionQuill = new Quill('#question-editor', {
+        theme: 'snow',
+        placeholder: 'Tuliskan pertanyaan yang akan diajukan...',
+        modules: {
+            toolbar: [
+                [{ font: [] }, { size: [] }],
+                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ color: [] }, { background: [] }],
+                [{ script: 'sub' }, { script: 'super' }],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                [{ indent: '-1' }, { indent: '+1' }],
+                [{ align: [] }],
+                ['blockquote', 'code-block'],
+                ['link', 'image'],
+                ['clean']
+            ]
+        }
+    });
+
+    questionQuill.format('color', '#333333');
+
+    // Initialize Quill editor for Explanation
+    var explanationQuill = new Quill('#explanation-editor', {
         theme: 'snow',
         placeholder: 'Berikan penjelasan detail untuk pertanyaan ini...',
         modules: {
@@ -504,45 +527,91 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    quill.format('color', '#333333');
+    explanationQuill.format('color', '#333333');
 
-
+    var questionTextarea = document.getElementById('question_text');
     var explanationTextarea = document.getElementById('explanation');
     
-    // Set initial content if any
+    // Set initial content for question if any
+    if (questionTextarea.value) {
+        questionQuill.root.innerHTML = questionTextarea.value;
+    }
+    
+    // Set initial content for explanation if any
     if (explanationTextarea.value) {
-        quill.root.innerHTML = explanationTextarea.value;
+        explanationQuill.root.innerHTML = explanationTextarea.value;
     }
 
-    // Update hidden textarea when content changes
-    quill.on('text-change', function() {
-        var html = quill.root.innerHTML;
+    // Update hidden textarea when question content changes
+    questionQuill.on('text-change', function() {
+        var html = questionQuill.root.innerHTML;
+        if (html === '<p><br></p>') {
+            html = '';
+        }
+        questionTextarea.value = html;
+        
+        // Update character counter
+        var textLength = questionQuill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
+        updateQuestionCharacterCounter(textLength);
+    });
+
+    // Update hidden textarea when explanation content changes
+    explanationQuill.on('text-change', function() {
+        var html = explanationQuill.root.innerHTML;
         if (html === '<p><br></p>') {
             html = '';
         }
         explanationTextarea.value = html;
         
         // Update character counter
-        var textLength = quill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
-        updateQuillCharacterCounter(textLength);
+        var textLength = explanationQuill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
+        updateExplanationCharacterCounter(textLength);
     });
 
     // Handle form submission
     document.getElementById('questionForm').addEventListener('submit', function() {
-        var html = quill.root.innerHTML;
-        if (html === '<p><br></p>') {
-            html = '';
+        var questionHtml = questionQuill.root.innerHTML;
+        if (questionHtml === '<p><br></p>') {
+            questionHtml = '';
         }
-        explanationTextarea.value = html;
+        questionTextarea.value = questionHtml;
+        
+        var explanationHtml = explanationQuill.root.innerHTML;
+        if (explanationHtml === '<p><br></p>') {
+            explanationHtml = '';
+        }
+        explanationTextarea.value = explanationHtml;
     });
 
-    // Add character counter for Quill
-    addQuillCharacterCounter();
+    // Add character counters for both editors
+    addQuestionCharacterCounter();
+    addExplanationCharacterCounter();
 
-    function addQuillCharacterCounter() {
+    function addQuestionCharacterCounter() {
+        var editorContainer = document.getElementById('question-editor').parentNode;
+        var counter = document.createElement('div');
+        counter.id = 'question-counter';
+        counter.className = 'help-text';
+        counter.style.textAlign = 'right';
+        counter.style.marginTop = '0.25rem';
+        counter.textContent = '0/2000 karakter';
+        
+        // Insert after the editor
+        editorContainer.insertBefore(counter, editorContainer.querySelector('.help-text'));
+    }
+
+    function updateQuestionCharacterCounter(length) {
+        var counter = document.getElementById('question-counter');
+        if (counter) {
+            counter.textContent = length + '/2000 karakter';
+            counter.style.color = length > 1900 ? '#e53e3e' : '#718096';
+        }
+    }
+
+    function addExplanationCharacterCounter() {
         var editorContainer = document.getElementById('explanation-editor').parentNode;
         var counter = document.createElement('div');
-        counter.id = 'quill-counter';
+        counter.id = 'explanation-counter';
         counter.className = 'help-text';
         counter.style.textAlign = 'right';
         counter.style.marginTop = '0.25rem';
@@ -552,8 +621,8 @@ document.addEventListener('DOMContentLoaded', function() {
         editorContainer.insertBefore(counter, editorContainer.querySelector('.help-text'));
     }
 
-    function updateQuillCharacterCounter(length) {
-        var counter = document.getElementById('quill-counter');
+    function updateExplanationCharacterCounter(length) {
+        var counter = document.getElementById('explanation-counter');
         if (counter) {
             counter.textContent = length + '/5000 karakter';
             counter.style.color = length > 4900 ? '#e53e3e' : '#718096';
@@ -653,28 +722,6 @@ document.addEventListener('DOMContentLoaded', function() {
     visibilitySwitch.addEventListener('change', function() {
         visibilityText.textContent = this.checked ? 'Public' : 'Private';
     });
-    
-    // Character count for textareas
-    const questionText = document.getElementById('question_text');
-    
-    function addCharacterCounter(textarea, maxLength) {
-        const counter = document.createElement('div');
-        counter.className = 'help-text';
-        counter.style.textAlign = 'right';
-        counter.style.marginTop = '0.25rem';
-        
-        function updateCounter() {
-            const remaining = maxLength - textarea.value.length;
-            counter.textContent = `${textarea.value.length}/${maxLength} karakter`;
-            counter.style.color = remaining < 100 ? '#e53e3e' : '#718096';
-        }
-        
-        textarea.addEventListener('input', updateCounter);
-        textarea.parentNode.appendChild(counter);
-        updateCounter();
-    }
-    
-    addCharacterCounter(questionText, 2000);
     
     // Submit button loading state
     const form = document.getElementById('questionForm');

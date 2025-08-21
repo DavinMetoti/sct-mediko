@@ -386,15 +386,15 @@
                 @enderror
             </div>
             
-            <div class="input-group">
-                <label for="question_text">
+            <div class="">
+                <label for="question_text" class="text-black">
                     Pertanyaan <span class="required">*</span>
                 </label>
-                <textarea class="form-input form-textarea @error('question_text') is-invalid @enderror" 
+                <textarea class="form-input @error('question_text') is-invalid @enderror d-none" 
                           id="question_text" 
                           name="question_text" 
-                          placeholder="Tuliskan pertanyaan yang akan diajukan..."
                           required>{{ old('question_text', $question->question_text) }}</textarea>
+                <div id="question-editor" style="min-height: 150px; border: 2px solid #e2e8f0; border-radius: 8px;"></div>
                 <div class="help-text">Maksimal 2000 karakter</div>
                 @error('question_text')
                     <div class="invalid-feedback">
@@ -522,11 +522,34 @@
 @push('scripts')
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
-        var quill; // Global variable untuk quill
+        var questionQuill, explanationQuill; // Global variables untuk quill editors
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Quill editor
-            quill = new Quill('#explanation-editor', {
+            // Initialize Quill editor for Question
+            questionQuill = new Quill('#question-editor', {
+                theme: 'snow',
+                placeholder: 'Tuliskan pertanyaan yang akan diajukan...',
+                modules: {
+                    toolbar: [
+                        [{ font: [] }, { size: [] }],
+                        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ color: [] }, { background: [] }],
+                        [{ script: 'sub' }, { script: 'super' }],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        [{ indent: '-1' }, { indent: '+1' }],
+                        [{ align: [] }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            questionQuill.format('color', '#333333');
+
+            // Initialize Quill editor for Explanation
+            explanationQuill = new Quill('#explanation-editor', {
                 theme: 'snow',
                 placeholder: 'Berikan penjelasan detail untuk pertanyaan ini...',
                 modules: {
@@ -546,58 +569,112 @@
                 }
             });
 
-            quill.format('color', '#333333');
+            explanationQuill.format('color', '#333333');
 
+            // Make quill editors globally accessible
+            window.questionQuill = questionQuill;
+            window.explanationQuill = explanationQuill;
+
+            var questionTextarea = document.getElementById('question_text');
             var explanationTextarea = document.getElementById('explanation');
             
-            // Set initial content from the textarea
+            // Set initial content for question from the textarea
+            if (questionTextarea.value) {
+                questionQuill.root.innerHTML = questionTextarea.value;
+            }
+            
+            // Set initial content for explanation from the textarea
             if (explanationTextarea.value) {
-                quill.root.innerHTML = explanationTextarea.value;
+                explanationQuill.root.innerHTML = explanationTextarea.value;
             }
 
-            // Update hidden textarea when content changes
-            quill.on('text-change', function() {
-                var html = quill.root.innerHTML;
+            // Update hidden textarea when question content changes
+            questionQuill.on('text-change', function() {
+                var html = questionQuill.root.innerHTML;
+                if (html === '<p><br></p>') {
+                    html = '';
+                }
+                questionTextarea.value = html;
+                
+                // Update character counter
+                var textLength = questionQuill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
+                updateQuestionCharacterCounter(textLength);
+            });
+
+            // Update hidden textarea when explanation content changes
+            explanationQuill.on('text-change', function() {
+                var html = explanationQuill.root.innerHTML;
                 if (html === '<p><br></p>') {
                     html = '';
                 }
                 explanationTextarea.value = html;
                 
                 // Update character counter
-                var textLength = quill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
-                updateQuillCharacterCounter(textLength);
+                var textLength = explanationQuill.getText().length - 1; // -1 untuk menghilangkan newline terakhir
+                updateExplanationCharacterCounter(textLength);
             });
 
             // Handle form submission
             document.getElementById('questionForm').addEventListener('submit', function() {
-                var html = quill.root.innerHTML;
-                if (html === '<p><br></p>') {
-                    html = '';
+                var questionHtml = questionQuill.root.innerHTML;
+                if (questionHtml === '<p><br></p>') {
+                    questionHtml = '';
                 }
-                explanationTextarea.value = html;
+                questionTextarea.value = questionHtml;
+                
+                var explanationHtml = explanationQuill.root.innerHTML;
+                if (explanationHtml === '<p><br></p>') {
+                    explanationHtml = '';
+                }
+                explanationTextarea.value = explanationHtml;
             });
 
-            // Add character counter for Quill
-            addQuillCharacterCounter();
+            // Add character counters for both editors
+            addQuestionCharacterCounter();
+            addExplanationCharacterCounter();
 
-            function addQuillCharacterCounter() {
-                var editorContainer = document.getElementById('explanation-editor').parentNode;
+            function addQuestionCharacterCounter() {
+                var editorContainer = document.getElementById('question-editor').parentNode;
                 var counter = document.createElement('div');
-                counter.id = 'quill-counter';
+                counter.id = 'question-counter';
                 counter.className = 'help-text';
                 counter.style.textAlign = 'right';
                 counter.style.marginTop = '0.25rem';
                 
                 // Initial count
-                var initialLength = quill ? quill.getText().length - 1 : 0;
+                var initialLength = questionQuill ? questionQuill.getText().length - 1 : 0;
+                counter.textContent = initialLength + '/2000 karakter';
+                
+                // Insert after the editor
+                editorContainer.insertBefore(counter, editorContainer.querySelector('.help-text'));
+            }
+
+            function updateQuestionCharacterCounter(length) {
+                var counter = document.getElementById('question-counter');
+                if (counter) {
+                    counter.textContent = length + '/2000 karakter';
+                    counter.style.color = length > 1900 ? '#e53e3e' : '#718096';
+                }
+            }
+
+            function addExplanationCharacterCounter() {
+                var editorContainer = document.getElementById('explanation-editor').parentNode;
+                var counter = document.createElement('div');
+                counter.id = 'explanation-counter';
+                counter.className = 'help-text';
+                counter.style.textAlign = 'right';
+                counter.style.marginTop = '0.25rem';
+                
+                // Initial count
+                var initialLength = explanationQuill ? explanationQuill.getText().length - 1 : 0;
                 counter.textContent = initialLength + '/5000 karakter';
                 
                 // Insert after the editor
                 editorContainer.insertBefore(counter, editorContainer.querySelector('.help-text'));
             }
 
-            function updateQuillCharacterCounter(length) {
-                var counter = document.getElementById('quill-counter');
+            function updateExplanationCharacterCounter(length) {
+                var counter = document.getElementById('explanation-counter');
                 if (counter) {
                     counter.textContent = length + '/5000 karakter';
                     counter.style.color = length > 4900 ? '#e53e3e' : '#718096';
@@ -608,6 +685,10 @@
 @endpush
 
 <script>
+// Boolean values dari Blade
+var originalIsActive = @json($question->is_active);
+var originalIsPublic = @json($question->is_public);
+
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('explanation_pdf');
     const pdfPreview = document.getElementById('pdfPreview');
@@ -701,29 +782,6 @@ document.addEventListener('DOMContentLoaded', function() {
         visibilityText.textContent = this.checked ? 'Public' : 'Private';
     });
     
-    // Character count for textareas
-    const questionText = document.getElementById('question_text');
-    
-    function addCharacterCounter(textarea, maxLength) {
-        const counter = document.createElement('div');
-        counter.className = 'help-text';
-        counter.style.textAlign = 'right';
-        counter.style.marginTop = '0.25rem';
-        
-        function updateCounter() {
-            const remaining = maxLength - textarea.value.length;
-            counter.textContent = `${textarea.value.length}/${maxLength} karakter`;
-            counter.style.color = remaining < 100 ? '#e53e3e' : '#718096';
-        }
-        
-        textarea.addEventListener('input', updateCounter);
-        textarea.parentNode.appendChild(counter);
-        updateCounter();
-    }
-    
-    addCharacterCounter(questionText, 2000);
-    // Removed explanation counter as it's handled by Quill
-    
     // Reset button functionality
     const resetBtn = document.querySelector('button[type="reset"]');
     resetBtn.addEventListener('click', function(e) {
@@ -731,11 +789,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Reset to original values
         document.getElementById('medmastery_category_id').value = '{{ $question->medmastery_category_id }}';
-        document.getElementById('question_text').value = `{{ addslashes($question->question_text) }}`;
-        document.getElementById('explanation').value = `{{ addslashes($question->explanation) }}`;
-        document.getElementById('is_active').checked = {{ $question->is_active ? 'true' : 'false' }};
+        
+        // Reset Quill editors to original content
+        if (window.questionQuill) {
+            window.questionQuill.root.innerHTML = `{!! addslashes($question->question_text) !!}`;
+            document.getElementById('question_text').value = `{!! addslashes($question->question_text) !!}`;
+        }
+        
+        if (window.explanationQuill) {
+            window.explanationQuill.root.innerHTML = `{!! addslashes($question->explanation) !!}`;
+            document.getElementById('explanation').value = `{!! addslashes($question->explanation) !!}`;
+        }
+        
+        document.getElementById('is_active').checked = originalIsActive;
         statusText.textContent = '{{ $question->is_active ? "Aktif" : "Tidak Aktif" }}';
-        document.getElementById('is_public').checked = {{ $question->is_public ? 'true' : 'false' }};
+        document.getElementById('is_public').checked = originalIsPublic;
         visibilityText.textContent = '{{ $question->is_public ? "Public" : "Private" }}';
         
         // Reset PDF preview
