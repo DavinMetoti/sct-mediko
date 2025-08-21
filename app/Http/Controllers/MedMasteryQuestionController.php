@@ -87,17 +87,15 @@ class MedMasteryQuestionController extends Controller
     {
         $request->validate([
             'medmastery_category_id' => 'required|exists:medmastery_category,id',
-            'question_text' => 'required|string|max:2000',
-            'explanation' => 'required|string|max:5000',
+            'question_text' => 'required|string',
+            'explanation' => 'required|string',
             'explanation_pdf' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
             'is_public' => 'nullable|boolean',
         ], [
             'medmastery_category_id.required' => 'Kategori harus dipilih',
             'medmastery_category_id.exists' => 'Kategori yang dipilih tidak valid',
             'question_text.required' => 'Pertanyaan tidak boleh kosong',
-            'question_text.max' => 'Pertanyaan maksimal 2000 karakter',
             'explanation.required' => 'Penjelasan tidak boleh kosong',
-            'explanation.max' => 'Penjelasan maksimal 5000 karakter',
             'explanation_pdf.file' => 'File harus berupa dokumen PDF',
             'explanation_pdf.mimes' => 'File harus berformat PDF',
             'explanation_pdf.max' => 'Ukuran file maksimal 10MB'
@@ -193,17 +191,15 @@ class MedMasteryQuestionController extends Controller
 
         $request->validate([
             'medmastery_category_id' => 'required|exists:medmastery_category,id',
-            'question_text' => 'required|string|max:2000',
-            'explanation' => 'required|string|max:5000',
+            'question_text' => 'required|string',
+            'explanation' => 'required|string',
             'explanation_pdf' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
             'is_public' => 'nullable|boolean',
         ], [
             'medmastery_category_id.required' => 'Kategori harus dipilih',
             'medmastery_category_id.exists' => 'Kategori yang dipilih tidak valid',
             'question_text.required' => 'Pertanyaan tidak boleh kosong',
-            'question_text.max' => 'Pertanyaan maksimal 2000 karakter',
             'explanation.required' => 'Penjelasan tidak boleh kosong',
-            'explanation.max' => 'Penjelasan maksimal 5000 karakter',
             'explanation_pdf.file' => 'File harus berupa dokumen PDF',
             'explanation_pdf.mimes' => 'File harus berformat PDF',
             'explanation_pdf.max' => 'Ukuran file maksimal 10MB'
