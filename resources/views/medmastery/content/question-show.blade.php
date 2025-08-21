@@ -350,7 +350,7 @@
                     <i class="fas fa-question-circle"></i>
                     Pertanyaan
                 </h3>
-                <div class="content-text">{{ $question->question_text }}</div>
+                <div class="content-text">{!! $question->question_text !!}</div>
             </div>
 
             <!-- Explanation Content -->
