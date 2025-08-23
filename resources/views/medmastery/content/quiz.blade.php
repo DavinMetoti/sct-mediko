@@ -3197,7 +3197,7 @@
                         </div>
                         
                         <div class="question-text">
-                            {!! nl2br(e($question->question_text)) !!}
+                            {!! $question->question_text !!}
                         </div>
                         
                         <div class="answer-section">
