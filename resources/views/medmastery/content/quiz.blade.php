@@ -3253,7 +3253,8 @@
                                         Selanjutnya
                                         <i class="fas fa-arrow-right"></i>
                                     </button>
-                                @else
+                                @endif
+                                @if($index === $questions->count() - 1)
                                     <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtn">
                                         <i class="fas fa-check"></i>
                                         Selesai
@@ -3289,7 +3290,7 @@
                         </div>
                         
                         <!-- 3. PDF Viewer -->
-                        <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0"></iframe>
+                        <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0" style="width:100%;height:100%;min-height:400px;"></iframe>
                         
                         <!-- Text explanation removed to avoid duplication, as it's now shown in "Jawaban Benar" section -->
 <div class="answer-options d-flex flex-row justify-content-between gap-2">
@@ -3305,10 +3306,17 @@
                         </div>
                         <input type="hidden" name="self_assessment[{{ $question->id }}]" id="assessment_{{ $question->id }}" value="">
                         <div class="next-button-container" id="nextContainerExplanation-{{ $question->id }}" style="display:none;margin-top:1rem;text-align:center;">
-                            <button type="button" class="btn btn-primary btn-nav" onclick="showNextExplanation({{ $question->id }})">
-    Selanjutnya
-    <i class="fas fa-arrow-right"></i>
-                            </button>
+                            @if($index < $questions->count() - 1)
+                                <button type="button" class="btn btn-primary btn-nav" onclick="showNextExplanation({{ $question->id }})">
+                                    Selanjutnya
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            @else
+                                <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtnExplanation">
+                                    <i class="fas fa-check"></i>
+                                    Selesai
+                                </button>
+                            @endif
                         </div>
                         <script>
                         document.addEventListener('DOMContentLoaded', function() {

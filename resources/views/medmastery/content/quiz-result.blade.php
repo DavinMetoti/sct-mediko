@@ -492,8 +492,8 @@
                 <div class="answer-header">
                     <div class="question-number">{{ $index + 1 }}</div>
                     <div class="question-text">
-                        {{ $detail->question->question_text ?? 'Pertanyaan tidak ditemukan' }}
-                        
+                        {!! $detail->question->question_text ?? 'Pertanyaan tidak ditemukan' !!}
+
                         <!-- Question Score Display -->
                         @if($detail->score !== null)
                             @if($detail->score == 1)
