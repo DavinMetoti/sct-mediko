@@ -3075,6 +3075,166 @@
     .quiz-container:has(.flip-card.flipped) .quiz-navigation {
         display: none;
     }
+    
+    /* CSS Override: Fix flip card functionality to allow repeated flipping */
+    .flip-card-front {
+        transform: rotateY(0deg) !important;
+        z-index: 2 !important;
+    }
+    
+    .flip-card-back {
+        transform: rotateY(180deg) !important;
+        z-index: 3 !important;
+    }
+    
+    /* Remove any display:none that prevents flipping */
+    .flip-card.flipped .flip-card-front {
+        display: block !important;
+    }
+    
+    /* Style for flip toggle buttons */
+    .flip-toggle-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .flip-toggle-btn:hover {
+        background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        color: white;
+    }
+    
+    /* Layout Improvements - Fixed Sidebar & Compact Design */
+    .quiz-container {
+        margin-right: 300px;
+        min-height: 100vh;
+        padding: 1rem;
+        background: #f8fafc;
+    }
+    
+    .question-status-nav {
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        width: 280px !important;
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+        z-index: 1000 !important;
+        transition: all 0.3s ease !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .question-status-nav.collapsed {
+        width: 60px !important;
+        padding: 0.5rem !important;
+    }
+    
+    .question-status-nav.collapsed .status-nav-header,
+    .question-status-nav.collapsed .status-legend,
+    .question-status-nav.collapsed .quick-nav-buttons {
+        display: none !important;
+    }
+    
+    .question-status-nav.collapsed .question-indicators {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.25rem !important;
+    }
+    
+    .question-status-nav.collapsed .question-indicator {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        border-radius: 50% !important;
+        font-size: 0.8rem !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .nav-toggle-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 0.8rem;
+        color: #64748b;
+        transition: all 0.2s ease;
+    }
+    
+    .nav-toggle-btn:hover {
+        background: #e2e8f0;
+        color: #374151;
+    }
+    
+    /* Compact Answer Input */
+    .answer-input {
+        min-height: 80px !important;
+        max-height: 120px !important;
+        resize: vertical;
+    }
+    
+    /* Compact Flip Card */
+    .flip-card {
+        min-height: 300px !important;
+    }
+    
+    .flip-card-front, .flip-card-back {
+        min-height: 300px !important;
+    }
+    
+    /* Compact PDF Viewer */
+    .pdf-viewer {
+        height: 300px !important;
+    }
+    
+    /* Responsive Layout */
+    @media (max-width: 1200px) {
+        .question-status-nav {
+            position: static !important;
+            width: 100% !important;
+            margin-right: 0 !important;
+            margin-bottom: 1.5rem !important;
+        }
+        
+        .quiz-container {
+            margin-right: 0 !important;
+        }
+        
+        .nav-toggle-btn {
+            display: none !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .quiz-container {
+            padding: 0.5rem !important;
+        }
+        
+        .flip-card {
+            min-height: 250px !important;
+        }
+        
+        .flip-card-front, .flip-card-back {
+            min-height: 250px !important;
+        }
+    }
 </style>
 
 <div class="quiz-container">
@@ -3127,7 +3287,11 @@
     </div>
     
     <!-- Question Status Navigation -->
-    <div class="question-status-nav">
+    <div class="question-status-nav" id="questionStatusNav">
+        <button class="nav-toggle-btn" id="navToggleBtn" onclick="toggleNavigation()">
+            <i class="fas fa-minus" id="toggleIcon"></i>
+        </button>
+        
         <div class="status-nav-header">
             <i class="fas fa-map-marker-alt"></i>
             Navigasi Soal
@@ -3271,6 +3435,13 @@
                         <div class="explanation-header">
                             <i class="fas fa-file-pdf"></i>
                             Penjelasan & Pembahasan
+                        </div>
+                        
+                        <!-- Toggle back to question button -->
+                        <div style="text-align:right;margin-bottom:1rem;">
+                            <button type="button" class="btn flip-toggle-btn" onclick="flipBack({{ $question->id }})">
+                                <i class="fas fa-undo"></i> Lihat Soal Kembali
+                            </button>
                         </div>
                         
                         <!-- 1. Jawaban Anda (Your Answer) -->
@@ -3617,7 +3788,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const questionNum = parseInt(this.getAttribute('data-question'));
                 showQuestion(questionNum);
             });
-        });    }
+        });
+    }
 
     // Show specific question
     function showQuestion(questionNumber) {
@@ -3683,6 +3855,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Ensure navigation is visible
         ensureNavigationVisibility();
+        
+        // Scroll to top when showing new question
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
     
     // Navigation event listeners
@@ -3768,11 +3946,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 answerTextarea.style.cursor = 'not-allowed';
             }
             
-            // Disable and update the button
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-check"></i> Penjelasan Ditampilkan';
+            // Update the button to show it can be clicked again to toggle
+            btn.disabled = false; // Keep it enabled for repeated use
+            btn.innerHTML = '<i class="fas fa-eye"></i> Lihat Penjelasan Lagi';
             btn.classList.remove('btn-outline', 'disabled-no-answer');
-            btn.classList.add('btn-success');
+            btn.classList.add('flip-toggle-btn'); // Use our new styling
             
             // Save explanation viewed state to localStorage
             const currentProgress = localStorage.getItem('quiz_progress_' + categoryId);
@@ -3809,6 +3987,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (quizNavigation) {
                 quizNavigation.style.display = 'none';
             }
+            
+            // Scroll to top when flipping to explanation
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     }
 
@@ -3823,6 +4007,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (quizNavigation) {
                 quizNavigation.style.display = 'flex';
             }
+            
+            // Scroll to top when flipping back to question
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     };
 
@@ -3866,7 +4056,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const explanationBtn = document.querySelector(`[data-question-id="${questionId}"].show-explanation-btn`);
             const warningElement = document.getElementById('warning-' + questionId);
             
-            if (explanationBtn && !explanationBtn.classList.contains('btn-success')) {
+            if (explanationBtn && !explanationBtn.classList.contains('flip-toggle-btn')) {
                 if (isAnswered) {
                     explanationBtn.disabled = false;
                     explanationBtn.classList.remove('disabled-no-answer');
@@ -3876,6 +4066,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     explanationBtn.disabled = true;
                     explanationBtn.classList.add('disabled-no-answer');
+                    if (warningElement) {
+                        warningElement.classList.add('show');
+                    }
+                }
+            } else if (explanationBtn && explanationBtn.classList.contains('flip-toggle-btn')) {
+                // If button has been upgraded to toggle button, keep it enabled if answer exists
+                if (isAnswered) {
+                    explanationBtn.disabled = false;
+                    if (warningElement) {
+                        warningElement.classList.remove('show');
+                    }
+                } else {
+                    // Only disable if no answer
+                    explanationBtn.disabled = true;
                     if (warningElement) {
                         warningElement.classList.add('show');
                     }
@@ -4075,6 +4279,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
+            // Validate that all answered questions have self-assessments
+            const missingAssessments = [];
+            Object.keys(answersData).forEach(function(questionId) {
+                const assessmentInput = document.getElementById(`assessment_${questionId}`);
+                if (!assessmentInput || !assessmentInput.value) {
+                    missingAssessments.push(parseInt(questionId));
+                }
+            });
+            
+            if (missingAssessments.length > 0) {
+                // Sort question numbers for better user experience
+                missingAssessments.sort((a, b) => a - b);
+                const questionNumbers = missingAssessments.map(qId => {
+                    // Find the question number based on question ID
+                    const indicator = document.querySelector(`[data-question-id="${qId}"]`);
+                    if (indicator) {
+                        return indicator.getAttribute('data-question') || qId;
+                    }
+                    return qId;
+                });
+                
+                alert(`Silakan pilih penilaian diri (Salah/Hampir Benar/Benar) untuk soal yang belum dinilai.\n\nUntuk melihat opsi penilaian, klik "Lihat Penjelasan" pada soal yang sudah dijawab.\n\nSoal yang belum dinilai: ${questionNumbers.join(', ')}`);
+                return;
+            }
+            
             const confirmSubmit = confirm(`Anda telah menjawab ${actualAnsweredCount} dari ${totalQuestions} pertanyaan. Yakin ingin submit sekarang?`);
             if (!confirmSubmit) {
                 return;
@@ -4094,21 +4323,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 finalFormData.append(`answers[${questionId}]`, answersData[questionId]);
             });
             
-            // Add self assessments if any
-            allTextareas.forEach(function(textarea) {
-                if (textarea.name && textarea.name.includes('self_assessment[') && textarea.value) {
-                    finalFormData.append(textarea.name, textarea.value);
+            // Add self assessments - collect all assessment values correctly
+            const allAssessmentInputs = document.querySelectorAll('input[name^="self_assessment["]');
+            allAssessmentInputs.forEach(function(input) {
+                if (input.value) {
+                    finalFormData.append(input.name, input.value);
                 }
             });
             
-            // Add default self-assessment for answers that don't have explicit assessment
+            // Also check hidden assessment inputs by ID
             Object.keys(answersData).forEach(function(questionId) {
                 const assessmentInput = document.getElementById(`assessment_${questionId}`);
-                if (!assessmentInput || !assessmentInput.value) {
-                    // Default to 'benar' (correct) for answered questions without explicit assessment
-                    finalFormData.append(`self_assessment[${questionId}]`, 'benar');
+                if (assessmentInput && assessmentInput.value) {
+                    finalFormData.append(`self_assessment[${questionId}]`, assessmentInput.value);
                 }
             });
+            
+            // Do NOT add default self-assessment values - let the backend handle missing assessments
             
             // Clear localStorage
             answerInputs.forEach(function(input) {
@@ -4225,13 +4456,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (progress.explanationViewed) {
                 Object.keys(progress.explanationViewed).forEach(questionId => {
                     if (progress.explanationViewed[questionId]) {
-                        // Find and disable the explanation button
+                        // Update the explanation button to show it can be clicked again
                         const btn = document.querySelector(`[data-question-id="${questionId}"].show-explanation-btn`);
                         if (btn) {
-                            btn.disabled = true;
-                            btn.innerHTML = '<i class="fas fa-check"></i> Penjelasan Ditampilkan';
+                            btn.disabled = false; // Keep it enabled for repeated use
+                            btn.innerHTML = '<i class="fas fa-eye"></i> Lihat Penjelasan Lagi';
                             btn.classList.remove('btn-outline', 'disabled-no-answer');
-                            btn.classList.add('btn-success');
+                            btn.classList.add('flip-toggle-btn'); // Use our new styling
                         }
                         
                         // Hide warning
@@ -4291,6 +4522,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize quiz after DOM is ready
     initializeQuiz();
     
+    // Navigation toggle functionality
+    window.toggleNavigation = function() {
+        const nav = document.getElementById('questionStatusNav');
+        const icon = document.getElementById('toggleIcon');
+        
+        if (nav.classList.contains('collapsed')) {
+            nav.classList.remove('collapsed');
+            icon.className = 'fas fa-minus';
+        } else {
+            nav.classList.add('collapsed');
+            icon.className = 'fas fa-plus';
+        }
+    };
+    
     // Define showNextExplanation function and make it globally accessible
     window.showNextExplanation = function(questionId) {
         // Find current question index
@@ -4346,6 +4591,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Ensure navigation is visible for the new question
                 ensureNavigationVisibility();
+                
+                // Scroll to top when navigating to next question
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             }
         } else {
             // If this is the last question, show the quiz navigation again

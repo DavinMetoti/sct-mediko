@@ -303,15 +303,12 @@ class MedMasteryController extends Controller
         foreach ($validAnswers as $questionId => $answerText) {
             $selfAssessment = $selfAssessments[$questionId] ?? null;
             
-            // If no self-assessment provided but user answered, assume it's correct
-            if (empty($selfAssessment) && !empty(trim($answerText))) {
-                $selfAssessment = 'benar'; // Default to correct for answered questions
-                Log::info('Applied default self-assessment', [
-                    'question_id' => $questionId,
-                    'original_assessment' => $selfAssessments[$questionId] ?? 'NULL',
-                    'applied_assessment' => $selfAssessment
-                ]);
-            }
+            // Log the self-assessment that was actually received
+            Log::info('Processing question assessment', [
+                'question_id' => $questionId,
+                'received_assessment' => $selfAssessment,
+                'answer_text_preview' => substr($answerText, 0, 50) . '...'
+            ]);
             
             $questionScore = $this->calculateQuestionScore($selfAssessment);
             $totalScore += $questionScore;
@@ -379,43 +376,43 @@ class MedMasteryController extends Controller
     
     /**
      * Calculate score for individual question based on self-assessment
-     * If no self-assessment is provided but answer exists, give partial credit
+     * If no self-assessment is provided, require user to assess before submitting
      */
     private function calculateQuestionScore($selfAssessment)
     {
         switch ($selfAssessment) {
             case 'benar':
-                return 1.0;     // Full score
+                return 1.0;     // Full score (100%)
             case 'hampir_benar':
-                return 0.5;     // Half score
+                return 0.5;     // Half score (50%)
             case 'salah':
-                return 0.0;     // No score
+                return 0.0;     // No score (0%)
             case null:
             case '':
             default:
-                // If no self-assessment provided but answer exists, give default partial credit
-                return 0.7;     // Default score for answered but not self-assessed questions
+                // If no self-assessment provided, assign minimal score to encourage proper assessment
+                return 0.0;     // No score for unevaluated answers
         }
     }
     
     /**
      * Evaluate answer based on self-assessment
-     * If no self-assessment is provided but answer exists, consider as correct
+     * If no self-assessment is provided, consider as incorrect to encourage proper assessment
      */
     private function evaluateAnswer($selfAssessment)
     {
         switch ($selfAssessment) {
             case 'benar':
-                return true;
+                return true;    // Fully correct
             case 'hampir_benar':
-                return true; // Consider as partially correct
+                return true;    // Partially correct (but still considered as "correct" in boolean evaluation)
             case 'salah':
-                return false;
+                return false;   // Incorrect
             case null:
             case '':
             default:
-                // If no self-assessment provided but answer exists, consider as correct
-                return true;
+                // If no self-assessment provided, consider as incorrect to encourage assessment
+                return false;
         }
     }
 
