@@ -412,37 +412,26 @@
     <div class="score-section">
         <div class="final-score">{{ number_format($answer->score ?? 0, 1) }}</div>
         <div class="score-label">Skor Akhir (dari 100)</div>
-    </div>
-    
-    <!-- Summary Info -->
-    <div class="summary-info">
-        <h4>
-            <i class="fas fa-chart-line"></i>
-            Ringkasan Hasil
-        </h4>
-        <div class="summary-grid">
-            <div class="summary-item">
-                <div class="summary-value">{{ $answer->answerDetails->count() }}</div>
-                <div class="summary-label">Soal Dijawab</div>
+        <div style="margin-top:1.2rem;display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;">
+            @php
+                $benar = $answer->answerDetails->where('self_assessment', 'benar')->count();
+                $hampir = $answer->answerDetails->where('self_assessment', 'hampir_benar')->count();
+                $salah = $answer->answerDetails->where('self_assessment', 'salah')->count();
+            @endphp
+            <div class="assessment-badge assessment-benar" style="font-size:1rem;min-width:120px;justify-content:center;">
+                <i class="fas fa-check-circle"></i> Benar: <strong>{{ $benar }}</strong>
             </div>
-            <div class="summary-item">
-                <div class="summary-value">{{ $answer->total_questions }}</div>
-                <div class="summary-label">Total Soal</div>
+            <div class="assessment-badge assessment-hampir" style="font-size:1rem;min-width:120px;justify-content:center;">
+                <i class="fas fa-adjust"></i> Hampir Benar: <strong>{{ $hampir }}</strong>
             </div>
-            <div class="summary-item">
-                <div class="summary-value">{{ number_format(($answer->answerDetails->count() / $answer->total_questions) * 100, 1) }}%</div>
-                <div class="summary-label">Tingkat Kelengkapan</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">{{ number_format($answer->answerDetails->sum('score'), 1) }}</div>
-                <div class="summary-label">Total Poin</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-value">{{ $answer->created_at->format('H:i') }}</div>
-                <div class="summary-label">Waktu Selesai</div>
+            <div class="assessment-badge assessment-salah" style="font-size:1rem;min-width:120px;justify-content:center;">
+                <i class="fas fa-times-circle"></i> Salah: <strong>{{ $salah }}</strong>
             </div>
         </div>
     </div>
+    
+    <!-- Summary Info -->
+    <!-- Summary Info removed as requested -->
     
     <!-- Statistics -->
     <div class="stats-grid">

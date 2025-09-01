@@ -538,23 +538,26 @@
         color: white;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
-    
-    .question-indicator.answered {
+
+    .question-indicator.correct {
         border-color: #10b981;
         background: #10b981;
         color: white;
     }
-    
-    .question-indicator.unanswered {
+    .question-indicator.partial {
+        border-color: #f59e0b;
+        background: #f59e0b;
+        color: white;
+    }
+    .question-indicator.wrong {
         border-color: #ef4444;
         background: #ef4444;
         color: white;
     }
-    
-    .question-indicator.incomplete {
-        border-color: #f59e0b;
-        background: #f59e0b;
-        color: white;
+    .question-indicator.unanswered {
+        border-color: #e5e7eb;
+        background: #e5e7eb;
+        color: #6b7280;
     }
     
     .status-legend {
@@ -3113,7 +3116,7 @@
     
     /* Layout Improvements - Fixed Sidebar & Compact Design */
     .quiz-container {
-        margin-right: 300px;
+        margin-left: 300px;
         min-height: 100vh;
         padding: 1rem;
         background: #f8fafc;
@@ -3122,7 +3125,7 @@
     .question-status-nav {
         position: fixed !important;
         top: 20px !important;
-        right: 20px !important;
+        left: 20px !important;
         width: 280px !important;
         max-height: 80vh !important;
         overflow-y: auto !important;
@@ -3163,7 +3166,7 @@
     .nav-toggle-btn {
         position: absolute;
         top: 10px;
-        right: 10px;
+        left: 10px;
         background: #f8fafc;
         border: 1px solid #e2e8f0;
         border-radius: 6px;
@@ -3207,11 +3210,16 @@
     /* Responsive Layout */
     @media (max-width: 1200px) {
         .question-status-nav {
-            position: static !important;
-            width: 100% !important;
-            margin-right: 0 !important;
-            margin-bottom: 1.5rem !important;
+            left: 0 !important;
+            width: 220px !important;
         }
+        .quiz-container {
+            margin-left: 220px !important;
+        }
+        .nav-toggle-btn {
+            left: 0 !important;
+        }
+    }
         
         .quiz-container {
             margin-right: 0 !important;
@@ -3556,13 +3564,15 @@
                 <i class="fas fa-arrow-left"></i>
                 Kembali ke Kategori
             </a>
-            
+            <a href="{{ route('dashboard') }}" class="btn btn-outline ms-2">
+                <i class="fas fa-home"></i>
+                Kembali ke Dashboard
+            </a>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-outline" id="saveProgressBtn">
                     <i class="fas fa-save"></i>
                     Simpan Progress
                 </button>
-                
                 <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
                     <i class="fas fa-redo"></i>
                     Reset Quiz
@@ -3685,27 +3695,28 @@ document.addEventListener('DOMContentLoaded', function() {
             indicators.forEach(indicator => {
                 const questionNum = parseInt(indicator.getAttribute('data-question'));
                 const questionId = indicator.getAttribute('data-question-id');
-                
                 if (!questionNum || !questionId) {
                     return;
                 }
-                
                 // Remove all status classes
-                indicator.classList.remove('current', 'answered', 'unanswered', 'incomplete');
-                
+                indicator.classList.remove('current', 'answered', 'unanswered', 'incomplete', 'correct', 'partial', 'wrong');
                 if (questionNum === currentQuestion) {
                     indicator.classList.add('current');
+                }
+                // Determine self-assessment value
+                const assessmentInput = document.getElementById(`assessment_${questionId}`);
+                let assessmentValue = '';
+                if (assessmentInput && assessmentInput.value) {
+                    assessmentValue = assessmentInput.value;
+                }
+                if (assessmentValue === 'benar') {
+                    indicator.classList.add('correct');
+                } else if (assessmentValue === 'hampir_benar') {
+                    indicator.classList.add('partial');
+                } else if (assessmentValue === 'salah') {
+                    indicator.classList.add('wrong');
                 } else {
-                    // Check both localStorage and actual input value
-                    const inputElement = document.querySelector(`[data-question-id="${questionId}"]`);
-                    const hasAnswer = (answers[questionId] && answers[questionId].trim().length > 0) || 
-                                     (inputElement && inputElement.value && inputElement.value.trim().length > 0);
-                    
-                    if (hasAnswer) {
-                        indicator.classList.add('answered');
-                    } else {
-                        indicator.classList.add('unanswered');
-                    }
+                    indicator.classList.add('unanswered');
                 }
             });
             
