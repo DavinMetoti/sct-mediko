@@ -3243,6 +3243,451 @@
             min-height: 250px !important;
         }
     }
+    
+    @media (max-width: 575.98px) {
+        .quiz-container {
+            max-width: 100%;
+            padding: 0.75rem 0.5rem;
+        }
+        
+        .quiz-header {
+            padding: 1rem 0.75rem;
+            text-align: center;
+        }
+        
+        .quiz-title {
+            font-size: 1.25rem;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+        
+        .quiz-info {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .quiz-info-item {
+            font-size: 0.8rem;
+            padding: 0.35rem 0.7rem;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .question-card {
+            padding: 1rem 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .question-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.75rem;
+        }
+        
+        .question-number {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+        }
+        
+        .question-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            text-align: left;
+        }
+        
+        .answer-input {
+            min-height: 90px;
+            font-size: 0.9rem;
+            padding: 0.75rem;
+        }
+        
+        .quiz-navigation {
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: stretch;
+        }
+        
+        .quiz-navigation .d-flex {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .quiz-timer {
+            position: static;
+            width: 100%;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding: 0.75rem;
+        }
+        
+        .timer-display {
+            font-size: 1rem;
+        }
+        
+        .question-indicators {
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        
+        .question-indicator {
+            width: 28px;
+            height: 28px;
+            font-size: 0.75rem;
+        }
+        
+        .quick-nav-buttons {
+            justify-content: center;
+            gap: 0.35rem;
+            flex-wrap: wrap;
+        }
+        
+        .quick-nav-btn {
+            font-size: 0.7rem;
+            padding: 0.35rem 0.6rem;
+            flex: 1;
+            min-width: auto;
+        }
+        
+        .status-legend {
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            font-size: 0.7rem;
+        }
+        
+        .question-navigation {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .nav-info {
+            order: -1;
+            text-align: center;
+        }
+        
+        .question-counter {
+            font-size: 0.95rem;
+        }
+        
+        .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .btn-nav {
+            min-width: auto;
+        }
+        
+        .pdf-viewer {
+            height: 250px;
+        }
+        
+        .answer-options {
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        
+        .answer-option {
+            min-width: auto;
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .explanation-section {
+            padding: 1rem 0.75rem;
+        }
+        
+        .explanation-header {
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        .progress-text {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .quiz-progress {
+            padding: 0.75rem;
+        }
+        
+        .question-status-nav {
+            padding: 0.75rem;
+        }
+        
+        .status-nav-header {
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .session-info {
+            padding: 0.75rem;
+            text-align: center;
+        }
+        
+        .session-info-text {
+            font-size: 0.85rem;
+        }
+        
+        .session-info-text small {
+            font-size: 0.75rem;
+        }
+        
+        .flip-card-container {
+            min-height: 350px;
+        }
+        
+        .flip-card-front, .flip-card-back {
+            min-height: 350px;
+        }
+    }
+    
+    /* Medium devices (tablets, 768px and up) */
+    @media (min-width: 576px) and (max-width: 767.98px) {
+        .quiz-container {
+            max-width: 95%;
+            padding: 1rem 0.75rem;
+        }
+        
+        .quiz-header {
+            padding: 1.25rem 1rem;
+        }
+        
+        .quiz-title {
+            font-size: 1.4rem;
+        }
+        
+        .quiz-info {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .quiz-info-item {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+        }
+        
+        .question-card {
+            padding: 1.25rem 1rem;
+        }
+        
+        .question-header {
+            flex-direction: row;
+            align-items: center;
+        }
+        
+        .question-number {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+        }
+        
+        .question-text {
+            font-size: 1rem;
+        }
+        
+        .answer-input {
+            min-height: 100px;
+            font-size: 0.95rem;
+            padding: 0.875rem;
+        }
+        
+        .quiz-timer {
+            position: static;
+            width: 100%;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .question-indicators {
+            justify-content: center;
+            gap: 0.3rem;
+        }
+        
+        .question-indicator {
+            width: 32px;
+            height: 32px;
+            font-size: 0.8rem;
+        }
+        
+        .pdf-viewer {
+            height: 300px;
+        }
+        
+        .answer-options {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .answer-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.75rem;
+        }
+    }
+    
+    /* Large devices (desktops, 992px and up) */
+    @media (min-width: 768px) and (max-width: 991.98px) {
+        .quiz-container {
+            max-width: 90%;
+            padding: 1.5rem 1rem;
+        }
+        
+        .quiz-timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .question-indicators {
+            gap: 0.4rem;
+        }
+        
+        .question-indicator {
+            width: 36px;
+            height: 36px;
+            font-size: 0.85rem;
+        }
+    }
+    
+    /* Extra large devices (large desktops, 1200px and up) */
+    @media (min-width: 992px) {
+        .quiz-container {
+            max-width: 1000px;
+            padding: 2rem 1rem;
+        }
+        
+        .quiz-timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .question-indicators {
+            gap: 0.5rem;
+        }
+        
+        .question-indicator {
+            width: 40px;
+            height: 40px;
+            font-size: 0.9rem;
+        }
+        
+        .pdf-viewer {
+            height: 400px;
+        }
+    }
+    
+    /* Touch-friendly improvements for mobile */
+    @media (hover: none) and (pointer: coarse) {
+        .btn {
+            min-height: 44px; /* Touch target minimum size */
+        }
+        
+        .question-indicator {
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        .answer-option {
+            min-height: 44px;
+        }
+        
+        .quick-nav-btn {
+            min-height: 40px;
+        }
+    }
+    
+    /* Landscape orientation adjustments for mobile */
+    @media screen and (max-width: 767px) and (orientation: landscape) {
+        .quiz-header {
+            padding: 1rem;
+        }
+        
+        .quiz-title {
+            font-size: 1.2rem;
+        }
+        
+        .question-card {
+            padding: 1rem;
+        }
+        
+        .pdf-viewer {
+            height: 200px;
+        }
+        
+        .flip-card-container {
+            min-height: 300px;
+        }
+        
+        .flip-card-front, .flip-card-back {
+            min-height: 300px;
+        }
+    }
+    
+    /* Navigation toggle button for mobile */
+    .nav-toggle-btn {
+        display: none;
+        background: none;
+        border: 1px solid #e2e8f0;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        color: #64748b;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        z-index: 10;
+    }
+    
+    .nav-toggle-btn:hover {
+        border-color: #cbd5e0;
+        background: #f8fafc;
+    }
+    
+    /* Collapsed navigation state */
+    .question-status-nav.collapsed .question-indicators,
+    .question-status-nav.collapsed .quick-nav-buttons,
+    .question-status-nav.collapsed .status-legend {
+        display: none;
+    }
+    
+    .question-status-nav.collapsed {
+        padding: 0.5rem;
+    }
+    
+    .question-status-nav.collapsed .status-nav-header {
+        margin-bottom: 0;
+        font-size: 0.85rem;
+    }
+    
+    /* Show toggle button on mobile */
+    @media (max-width: 767px) {
+        .nav-toggle-btn {
+            display: block;
+        }
+        
+        .question-status-nav {
+            position: relative;
+        }
+    }
 </style>
 
 <div class="quiz-container">
@@ -3296,7 +3741,7 @@
     
     <!-- Question Status Navigation -->
     <div class="question-status-nav" id="questionStatusNav">
-        <button class="nav-toggle-btn" id="navToggleBtn" onclick="toggleNavigation()">
+        <button class="nav-toggle-btn d-md-none" id="navToggleBtn" onclick="toggleNavigation()">
             <i class="fas fa-minus" id="toggleIcon"></i>
         </button>
         
@@ -3318,16 +3763,16 @@
         
         <div class="quick-nav-buttons">
             <button type="button" class="quick-nav-btn" id="goToFirstUnanswered">
-                <i class="fas fa-exclamation-triangle"></i>
-                Pertama Belum Dijawab
+                <i class="fas fa-exclamation-triangle d-none d-sm-inline"></i>
+                <span class="d-none d-sm-inline">Pertama</span> Belum Dijawab
             </button>
             <button type="button" class="quick-nav-btn" id="goToNextUnanswered">
-                <i class="fas fa-arrow-right"></i>
-                Berikutnya Belum Dijawab
+                <i class="fas fa-arrow-right d-none d-sm-inline"></i>
+                <span class="d-none d-sm-inline">Berikutnya</span> Belum Dijawab
             </button>
             <button type="button" class="quick-nav-btn" id="goToLastAnswered">
-                <i class="fas fa-check"></i>
-                Terakhir Dijawab
+                <i class="fas fa-check d-none d-sm-inline"></i>
+                <span class="d-none d-sm-inline">Terakhir</span> Dijawab
             </button>
         </div>
         
@@ -3397,11 +3842,12 @@
                         <div class="explanation-trigger">
                             <button type="button" class="btn btn-outline show-explanation-btn disabled-no-answer" data-question-id="{{ $question->id }}" disabled>
                                 <i class="fas fa-eye"></i>
-                                Lihat Penjelasan
+                                <span class="d-none d-sm-inline">Lihat</span> Penjelasan
                             </button>
                             <div class="answer-warning show" id="warning-{{ $question->id }}">
                                 <i class="fas fa-exclamation-triangle"></i>
-                                Silakan jawab pertanyaan terlebih dahulu sebelum melihat penjelasan
+                                <span class="d-none d-sm-inline">Silakan jawab pertanyaan terlebih dahulu sebelum melihat penjelasan</span>
+                                <span class="d-sm-none">Jawab dulu sebelum lihat penjelasan</span>
                             </div>
                         </div>
                         @endif
@@ -3410,19 +3856,21 @@
                         <div class="question-navigation">
                             <button type="button" class="btn btn-outline btn-nav" id="prevBtn" {{ $index === 0 ? 'disabled' : '' }}>
                                 <i class="fas fa-arrow-left"></i>
-                                Sebelumnya
+                                <span class="d-none d-sm-inline">Sebelumnya</span>
+                                <span class="d-sm-none">Prev</span>
                             </button>
                             
                             <div class="nav-info">
                                 <div class="question-counter">
-                                    Pertanyaan {{ $index + 1 }} dari {{ $questions->count() }}
+                                    <span class="d-none d-sm-inline">Pertanyaan</span> {{ $index + 1 }} dari {{ $questions->count() }}
                                 </div>
                             </div>
                             
                             <div class="next-button-container" id="nextContainer-{{ $question->id }}" style="{{ $question->explanation_pdf_path ? 'display: none;' : '' }}">
                                 @if($index < $questions->count() - 1)
                                     <button type="button" class="btn btn-primary btn-nav" id="nextBtn">
-                                        Selanjutnya
+                                        <span class="d-none d-sm-inline">Selanjutnya</span>
+                                        <span class="d-sm-none">Next</span>
                                         <i class="fas fa-arrow-right"></i>
                                     </button>
                                 @endif
@@ -3560,18 +4008,20 @@
         
         <!-- Global Navigation -->
         <div class="quiz-navigation">
-            <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
-                <i class="fas fa-arrow-left"></i>
-                Kembali ke Kategori
-            </a>
-            <a href="{{ route('medmastery.index') }}" class="btn btn-outline ms-2">
-                <i class="fas fa-home"></i>
-                Kembali ke Dashboard
-            </a>
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i>
+                    <span class="d-none d-sm-inline">Kembali ke</span> Kategori
+                </a>
+                <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
+                    <i class="fas fa-home"></i>
+                    <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
+                </a>
+            </div>
+            <div class="d-flex flex-column flex-sm-row gap-2">
                 <button type="button" class="btn btn-outline" id="saveProgressBtn">
                     <i class="fas fa-save"></i>
-                    Simpan Progress
+                    <span class="d-none d-sm-inline">Simpan</span> Progress
                 </button>
                 <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
                     <i class="fas fa-redo"></i>
@@ -3586,6 +4036,29 @@
     // PHP data passed to JavaScript
     const totalQuestions = {{ json_encode($questions->count()) }};
     const categoryId = {{ json_encode($category->id) }};
+    
+    // Toggle navigation function for mobile
+    function toggleNavigation() {
+        const nav = document.getElementById('questionStatusNav');
+        const toggleBtn = document.getElementById('navToggleBtn');
+        const toggleIcon = document.getElementById('toggleIcon');
+        
+        if (nav.classList.contains('collapsed')) {
+            nav.classList.remove('collapsed');
+            toggleIcon.className = 'fas fa-minus';
+        } else {
+            nav.classList.add('collapsed');
+            toggleIcon.className = 'fas fa-plus';
+        }
+    }
+    
+    // Confirm restart quiz function
+    function confirmRestartQuiz() {
+        if (confirm('Apakah Anda yakin ingin mereset quiz? Semua progress akan hilang.')) {
+            localStorage.removeItem('quiz_progress_' + categoryId);
+            location.reload();
+        }
+    }
 </script>
 
 <script>
