@@ -3564,7 +3564,7 @@
                 <i class="fas fa-arrow-left"></i>
                 Kembali ke Kategori
             </a>
-            <a href="{{ route('dashboard') }}" class="btn btn-outline ms-2">
+            <a href="{{ route('medmastery.index') }}" class="btn btn-outline ms-2">
                 <i class="fas fa-home"></i>
                 Kembali ke Dashboard
             </a>
