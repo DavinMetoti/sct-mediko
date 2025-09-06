@@ -333,6 +333,16 @@
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
     }
     
+    /* When placed after number navigation */
+    .question-status-nav + .quiz-navigation {
+        margin-top: 1rem !important;
+        margin-bottom: 2rem !important;
+        border-top: 1px solid #e2e8f0 !important;
+        padding: 1rem 1.5rem !important;
+        background: rgba(248, 250, 252, 0.9) !important;
+        border-radius: 8px !important;
+    }
+    
     .navigation-left {
         display: flex;
         gap: 0.75rem;
@@ -430,6 +440,12 @@
             gap: 1rem !important;
             padding: 1rem !important;
             text-align: center;
+        }
+        
+        /* Mobile styling for navigation after number nav */
+        .question-status-nav + .quiz-navigation {
+            margin: 0.5rem 0 1.5rem 0 !important;
+            padding: 0.75rem 1rem !important;
         }
         
         .navigation-left,
@@ -4128,6 +4144,30 @@
         </div>
     </div>
     
+    <!-- Global Navigation - Moved below number navigation -->
+    <div class="quiz-navigation" style="display: flex;">
+        <div class="d-flex flex-column flex-sm-row gap-2">
+            <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i>
+                <span class="d-none d-sm-inline">Kembali ke</span> Kategori
+            </a>
+            <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
+                <i class="fas fa-home"></i>
+                <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
+            </a>
+        </div>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+            <button type="button" class="btn btn-outline" id="saveProgressBtn">
+                <i class="fas fa-save"></i>
+                <span class="d-none d-sm-inline">Simpan</span> Progress
+            </button>
+            <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
+                <i class="fas fa-redo"></i>
+                Reset Quiz
+            </button>
+        </div>
+    </div>
+    
     <!-- Main Quiz Content -->
     <div class="quiz-content">
         <!-- Quiz Header -->
@@ -4382,30 +4422,6 @@
                 </div>
             </div>
             @endforeach
-            
-            <!-- Global Navigation -->
-            <div class="quiz-navigation">
-                <div class="d-flex flex-column flex-sm-row gap-2">
-                    <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i>
-                        <span class="d-none d-sm-inline">Kembali ke</span> Kategori
-                    </a>
-                    <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
-                        <i class="fas fa-home"></i>
-                        <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
-                    </a>
-                </div>
-                <div class="d-flex flex-column flex-sm-row gap-2">
-                    <button type="button" class="btn btn-outline" id="saveProgressBtn">
-                        <i class="fas fa-save"></i>
-                        <span class="d-none d-sm-inline">Simpan</span> Progress
-                    </button>
-                    <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
-                        <i class="fas fa-redo"></i>
-                        Reset Quiz
-                    </button>
-                </div>
-            </div>
         </form>
     </div>
 </div>
