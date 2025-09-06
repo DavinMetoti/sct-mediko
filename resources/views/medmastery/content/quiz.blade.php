@@ -3114,578 +3114,659 @@
         color: white;
     }
     
-    /* Layout Improvements - Fixed Sidebar & Compact Design */
+    /* Improved Layout - Responsive Sidebar & Clean Design */
     .quiz-container {
-        margin-left: 300px;
-        min-height: 100vh;
+        max-width: 1400px;
+        margin: 0 auto;
         padding: 1rem;
         background: #f8fafc;
+        min-height: 100vh;
+        transition: all 0.3s ease;
     }
     
     .question-status-nav {
-        position: fixed !important;
-        top: 20px !important;
-        left: 20px !important;
-        width: 280px !important;
-        max-height: 80vh !important;
-        overflow-y: auto !important;
-        z-index: 1000 !important;
-        transition: all 0.3s ease !important;
-        margin-bottom: 0 !important;
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        position: sticky;
+        top: 20px;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+    
+    /* Desktop Sidebar Layout */
+    @media (min-width: 1200px) {
+        .quiz-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 2rem;
+            padding: 2rem 1rem;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1600px;
+        }
+        
+        .question-status-nav {
+            position: fixed;
+            top: 20px;
+            left: calc((100vw - 1600px) / 2 + 20px);
+            width: 280px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            margin-bottom: 0;
+        }
+        
+        .quiz-content {
+            grid-column: 2;
+        }
+        
+        .quiz-timer {
+            position: fixed;
+            top: 20px;
+            right: calc((100vw - 1600px) / 2 + 20px);
+            z-index: 1001;
+        }
+    }
+    
+    @media (min-width: 992px) and (max-width: 1199px) {
+        .quiz-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem 1rem;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1400px;
+        }
+        
+        .question-status-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 260px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            margin-bottom: 0;
+        }
+        
+        .quiz-content {
+            grid-column: 2;
+            margin-left: 280px;
+        }
+        
+        .quiz-timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
     }
     
     .question-status-nav.collapsed {
-        width: 60px !important;
-        padding: 0.5rem !important;
+        width: 70px;
+        padding: 0.5rem;
     }
     
     .question-status-nav.collapsed .status-nav-header,
     .question-status-nav.collapsed .status-legend,
     .question-status-nav.collapsed .quick-nav-buttons {
-        display: none !important;
+        display: none;
     }
     
     .question-status-nav.collapsed .question-indicators {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0.25rem !important;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        align-items: center;
     }
     
     .question-status-nav.collapsed .question-indicator {
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 40px !important;
-        border-radius: 50% !important;
-        font-size: 0.8rem !important;
-        padding: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        border-radius: 50%;
+        font-size: 0.9rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .nav-toggle-btn {
         position: absolute;
         top: 10px;
-        left: 10px;
+        right: 10px;
         background: #f8fafc;
         border: 1px solid #e2e8f0;
-        border-radius: 6px;
-        width: 30px;
-        height: 30px;
-        display: flex;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: none;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: #64748b;
         transition: all 0.2s ease;
+        z-index: 10;
     }
     
     .nav-toggle-btn:hover {
         background: #e2e8f0;
         color: #374151;
+        transform: scale(1.05);
     }
     
-    /* Compact Answer Input */
+    /* Improved Answer Input */
     .answer-input {
-        min-height: 80px !important;
-        max-height: 120px !important;
+        min-height: 100px;
+        max-height: 200px;
         resize: vertical;
+        font-family: system-ui, -apple-system, sans-serif;
+        line-height: 1.5;
     }
     
-    /* Compact Flip Card */
+    /* Better Flip Card Design */
     .flip-card {
-        min-height: 300px !important;
+        min-height: 400px;
+        border-radius: 16px;
+        overflow: hidden;
     }
     
     .flip-card-front, .flip-card-back {
-        min-height: 300px !important;
+        min-height: 400px;
+        border-radius: 16px;
     }
     
-    /* Compact PDF Viewer */
+    /* Enhanced PDF Viewer */
     .pdf-viewer {
-        height: 300px !important;
+        height: 500px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    
-    /* Responsive Layout */
-    @media (max-width: 1200px) {
+    /* Mobile and Tablet Responsive Design */
+    @media (max-width: 991px) {
+        .quiz-container {
+            display: block !important;
+            grid-template-columns: none !important;
+            padding: 1rem 0.75rem !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+        }
+        
+        .quiz-content {
+            margin-left: 0 !important;
+            grid-column: unset !important;
+        }
+        
         .question-status-nav {
-            left: 0 !important;
-            width: 220px !important;
-        }
-        .quiz-container {
-            margin-left: 220px !important;
-        }
-        .nav-toggle-btn {
-            left: 0 !important;
-        }
-    }
-        
-        .quiz-container {
-            margin-right: 0 !important;
+            position: relative !important;
+            left: unset !important;
+            top: unset !important;
+            width: 100% !important;
+            max-height: none !important;
+            margin-bottom: 1.5rem !important;
         }
         
+        .quiz-timer {
+            position: relative !important;
+            left: unset !important;
+            top: unset !important;
+            right: unset !important;
+            margin-bottom: 1rem;
+            width: 100%;
+            text-align: center;
+        }
+        
         .nav-toggle-btn {
-            display: none !important;
+            display: flex !important;
         }
     }
     
     @media (max-width: 768px) {
         .quiz-container {
-            padding: 0.5rem !important;
-        }
-        
-        .flip-card {
-            min-height: 250px !important;
-        }
-        
-        .flip-card-front, .flip-card-back {
-            min-height: 250px !important;
-        }
-    }
-    
-    @media (max-width: 575.98px) {
-        .quiz-container {
-            max-width: 100%;
-            padding: 0.75rem 0.5rem;
+            padding: 0.75rem 0.5rem !important;
         }
         
         .quiz-header {
-            padding: 1rem 0.75rem;
+            padding: 1.25rem 1rem !important;
             text-align: center;
         }
         
         .quiz-title {
-            font-size: 1.25rem;
-            line-height: 1.3;
-            margin-bottom: 0.75rem;
+            font-size: 1.4rem !important;
+            line-height: 1.3 !important;
         }
         
         .quiz-info {
-            flex-direction: column;
-            gap: 0.5rem;
+            flex-direction: column !important;
+            gap: 0.75rem !important;
             align-items: center;
         }
         
         .quiz-info-item {
-            font-size: 0.8rem;
-            padding: 0.35rem 0.7rem;
-            width: 100%;
-            justify-content: center;
+            width: 100% !important;
+            justify-content: center !important;
+            font-size: 0.9rem !important;
+            padding: 0.6rem 1rem !important;
         }
         
         .question-card {
-            padding: 1rem 0.75rem;
-            margin-bottom: 1.25rem;
+            padding: 1.25rem 1rem !important;
+            margin-bottom: 1.5rem !important;
         }
         
         .question-header {
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 1rem !important;
             text-align: center;
-            gap: 0.75rem;
         }
         
         .question-number {
-            width: 32px;
-            height: 32px;
-            font-size: 0.9rem;
+            width: 50px !important;
+            height: 50px !important;
+            font-size: 1.2rem !important;
         }
         
         .question-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            text-align: left;
+            font-size: 1rem !important;
+            text-align: left !important;
         }
         
         .answer-input {
-            min-height: 90px;
-            font-size: 0.9rem;
-            padding: 0.75rem;
+            min-height: 120px !important;
+            font-size: 1rem !important;
+            padding: 1rem !important;
+        }
+        
+        .question-indicators {
+            justify-content: center !important;
+            gap: 0.5rem !important;
+        }
+        
+        .question-indicator {
+            width: 45px !important;
+            height: 45px !important;
+            font-size: 0.9rem !important;
         }
         
         .quiz-navigation {
-            flex-direction: column;
-            gap: 0.75rem;
-            align-items: stretch;
-        }
-        
-        .quiz-navigation .d-flex {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .quiz-timer {
-            position: static;
-            width: 100%;
-            margin-bottom: 1rem;
-            text-align: center;
-            padding: 0.75rem;
-        }
-        
-        .timer-display {
-            font-size: 1rem;
-        }
-        
-        .question-indicators {
-            justify-content: center;
-            gap: 0.25rem;
-        }
-        
-        .question-indicator {
-            width: 28px;
-            height: 28px;
-            font-size: 0.75rem;
-        }
-        
-        .quick-nav-buttons {
-            justify-content: center;
-            gap: 0.35rem;
-            flex-wrap: wrap;
-        }
-        
-        .quick-nav-btn {
-            font-size: 0.7rem;
-            padding: 0.35rem 0.6rem;
-            flex: 1;
-            min-width: auto;
-        }
-        
-        .status-legend {
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .legend-item {
-            font-size: 0.7rem;
-        }
-        
-        .question-navigation {
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .nav-info {
-            order: -1;
-            text-align: center;
-        }
-        
-        .question-counter {
-            font-size: 0.95rem;
+            flex-direction: column !important;
+            gap: 1rem !important;
         }
         
         .btn {
-            width: 100%;
-            justify-content: center;
-            padding: 0.75rem;
-            font-size: 0.9rem;
+            width: 100% !important;
+            padding: 0.875rem !important;
+            font-size: 1rem !important;
         }
         
-        .btn-nav {
-            min-width: auto;
+        .flip-card {
+            min-height: 350px !important;
+        }
+        
+        .flip-card-front, .flip-card-back {
+            min-height: 350px !important;
         }
         
         .pdf-viewer {
-            height: 250px;
+            height: 350px !important;
         }
         
         .answer-options {
-            flex-direction: column;
-            gap: 0.6rem;
+            flex-direction: column !important;
+            gap: 0.75rem !important;
         }
         
         .answer-option {
-            min-width: auto;
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 0.85rem;
+            width: 100% !important;
+            min-width: unset !important;
+            padding: 1rem !important;
+            font-size: 1rem !important;
         }
         
         .explanation-section {
-            padding: 1rem 0.75rem;
+            padding: 1rem !important;
         }
         
-        .explanation-header {
-            font-size: 1rem;
-            text-align: center;
-        }
-        
-        .progress-text {
-            flex-direction: column;
-            text-align: center;
-            gap: 0.25rem;
-            font-size: 0.8rem;
-        }
-        
-        .quiz-progress {
-            padding: 0.75rem;
-        }
-        
-        .question-status-nav {
-            padding: 0.75rem;
-        }
-        
-        .status-nav-header {
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        
-        .session-info {
-            padding: 0.75rem;
-            text-align: center;
-        }
-        
-        .session-info-text {
-            font-size: 0.85rem;
-        }
-        
-        .session-info-text small {
-            font-size: 0.75rem;
-        }
-        
-        .flip-card-container {
-            min-height: 350px;
-        }
-        
-        .flip-card-front, .flip-card-back {
-            min-height: 350px;
-        }
-    }
-    
-    /* Medium devices (tablets, 768px and up) */
-    @media (min-width: 576px) and (max-width: 767.98px) {
-        .quiz-container {
-            max-width: 95%;
-            padding: 1rem 0.75rem;
-        }
-        
-        .quiz-header {
-            padding: 1.25rem 1rem;
-        }
-        
-        .quiz-title {
-            font-size: 1.4rem;
-        }
-        
-        .quiz-info {
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.75rem;
-        }
-        
-        .quiz-info-item {
-            font-size: 0.85rem;
-            padding: 0.4rem 0.8rem;
-        }
-        
-        .question-card {
-            padding: 1.25rem 1rem;
-        }
-        
-        .question-header {
-            flex-direction: row;
-            align-items: center;
-        }
-        
-        .question-number {
-            width: 36px;
-            height: 36px;
-            font-size: 1rem;
-        }
-        
-        .question-text {
-            font-size: 1rem;
-        }
-        
-        .answer-input {
-            min-height: 100px;
-            font-size: 0.95rem;
-            padding: 0.875rem;
-        }
-        
-        .quiz-timer {
-            position: static;
-            width: 100%;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        
-        .question-indicators {
-            justify-content: center;
-            gap: 0.3rem;
-        }
-        
-        .question-indicator {
-            width: 32px;
-            height: 32px;
-            font-size: 0.8rem;
-        }
-        
-        .pdf-viewer {
-            height: 300px;
-        }
-        
-        .answer-options {
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-        
-        .answer-option {
-            flex: 1;
-            min-width: 120px;
-            padding: 0.75rem;
-        }
-    }
-    
-    /* Large devices (desktops, 992px and up) */
-    @media (min-width: 768px) and (max-width: 991.98px) {
-        .quiz-container {
-            max-width: 90%;
-            padding: 1.5rem 1rem;
-        }
-        
-        .quiz-timer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-        }
-        
-        .question-indicators {
-            gap: 0.4rem;
-        }
-        
-        .question-indicator {
-            width: 36px;
-            height: 36px;
-            font-size: 0.85rem;
-        }
-    }
-    
-    /* Extra large devices (large desktops, 1200px and up) */
-    @media (min-width: 992px) {
-        .quiz-container {
-            max-width: 1000px;
-            padding: 2rem 1rem;
-        }
-        
-        .quiz-timer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-        }
-        
-        .question-indicators {
-            gap: 0.5rem;
-        }
-        
-        .question-indicator {
-            width: 40px;
-            height: 40px;
-            font-size: 0.9rem;
-        }
-        
-        .pdf-viewer {
-            height: 400px;
-        }
-    }
-    
-    /* Touch-friendly improvements for mobile */
-    @media (hover: none) and (pointer: coarse) {
-        .btn {
-            min-height: 44px; /* Touch target minimum size */
-        }
-        
-        .question-indicator {
-            min-width: 44px;
-            min-height: 44px;
-        }
-        
-        .answer-option {
-            min-height: 44px;
+        .quick-nav-buttons {
+            justify-content: center !important;
+            flex-wrap: wrap !important;
         }
         
         .quick-nav-btn {
-            min-height: 40px;
+            flex: 1 1 auto !important;
+            min-width: 120px !important;
+            font-size: 0.85rem !important;
+            padding: 0.6rem 0.8rem !important;
+        }
+        
+        .status-legend {
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+            gap: 0.75rem !important;
+        }
+        
+        .legend-item {
+            font-size: 0.85rem !important;
         }
     }
     
-    /* Landscape orientation adjustments for mobile */
-    @media screen and (max-width: 767px) and (orientation: landscape) {
+    @media (max-width: 480px) {
+        .quiz-container {
+            padding: 0.5rem 0.25rem !important;
+        }
+        
         .quiz-header {
-            padding: 1rem;
+            padding: 1rem 0.75rem !important;
         }
         
         .quiz-title {
-            font-size: 1.2rem;
+            font-size: 1.2rem !important;
         }
         
         .question-card {
-            padding: 1rem;
+            padding: 1rem 0.75rem !important;
         }
         
-        .pdf-viewer {
-            height: 200px;
+        .question-number {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 1rem !important;
         }
         
-        .flip-card-container {
-            min-height: 300px;
+        .question-text {
+            font-size: 0.95rem !important;
+        }
+        
+        .answer-input {
+            min-height: 100px !important;
+            font-size: 0.95rem !important;
+            padding: 0.875rem !important;
+        }
+        
+        .question-indicator {
+            width: 38px !important;
+            height: 38px !important;
+            font-size: 0.8rem !important;
+        }
+        
+        .btn {
+            padding: 0.75rem !important;
+            font-size: 0.9rem !important;
+        }
+        
+        .flip-card {
+            min-height: 300px !important;
         }
         
         .flip-card-front, .flip-card-back {
-            min-height: 300px;
+            min-height: 300px !important;
         }
-    }
-    
-    /* Navigation toggle button for mobile */
-    .nav-toggle-btn {
-        display: none;
-        background: none;
-        border: 1px solid #e2e8f0;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-        color: #64748b;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        z-index: 10;
-    }
-    
-    .nav-toggle-btn:hover {
-        border-color: #cbd5e0;
-        background: #f8fafc;
-    }
-    
-    /* Collapsed navigation state */
-    .question-status-nav.collapsed .question-indicators,
-    .question-status-nav.collapsed .quick-nav-buttons,
-    .question-status-nav.collapsed .status-legend {
-        display: none;
-    }
-    
-    .question-status-nav.collapsed {
-        padding: 0.5rem;
-    }
-    
-    .question-status-nav.collapsed .status-nav-header {
-        margin-bottom: 0;
-        font-size: 0.85rem;
-    }
-    
-    /* Show toggle button on mobile */
-    @media (max-width: 767px) {
-        .nav-toggle-btn {
-            display: block;
+        
+        .pdf-viewer {
+            height: 250px !important;
+        }
+        
+        .answer-option {
+            padding: 0.875rem !important;
+            font-size: 0.9rem !important;
+        }
+        
+        .quick-nav-btn {
+            font-size: 0.75rem !important;
+            padding: 0.5rem 0.6rem !important;
+            min-width: 100px !important;
+        }
+        
+        .quiz-progress {
+            padding: 0.75rem !important;
+        }
+        
+        .session-info {
+            padding: 0.75rem 1rem !important;
+            font-size: 0.9rem !important;
         }
         
         .question-status-nav {
-            position: relative;
+            padding: 0.75rem !important;
+        }
+        
+        .explanation-header {
+            font-size: 1rem !important;
+        }
+    }
+    
+    /* Landscape Orientation for Mobile */
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+        .quiz-header {
+            padding: 0.75rem !important;
+        }
+        
+        .quiz-title {
+            font-size: 1.1rem !important;
+        }
+        
+        .question-card {
+            padding: 0.875rem !important;
+        }
+        
+        .pdf-viewer {
+            height: 280px !important;
+        }
+        
+        .flip-card {
+            min-height: 320px !important;
+        }
+        
+        .flip-card-front, .flip-card-back {
+            min-height: 320px !important;
+        }
+    }
+    
+    /* Touch-friendly improvements */
+    @media (hover: none) and (pointer: coarse) {
+        .btn {
+            min-height: 48px !important;
+            touch-action: manipulation;
+        }
+        
+        .question-indicator {
+            min-width: 48px !important;
+            min-height: 48px !important;
+            touch-action: manipulation;
+        }
+        
+        .answer-option {
+            min-height: 48px !important;
+            touch-action: manipulation;
+        }
+        
+        .quick-nav-btn {
+            min-height: 44px !important;
+            touch-action: manipulation;
+        }
+        
+        .nav-toggle-btn {
+            min-width: 48px !important;
+            min-height: 48px !important;
+            touch-action: manipulation;
+        }
+    }
+    
+    /* Additional Responsive Improvements */
+    
+    /* Smooth transitions and better animations */
+    * {
+        box-sizing: border-box;
+    }
+    
+    .quiz-container, .question-status-nav, .question-card, .btn, .answer-option {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Better scrollbar styling */
+    .question-status-nav::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .question-status-nav::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    
+    .question-status-nav::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+    
+    .question-status-nav::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+    
+    /* Enhanced focus states for accessibility */
+    .btn:focus,
+    .answer-option:focus,
+    .question-indicator:focus {
+        outline: 2px solid #4f46e5;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+    
+    .answer-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+    
+    /* Better loading states */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+        pointer-events: none;
+    }
+    
+    /* Improved hover states */
+    @media (hover: hover) and (pointer: fine) {
+        .question-indicator:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .answer-option:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+    }
+    
+    /* Better print styles */
+    @media print {
+        .quiz-timer,
+        .question-status-nav,
+        .quiz-navigation,
+        .nav-toggle-btn {
+            display: none !important;
+        }
+        
+        .quiz-container {
+            display: block !important;
+            grid-template-columns: none !important;
+            margin: 0 !important;
+            padding: 1rem !important;
+        }
+        
+        .quiz-content {
+            margin: 0 !important;
+        }
+        
+        .question-card {
+            page-break-inside: avoid;
+            border: 1px solid #000;
+            margin-bottom: 2rem;
+        }
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+        .question-card,
+        .question-status-nav,
+        .quiz-progress {
+            border: 2px solid #000;
+        }
+        
+        .btn {
+            border: 2px solid;
+        }
+        
+        .answer-option {
+            border: 2px solid;
+        }
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+        
+        .flip-card {
+            transition: none !important;
+        }
+        
+        .question-indicator:hover,
+        .btn:hover,
+        .answer-option:hover {
+            transform: none !important;
+        }
+    }
+    
+    /* Dark mode support (if parent theme supports it) */
+    @media (prefers-color-scheme: dark) {
+        .quiz-container {
+            background: #1a1a1a;
+            color: #e5e5e5;
+        }
+        
+        .question-card,
+        .question-status-nav,
+        .quiz-progress {
+            background: #2a2a2a;
+            border-color: #404040;
+            color: #e5e5e5;
+        }
+        
+        .btn-outline {
+            border-color: #404040;
+            color: #e5e5e5;
+        }
+        
+        .btn-outline:hover {
+            background: #3a3a3a;
+        }
+        
+        .answer-input {
+            background: #2a2a2a;
+            border-color: #404040;
+            color: #e5e5e5;
         }
     }
 </style>
@@ -3699,49 +3780,9 @@
         </div>
     </div>
     
-    <!-- Quiz Header -->
-    <div class="quiz-header">
-        <h1 class="quiz-title">{{ $category->name }}</h1>
-        <p class="mb-0">Latihan Soal</p>
-        <div class="quiz-info">
-            <div class="quiz-info-item">
-                <i class="fas fa-question-circle"></i>
-                <span>{{ $questions->count() }} Soal</span>
-            </div>
-            <div class="quiz-info-item">
-                <i class="fas fa-user"></i>
-                <span>{{ $user->name ?? 'Guest' }}</span>
-            </div>
-            <div class="quiz-info-item">
-                <i class="fas fa-tag"></i>
-                <span>{{ $category->segmentation->name ?? 'General' }}</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Session Info Banner -->
-    <div class="session-info">
-        <i class="fas fa-info-circle session-info-icon"></i>
-        <div class="session-info-text">
-            Quiz session aktif - Soal akan tetap sama meski halaman di-refresh
-            <small>Gunakan tombol "Reset Quiz" jika ingin mengulang dengan soal yang berbeda</small>
-        </div>
-    </div>
-    
-    <!-- Progress Bar -->
-    <div class="quiz-progress">
-        <div class="progress-bar-container">
-            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-        </div>
-        <div class="progress-text">
-            <span>Progress: <span id="progressText">0 dari {{ $questions->count() }}</span></span>
-            <span>Terjawab: <span id="answeredCount">0</span></span>
-        </div>
-    </div>
-    
     <!-- Question Status Navigation -->
     <div class="question-status-nav" id="questionStatusNav">
-        <button class="nav-toggle-btn d-md-none" id="navToggleBtn" onclick="toggleNavigation()">
+        <button class="nav-toggle-btn" id="navToggleBtn" onclick="toggleNavigation()">
             <i class="fas fa-minus" id="toggleIcon"></i>
         </button>
         
@@ -3764,272 +3805,317 @@
         <div class="quick-nav-buttons">
             <button type="button" class="quick-nav-btn" id="goToFirstUnanswered">
                 <i class="fas fa-exclamation-triangle d-none d-sm-inline"></i>
-                <span class="d-none d-sm-inline">Pertama</span> Belum Dijawab
+                <span class="d-none d-sm-inline">Pertama</span>
+                <span class="d-sm-none">1st</span> Belum
             </button>
             <button type="button" class="quick-nav-btn" id="goToNextUnanswered">
                 <i class="fas fa-arrow-right d-none d-sm-inline"></i>
-                <span class="d-none d-sm-inline">Berikutnya</span> Belum Dijawab
+                <span class="d-none d-sm-inline">Berikutnya</span>
+                <span class="d-sm-none">Next</span> Belum
             </button>
             <button type="button" class="quick-nav-btn" id="goToLastAnswered">
                 <i class="fas fa-check d-none d-sm-inline"></i>
-                <span class="d-none d-sm-inline">Terakhir</span> Dijawab
+                <span class="d-none d-sm-inline">Terakhir</span>
+                <span class="d-sm-none">Last</span> Dijawab
             </button>
         </div>
         
         <div class="status-legend">
             <div class="legend-item">
                 <div class="legend-dot" style="background: #667eea;"></div>
-                <span>Sedang Dikerjakan</span>
+                <span>Aktif</span>
             </div>
             <div class="legend-item">
                 <div class="legend-dot" style="background: #10b981;"></div>
-                <span>Sudah Dijawab</span>
+                <span>Dijawab</span>
             </div>
             <div class="legend-item">
                 <div class="legend-dot" style="background: #ef4444;"></div>
-                <span>Belum Dijawab</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-dot" style="background: #f59e0b;"></div>
-                <span>Belum Lengkap</span>
+                <span>Belum</span>
             </div>
         </div>
     </div>
     
-    <!-- Quiz Form -->
-    <form action="{{ route('medmastery.quiz.submit', $category->id) }}" method="POST" id="quizForm">
-        @csrf
+    <!-- Main Quiz Content -->
+    <div class="quiz-content">
+        <!-- Quiz Header -->
+        <div class="quiz-header">
+            <h1 class="quiz-title">{{ $category->name }}</h1>
+            <p class="mb-0">Latihan Soal</p>
+            <div class="quiz-info">
+                <div class="quiz-info-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>{{ $questions->count() }} Soal</span>
+                </div>
+                <div class="quiz-info-item">
+                    <i class="fas fa-user"></i>
+                    <span>{{ $user->name ?? 'Guest' }}</span>
+                </div>
+                <div class="quiz-info-item">
+                    <i class="fas fa-tag"></i>
+                    <span>{{ $category->segmentation->name ?? 'General' }}</span>
+                </div>
+            </div>
+        </div>
         
-        @foreach($questions as $index => $question)
-        <div class="flip-card-container" id="flipContainer-{{ $question->id }}" style="display: {{ $index === 0 ? 'block' : 'none' }};">
-            <div class="flip-card" id="flipCard-{{ $question->id }}">
-                <!-- Front: Question Card -->
-                <div class="flip-card-front">
-                    <div class="question-card {{ $index === 0 ? 'active' : '' }}" data-question="{{ $index + 1 }}" id="question-{{ $index + 1 }}">
-                        <div class="question-header">
-                            <div class="question-number">{{ $index + 1 }}</div>
-                            <div class="ms-auto">
-                                <span class="badge bg-light text-dark">{{ $index + 1 }} dari {{ $questions->count() }}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="question-text">
-                            {!! $question->question_text !!}
-                        </div>
-                        
-                        <div class="answer-section">
-                            <label for="answer_{{ $question->id }}" class="form-label">
-                                <i class="fas fa-edit"></i>
-                                Jawaban Anda:
-                            </label>
-                            <textarea 
-                                name="answers[{{ $question->id }}]" 
-                                id="answer_{{ $question->id }}" 
-                                class="answer-input form-control"
-                                placeholder="Ketik jawaban Anda di sini..."
-                                data-question-id="{{ $question->id }}"
-                                data-question-index="{{ $index }}"
-                                rows="5"
-                                required
-                            ></textarea>
-                            <div class="answer-counter">
-                                <span id="counter_{{ $question->id }}">0 karakter</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Show Explanation Button -->
-                        @if($question->explanation_pdf_path)
-                        <div class="explanation-trigger">
-                            <button type="button" class="btn btn-outline show-explanation-btn disabled-no-answer" data-question-id="{{ $question->id }}" disabled>
-                                <i class="fas fa-eye"></i>
-                                <span class="d-none d-sm-inline">Lihat</span> Penjelasan
-                            </button>
-                            <div class="answer-warning show" id="warning-{{ $question->id }}">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <span class="d-none d-sm-inline">Silakan jawab pertanyaan terlebih dahulu sebelum melihat penjelasan</span>
-                                <span class="d-sm-none">Jawab dulu sebelum lihat penjelasan</span>
-                            </div>
-                        </div>
-                        @endif
-                        
-                        <!-- Question Navigation -->
-                        <div class="question-navigation">
-                            <button type="button" class="btn btn-outline btn-nav" id="prevBtn" {{ $index === 0 ? 'disabled' : '' }}>
-                                <i class="fas fa-arrow-left"></i>
-                                <span class="d-none d-sm-inline">Sebelumnya</span>
-                                <span class="d-sm-none">Prev</span>
-                            </button>
-                            
-                            <div class="nav-info">
-                                <div class="question-counter">
-                                    <span class="d-none d-sm-inline">Pertanyaan</span> {{ $index + 1 }} dari {{ $questions->count() }}
+        <!-- Session Info Banner -->
+        <div class="session-info">
+            <i class="fas fa-info-circle session-info-icon"></i>
+            <div class="session-info-text">
+                Quiz session aktif - Soal akan tetap sama meski halaman di-refresh
+                <small>Gunakan tombol "Reset Quiz" jika ingin mengulang dengan soal yang berbeda</small>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="quiz-progress">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">
+                <span>Progress: <span id="progressText">0 dari {{ $questions->count() }}</span></span>
+                <span>Terjawab: <span id="answeredCount">0</span></span>
+            </div>
+        </div>
+        
+        <!-- Quiz Form -->
+        <form action="{{ route('medmastery.quiz.submit', $category->id) }}" method="POST" id="quizForm">
+            @csrf
+            
+            @foreach($questions as $index => $question)
+            <div class="flip-card-container" id="flipContainer-{{ $question->id }}" style="display: {{ $index === 0 ? 'block' : 'none' }};">
+                <div class="flip-card" id="flipCard-{{ $question->id }}">
+                    <!-- Front: Question Card -->
+                    <div class="flip-card-front">
+                        <div class="question-card {{ $index === 0 ? 'active' : '' }}" data-question="{{ $index + 1 }}" id="question-{{ $index + 1 }}">
+                            <div class="question-header">
+                                <div class="question-number">{{ $index + 1 }}</div>
+                                <div class="ms-auto">
+                                    <span class="badge bg-light text-dark">{{ $index + 1 }} dari {{ $questions->count() }}</span>
                                 </div>
                             </div>
                             
-                            <div class="next-button-container" id="nextContainer-{{ $question->id }}" style="{{ $question->explanation_pdf_path ? 'display: none;' : '' }}">
+                            <div class="question-text">
+                                {!! $question->question_text !!}
+                            </div>
+                            
+                            <div class="answer-section">
+                                <label for="answer_{{ $question->id }}" class="form-label">
+                                    <i class="fas fa-edit"></i>
+                                    Jawaban Anda:
+                                </label>
+                                <textarea 
+                                    name="answers[{{ $question->id }}]" 
+                                    id="answer_{{ $question->id }}" 
+                                    class="answer-input form-control"
+                                    placeholder="Ketik jawaban Anda di sini..."
+                                    data-question-id="{{ $question->id }}"
+                                    data-question-index="{{ $index }}"
+                                    rows="5"
+                                    required
+                                ></textarea>
+                                <div class="answer-counter">
+                                    <span id="counter_{{ $question->id }}">0 karakter</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Show Explanation Button -->
+                            @if($question->explanation_pdf_path)
+                            <div class="explanation-trigger">
+                                <button type="button" class="btn btn-outline show-explanation-btn disabled-no-answer" data-question-id="{{ $question->id }}" disabled>
+                                    <i class="fas fa-eye"></i>
+                                    <span class="d-none d-sm-inline">Lihat</span> Penjelasan
+                                </button>
+                                <div class="answer-warning show" id="warning-{{ $question->id }}">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span class="d-none d-sm-inline">Silakan jawab pertanyaan terlebih dahulu sebelum melihat penjelasan</span>
+                                    <span class="d-sm-none">Jawab dulu sebelum lihat penjelasan</span>
+                                </div>
+                            </div>
+                            @endif
+                            
+                            <!-- Question Navigation -->
+                            <div class="question-navigation">
+                                <button type="button" class="btn btn-outline btn-nav" id="prevBtn" {{ $index === 0 ? 'disabled' : '' }}>
+                                    <i class="fas fa-arrow-left"></i>
+                                    <span class="d-none d-sm-inline">Sebelumnya</span>
+                                    <span class="d-sm-none">Prev</span>
+                                </button>
+                                
+                                <div class="nav-info">
+                                    <div class="question-counter">
+                                        <span class="d-none d-sm-inline">Pertanyaan</span> {{ $index + 1 }} dari {{ $questions->count() }}
+                                    </div>
+                                </div>
+                                
+                                <div class="next-button-container" id="nextContainer-{{ $question->id }}" style="{{ $question->explanation_pdf_path ? 'display: none;' : '' }}">
+                                    @if($index < $questions->count() - 1)
+                                        <button type="button" class="btn btn-primary btn-nav" id="nextBtn">
+                                            <span class="d-none d-sm-inline">Selanjutnya</span>
+                                            <span class="d-sm-none">Next</span>
+                                            <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    @endif
+                                    @if($index === $questions->count() - 1)
+                                        <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtn">
+                                            <i class="fas fa-check"></i>
+                                            Selesai
+                                        </button>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Back: Explanation Section -->
+                    <div class="flip-card-back">
+                        @if($question->explanation_pdf_path)
+                        <div class="explanation-section" id="explanation-{{ $question->id }}">
+                            <div class="explanation-header">
+                                <i class="fas fa-file-pdf"></i>
+                                Penjelasan & Pembahasan
+                            </div>
+                            
+                            <!-- Toggle back to question button -->
+                            <div style="text-align:right;margin-bottom:1rem;">
+                                <button type="button" class="btn flip-toggle-btn" onclick="flipBack({{ $question->id }})">
+                                    <i class="fas fa-undo"></i> 
+                                    <span class="d-none d-sm-inline">Lihat Soal Kembali</span>
+                                    <span class="d-sm-none">Kembali</span>
+                                </button>
+                            </div>
+                            
+                            <!-- 1. Jawaban Anda (Your Answer) -->
+                            <div class="participant-answer mb-3">
+                                <strong>Jawaban Anda:</strong>
+                                <div style="background:#fffbe6;padding:1rem;border-radius:8px;border:1px solid #ffe58f;">
+                                    <p style="margin-bottom:0;" id="participant-answer-{{ $question->id }}"></p>
+                                </div>
+                            </div>
+                            
+                            <!-- 2. Jawaban Benar (Correct Answer) -->
+                            <div class="correct-answer mb-3">
+                                <strong>Jawaban Benar:</strong>
+                                <div style="background:#f0f9f4;padding:1rem;border-radius:8px;border:1px solid #bbf7d0;">
+                                    <p style="margin-bottom:0;">{!! $question->correct_answer ?? $question->explanation ?? 'Jawaban benar tidak tersedia' !!}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 3. PDF Viewer -->
+                            <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0" style="width:100%;height:100%;min-height:400px;"></iframe>
+                            
+                            <!-- Self Assessment Options -->
+                            <div class="answer-options d-flex flex-column flex-sm-row justify-content-between gap-2">
+                                <div class="answer-option wrong" data-value="salah" data-question-id="{{ $question->id }}" style="background:#ef4444;color:white;border-color:#ef4444;">
+                                    <i class="fas fa-times"></i> Salah <span class="selected-indicator" id="selected-indicator-salah-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+                                </div>
+                                <div class="answer-option partial" data-value="hampir_benar" data-question-id="{{ $question->id }}" style="background:#f59e0b;color:white;border-color:#f59e0b;">
+                                    <i class="fas fa-adjust"></i> Hampir Benar <span class="selected-indicator" id="selected-indicator-hampir_benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+                                </div>
+                                <div class="answer-option correct" data-value="benar" data-question-id="{{ $question->id }}" style="background:#10b981;color:white;border-color:#10b981;">
+                                    <i class="fas fa-check"></i> Benar <span class="selected-indicator" id="selected-indicator-benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+                                </div>
+                            </div>
+                            <input type="hidden" name="self_assessment[{{ $question->id }}]" id="assessment_{{ $question->id }}" value="">
+                            <div class="next-button-container" id="nextContainerExplanation-{{ $question->id }}" style="display:none;margin-top:1rem;text-align:center;">
                                 @if($index < $questions->count() - 1)
-                                    <button type="button" class="btn btn-primary btn-nav" id="nextBtn">
+                                    <button type="button" class="btn btn-primary btn-nav" onclick="showNextExplanation({{ $question->id }})">
                                         <span class="d-none d-sm-inline">Selanjutnya</span>
                                         <span class="d-sm-none">Next</span>
                                         <i class="fas fa-arrow-right"></i>
                                     </button>
-                                @endif
-                                @if($index === $questions->count() - 1)
-                                    <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtn">
+                                @else
+                                    <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtnExplanation">
                                         <i class="fas fa-check"></i>
                                         Selesai
                                     </button>
                                 @endif
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Back: Explanation Section -->
-                <div class="flip-card-back">
-                    @if($question->explanation_pdf_path)
-                    <div class="explanation-section" id="explanation-{{ $question->id }}">
-                        <div class="explanation-header">
-                            <i class="fas fa-file-pdf"></i>
-                            Penjelasan & Pembahasan
-                        </div>
-                        
-                        <!-- Toggle back to question button -->
-                        <div style="text-align:right;margin-bottom:1rem;">
-                            <button type="button" class="btn flip-toggle-btn" onclick="flipBack({{ $question->id }})">
-                                <i class="fas fa-undo"></i> Lihat Soal Kembali
-                            </button>
-                        </div>
-                        
-                        <!-- 1. Jawaban Anda (Your Answer) -->
-                        <div class="participant-answer mb-3">
-                            <strong>Jawaban Anda:</strong>
-                            <div style="background:#fffbe6;padding:1rem;border-radius:8px;border:1px solid #ffe58f;">
-                                <p style="margin-bottom:0;" id="participant-answer-{{ $question->id }}"></p>
-                            </div>
-                        </div>
-                        
-                        <!-- 2. Jawaban Benar (Correct Answer) -->
-                        <div class="correct-answer mb-3">
-                            <strong>Jawaban Benar:</strong>
-                            <div style="background:#f0f9f4;padding:1rem;border-radius:8px;border:1px solid #bbf7d0;">
-                                <p style="margin-bottom:0;">{!! $question->correct_answer ?? $question->explanation ?? 'Jawaban benar tidak tersedia' !!}</p>
-                            </div>
-                        </div>
-                        
-                        <!-- 3. PDF Viewer -->
-                        <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0" style="width:100%;height:100%;min-height:400px;"></iframe>
-                        
-                        <!-- Text explanation removed to avoid duplication, as it's now shown in "Jawaban Benar" section -->
-<div class="answer-options d-flex flex-row justify-content-between gap-2">
-    <div class="answer-option wrong" data-value="salah" data-question-id="{{ $question->id }}" style="background:#ef4444;color:white;border-color:#ef4444;">
-        <i class="fas fa-times"></i> Salah <span class="selected-indicator" id="selected-indicator-salah-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
-    </div>
-    <div class="answer-option partial" data-value="hampir_benar" data-question-id="{{ $question->id }}" style="background:#f59e0b;color:white;border-color:#f59e0b;">
-        <i class="fas fa-adjust"></i> Hampir Benar <span class="selected-indicator" id="selected-indicator-hampir_benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
-    </div>
-    <div class="answer-option correct" data-value="benar" data-question-id="{{ $question->id }}" style="background:#10b981;color:white;border-color:#10b981;">
-        <i class="fas fa-check"></i> Benar <span class="selected-indicator" id="selected-indicator-benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
-    </div>
-                        </div>
-                        <input type="hidden" name="self_assessment[{{ $question->id }}]" id="assessment_{{ $question->id }}" value="">
-                        <div class="next-button-container" id="nextContainerExplanation-{{ $question->id }}" style="display:none;margin-top:1rem;text-align:center;">
-                            @if($index < $questions->count() - 1)
-                                <button type="button" class="btn btn-primary btn-nav" onclick="showNextExplanation({{ $question->id }})">
-                                    Selanjutnya
-                                    <i class="fas fa-arrow-right"></i>
-                                </button>
-                            @else
-                                <button type="submit" class="btn btn-success btn-nav" id="submitQuizBtnExplanation">
-                                    <i class="fas fa-check"></i>
-                                    Selesai
-                                </button>
-                            @endif
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var options = document.querySelectorAll('#explanation-{{ $question->id }} .answer-option');
+                                var nextBtnContainer = document.getElementById('nextContainerExplanation-{{ $question->id }}');
+                                var indicatorMap = {
+                                    'salah': document.getElementById('selected-indicator-salah-{{ $question->id }}'),
+                                    'hampir_benar': document.getElementById('selected-indicator-hampir_benar-{{ $question->id }}'),
+                                    'benar': document.getElementById('selected-indicator-benar-{{ $question->id }}')
+                                };
+                                options.forEach(function(option) {
+                                    option.addEventListener('click', function() {
+                                        options.forEach(function(opt) {
+                                            opt.classList.remove('selected');
+                                            opt.classList.remove('faded');
+                                        });
+                                        option.classList.add('selected');
+                                        options.forEach(function(opt) {
+                                            if (!opt.classList.contains('selected')) {
+                                                opt.classList.add('faded');
+                                            }
+                                        });
+                                        // Hide all indicators first
+                                        Object.values(indicatorMap).forEach(function(ind) {
+                                            if (ind) ind.style.display = 'none';
+                                        });
+                                        // Show indicator for selected
+                                        var value = option.getAttribute('data-value');
+                                        if (indicatorMap[value]) {
+                                            indicatorMap[value].style.display = 'inline-block';
+                                            if (value === 'benar') {
+                                                indicatorMap[value].innerHTML = '<i class="fas fa-check-circle"></i> Dipilih';
+                                            } else if (value === 'hampir_benar') {
+                                                indicatorMap[value].innerHTML = '<i class="fas fa-adjust"></i> Dipilih';
+                                            } else {
+                                                indicatorMap[value].innerHTML = '<i class="fas fa-times-circle"></i> Dipilih';
+                                            }
+                                        }
+                                        if (nextBtnContainer) nextBtnContainer.style.display = 'block';
+                                    });
+                                });
+                            });
+                            </script>
                         </div>
                         <script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            var options = document.querySelectorAll('#explanation-{{ $question->id }} .answer-option');
-                            var nextBtnContainer = document.getElementById('nextContainerExplanation-{{ $question->id }}');
-                            var indicatorMap = {
-                                'salah': document.getElementById('selected-indicator-salah-{{ $question->id }}'),
-                                'hampir_benar': document.getElementById('selected-indicator-hampir_benar-{{ $question->id }}'),
-                                'benar': document.getElementById('selected-indicator-benar-{{ $question->id }}')
-                            };
-                            options.forEach(function(option) {
-                                option.addEventListener('click', function() {
-                                    options.forEach(function(opt) {
-                                        opt.classList.remove('selected');
-                                        opt.classList.remove('faded');
-                                    });
-                                    option.classList.add('selected');
-                                    options.forEach(function(opt) {
-                                        if (!opt.classList.contains('selected')) {
-                                            opt.classList.add('faded');
-                                        }
-                                    });
-                                    // Hide all indicators first
-                                    Object.values(indicatorMap).forEach(function(ind) {
-                                        if (ind) ind.style.display = 'none';
-                                    });
-                                    // Show indicator for selected
-                                    var value = option.getAttribute('data-value');
-                                    if (indicatorMap[value]) {
-                                        indicatorMap[value].style.display = 'inline-block';
-                                        if (value === 'benar') {
-                                            indicatorMap[value].innerHTML = '<i class="fas fa-check-circle"></i> Dipilih';
-                                        } else if (value === 'hampir_benar') {
-                                            indicatorMap[value].innerHTML = '<i class="fas fa-adjust"></i> Dipilih';
-                                        } else {
-                                            indicatorMap[value].innerHTML = '<i class="fas fa-times-circle"></i> Dipilih';
-                                        }
-                                    }
-                                    if (nextBtnContainer) nextBtnContainer.style.display = 'block';
+                            var answerInput = document.getElementById('answer_{{ $question->id }}');
+                            var answerDisplay = document.getElementById('participant-answer-{{ $question->id }}');
+                            if (answerInput && answerDisplay) {
+                                answerDisplay.textContent = answerInput.value;
+                                answerInput.addEventListener('input', function() {
+                                    answerDisplay.textContent = answerInput.value;
                                 });
-                            });
+                            }
                         });
                         </script>
+                        @endif
                     </div>
-                    <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        var answerInput = document.getElementById('answer_{{ $question->id }}');
-                        var answerDisplay = document.getElementById('participant-answer-{{ $question->id }}');
-                        if (answerInput && answerDisplay) {
-                            answerDisplay.textContent = answerInput.value;
-                            answerInput.addEventListener('input', function() {
-                                answerDisplay.textContent = answerInput.value;
-                            });
-                        }
-                    });
-                    </script>
-                    @endif
                 </div>
             </div>
-        </div>
-        @endforeach
-        
-        <!-- Global Navigation -->
-        <div class="quiz-navigation">
-            <div class="d-flex flex-column flex-sm-row gap-2">
-                <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
-                    <i class="fas fa-arrow-left"></i>
-                    <span class="d-none d-sm-inline">Kembali ke</span> Kategori
-                </a>
-                <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
-                    <i class="fas fa-home"></i>
-                    <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
-                </a>
+            @endforeach
+            
+            <!-- Global Navigation -->
+            <div class="quiz-navigation">
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="d-none d-sm-inline">Kembali ke</span> Kategori
+                    </a>
+                    <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
+                        <i class="fas fa-home"></i>
+                        <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
+                    </a>
+                </div>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <button type="button" class="btn btn-outline" id="saveProgressBtn">
+                        <i class="fas fa-save"></i>
+                        <span class="d-none d-sm-inline">Simpan</span> Progress
+                    </button>
+                    <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
+                        <i class="fas fa-redo"></i>
+                        Reset Quiz
+                    </button>
+                </div>
             </div>
-            <div class="d-flex flex-column flex-sm-row gap-2">
-                <button type="button" class="btn btn-outline" id="saveProgressBtn">
-                    <i class="fas fa-save"></i>
-                    <span class="d-none d-sm-inline">Simpan</span> Progress
-                </button>
-                <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
-                    <i class="fas fa-redo"></i>
-                    Reset Quiz
-                </button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 <script>
