@@ -144,52 +144,88 @@
     }
     
     .btn {
-        padding: 0.75rem 1.5rem;
+        padding: 0.875rem 1.75rem;
         border-radius: 12px;
         font-weight: 600;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 0.5rem;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 2px solid transparent;
         cursor: pointer;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        min-height: 44px;
+        box-sizing: border-box;
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+        user-select: none;
     }
     
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    .btn:hover::before {
+        left: 100%;
+    }
+    
+    /* PRIMARY BUTTON - Main Action Buttons */
     .btn-primary {
-        background: linear-gradient(135deg, {{ $category->segmentation->color ?? '#667eea' }}, #764ba2);
+        background: linear-gradient(135deg, {{ $category->segmentation->color ?? '#4f46e5' }}, #7c3aed);
         color: white;
-        border: none;
+        border: 2px solid transparent;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.25);
+        font-weight: 700;
+        letter-spacing: 0.025em;
     }
     
     .btn-primary:hover {
-        background: linear-gradient(135deg, #5a67d8, #6b46c1);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        background: linear-gradient(135deg, #4338ca, #6d28d9);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
     }
     
+    /* OUTLINE BUTTON - Secondary Actions */
     .btn-outline {
-        background: transparent;
-        color: #64748b;
-        border-color: #e2e8f0;
+        background: rgba(255, 255, 255, 0.05);
+        color: #4f46e5;
+        border: 2px solid #e2e8f0;
+        backdrop-filter: blur(10px);
+        font-weight: 600;
     }
     
     .btn-outline:hover {
-        background: #f8fafc;
-        border-color: #cbd5e0;
-        color: #475569;
+        background: #4f46e5;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+        border-color: #4f46e5;
     }
     
+    /* SUCCESS BUTTON - Completion Actions */
     .btn-success {
-        background: linear-gradient(135deg, #10b981, #059669);
+        background: linear-gradient(135deg, #059669, #047857);
         color: white;
-        border: none;
+        border: 2px solid transparent;
+        box-shadow: 0 4px 15px rgba(5, 150, 105, 0.25);
+        font-weight: 700;
     }
     
     .btn-success:hover {
-        background: linear-gradient(135deg, #059669, #047857);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        background: linear-gradient(135deg, #047857, #065f46);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(5, 150, 105, 0.4);
     }
     
     .btn:disabled {
@@ -197,6 +233,262 @@
         cursor: not-allowed;
         transform: none !important;
         box-shadow: none !important;
+    }
+    
+    /* =================================================================
+       SPECIALIZED EXPLANATION BUTTON - UNIQUE STYLING
+       ================================================================= */
+    .show-explanation-btn {
+        /* Reset any inherited styles */
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+        color: white !important;
+        border: 3px solid #fbbf24 !important;
+        padding: 1rem 2.5rem !important;
+        border-radius: 20px !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.1em !important;
+        box-shadow: 
+            0 6px 20px rgba(245, 158, 11, 0.3),
+            inset 0 2px 4px rgba(255, 255, 255, 0.2) !important;
+        overflow: hidden !important;
+        min-width: 220px !important;
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.75rem !important;
+    }
+    
+    .show-explanation-btn::before {
+        content: '💡 Lihat Penjelasan' !important;
+        font-size: 0.95rem !important;
+        opacity: 1 !important;
+        position: static !important;
+        transform: none !important;
+    }
+    
+    .show-explanation-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+        transform: translateY(-4px) scale(1.02) !important;
+        border-color: #f59e0b !important;
+        box-shadow: 
+            0 12px 35px rgba(245, 158, 11, 0.5),
+            inset 0 2px 8px rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+    }
+    
+    .show-explanation-btn:active {
+        transform: translateY(-2px) scale(1) !important;
+        box-shadow: 
+            0 8px 25px rgba(245, 158, 11, 0.4),
+            inset 0 2px 4px rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .show-explanation-btn:disabled,
+    .show-explanation-btn.disabled-no-answer {
+        background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%) !important;
+        border-color: #cbd5e0 !important;
+        cursor: not-allowed !important;
+        transform: none !important;
+        box-shadow: 0 2px 8px rgba(148, 163, 184, 0.2) !important;
+        color: #f1f5f9 !important;
+        opacity: 0.7 !important;
+    }
+    
+    .show-explanation-btn:disabled::before,
+    .show-explanation-btn.disabled-no-answer::before {
+        content: '🔒 Jawab Dulu' !important;
+        opacity: 0.8 !important;
+    }
+    
+    /* =================================================================
+       NAVIGATION BUTTONS - CLEAN LAYOUT
+       ================================================================= */
+    .btn-nav {
+        min-width: 130px !important;
+        padding: 0.875rem 1.5rem !important;
+        font-weight: 600 !important;
+        border-radius: 10px !important;
+        transition: all 0.3s ease !important;
+        margin: 0.25rem !important;
+    }
+    
+    /* Navigation Container */
+    .quiz-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1.5rem 0;
+        margin-top: 2rem;
+        border-top: 2px solid #e2e8f0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .navigation-left {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+    
+    .navigation-right {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+    
+    .navigation-center {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+    }
+    
+    /* =================================================================
+       LAYOUT CLEANUP - NO OVERLAPPING
+       ================================================================= */
+    
+    /* Ensure proper spacing between all major sections */
+    .quiz-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .question-card {
+        margin-bottom: 2.5rem !important;
+        position: relative;
+        z-index: 10;
+        clear: both;
+    }
+    
+    .explanation-trigger {
+        margin-top: 2rem !important;
+        margin-bottom: 2rem !important;
+        text-align: center;
+        clear: both;
+        position: relative;
+        z-index: 5;
+    }
+    
+    .quiz-navigation {
+        margin-top: 2.5rem !important;
+        padding: 1.5rem !important;
+        position: relative;
+        z-index: 15;
+        clear: both;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Button container spacing */
+    .d-flex.justify-content-between {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding: 0 0.5rem;
+        position: relative;
+        z-index: 12;
+        clear: both;
+    }
+    
+    /* Answer options container */
+    .answer-options {
+        margin-bottom: 2rem !important;
+        position: relative;
+        z-index: 8;
+    }
+    
+    /* Prevent any floating or absolute positioning conflicts */
+    .flip-card {
+        position: relative !important;
+        clear: both !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .flip-card-inner {
+        position: relative !important;
+        clear: both !important;
+    }
+    
+    /* =================================================================
+       MOBILE RESPONSIVE - NO OVERLAPPING
+       ================================================================= */
+    @media (max-width: 768px) {
+        .quiz-navigation {
+            flex-direction: column !important;
+            gap: 1rem !important;
+            padding: 1rem !important;
+            text-align: center;
+        }
+        
+        .navigation-left,
+        .navigation-right,
+        .navigation-center {
+            width: 100% !important;
+            justify-content: center !important;
+            flex: none !important;
+        }
+        
+        .btn-nav {
+            min-width: 100px !important;
+            margin: 0.25rem !important;
+        }
+        
+        .show-explanation-btn {
+            min-width: 200px !important;
+            padding: 1rem 2rem !important;
+            margin: 1rem auto !important;
+            display: block !important;
+        }
+        
+        .d-flex.justify-content-between {
+            flex-direction: column !important;
+            gap: 1rem !important;
+            align-items: center !important;
+        }
+        
+        .explanation-trigger {
+            margin-top: 2rem !important;
+            margin-bottom: 2rem !important;
+        }
+        
+        .question-card {
+            margin-bottom: 3rem !important;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .quiz-container {
+            padding: 1rem 0.5rem !important;
+        }
+        
+        .quiz-navigation {
+            margin: 1.5rem -0.5rem 0 -0.5rem !important;
+            padding: 1rem 0.5rem !important;
+        }
+        
+        .btn-nav {
+            min-width: 80px !important;
+            padding: 0.75rem 1rem !important;
+            font-size: 0.9rem !important;
+        }
+        
+        .show-explanation-btn {
+            min-width: 180px !important;
+            padding: 0.875rem 1.5rem !important;
+            font-size: 0.9rem !important;
+        }
     }
     
     .quiz-timer {
