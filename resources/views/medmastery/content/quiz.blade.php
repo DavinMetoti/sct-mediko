@@ -6,10 +6,25 @@
 <style>
     /* Base Layout */
     .quiz-container {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
         padding: 2rem 1rem;
         position: relative;
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 2rem;
+    }
+    
+    .quiz-main-content {
+        min-width: 0; /* Prevents grid items from expanding beyond container */
+    }
+    
+    .quiz-sidebar {
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
     }
     
     /* Quiz Header */
@@ -47,15 +62,12 @@
     
     /* Timer */
     .quiz-timer {
-        position: fixed;
-        top: 20px;
-        right: 20px;
         background: white;
         border-radius: 12px;
         padding: 1rem;
+        margin-bottom: 1rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         border: 1px solid #e2e8f0;
-        z-index: 1000;
     }
     
     .timer-display {
@@ -593,21 +605,41 @@
     }
     
     .quiz-navigation {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        margin-top: 3rem;
-        padding: 2rem;
         background: white;
         border-radius: 16px;
+        padding: 1.5rem;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         border: 1px solid #e2e8f0;
+        margin-bottom: 1rem;
+    }
+    
+    .quiz-navigation h6 {
+        color: #2d3748;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .quiz-navigation .nav-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .quiz-navigation .nav-section:last-child {
+        margin-bottom: 0;
     }
     
     .quiz-navigation .d-flex {
         display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .quiz-navigation .btn {
+        width: 100%;
+        justify-content: flex-start;
+        text-align: left;
     }
     
     /* Warnings and Messages */
@@ -697,6 +729,8 @@
         .quiz-container {
             max-width: 100%;
             padding: 1rem;
+            grid-template-columns: 280px 1fr;
+            gap: 1.5rem;
         }
         
         .question-indicators {
@@ -710,9 +744,31 @@
         }
     }
     
+    @media (max-width: 1024px) {
+        .quiz-container {
+            grid-template-columns: 260px 1fr;
+            gap: 1rem;
+        }
+        
+        .quiz-sidebar {
+            position: relative;
+            top: auto;
+            max-height: none;
+        }
+    }
+    
     @media (max-width: 768px) {
         .quiz-container {
+            grid-template-columns: 1fr;
             padding: 0.5rem;
+            gap: 1rem;
+        }
+        
+        .quiz-sidebar {
+            order: -1;
+            position: relative;
+            top: auto;
+            max-height: none;
         }
         
         .quiz-header {
@@ -754,11 +810,6 @@
             grid-template-columns: 1fr;
         }
         
-        .quiz-navigation {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-        
         .quiz-navigation .d-flex {
             flex-direction: column;
         }
@@ -767,15 +818,6 @@
             grid-template-columns: 1fr;
             text-align: center;
             gap: 1rem;
-        }
-        
-        .quiz-timer {
-            position: relative;
-            top: auto;
-            right: auto;
-            margin-bottom: 1rem;
-            width: 100%;
-            text-align: center;
         }
         
         .nav-toggle-btn {
@@ -825,19 +867,112 @@
         }
     }
     
-    /* Hide quiz navigation when card is flipped */
-    .quiz-container:has(.flip-card.flipped) .quiz-navigation {
-    }
+    /* Responsive Design */
 </style>
 
 <div class="quiz-container">
-    <!-- Quiz Timer -->
-    <div class="quiz-timer">
-        <div class="timer-display">
-            <i class="fas fa-clock"></i>
-            <span id="timer">00:00</span>
+    <!-- Quiz Sidebar -->
+    <div class="quiz-sidebar">
+        <!-- Quiz Timer -->
+        <div class="quiz-timer">
+            <div class="timer-display">
+                <i class="fas fa-clock"></i>
+                <span id="timer">00:00</span>
+            </div>
+        </div>
+        
+        <!-- Question Status Navigation -->
+        <div class="question-status-nav" id="questionStatusNav">
+            <button class="nav-toggle-btn d-md-none" id="navToggleBtn" onclick="toggleNavigation()">
+                <i class="fas fa-minus" id="toggleIcon"></i>
+            </button>
+            
+            <div class="status-nav-header">
+                <i class="fas fa-map-marker-alt"></i>
+                Navigasi Soal
+            </div>
+            
+            <div class="question-indicators" id="questionIndicators">
+                @foreach($questions as $index => $question)
+                <div class="question-indicator" 
+                     data-question="{{ $index + 1 }}"
+                     data-question-id="{{ $question->id }}"
+                     id="indicator-{{ $index + 1 }}">
+                    {{ $index + 1 }}
+                </div>
+                @endforeach
+            </div>
+            
+            <div class="quick-nav-buttons">
+                <button type="button" class="quick-nav-btn" id="goToFirstUnanswered">
+                    <i class="fas fa-exclamation-triangle d-none d-sm-inline"></i>
+                    <span class="d-none d-sm-inline">Pertama</span> Belum Dijawab
+                </button>
+                <button type="button" class="quick-nav-btn" id="goToNextUnanswered">
+                    <i class="fas fa-arrow-right d-none d-sm-inline"></i>
+                    <span class="d-none d-sm-inline">Berikutnya</span> Belum Dijawab
+                </button>
+                <button type="button" class="quick-nav-btn" id="goToLastAnswered">
+                    <i class="fas fa-check d-none d-sm-inline"></i>
+                    <span class="d-none d-sm-inline">Terakhir</span> Dijawab
+                </button>
+            </div>
+            
+            <div class="status-legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #667eea;"></div>
+                    <span>Sedang Dikerjakan</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #10b981;"></div>
+                    <span>Sudah Dijawab</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #ef4444;"></div>
+                    <span>Belum Dijawab</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #f59e0b;"></div>
+                    <span>Belum Lengkap</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Navigation -->
+        <div class="quiz-navigation">
+            <h6>
+                <i class="fas fa-bars"></i>
+                Menu Navigasi
+            </h6>
+            <div class="nav-section">
+                <div class="d-flex">
+                    <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="d-none d-sm-inline">Kembali ke</span> Kategori
+                    </a>
+                    <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
+                        <i class="fas fa-home"></i>
+                        <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
+                    </a>
+                </div>
+            </div>
+            <div class="nav-section">
+                <div class="d-flex">
+                    <button type="button" class="btn btn-outline" id="saveProgressBtn">
+                        <i class="fas fa-save"></i>
+                        <span class="d-none d-sm-inline">Simpan</span> Progress
+                    </button>
+                    <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
+                        <i class="fas fa-redo"></i>
+                        Reset Quiz
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Quiz Main Content -->
+    <div class="quiz-main-content">
     
     <!-- Quiz Header -->
     <div class="quiz-header">
@@ -876,63 +1011,6 @@
         <div class="progress-text">
             <span>Progress: <span id="progressText">0 dari {{ $questions->count() }}</span></span>
             <span>Terjawab: <span id="answeredCount">0</span></span>
-        </div>
-    </div>
-    
-    <!-- Question Status Navigation -->
-    <div class="question-status-nav" id="questionStatusNav">
-        <button class="nav-toggle-btn d-md-none" id="navToggleBtn" onclick="toggleNavigation()">
-            <i class="fas fa-minus" id="toggleIcon"></i>
-        </button>
-        
-        <div class="status-nav-header">
-            <i class="fas fa-map-marker-alt"></i>
-            Navigasi Soal
-        </div>
-        
-        <div class="question-indicators" id="questionIndicators">
-            @foreach($questions as $index => $question)
-            <div class="question-indicator" 
-                 data-question="{{ $index + 1 }}"
-                 data-question-id="{{ $question->id }}"
-                 id="indicator-{{ $index + 1 }}">
-                {{ $index + 1 }}
-            </div>
-            @endforeach
-        </div>
-        
-        <div class="quick-nav-buttons">
-            <button type="button" class="quick-nav-btn" id="goToFirstUnanswered">
-                <i class="fas fa-exclamation-triangle d-none d-sm-inline"></i>
-                <span class="d-none d-sm-inline">Pertama</span> Belum Dijawab
-            </button>
-            <button type="button" class="quick-nav-btn" id="goToNextUnanswered">
-                <i class="fas fa-arrow-right d-none d-sm-inline"></i>
-                <span class="d-none d-sm-inline">Berikutnya</span> Belum Dijawab
-            </button>
-            <button type="button" class="quick-nav-btn" id="goToLastAnswered">
-                <i class="fas fa-check d-none d-sm-inline"></i>
-                <span class="d-none d-sm-inline">Terakhir</span> Dijawab
-            </button>
-        </div>
-        
-        <div class="status-legend">
-            <div class="legend-item">
-                <div class="legend-dot" style="background: #667eea;"></div>
-                <span>Sedang Dikerjakan</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-dot" style="background: #10b981;"></div>
-                <span>Sudah Dijawab</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-dot" style="background: #ef4444;"></div>
-                <span>Belum Dijawab</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-dot" style="background: #f59e0b;"></div>
-                <span>Belum Lengkap</span>
-            </div>
         </div>
     </div>
     
@@ -1146,31 +1224,9 @@
         </div>
         @endforeach
         
-        <!-- Global Navigation -->
-        <div class="quiz-navigation">
-            <div class="d-flex flex-column flex-sm-row gap-2">
-                <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
-                    <i class="fas fa-arrow-left"></i>
-                    <span class="d-none d-sm-inline">Kembali ke</span> Kategori
-                </a>
-                <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
-                    <i class="fas fa-home"></i>
-                    <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
-                </a>
-            </div>
-            <div class="d-flex flex-column flex-sm-row gap-2">
-                <button type="button" class="btn btn-outline" id="saveProgressBtn">
-                    <i class="fas fa-save"></i>
-                    <span class="d-none d-sm-inline">Simpan</span> Progress
-                </button>
-                <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
-                    <i class="fas fa-redo"></i>
-                    Reset Quiz
-                </button>
-            </div>
-        </div>
     </form>
-</div>
+    </div> <!-- End quiz-main-content -->
+</div> <!-- End quiz-container -->
 
 <script>
     // PHP data passed to JavaScript
@@ -1444,12 +1500,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const flipCard = targetContainer.querySelector('.flip-card');
                 if (flipCard) {
                     flipCard.classList.remove('flipped');
-                    
-                    // Show the global navigation when showing a new question
-                    const quizNavigation = document.querySelector('.quiz-navigation');
-                    if (quizNavigation) {
-                        quizNavigation.style.display = 'flex';
-                    }
                 }
             }
         }
@@ -1476,9 +1526,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         currentQuestion = questionNumber;
         updateProgress();
-        
-        // Ensure navigation is visible
-        ensureNavigationVisibility();
         
         // Scroll to top when showing new question
         window.scrollTo({
@@ -1606,12 +1653,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (flipCard) {
             flipCard.classList.add('flipped');
             
-            // Hide the global navigation when card is flipped
-            const quizNavigation = document.querySelector('.quiz-navigation');
-            if (quizNavigation) {
-                quizNavigation.style.display = 'none';
-            }
-            
             // Scroll to top when flipping to explanation
             window.scrollTo({
                 top: 0,
@@ -1625,12 +1666,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const flipCard = document.getElementById('flipCard-' + questionId);
         if (flipCard) {
             flipCard.classList.remove('flipped');
-            
-            // Show the global navigation when card is flipped back
-            const quizNavigation = document.querySelector('.quiz-navigation');
-            if (quizNavigation) {
-                quizNavigation.style.display = 'flex';
-            }
             
             // Scroll to top when flipping back to question
             window.scrollTo({
@@ -2138,9 +2173,6 @@ document.addEventListener('DOMContentLoaded', function() {
         showQuestion(1);
         updateProgress();
         initQuestionIndicatorNavigation();
-        
-        // Ensure navigation is visible initially
-        ensureNavigationVisibility();
     }
     
     // Initialize quiz after DOM is ready
@@ -2213,33 +2245,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update progress and indicators
                 updateProgress();
                 
-                // Ensure navigation is visible for the new question
-                ensureNavigationVisibility();
-                
                 // Scroll to top when navigating to next question
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
             }
-        } else {
-            // If this is the last question, show the quiz navigation again
-            var quizNavigation = document.querySelector('.quiz-navigation');
-            if (quizNavigation) {
-                quizNavigation.style.display = 'flex';
-            }
         }
     };
-    
-    // Function to check if any cards are flipped and show navigation if none are flipped
-    function ensureNavigationVisibility() {
-        const flippedCards = document.querySelectorAll('.flip-card.flipped');
-        const quizNavigation = document.querySelector('.quiz-navigation');
-        
-        if (flippedCards.length === 0 && quizNavigation) {
-            quizNavigation.style.display = 'flex';
-        }
-    }
 });
 
 // Function to confirm and restart quiz
