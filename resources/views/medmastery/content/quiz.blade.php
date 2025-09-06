@@ -25,6 +25,8 @@
         height: fit-content;
         max-height: calc(100vh - 4rem);
         overflow-y: auto;
+        min-width: 0;
+        width: 100%;
     }
     
     /* Quiz Header */
@@ -640,6 +642,17 @@
         width: 100%;
         justify-content: flex-start;
         text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+        line-height: 1.2;
+    }
+    
+    .quiz-navigation .btn i {
+        margin-right: 0.5rem;
+        flex-shrink: 0;
     }
     
     /* Warnings and Messages */
@@ -769,6 +782,21 @@
             position: relative;
             top: auto;
             max-height: none;
+        }
+        
+        .quiz-navigation {
+            padding: 1rem;
+        }
+        
+        .quiz-navigation .btn {
+            font-size: 0.85rem;
+            padding: 0.6rem;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .quiz-navigation .btn i {
+            margin-right: 0.3rem;
         }
         
         .quiz-header {
@@ -948,11 +976,11 @@
                 <div class="d-flex">
                     <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
                         <i class="fas fa-arrow-left"></i>
-                        <span class="d-none d-sm-inline">Kembali ke</span> Kategori
+                        Kembali ke Kategori
                     </a>
                     <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
                         <i class="fas fa-home"></i>
-                        <span class="d-none d-sm-inline">Kembali ke</span> Dashboard
+                        Dashboard
                     </a>
                 </div>
             </div>
@@ -960,7 +988,7 @@
                 <div class="d-flex">
                     <button type="button" class="btn btn-outline" id="saveProgressBtn">
                         <i class="fas fa-save"></i>
-                        <span class="d-none d-sm-inline">Simpan</span> Progress
+                        Simpan Progress
                     </button>
                     <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
                         <i class="fas fa-redo"></i>
@@ -991,15 +1019,6 @@
                 <i class="fas fa-tag"></i>
                 <span>{{ $category->segmentation->name ?? 'General' }}</span>
             </div>
-        </div>
-    </div>
-    
-    <!-- Session Info Banner -->
-    <div class="session-info">
-        <i class="fas fa-info-circle session-info-icon"></i>
-        <div class="session-info-text">
-            Quiz session aktif - Soal akan tetap sama meski halaman di-refresh
-            <small>Gunakan tombol "Reset Quiz" jika ingin mengulang dengan soal yang berbeda</small>
         </div>
     </div>
     
