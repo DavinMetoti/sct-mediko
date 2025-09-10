@@ -1027,10 +1027,10 @@
         <div class="progress-bar-container">
             <div class="progress-bar" id="progressBar" style="width: 0%"></div>
         </div>
-        <div class="progress-text">
+        <!-- <div class="progress-text">
             <span>Progress: <span id="progressText">0 dari {{ $questions->count() }}</span></span>
             <span>Terjawab: <span id="answeredCount">0</span></span>
-        </div>
+        </div> -->
     </div>
     
     <!-- Quiz Form -->
