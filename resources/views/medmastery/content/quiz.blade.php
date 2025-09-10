@@ -634,7 +634,7 @@
     
     .quiz-navigation .d-flex {
         display: flex;
-        flex-direction: column;
+        flex-direction: column !important;
         gap: 0.75rem;
     }
     
@@ -839,7 +839,7 @@
         }
         
         .quiz-navigation .d-flex {
-            flex-direction: column;
+            flex-direction: column !important;
         }
         
         .question-navigation {
