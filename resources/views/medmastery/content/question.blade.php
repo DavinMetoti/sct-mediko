@@ -250,7 +250,18 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="mb-1" style="color: #2d3748; font-weight: 600;">Pertanyaan</h2>
-            <p class="text-muted mb-0">Kelola pertanyaan untuk pembelajaran medis</p>
+            <p class="text-muted mb-0">
+                Kelola pertanyaan untuk pembelajaran medis
+                @if(isset($totalQuestions) && $totalQuestions > 0)
+                    <span class="badge bg-primary ms-2">{{ $totalQuestions }} 
+                        @if(request()->hasAny(['visibility', 'category_id', 'status', 'search']))
+                            dari total yang difilter
+                        @else
+                            total pertanyaan
+                        @endif
+                    </span>
+                @endif
+            </p>
         </div>
         <a href="{{ route('medmastery-question.create') }}" class="btn-create">
             <i class="fas fa-plus"></i>Tambah Pertanyaan
@@ -287,14 +298,28 @@
                     <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <label class="form-label fw-semibold">Pencarian</label>
-                <input type="text" name="search" class="form-control" placeholder="Cari pertanyaan..." value="{{ request('search') }}">
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Per Halaman</label>
+                <select name="per_page" class="form-select">
+                    <option value="12" {{ request('per_page', 12) == 12 ? 'selected' : '' }}>12</option>
+                    <option value="24" {{ request('per_page') == 24 ? 'selected' : '' }}>24</option>
+                    <option value="48" {{ request('per_page') == 48 ? 'selected' : '' }}>48</option>
+                    <option value="96" {{ request('per_page') == 96 ? 'selected' : '' }}>96</option>
+                </select>
             </div>
-            <div class="col-md-1 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="fas fa-search"></i>
-                </button>
+            <div class="col-md-2 d-flex align-items-end gap-2">
+                <a href="{{ route('medmastery-question.index') }}" class="btn btn-secondary" title="Reset Filter">
+                    <i class="fas fa-refresh"></i>
+                </a>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label fw-semibold">Pencarian</label>
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Cari pertanyaan, penjelasan, atau kategori..." value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Cari
+                    </button>
+                </div>
             </div>
         </form>
     </div>
@@ -378,8 +403,16 @@
         </div>
         
         <!-- Pagination -->
-        <div class="d-flex justify-content-center mt-4">
-            {{ $questions->links() }}
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div class="text-muted">
+                Menampilkan {{ $questions->firstItem() }} - {{ $questions->lastItem() }} dari {{ $questions->total() }} pertanyaan
+                @if($questions->currentPage() > 1)
+                    (Halaman {{ $questions->currentPage() }} dari {{ $questions->lastPage() }})
+                @endif
+            </div>
+            <div>
+                {{ $questions->links() }}
+            </div>
         </div>
     @else
         <!-- Empty State -->
@@ -424,6 +457,39 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.transform = 'translateY(0) scale(1)';
         });
     });
+    
+    // Auto-submit form when filters change (except search)
+    const filterForm = document.querySelector('form[method="GET"]');
+    const filterSelects = filterForm.querySelectorAll('select[name="visibility"], select[name="category_id"], select[name="status"], select[name="per_page"]');
+    
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            // Reset to first page when filter changes
+            const pageInput = filterForm.querySelector('input[name="page"]');
+            if (pageInput) {
+                pageInput.remove();
+            }
+            filterForm.submit();
+        });
+    });
+    
+    // Handle search with debounce
+    const searchInput = filterForm.querySelector('input[name="search"]');
+    let searchTimeout;
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                // Reset to first page when search changes
+                const pageInput = filterForm.querySelector('input[name="page"]');
+                if (pageInput) {
+                    pageInput.remove();
+                }
+                filterForm.submit();
+            }, 500); // Wait 500ms after user stops typing
+        });
+    }
 });
 </script>
 @endsection

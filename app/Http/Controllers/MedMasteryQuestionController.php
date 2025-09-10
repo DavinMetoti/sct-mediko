@@ -18,29 +18,23 @@ class MedMasteryQuestionController extends Controller
     {
         $query = MedMasteryQuestion::with(['category.segmentation', 'creator']);
 
-        // Show questions based on visibility
         $visibility = $request->input('visibility', 'my');
         
         if ($visibility === 'my') {
-            // Only show questions created by the current user
             $query->where('creator_id', Auth::id());
         } elseif ($visibility === 'public') {
-            // Show all public questions
             $query->where('is_public', true);
         } elseif ($visibility === 'all') {
-            // Show user's own questions AND public questions
             $query->where(function($q) {
                 $q->where('creator_id', Auth::id())
                   ->orWhere('is_public', true);
             });
         }
 
-        // Filter by category if provided
         if ($request->filled('category_id')) {
             $query->where('medmastery_category_id', $request->category_id);
         }
 
-        // Search functionality
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -48,6 +42,9 @@ class MedMasteryQuestionController extends Controller
                   ->orWhere('explanation', 'like', "%{$search}%")
                   ->orWhereHas('category', function($categoryQuery) use ($search) {
                       $categoryQuery->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('category.segmentation', function($segmentationQuery) use ($search) {
+                      $segmentationQuery->where('name', 'like', "%{$search}%");
                   });
             });
         }
@@ -57,14 +54,26 @@ class MedMasteryQuestionController extends Controller
             $query->where('is_active', $request->status === 'active');
         }
 
-        $questions = $query->orderBy('created_at', 'desc')->paginate(12);
+        // Handle per page option
+        $perPage = $request->input('per_page', 12);
+        if (!in_array($perPage, [12, 24, 48, 96])) {
+            $perPage = 12;
+        }
+
+        // Get total count for statistics before pagination
+        $totalQuestions = $query->count();
+
+        $questions = $query->orderBy('created_at', 'desc')->paginate($perPage);
+        
+        // Append query parameters to pagination links
+        $questions->appends($request->query());
         
         // Show all categories to all users
         $categories = MedmasteryCategory::with('segmentation')
             ->orderBy('name')
             ->get();
 
-        return view('medmastery.content.question', compact('questions', 'categories'));
+        return view('medmastery.content.question', compact('questions', 'categories', 'totalQuestions'));
     }
 
     /**
