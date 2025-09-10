@@ -2239,11 +2239,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (nextFlipCard) {
                     nextFlipCard.classList.remove('flipped');
                     
-                    // Show the global navigation when going to next question
-                    var quizNavigation = document.querySelector('.quiz-navigation');
-                    if (quizNavigation) {
-                        quizNavigation.style.display = 'flex';
-                    }
                 }
                 
                 // Update the current question tracking
