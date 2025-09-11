@@ -183,13 +183,14 @@
         font-size: 1rem;
         cursor: pointer;
         transition: all 0.3s ease;
-        border: 2px solid #e2e8f0;
-        background: white;
-        color: #64748b;
+        border: 2px solid #94a3b8;
+        background: #94a3b8;
+        color: white;
     }
     
     .question-indicator:hover {
-        border-color: #cbd5e0;
+        border-color: #64748b;
+        background: #64748b;
         transform: translateY(-2px);
     }
     
@@ -219,20 +220,20 @@
     }
     
     .question-indicator.answered {
-        border-color: #10b981;
-        background: #10b981;
+        border-color: #94a3b8;
+        background: #94a3b8;
         color: white;
     }
     
     .question-indicator.unanswered {
-        border-color: #ef4444;
-        background: #ef4444;
+        border-color: #94a3b8;
+        background: #94a3b8;
         color: white;
     }
     
     .question-indicator.incomplete {
-        border-color: #f59e0b;
-        background: #f59e0b;
+        border-color: #94a3b8;
+        background: #94a3b8;
         color: white;
     }
     
@@ -782,10 +783,22 @@
             position: relative;
             top: auto;
             max-height: none;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Reorder sidebar components for mobile */
+        .quiz-timer {
+            order: 1;
         }
         
         .quiz-navigation {
+            order: 2;
             padding: 1rem;
+        }
+        
+        .question-status-nav {
+            order: 3;
         }
         
         .quiz-navigation .btn {
@@ -953,15 +966,19 @@
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot" style="background: #10b981;"></div>
-                    <span>Sudah Dijawab</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-dot" style="background: #ef4444;"></div>
-                    <span>Belum Dijawab</span>
+                    <span>Benar</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot" style="background: #f59e0b;"></div>
-                    <span>Belum Lengkap</span>
+                    <span>Hampir Benar</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #ef4444;"></div>
+                    <span>Salah</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: #94a3b8;"></div>
+                    <span>Belum Dijawab</span>
                 </div>
             </div>
         </div>
@@ -1386,25 +1403,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!questionNum || !questionId) {
                     return;
                 }
+                
                 // Remove all status classes
                 indicator.classList.remove('current', 'answered', 'unanswered', 'incomplete', 'correct', 'partial', 'wrong');
+                
+                // Check if this is the current question
                 if (questionNum === currentQuestion) {
                     indicator.classList.add('current');
                 }
-                // Determine self-assessment value
-                const assessmentInput = document.getElementById(`assessment_${questionId}`);
-                let assessmentValue = '';
-                if (assessmentInput && assessmentInput.value) {
-                    assessmentValue = assessmentInput.value;
-                }
-                if (assessmentValue === 'benar') {
-                    indicator.classList.add('correct');
-                } else if (assessmentValue === 'hampir_benar') {
-                    indicator.classList.add('partial');
-                } else if (assessmentValue === 'salah') {
-                    indicator.classList.add('wrong');
-                } else {
+                
+                // Check if question has been answered
+                const inputElement = document.querySelector(`[data-question-id="${questionId}"]`);
+                const hasAnswer = (answers[questionId] && answers[questionId].trim().length > 0) || 
+                                 (inputElement && inputElement.value && inputElement.value.trim().length > 0);
+                
+                if (!hasAnswer) {
+                    // Question is unanswered - show gray
                     indicator.classList.add('unanswered');
+                } else {
+                    // Question is answered - check self-assessment
+                    const assessmentInput = document.getElementById(`assessment_${questionId}`);
+                    let assessmentValue = '';
+                    if (assessmentInput && assessmentInput.value) {
+                        assessmentValue = assessmentInput.value;
+                    }
+                    
+                    if (assessmentValue === 'benar') {
+                        indicator.classList.add('correct');
+                    } else if (assessmentValue === 'hampir_benar') {
+                        indicator.classList.add('partial');
+                    } else if (assessmentValue === 'salah') {
+                        indicator.classList.add('wrong');
+                    } else {
+                        // Answered but no self-assessment yet - keep gray
+                        indicator.classList.add('answered');
+                    }
                 }
             });
             
