@@ -202,33 +202,33 @@
     }
     
     .question-indicator.correct {
-        border-color: #10b981;
-        background: #10b981;
-        color: white;
+        border-color: #10b981 !important;
+        background: #10b981 !important;
+        color: white !important;
     }
     
     .question-indicator.partial {
-        border-color: #f59e0b;
-        background: #f59e0b;
-        color: white;
+        border-color: #f59e0b !important;
+        background: #f59e0b !important;
+        color: white !important;
     }
     
     .question-indicator.wrong {
-        border-color: #ef4444;
-        background: #ef4444;
-        color: white;
+        border-color: #ef4444 !important;
+        background: #ef4444 !important;
+        color: white !important;
     }
     
     .question-indicator.answered {
-        border-color: #94a3b8;
-        background: #94a3b8;
-        color: white;
+        border-color: #94a3b8 !important;
+        background: #94a3b8 !important;
+        color: white !important;
     }
     
     .question-indicator.unanswered {
-        border-color: #94a3b8;
-        background: #94a3b8;
-        color: white;
+        border-color: #94a3b8 !important;
+        background: #94a3b8 !important;
+        color: white !important;
     }
     
     .question-indicator.incomplete {
@@ -1390,6 +1390,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const sessionKey = 'quiz_progress_{{ $category->id }}';
             let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
             const answers = progress.answers || {};
+            const assessments = progress.assessments || {};
             
             // Update each indicator
             const indicators = document.querySelectorAll('.question-indicator');
@@ -1422,12 +1423,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     indicator.classList.add('unanswered');
                 } else {
                     // Question is answered - check self-assessment
-                    const assessmentInput = document.getElementById(`assessment_${questionId}`);
                     let assessmentValue = '';
+                    
+                    // First check the DOM element
+                    const assessmentInput = document.getElementById(`assessment_${questionId}`);
                     if (assessmentInput && assessmentInput.value) {
                         assessmentValue = assessmentInput.value;
                     }
                     
+                    // Fallback to localStorage if DOM is empty
+                    if (!assessmentValue && assessments[questionId]) {
+                        assessmentValue = assessments[questionId];
+                    }
+                    
+                    // Apply appropriate color based on assessment
                     if (assessmentValue === 'benar') {
                         indicator.classList.add('correct');
                     } else if (assessmentValue === 'hampir_benar') {
@@ -1435,7 +1444,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (assessmentValue === 'salah') {
                         indicator.classList.add('wrong');
                     } else {
-                        // Answered but no self-assessment yet - keep gray
+                        // Answered but no self-assessment yet - keep gray with answered style
                         indicator.classList.add('answered');
                     }
                 }
@@ -1444,7 +1453,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update quick nav buttons state
             updateQuickNavButtons();
         } catch (error) {
-            // Error handling
+            console.error('Error updating question indicators:', error);
         }
     }
     
@@ -1638,6 +1647,17 @@ document.addEventListener('DOMContentLoaded', function() {
             if (hiddenInput) {
                 hiddenInput.value = value;
             }
+            
+            // Save assessment to localStorage
+            const sessionKey = 'quiz_progress_{{ $category->id }}';
+            let progress = JSON.parse(localStorage.getItem(sessionKey) || '{}');
+            if (!progress.assessments) progress.assessments = {};
+            progress.assessments[questionId] = value;
+            progress.timestamp = Date.now();
+            localStorage.setItem(sessionKey, JSON.stringify(progress));
+            
+            // Update question indicators to reflect the assessment
+            updateQuestionIndicators();
         }
     });
     
@@ -1874,11 +1894,20 @@ document.addEventListener('DOMContentLoaded', function() {
         saveProgressBtn.addEventListener('click', function() {
             const answers = {};
             const explanationViewed = {};
+            const assessments = {};
             
             answerInputs.forEach(function(input) {
                 const questionId = input.getAttribute('data-question-id');
                 if (input.value.trim()) {
                     answers[questionId] = input.value;
+                }
+            });
+            
+            // Collect assessments
+            document.querySelectorAll('input[id^="assessment_"]').forEach(function(input) {
+                const questionId = input.id.replace('assessment_', '');
+                if (input.value) {
+                    assessments[questionId] = input.value;
                 }
             });
             
@@ -1892,6 +1921,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             localStorage.setItem('quiz_progress_' + categoryId, JSON.stringify({
                 answers: answers,
+                assessments: assessments,
                 explanationViewed: explanationViewed,
                 timestamp: Date.now(),
                 categoryId: categoryId,
@@ -2155,6 +2185,36 @@ document.addEventListener('DOMContentLoaded', function() {
                         input.value = progress.answers[questionId];
                         input.dispatchEvent(new Event('input'));
                     }
+                });
+            }
+            
+            // Restore assessments
+            if (progress.assessments) {
+                Object.keys(progress.assessments).forEach(questionId => {
+                    const assessmentValue = progress.assessments[questionId];
+                    
+                    // Set hidden input value
+                    const hiddenInput = document.getElementById('assessment_' + questionId);
+                    if (hiddenInput) {
+                        hiddenInput.value = assessmentValue;
+                    }
+                    
+                    // Update the visual state of answer options
+                    const allOptions = document.querySelectorAll(`[data-question-id="${questionId}"].answer-option`);
+                    allOptions.forEach(opt => {
+                        opt.classList.remove('selected', 'wrong', 'partial', 'correct');
+                        const optionValue = opt.getAttribute('data-value');
+                        if (optionValue === assessmentValue) {
+                            opt.classList.add('selected');
+                            if (assessmentValue === 'salah') {
+                                opt.classList.add('wrong');
+                            } else if (assessmentValue === 'hampir_benar') {
+                                opt.classList.add('partial');
+                            } else if (assessmentValue === 'benar') {
+                                opt.classList.add('correct');
+                            }
+                        }
+                    });
                 });
             }
             

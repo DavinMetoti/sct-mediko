@@ -85,7 +85,8 @@
         font-weight: 600;
         color: #2d3748;
         margin-bottom: 0.25rem;
-        flex-wrap: wrap;
+        white-space: normal;
+        word-break: break-word;
     }
     
     .stat-label {
