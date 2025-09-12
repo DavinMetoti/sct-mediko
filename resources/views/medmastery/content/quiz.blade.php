@@ -23,8 +23,6 @@
         position: sticky;
         top: 2rem;
         height: fit-content;
-        max-height: calc(100vh - 4rem);
-        overflow-y: auto;
         min-width: 0;
         width: 100%;
     }
@@ -922,6 +920,38 @@
             </div>
         </div>
         
+        <!-- Global Navigation -->
+        <div class="quiz-navigation">
+            <h6>
+                <i class="fas fa-bars"></i>
+                Menu Navigasi
+            </h6>
+            <div class="nav-section">
+                <div class="d-flex">
+                    <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
+                        <i class="fas fa-arrow-left"></i>
+                        Kembali ke Kategori
+                    </a>
+                    <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+            <div class="nav-section">
+                <div class="d-flex">
+                    <button type="button" class="btn btn-outline" id="saveProgressBtn">
+                        <i class="fas fa-save"></i>
+                        Simpan Progress
+                    </button>
+                    <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
+                        <i class="fas fa-redo"></i>
+                        Reset Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Question Status Navigation -->
         <div class="question-status-nav" id="questionStatusNav">
             <button class="nav-toggle-btn d-md-none" id="navToggleBtn" onclick="toggleNavigation()">
@@ -979,38 +1009,6 @@
                 <div class="legend-item">
                     <div class="legend-dot" style="background: #94a3b8;"></div>
                     <span>Belum Dijawab</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Global Navigation -->
-        <div class="quiz-navigation">
-            <h6>
-                <i class="fas fa-bars"></i>
-                Menu Navigasi
-            </h6>
-            <div class="nav-section">
-                <div class="d-flex">
-                    <a href="{{ route('medmastery.category.show', $category->id) }}" class="btn btn-outline">
-                        <i class="fas fa-arrow-left"></i>
-                        Kembali ke Kategori
-                    </a>
-                    <a href="{{ route('medmastery.index') }}" class="btn btn-outline">
-                        <i class="fas fa-home"></i>
-                        Dashboard
-                    </a>
-                </div>
-            </div>
-            <div class="nav-section">
-                <div class="d-flex">
-                    <button type="button" class="btn btn-outline" id="saveProgressBtn">
-                        <i class="fas fa-save"></i>
-                        Simpan Progress
-                    </button>
-                    <button type="button" class="btn btn-outline" id="restartQuizBtn" onclick="confirmRestartQuiz()">
-                        <i class="fas fa-redo"></i>
-                        Reset Quiz
-                    </button>
                 </div>
             </div>
         </div>
