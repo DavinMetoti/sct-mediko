@@ -91,14 +91,14 @@ class LoginController extends Controller
         if ($user->accessRole->access == "public") {
             Log::info('Checking user device limit', ['user_id' => $user->id]);
 
-            $deviceCount = UserDevice::where('user_id', $user->id)->count();
-            if ($deviceCount >= 2) {
-                Log::error('Device limit reached', ['user_id' => $user->id]);
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Maksimal 2 perangkat diizinkan untuk akun publik.'
-                ], 403);
-            }
+            // $deviceCount = UserDevice::where('user_id', $user->id)->count();
+            // if ($deviceCount >= 2) {
+            //     Log::error('Device limit reached', ['user_id' => $user->id]);
+            //     return response()->json([
+            //         'status' => 'error',
+            //         'message' => 'Maksimal 2 perangkat diizinkan untuk akun publik.'
+            //     ], 403);
+            // }
 
             $existingDevice = UserDevice::where('user_id', $user->id)
                 ->where('device_id', $deviceId)
