@@ -430,12 +430,15 @@
     }
     
     .pdf-viewer {
-        width: 100%;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
         height: 500px;
         border: 2px solid #d1d5db;
         border-radius: 8px;
         background: white;
         margin-bottom: 1.5rem;
+        box-sizing: border-box;
     }
     
     .answer-options {
@@ -865,6 +868,10 @@
         
         .pdf-viewer {
             height: 300px;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+            box-sizing: border-box;
         }
         
         .flip-card, .flip-card-front, .flip-card-back {
@@ -897,6 +904,10 @@
         
         .pdf-viewer {
             height: 250px;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+            box-sizing: border-box;
         }
         
         .answer-option {
@@ -1172,16 +1183,16 @@
                         <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0" style="width:100%;height:100%;min-height:400px;"></iframe>
                         
                         <!-- Text explanation removed to avoid duplication, as it's now shown in "Jawaban Benar" section -->
-<div class="answer-options d-flex flex-row justify-content-between gap-2">
-    <div class="answer-option wrong" data-value="salah" data-question-id="{{ $question->id }}" style="background:#ef4444;color:white;border-color:#ef4444;">
-        <i class="fas fa-times"></i> Salah <span class="selected-indicator" id="selected-indicator-salah-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
-    </div>
-    <div class="answer-option partial" data-value="hampir_benar" data-question-id="{{ $question->id }}" style="background:#f59e0b;color:white;border-color:#f59e0b;">
-        <i class="fas fa-adjust"></i> Hampir Benar <span class="selected-indicator" id="selected-indicator-hampir_benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
-    </div>
-    <div class="answer-option correct" data-value="benar" data-question-id="{{ $question->id }}" style="background:#10b981;color:white;border-color:#10b981;">
-        <i class="fas fa-check"></i> Benar <span class="selected-indicator" id="selected-indicator-benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
-    </div>
+                        <div class="answer-options d-flex flex-row justify-content-between gap-2">
+                            <div class="answer-option wrong" data-value="salah" data-question-id="{{ $question->id }}" style="background:#ef4444;color:white;border-color:#ef4444;">
+                                <i class="fas fa-times"></i> Salah <span class="selected-indicator" id="selected-indicator-salah-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+                            </div>
+                            <div class="answer-option partial" data-value="hampir_benar" data-question-id="{{ $question->id }}" style="background:#f59e0b;color:white;border-color:#f59e0b;">
+                                <i class="fas fa-adjust"></i> Hampir Benar <span class="selected-indicator" id="selected-indicator-hampir_benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+                            </div>
+                            <div class="answer-option correct" data-value="benar" data-question-id="{{ $question->id }}" style="background:#10b981;color:white;border-color:#10b981;">
+                                <i class="fas fa-check"></i> Benar <span class="selected-indicator" id="selected-indicator-benar-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
+                            </div>
                         </div>
                         <input type="hidden" name="self_assessment[{{ $question->id }}]" id="assessment_{{ $question->id }}" value="">
                         <div class="next-button-container" id="nextContainerExplanation-{{ $question->id }}" style="display:none;margin-top:1rem;text-align:center;">
