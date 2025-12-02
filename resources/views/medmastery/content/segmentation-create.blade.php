@@ -201,13 +201,91 @@
         margin-top: 0.25rem;
     }
     
-    .invalid-feedback {
-        color: #e53e3e;
-        font-size: 0.85rem;
-        margin-top: 0.5rem;
+    .access-roles-section {
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        background: #f7fafc;
+        transition: border-color 0.2s ease;
+    }
+    
+    .access-roles-section:hover {
+        border-color: #cbd5e0;
+    }
+    
+    .form-check-label {
+        cursor: pointer;
+        font-weight: 500;
+        color: #2d3748;
+    }
+
+    .form-check-input:checked {
+        background-color: #2d3748;
+        border-color: #2d3748;
+    }
+
+    .allowed-users-section {
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        background: #f7fafc;
+        transition: border-color 0.2s ease;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .allowed-users-section:hover {
+        border-color: #cbd5e0;
+    }
+
+    .users-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .user-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: white;
+        transition: all 0.2s ease;
+    }
+
+    .user-item:hover {
+        border-color: #cbd5e0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-item input[type="checkbox"] {
+        margin-top: 0.125rem;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .user-name {
+        font-weight: 500;
+        color: #2d3748;
+        margin-bottom: 0.25rem;
+        font-size: 0.9rem;
+    }
+
+    .user-details {
         display: flex;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .user-details small {
+        font-size: 0.75rem;
     }
 
     @media (max-width: 768px) {
@@ -291,7 +369,7 @@
                     Warna Tema <span class="required">*</span>
                 </label>
                 <div class="color-section">
-                    <div class="color-circle" id="colorPreview" style="background-color: {{ old('color', '#4a5568') }};"></div>
+                    <div class="color-circle" id="colorPreview" data-color="{{ old('color', '#4a5568') }}"></div>
                     <div style="flex: 1;">
                         <input type="color" 
                                class="d-none" 
@@ -309,6 +387,49 @@
                 </div>
                 @error('color')
                     <div class="invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i>{{ $message }}
+                    </div>
+                @enderror
+            </div>
+                <div class="allowed-users-section">
+                    <div class="mb-2 d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Pilih siswa yang boleh mengakses bidang ini. Jika tidak dipilih, semua siswa dapat mengakses.</small>
+                        <input type="text" id="userSearch" class="form-control form-control-sm" placeholder="Cari siswa..." style="width: 200px;">
+                    </div>
+                    <div class="mb-2 d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectAllUsers">
+                            <label class="form-check-label fw-bold" for="selectAllUsers">
+                                Pilih Semua Siswa
+                            </label>
+                        </div>
+                        <small class="text-muted" id="selectedCount">0 siswa dipilih</small>
+                    </div>
+                    <div class="users-grid" id="usersContainer">
+                        @foreach($users as $user)
+                            <div class="user-item">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="allowed_users[]" 
+                                       value="{{ $user->id }}" 
+                                       id="user_{{ $user->id }}">
+                                <label class="form-check-label" for="user_{{ $user->id }}">
+                                    <div class="user-info">
+                                        <div class="user-name">{{ $user->name }}</div>
+                                        <div class="user-details">
+                                            <small class="text-muted">{{ $user->email }}</small>
+                                            @if($user->accessRole)
+                                                <span class="badge bg-secondary ms-1" style="font-size: 0.6rem;">{{ $user->accessRole->name }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @error('allowed_users')
+                    <div class="invalid-feedback d-block">
                         <i class="fas fa-exclamation-circle"></i>{{ $message }}
                     </div>
                 @enderror
@@ -334,6 +455,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const colorPicker = document.getElementById('colorPicker');
     const colorInput = document.getElementById('colorInput');
     const colorPreview = document.getElementById('colorPreview');
+    const userSearch = document.getElementById('userSearch');
+    const usersContainer = document.getElementById('usersContainer');
+    
+    // Set initial color from data attribute
+    const initialColor = colorPreview.dataset.color;
+    colorPreview.style.backgroundColor = initialColor;
     
     // Color picker functionality
     colorPreview.addEventListener('click', function() {
@@ -345,6 +472,59 @@ document.addEventListener('DOMContentLoaded', function() {
         colorInput.value = color;
         colorPreview.style.backgroundColor = color;
     });
+    
+    // User search functionality
+    if (userSearch && usersContainer) {
+        userSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const userItems = usersContainer.querySelectorAll('.user-item');
+            
+            userItems.forEach(item => {
+                const userName = item.querySelector('.user-name').textContent.toLowerCase();
+                const userEmail = item.querySelector('.user-details small').textContent.toLowerCase();
+                
+                if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Select all users functionality
+    const selectAllUsers = document.getElementById('selectAllUsers');
+    const selectedCount = document.getElementById('selectedCount');
+    
+    function updateSelectedCount() {
+        const checkedBoxes = usersContainer.querySelectorAll('input[name="allowed_users[]"]:checked');
+        const totalBoxes = usersContainer.querySelectorAll('input[name="allowed_users[]"]').length;
+        selectedCount.textContent = `${checkedBoxes.length} siswa dipilih`;
+        
+        // Update select all checkbox state
+        selectAllUsers.checked = checkedBoxes.length === totalBoxes && totalBoxes > 0;
+        selectAllUsers.indeterminate = checkedBoxes.length > 0 && checkedBoxes.length < totalBoxes;
+    }
+    
+    if (selectAllUsers) {
+        selectAllUsers.addEventListener('change', function() {
+            const userCheckboxes = usersContainer.querySelectorAll('input[name="allowed_users[]"]');
+            userCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateSelectedCount();
+        });
+    }
+    
+    // Update count when individual checkboxes change
+    usersContainer.addEventListener('change', function(e) {
+        if (e.target.name === 'allowed_users[]') {
+            updateSelectedCount();
+        }
+    });
+    
+    // Initialize count on page load
+    updateSelectedCount();
     
     // Submit button loading state
     const form = document.getElementById('segmentationForm');

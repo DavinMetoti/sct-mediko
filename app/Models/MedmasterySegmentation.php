@@ -25,4 +25,14 @@ class MedmasterySegmentation extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function accessRoles()
+    {
+        return $this->belongsToMany(AccessRole::class, 'segmentation_access_roles', 'medmastery_segmentation_id', 'access_role_id');
+    }
+
+    public function allowedUsers()
+    {
+        return $this->belongsToMany(User::class, 'segmentation_users', 'medmastery_segmentation_id', 'user_id');
+    }
 }

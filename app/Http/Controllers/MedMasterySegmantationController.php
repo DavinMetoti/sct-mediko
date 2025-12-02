@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MedmasterySegmentation;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class MedMasterySegmantationController extends Controller
@@ -13,7 +14,7 @@ class MedMasterySegmantationController extends Controller
      */
     public function index()
     {
-        $segmentations = MedmasterySegmentation::with('creator')
+        $segmentations = MedmasterySegmentation::with('creator', 'allowedUsers')
             ->orderBy('created_at', 'desc')
             ->get();
             
@@ -25,7 +26,8 @@ class MedMasterySegmantationController extends Controller
      */
     public function create()
     {
-        return view('medmastery.content.segmentation-create');
+        $users = User::active()->orderBy('name')->get();
+        return view('medmastery.content.segmentation-create', compact('users'));
     }
 
     /**
@@ -38,6 +40,8 @@ class MedMasterySegmantationController extends Controller
             'name' => 'required|string|max:255|unique:medmastery_segmentation,name',
             'description' => 'nullable|string|max:1000',
             'color' => ['required', 'string', 'max:7', 'regex:/^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/'],
+            'allowed_users' => 'nullable|array',
+            'allowed_users.*' => 'exists:users,id',
         ], [
             'name.required' => 'Nama segmentasi wajib diisi.',
             'name.unique' => 'Nama segmentasi sudah ada, silakan gunakan nama lain.',
@@ -45,6 +49,8 @@ class MedMasterySegmantationController extends Controller
             'description.max' => 'Deskripsi maksimal 1000 karakter.',
             'color.required' => 'Warna wajib dipilih.',
             'color.regex' => 'Format warna tidak valid.',
+            'allowed_users.array' => 'Pengguna yang diizinkan harus berupa array.',
+            'allowed_users.*.exists' => 'Pengguna yang dipilih tidak valid.',
         ]);
 
         try {
@@ -55,6 +61,11 @@ class MedMasterySegmantationController extends Controller
                 'color' => $request->color,
                 'created_by' => Auth::id(),
             ]);
+
+            // Simpan allowed users jika ada
+            if ($request->has('allowed_users') && is_array($request->allowed_users)) {
+                $segmentation->allowedUsers()->attach($request->allowed_users);
+            }
 
             return redirect()
                 ->route('medmastery-segmentation.index')
@@ -83,7 +94,8 @@ class MedMasterySegmantationController extends Controller
     {
         try {
             $segmentation = MedmasterySegmentation::findOrFail($id);
-            return view('medmastery.content.segmentation-edit', compact('segmentation'));
+            $users = User::active()->orderBy('name')->get();
+            return view('medmastery.content.segmentation-edit', compact('segmentation', 'users'));
         } catch (\Exception $e) {
             return redirect()
                 ->route('medmastery-segmentation.index')
@@ -101,6 +113,8 @@ class MedMasterySegmantationController extends Controller
             'name' => 'required|string|max:255|unique:medmastery_segmentation,name,' . $id,
             'description' => 'nullable|string|max:1000',
             'color' => ['required', 'string', 'max:7', 'regex:/^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/'],
+            'allowed_users' => 'nullable|array',
+            'allowed_users.*' => 'exists:users,id',
         ], [
             'name.required' => 'Nama bidang wajib diisi.',
             'name.unique' => 'Nama bidang sudah ada, silakan gunakan nama lain.',
@@ -108,6 +122,8 @@ class MedMasterySegmantationController extends Controller
             'description.max' => 'Deskripsi maksimal 1000 karakter.',
             'color.required' => 'Warna wajib dipilih.',
             'color.regex' => 'Format warna tidak valid.',
+            'allowed_users.array' => 'Pengguna yang diizinkan harus berupa array.',
+            'allowed_users.*.exists' => 'Pengguna yang dipilih tidak valid.',
         ]);
 
         try {
@@ -118,6 +134,13 @@ class MedMasterySegmantationController extends Controller
                 'description' => $request->description,
                 'color' => $request->color,
             ]);
+
+            // Update allowed users
+            if ($request->has('allowed_users') && is_array($request->allowed_users)) {
+                $segmentation->allowedUsers()->sync($request->allowed_users);
+            } else {
+                $segmentation->allowedUsers()->detach();
+            }
 
             return redirect()
                 ->route('medmastery-segmentation.index')

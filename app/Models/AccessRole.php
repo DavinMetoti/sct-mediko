@@ -15,4 +15,9 @@ class AccessRole extends Model
     {
         return $this->hasMany(PermissionAccessRole::class, 'access_role_id');
     }
+
+    public function segmentations()
+    {
+        return $this->belongsToMany(MedmasterySegmentation::class, 'segmentation_access_roles', 'access_role_id', 'medmastery_segmentation_id');
+    }
 }

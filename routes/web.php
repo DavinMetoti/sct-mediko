@@ -109,6 +109,12 @@ Route::middleware('auth')->resource('admin/question-bank', QuestionBankControlle
 Route::middleware('auth')->resource('admin/column-title', ColumnTitleController::class);
 Route::middleware('auth')->resource('admin/list-invoice', ListInvoiceController::class);
 Route::middleware('auth')->resource('admin/medmastery-segmentation', MedMasterySegmantationController::class);
+Route::middleware(['auth', 'check.segmentation.access'])->group(function () {
+    Route::get('admin/medmastery-segmentation/{segmentation}', [MedMasterySegmantationController::class, 'show'])->name('admin.medmastery-segmentation.show');
+    Route::get('admin/medmastery-segmentation/{segmentation}/edit', [MedMasterySegmantationController::class, 'edit'])->name('admin.medmastery-segmentation.edit');
+    Route::put('admin/medmastery-segmentation/{segmentation}', [MedMasterySegmantationController::class, 'update'])->name('admin.medmastery-segmentation.update');
+    Route::delete('admin/medmastery-segmentation/{segmentation}', [MedMasterySegmantationController::class, 'destroy'])->name('admin.medmastery-segmentation.destroy');
+});
 Route::middleware('auth')->resource('admin/medmastery-category', MedMasteryCategoryController::class);
 Route::middleware('auth')->resource('admin/medmastery-question', MedMasteryQuestionController::class);
 

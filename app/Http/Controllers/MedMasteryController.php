@@ -32,6 +32,20 @@ class MedMasteryController extends Controller
                     });
                 }
             })
+            ->whereHas('segmentation', function($query) use ($user) {
+                // If no user is logged in, only show segmentations with no access restrictions
+                if (!$user) {
+                    $query->whereDoesntHave('allowedUsers');
+                } else {
+                    // For logged in users, show segmentations with no restrictions OR where user is specifically allowed
+                    $query->where(function($q) use ($user) {
+                        $q->whereDoesntHave('allowedUsers') // No restrictions - all users can access
+                          ->orWhereHas('allowedUsers', function($allowedQuery) use ($user) {
+                              $allowedQuery->where('users.id', $user->id); // User is specifically allowed
+                          });
+                    });
+                }
+            })
             ->orderBy('created_at', 'desc')
             ->get();
             
@@ -93,6 +107,28 @@ class MedMasteryController extends Controller
             ->findOrFail($id);
         
         $user = Auth::user();
+        
+        // Check segmentation access
+        if ($category->segmentation) {
+            $hasAccess = false;
+            
+            if ($category->segmentation->allowedUsers->isEmpty()) {
+                // No restrictions - all users can access
+                $hasAccess = true;
+            } elseif ($user && $category->segmentation->allowedUsers->contains($user->id)) {
+                // User is specifically allowed
+                $hasAccess = true;
+            }
+            
+            if (!$hasAccess) {
+                if (!$user) {
+                    return redirect()->route('login')->with('error', 'Silakan login untuk mengakses kategori ini.');
+                } else {
+                    abort(403, 'Anda tidak memiliki akses ke kategori ini.');
+                }
+            }
+        }
+        
         $userRole = $user ? $user->accessRole : null;
         
         // Get accessible questions count based on visibility
@@ -133,9 +169,31 @@ class MedMasteryController extends Controller
         ]);
 
         $category = MedmasteryCategory::findOrFail($categoryId);
+        
+        // Check segmentation access
+        $user = Auth::user();
+        if ($category->segmentation) {
+            $hasAccess = false;
+            
+            if ($category->segmentation->allowedUsers->isEmpty()) {
+                // No restrictions - all users can access
+                $hasAccess = true;
+            } elseif ($user && $category->segmentation->allowedUsers->contains($user->id)) {
+                // User is specifically allowed
+                $hasAccess = true;
+            }
+            
+            if (!$hasAccess) {
+                if (!$user) {
+                    return redirect()->route('login')->with('error', 'Silakan login untuk mengakses kategori ini.');
+                } else {
+                    return redirect()->back()->with('error', 'Anda tidak memiliki akses ke kategori ini.');
+                }
+            }
+        }
+        
         $questionCount = $request->question_count;
         $quizMode = $request->quiz_mode;
-        $user = Auth::user();
         
         // Create a unique session key for this quiz
         $sessionKey = 'quiz_session_' . $categoryId . '_' . ($user ? $user->id : 'guest');
@@ -231,7 +289,28 @@ class MedMasteryController extends Controller
     public function submitQuiz(Request $request, string $categoryId)
     {
         $category = MedmasteryCategory::findOrFail($categoryId);
+        
+        // Check segmentation access
         $user = Auth::user();
+        if ($category->segmentation) {
+            $hasAccess = false;
+            
+            if ($category->segmentation->allowedUsers->isEmpty()) {
+                // No restrictions - all users can access
+                $hasAccess = true;
+            } elseif ($user && $category->segmentation->allowedUsers->contains($user->id)) {
+                // User is specifically allowed
+                $hasAccess = true;
+            }
+            
+            if (!$hasAccess) {
+                if (!$user) {
+                    return redirect()->route('login')->with('error', 'Silakan login untuk mengakses kategori ini.');
+                } else {
+                    return redirect()->back()->with('error', 'Anda tidak memiliki akses ke kategori ini.');
+                }
+            }
+        }
         
         if (!$user) {
             // Return JSON for AJAX requests

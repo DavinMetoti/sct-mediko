@@ -111,4 +111,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(MedMasteryAnswer::class, 'user_id');
     }
+
+    public function allowedSegmentations()
+    {
+        return $this->belongsToMany(MedmasterySegmentation::class, 'segmentation_users', 'user_id', 'medmastery_segmentation_id');
+    }
 }

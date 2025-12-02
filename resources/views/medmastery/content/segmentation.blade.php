@@ -144,6 +144,28 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-12">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="rounded-circle bg-info d-flex align-items-center justify-content-center me-2" 
+                                                         style="width: 28px; height: 28px;">
+                                                        <i class="fas fa-users text-white" style="font-size: 0.7rem;"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="fw-500 text-dark mb-1" style="font-size: 0.8rem;">Siswa yang Boleh Akses</div>
+                                                        <div style="font-size: 0.75rem;">
+                                                            @if($segmentation->allowedUsers->count() > 0)
+                                                                @foreach($segmentation->allowedUsers as $user)
+                                                                    <span class="badge bg-light text-dark me-1 mb-1" style="font-size: 0.7rem;">
+                                                                        {{ $user->name }}
+                                                                    </span>
+                                                                @endforeach
+                                                            @else
+                                                                <span class="text-muted fst-italic">Semua siswa memiliki akses</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
