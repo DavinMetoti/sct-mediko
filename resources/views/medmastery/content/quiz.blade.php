@@ -1080,7 +1080,7 @@
                             {!! $question->question_text !!}
                         </div>
                         
-                        <div class="answer-section">
+                        <!-- <div class="answer-section">
                             <label for="answer_{{ $question->id }}" class="form-label">
                                 <i class="fas fa-edit"></i>
                                 Jawaban Anda:
@@ -1093,12 +1093,11 @@
                                 data-question-id="{{ $question->id }}"
                                 data-question-index="{{ $index }}"
                                 rows="5"
-                                required
                             ></textarea>
                             <div class="answer-counter">
                                 <span id="counter_{{ $question->id }}">0 karakter</span>
                             </div>
-                        </div>
+                        </div> -->
                         
                         <!-- Show Explanation Button -->
                         @if($question->explanation_pdf_path)
