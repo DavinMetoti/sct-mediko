@@ -1102,7 +1102,7 @@
                         <!-- Show Explanation Button -->
                         @if($question->explanation_pdf_path)
                         <div class="explanation-trigger">
-                            <button type="button" class="btn btn-outline show-explanation-btn disabled-no-answer" data-question-id="{{ $question->id }}" disabled>
+                            <button type="button" class="btn btn-outline show-explanation-btn" data-question-id="{{ $question->id }}">
                                 <i class="fas fa-eye"></i>
                                 <span class="d-none d-sm-inline">Lihat</span> Penjelasan
                             </button>
@@ -1675,22 +1675,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const btn = e.target.classList.contains('show-explanation-btn') ? e.target : e.target.closest('.show-explanation-btn');
             const questionId = btn.getAttribute('data-question-id');
             const answerTextarea = document.getElementById('answer_' + questionId);
-            if (!answerTextarea || answerTextarea.value.trim().length === 0) {
-                // Show warning if no answer provided
-                const warningElement = document.getElementById('warning-' + questionId);
-                if (warningElement) {
-                    warningElement.classList.add('show');
-                    // Flash effect for attention
-                    warningElement.style.animation = 'flash 0.5s ease-in-out';
-                    setTimeout(() => {
-                        warningElement.style.animation = '';
-                    }, 500);
-                }
-                return;
-            }
+            
+            // Always allow showing explanation regardless of answer
             flipToExplanation(questionId);
-            // Disable the answer textarea for this question
-            if (answerTextarea) {
+            
+            // Disable the answer textarea for this question only if it has content
+            if (answerTextarea && answerTextarea.value.trim().length > 0) {
                 answerTextarea.disabled = true;
                 answerTextarea.style.backgroundColor = '#f8fafc';
                 answerTextarea.style.color = '#64748b';
@@ -1796,32 +1786,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const warningElement = document.getElementById('warning-' + questionId);
             
             if (explanationBtn && !explanationBtn.classList.contains('flip-toggle-btn')) {
-                if (isAnswered) {
-                    explanationBtn.disabled = false;
-                    explanationBtn.classList.remove('disabled-no-answer');
-                    if (warningElement) {
-                        warningElement.classList.remove('show');
-                    }
-                } else {
-                    explanationBtn.disabled = true;
-                    explanationBtn.classList.add('disabled-no-answer');
-                    if (warningElement) {
-                        warningElement.classList.add('show');
-                    }
+                // Always enable the explanation button
+                explanationBtn.disabled = false;
+                explanationBtn.classList.remove('disabled-no-answer');
+                if (warningElement) {
+                    warningElement.classList.remove('show');
                 }
             } else if (explanationBtn && explanationBtn.classList.contains('flip-toggle-btn')) {
-                // If button has been upgraded to toggle button, keep it enabled if answer exists
-                if (isAnswered) {
-                    explanationBtn.disabled = false;
-                    if (warningElement) {
-                        warningElement.classList.remove('show');
-                    }
-                } else {
-                    // Only disable if no answer
-                    explanationBtn.disabled = true;
-                    if (warningElement) {
-                        warningElement.classList.add('show');
-                    }
+                // Always keep the toggle button enabled
+                explanationBtn.disabled = false;
+                if (warningElement) {
+                    warningElement.classList.remove('show');
                 }
             }
             
