@@ -1163,12 +1163,12 @@
                         </div>
                         
                         <!-- 1. Jawaban Anda (Your Answer) -->
-                        <div class="participant-answer mb-3">
+                        <!-- <div class="participant-answer mb-3">
                             <strong>Jawaban Anda:</strong>
                             <div style="background:#fffbe6;padding:1rem;border-radius:8px;border:1px solid #ffe58f;">
                                 <p style="margin-bottom:0;" id="participant-answer-{{ $question->id }}"></p>
                             </div>
-                        </div>
+                        </div> -->
                         
                         <!-- 2. Jawaban Benar (Correct Answer) -->
                         <div class="correct-answer mb-3">
