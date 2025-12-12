@@ -1998,11 +1998,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const actualAnsweredCount = Object.keys(answersData).length;
             
-            if (actualAnsweredCount === 0) {
-                alert('Silakan jawab minimal 1 pertanyaan sebelum submit.');
-                return;
-            }
-            
             // Validate that all answered questions have self-assessments
             const missingAssessments = [];
             Object.keys(answersData).forEach(function(questionId) {
