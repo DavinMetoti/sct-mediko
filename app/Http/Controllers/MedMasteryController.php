@@ -346,25 +346,6 @@ class MedMasteryController extends Controller
         
         $totalQuestions = count($validAnswers);
         
-        // Check if there are any valid answers
-        if ($totalQuestions === 0) {
-            Log::warning('No valid answers found in quiz submission', [
-                'user_id' => $user->id,
-                'category_id' => $categoryId,
-                'raw_answers' => $answers
-            ]);
-            
-            // Return JSON for AJAX requests
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Silakan jawab minimal 1 pertanyaan sebelum submit.'
-                ], 400);
-            }
-            
-            return redirect()->back()->with('error', 'Silakan jawab minimal 1 pertanyaan sebelum submit.');
-        }
-        
         // Create main answer record
         $medMasteryAnswer = MedMasteryAnswer::create([
             'user_id' => $user->id,
