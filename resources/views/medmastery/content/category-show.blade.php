@@ -346,10 +346,12 @@
         opacity: 0.8;
     }
     
-    .count-option.selected .count-number,
-    .count-option.selected .count-label {
-        color: white;
-        opacity: 1;
+    .count-option.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+        background: #f8f9fa;
+        border-color: #dee2e6;
     }
     
     @media (max-width: 768px) {
@@ -997,6 +999,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateQuestionCountOptions(mode) {
         const totalQuestions = {{ $category->accessible_active_questions_count ?? 0 }};
+        const unansweredQuestions = {{ $category->unanswered_questions_count ?? 0 }};
         const defaultOptions = [10, 25, 50];
         
         // Clear existing options
@@ -1022,16 +1025,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 container.innerHTML = '<div class="text-center text-muted p-3"><i class="fas fa-info-circle me-2"></i>Tidak ada soal yang salah untuk dikerjakan ulang</div>';
             }
         } else {
-            // For new mode, show standard options
+            // For new mode, show all default options but disable those exceeding unanswered questions
             defaultOptions.forEach(count => {
                 if (count <= totalQuestions) {
-                    const option = createCountOption(count, 'soal');
+                    const disabled = count > unansweredQuestions;
+                    const option = createCountOption(count, 'soal', disabled);
                     container.appendChild(option);
                 }
             });
             
+            // Add "all" option if totalQuestions < 50
             if (totalQuestions > 0 && totalQuestions < 50) {
-                const option = createCountOption(totalQuestions, 'semua');
+                const disabled = totalQuestions > unansweredQuestions;
+                const option = createCountOption(totalQuestions, 'semua', disabled);
                 container.appendChild(option);
             }
         }
@@ -1040,9 +1046,9 @@ document.addEventListener('DOMContentLoaded', function() {
         attachCountOptionListeners();
     }
     
-    function createCountOption(count, label) {
+    function createCountOption(count, label, disabled = false) {
         const div = document.createElement('div');
-        div.className = 'count-option';
+        div.className = 'count-option' + (disabled ? ' disabled' : '');
         div.setAttribute('data-count', count);
         div.innerHTML = `
             <div class="count-number">${count}</div>
@@ -1052,13 +1058,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function attachCountOptionListeners() {
-        const newCountOptions = document.querySelectorAll('.count-option');
+        const newCountOptions = document.querySelectorAll('.count-option:not(.disabled)');
         newCountOptions.forEach(option => {
             option.addEventListener('click', function() {
                 const count = this.getAttribute('data-count');
                 
                 // Remove selected class from all options
-                newCountOptions.forEach(opt => opt.classList.remove('selected'));
+                document.querySelectorAll('.count-option').forEach(opt => opt.classList.remove('selected'));
                 
                 // Add selected class to clicked option
                 this.classList.add('selected');
