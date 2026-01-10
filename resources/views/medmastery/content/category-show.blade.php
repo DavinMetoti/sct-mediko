@@ -717,8 +717,8 @@
                                         Mode Latihan
                                     </label>
                                     <div class="quiz-mode-options d-flex gap-3 mb-3">
-                                        <button type="button" class="btn quiz-mode-btn flex-fill @if(($category->unanswered_questions_count ?? 0) == 0 || ($category->wrong_questions_count ?? 0) > 0) disabled @endif" data-mode="new" 
-                                                title="@if(($category->unanswered_questions_count ?? 0) == 0) Semua soal sudah pernah dikerjakan. Gunakan mode 'Kerjakan yang Salah' untuk melatih ulang. @elseif(($category->wrong_questions_count ?? 0) > 0) Ada soal yang perlu diulang. Selesaikan dulu mode 'Kerjakan yang Salah' untuk pengalaman belajar yang optimal. @else Latihan dengan soal-soal baru yang belum pernah dikerjakan @endif">
+                                        <button type="button" class="btn quiz-mode-btn flex-fill @if(($category->unanswered_questions_count ?? 0) == 0) disabled @endif" data-mode="new" 
+                                                title="@if(($category->unanswered_questions_count ?? 0) == 0) Semua soal sudah pernah dikerjakan. Gunakan mode 'Kerjakan yang Salah' untuk melatih ulang. @else Latihan dengan soal-soal baru yang belum pernah dikerjakan @endif">
                                             <div class="mode-icon">
                                                 <i class="fas fa-plus-circle"></i>
                                             </div>
@@ -726,8 +726,6 @@
                                             <div class="mode-subtitle">
                                                 @if(($category->unanswered_questions_count ?? 0) == 0)
                                                     Semua soal sudah dikerjakan
-                                                @elseif(($category->wrong_questions_count ?? 0) > 0)
-                                                    Fokus kerjakan yang salah dulu
                                                 @else
                                                     Latihan dengan soal-soal fresh
                                                 @endif
