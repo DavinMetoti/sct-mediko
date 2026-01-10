@@ -60,6 +60,15 @@ class MedMasteryQuestion extends Model
         return $query->where('medmastery_category_id', $categoryId);
     }
 
+    public function scopeNotAnsweredByUser($query, $userId)
+    {
+        return $query->whereDoesntHave('answerDetails', function($q) use ($userId) {
+            $q->whereHas('answer', function($a) use ($userId) {
+                $a->where('user_id', $userId);
+            });
+        });
+    }
+
     public function answerDetails()
     {
         return $this->hasMany(MedMasteryAnswerDetail::class, 'med_mastery_question_id');

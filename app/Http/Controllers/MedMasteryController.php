@@ -247,9 +247,27 @@ class MedMasteryController extends Controller
                 $questionsQuery->where('is_public', true);
             }
             
-            $questions = $questionsQuery->inRandomOrder()
-                ->limit($questionCount)
-                ->get();
+            // First, try to get unanswered questions
+            $unansweredQuery = clone $questionsQuery;
+            if ($user) {
+                $unansweredQuery->notAnsweredByUser($user->id);
+            }
+            $unansweredQuestions = $unansweredQuery->inRandomOrder()->limit($questionCount)->get();
+            
+            $questions = $unansweredQuestions;
+            
+            // If we don't have enough unanswered questions, fill with random questions
+            if ($questions->count() < $questionCount) {
+                $needed = $questionCount - $questions->count();
+                $existingIds = $questions->pluck('id')->toArray();
+                
+                $additionalQuestions = $questionsQuery->whereNotIn('id', $existingIds)
+                    ->inRandomOrder()
+                    ->limit($needed)
+                    ->get();
+                
+                $questions = $questions->merge($additionalQuestions);
+            }
         }
             
         if ($questions->isEmpty()) {
