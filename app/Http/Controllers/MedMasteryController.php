@@ -148,6 +148,22 @@ class MedMasteryController extends Controller
         $category->accessible_questions_count = $accessibleQuestionsCount->count();
         $category->accessible_active_questions_count = $accessibleQuestionsCount->where('is_active', true)->count();
         
+        // Get unanswered questions count for logged in users
+        if ($user) {
+            $unansweredQuestionsCount = MedMasteryQuestion::active()
+                ->byCategory($id)
+                ->where(function($q) use ($user) {
+                    $q->where('creator_id', $user->id)
+                      ->orWhere('is_public', true);
+                })
+                ->notAnsweredByUser($user->id)
+                ->count();
+            $category->unanswered_questions_count = $unansweredQuestionsCount;
+        } else {
+            // For guests, all accessible questions are unanswered
+            $category->unanswered_questions_count = $category->accessible_active_questions_count;
+        }
+        
         return view('medmastery.content.category-show', compact('category', 'user', 'userRole'));
     }
 

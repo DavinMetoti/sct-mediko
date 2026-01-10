@@ -689,13 +689,19 @@
                                         Mode Latihan
                                     </label>
                                     <div class="quiz-mode-options d-flex gap-3 mb-3">
-                                        <button type="button" class="btn quiz-mode-btn flex-fill" data-mode="new" 
-                                                title="Latihan dengan soal-soal baru yang belum pernah dikerjakan">
+                                        <button type="button" class="btn quiz-mode-btn flex-fill @if(($category->unanswered_questions_count ?? 0) == 0) disabled @endif" data-mode="new" 
+                                                title="@if(($category->unanswered_questions_count ?? 0) == 0) Semua soal sudah pernah dikerjakan. Gunakan mode 'Kerjakan yang Salah' untuk melatih ulang. @else Latihan dengan soal-soal baru yang belum pernah dikerjakan @endif">
                                             <div class="mode-icon">
                                                 <i class="fas fa-plus-circle"></i>
                                             </div>
                                             <div class="mode-title">Pertanyaan Baru</div>
-                                            <div class="mode-subtitle">Latihan dengan soal-soal fresh</div>
+                                            <div class="mode-subtitle">
+                                                @if(($category->unanswered_questions_count ?? 0) == 0)
+                                                    Semua soal sudah dikerjakan
+                                                @else
+                                                    Latihan dengan soal-soal fresh
+                                                @endif
+                                            </div>
                                         </button>
                                         <button type="button" class="btn quiz-mode-btn flex-fill" data-mode="wrong" id="wrongModeBtn"
                                                 title="Mengulang soal-soal yang pernah dijawab salah untuk memperbaiki pemahaman">
@@ -858,6 +864,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle quiz mode selection
     quizModeButtons.forEach(button => {
         button.addEventListener('click', function() {
+            if (this.disabled) return;
+            
             const mode = this.getAttribute('data-mode');
             
             // Remove active class from all buttons
