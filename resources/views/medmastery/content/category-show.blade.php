@@ -696,7 +696,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 mt-2">
-                                        <div class="text-center p-2 bg-warning bg-opacity-10 rounded">
+                                        <div class="text-center p-2 border border-warning rounded">
                                             <div class="stat-number text-warning">{{ $category->wrong_questions_count ?? 0 }}</div>
                                             <div class="stat-label small">Perlu Diulang (Salah)</div>
                                         </div>
