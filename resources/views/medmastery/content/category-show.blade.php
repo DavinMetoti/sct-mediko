@@ -676,6 +676,34 @@
                     @else
                         <!-- User Actions -->
                         @if(($category->accessible_questions_count ?? 0) > 0)
+                            <!-- Question Statistics -->
+                            <div class="info-card mb-3">
+                                <h5 class="info-title">
+                                    <i class="fas fa-chart-bar text-info"></i>
+                                    Statistik Soal
+                                </h5>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="text-center p-2 bg-light rounded">
+                                            <div class="stat-number text-success">{{ $category->accessible_active_questions_count - ($category->unanswered_questions_count ?? 0) }}</div>
+                                            <div class="stat-label small">Sudah Dikerjakan</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-center p-2 bg-light rounded">
+                                            <div class="stat-number text-primary">{{ $category->unanswered_questions_count ?? 0 }}</div>
+                                            <div class="stat-label small">Belum Dikerjakan</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <div class="text-center p-2 bg-warning bg-opacity-10 rounded">
+                                            <div class="stat-number text-warning">{{ $category->wrong_questions_count ?? 0 }}</div>
+                                            <div class="stat-label small">Perlu Diulang (Salah)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="user-practice-section">
                                 <h4 class="mb-3">
                                     <i class="fas fa-play text-primary"></i>
