@@ -161,8 +161,20 @@ class MedMasteryController extends Controller
             $category->unanswered_questions_count = $unansweredQuestionsCount;
             
             // Get wrong questions count
-            $wrongCountData = $this->getWrongQuestionsCount($id);
-            $category->wrong_questions_count = $wrongCountData['count'];
+            $wrongQuestionsCount = MedMasteryAnswerDetail::join('med_mastery_answers', 'med_mastery_answer_details.med_mastery_answer_id', '=', 'med_mastery_answers.id')
+                ->join('med_mastery_questions', 'med_mastery_answer_details.med_mastery_question_id', '=', 'med_mastery_questions.id')
+                ->where('med_mastery_answers.user_id', $user->id)
+                ->where('med_mastery_answers.med_mastery_category_id', $id)
+                ->where('med_mastery_answer_details.score', '<', 1) // Score kurang dari 1 (salah)
+                ->where('med_mastery_questions.is_active', true) // Only active questions
+                ->where(function($query) use ($user) {
+                    // Only include questions that user can access (own questions OR public questions)
+                    $query->where('med_mastery_questions.creator_id', $user->id)
+                          ->orWhere('med_mastery_questions.is_public', true);
+                })
+                ->distinct()
+                ->count('med_mastery_answer_details.med_mastery_question_id');
+            $category->wrong_questions_count = $wrongQuestionsCount;
             
             Log::info('Category counts', [
                 'category_id' => $id,
