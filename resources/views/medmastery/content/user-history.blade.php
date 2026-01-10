@@ -389,7 +389,13 @@
                         <div class="quiz-stat-label">Terjawab</div>
                     </div>
                     <div class="quiz-stat">
-                        <div class="quiz-stat-value">{{ number_format(($quiz->answerDetails->count() / $quiz->total_questions) * 100, 0) }}%</div>
+                        @php
+                            $percentage = $quiz->total_questions > 0
+                                ? ($quiz->answerDetails->count() / $quiz->total_questions) * 100
+                                : 0;
+                        @endphp
+
+                        <div class="quiz-stat-value">{{ number_format($percentage, 0) }}%</div>
                         <div class="quiz-stat-label">Kelengkapan</div>
                     </div>
                     @if($quiz->score !== null)
