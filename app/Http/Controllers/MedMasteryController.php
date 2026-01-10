@@ -159,9 +159,22 @@ class MedMasteryController extends Controller
                 ->notAnsweredByUser($user->id)
                 ->count();
             $category->unanswered_questions_count = $unansweredQuestionsCount;
+            
+            // Get wrong questions count
+            $wrongCountData = $this->getWrongQuestionsCount($id);
+            $category->wrong_questions_count = $wrongCountData['count'];
+            
+            Log::info('Category counts', [
+                'category_id' => $id,
+                'user_id' => $user->id,
+                'unanswered_count' => $unansweredQuestionsCount,
+                'wrong_count' => $category->wrong_questions_count,
+                'accessible_active' => $category->accessible_active_questions_count
+            ]);
         } else {
             // For guests, all accessible questions are unanswered
             $category->unanswered_questions_count = $category->accessible_active_questions_count;
+            $category->wrong_questions_count = 0;
         }
         
         return view('medmastery.content.category-show', compact('category', 'user', 'userRole'));
