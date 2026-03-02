@@ -1000,7 +1000,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateQuestionCountOptions(mode) {
         const totalQuestions = {{ $category->accessible_active_questions_count ?? 0 }};
         const unansweredQuestions = {{ $category->unanswered_questions_count ?? 0 }};
-        const defaultOptions = [10, 25, 50];
+        let defaultOptions = [10, 25, 50];
+        
+        // Adjust first option if unanswered questions are less than 10
+        if (mode === 'new' && unansweredQuestions < 10 && unansweredQuestions > 0) {
+            defaultOptions[0] = unansweredQuestions;
+        }
         
         // Clear existing options
         const container = document.querySelector('.question-count-options');
