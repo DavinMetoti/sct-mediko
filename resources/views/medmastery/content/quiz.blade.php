@@ -1100,7 +1100,6 @@
                         </div>
                         
                         <!-- Show Explanation Button -->
-                        @if($question->explanation_pdf_path)
                         <div class="explanation-trigger">
                             <button type="button" class="btn btn-outline show-explanation-btn" data-question-id="{{ $question->id }}">
                                 <i class="fas fa-eye"></i>
@@ -1112,7 +1111,6 @@
                                 <span class="d-sm-none">Jawab dulu sebelum lihat penjelasan</span>
                             </div> -->
                         </div>
-                        @endif
                         
                         <!-- Question Navigation -->
                         <div class="question-navigation">
@@ -1128,7 +1126,7 @@
                                 </div>
                             </div>
                             
-                            <div class="next-button-container" id="nextContainer-{{ $question->id }}" style="{{ $question->explanation_pdf_path ? 'display: none;' : '' }}">
+                            <div class="next-button-container" id="nextContainer-{{ $question->id }}" style="display: none;">
                                 @if($index < $questions->count() - 1)
                                     <button type="button" class="btn btn-primary btn-nav" id="nextBtn">
                                         <span class="d-none d-sm-inline">Selanjutnya</span>
@@ -1148,20 +1146,19 @@
                 </div>
                 <!-- Back: Explanation Section -->
                 <div class="flip-card-back">
-                    @if($question->explanation_pdf_path)
                     <div class="explanation-section" id="explanation-{{ $question->id }}">
                         <div class="explanation-header">
-                            <i class="fas fa-file-pdf"></i>
+                            <i class="fas fa-lightbulb"></i>
                             Penjelasan & Pembahasan
                         </div>
-                        
+
                         <!-- Toggle back to question button -->
                         <div style="text-align:right;margin-bottom:1rem;">
                             <button type="button" class="btn flip-toggle-btn" onclick="flipBack({{ $question->id }})">
                                 <i class="fas fa-undo"></i> Lihat Soal Kembali
                             </button>
                         </div>
-                        
+
                         <!-- 1. Jawaban Anda (Your Answer) -->
                         <div class="participant-answer mb-3">
                             <strong>Jawaban Anda:</strong>
@@ -1169,7 +1166,7 @@
                                 <p style="margin-bottom:0;" id="participant-answer-{{ $question->id }}"></p>
                             </div>
                         </div>
-                        
+
                         <!-- 2. Jawaban Benar (Correct Answer) -->
                         <div class="correct-answer mb-3">
                             <strong>Jawaban Benar:</strong>
@@ -1177,11 +1174,20 @@
                                 <p style="margin-bottom:0;">{!! $question->correct_answer ?? $question->explanation ?? 'Jawaban benar tidak tersedia' !!}</p>
                             </div>
                         </div>
-                        
-                        <!-- 3. PDF Viewer -->
-                        <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0" style="width:100%;height:100%;min-height:400px;"></iframe>
-                        
-                        <!-- Text explanation removed to avoid duplication, as it's now shown in "Jawaban Benar" section -->
+
+                        <!-- 3. PDF Viewer (if available) -->
+                        @if($question->explanation_pdf_path)
+                        <div class="pdf-section mb-3">
+                            <iframe src="{{ url('storage/' . $question->explanation_pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0" class="pdf-viewer" frameborder="0"></iframe>
+                        </div>
+                        @else
+                        <div class="pdf-section mb-3" style="background:#f8f9fa;border:1px solid #dee2e6;padding:2rem;text-align:center;border-radius:8px;">
+                            <i class="fas fa-file-pdf" style="font-size:3rem;color:#6c757d;margin-bottom:1rem;"></i>
+                            <p style="color:#6c757d;margin-bottom:0;">File PDF penjelasan tidak tersedia</p>
+                        </div>
+                        @endif
+
+                        <!-- Self Assessment Options -->
                         <div class="answer-options d-flex flex-row justify-content-between gap-2">
                             <div class="answer-option wrong" data-value="salah" data-question-id="{{ $question->id }}" style="background:#ef4444;color:white;border-color:#ef4444;">
                                 <i class="fas fa-times"></i> Salah <span class="selected-indicator" id="selected-indicator-salah-{{ $question->id }}" style="display:none;margin-left:8px;"></span>
@@ -1262,7 +1268,6 @@
                         }
                     });
                     </script>
-                    @endif
                 </div>
             </div>
         </div>

@@ -54,6 +54,15 @@ class MedMasteryQuestionController extends Controller
             $query->where('is_active', $request->status === 'active');
         }
 
+        // Filter by PDF availability
+        if ($request->filled('pdf_filter')) {
+            if ($request->pdf_filter === 'with_pdf') {
+                $query->whereNotNull('explanation_pdf_path');
+            } elseif ($request->pdf_filter === 'without_pdf') {
+                $query->whereNull('explanation_pdf_path');
+            }
+        }
+
         // Handle per page option
         $perPage = $request->input('per_page', 12);
         if (!in_array($perPage, [12, 24, 48, 96])) {
@@ -62,6 +71,11 @@ class MedMasteryQuestionController extends Controller
 
         // Get total count for statistics before pagination
         $totalQuestions = $query->count();
+
+        // Calculate PDF statistics
+        $baseQuery = clone $query;
+        $withPdfCount = $baseQuery->whereNotNull('explanation_pdf_path')->count();
+        $withoutPdfCount = $baseQuery->whereNull('explanation_pdf_path')->count();
 
         $questions = $query->orderBy('created_at', 'desc')->paginate($perPage);
         
@@ -73,7 +87,7 @@ class MedMasteryQuestionController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('medmastery.content.question', compact('questions', 'categories', 'totalQuestions'));
+        return view('medmastery.content.question', compact('questions', 'categories', 'totalQuestions', 'withPdfCount', 'withoutPdfCount'));
     }
 
     /**
@@ -98,13 +112,14 @@ class MedMasteryQuestionController extends Controller
             'medmastery_category_id' => 'required|exists:medmastery_category,id',
             'question_text' => 'required|string',
             'explanation' => 'required|string',
-            'explanation_pdf' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
+            'explanation_pdf' => 'required|file|mimes:pdf|max:10240', // 10MB max
             'is_public' => 'nullable|boolean',
         ], [
             'medmastery_category_id.required' => 'Kategori harus dipilih',
             'medmastery_category_id.exists' => 'Kategori yang dipilih tidak valid',
             'question_text.required' => 'Pertanyaan tidak boleh kosong',
             'explanation.required' => 'Penjelasan tidak boleh kosong',
+            'explanation_pdf.required' => 'File PDF penjelasan wajib diupload',
             'explanation_pdf.file' => 'File harus berupa dokumen PDF',
             'explanation_pdf.mimes' => 'File harus berformat PDF',
             'explanation_pdf.max' => 'Ukuran file maksimal 10MB'

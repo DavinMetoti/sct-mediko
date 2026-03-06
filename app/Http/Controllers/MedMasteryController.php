@@ -288,26 +288,37 @@ class MedMasteryController extends Controller
                 $questionsQuery->where('is_public', true);
             }
             
-            // First, try to get unanswered questions
-            $unansweredQuery = clone $questionsQuery;
-            if ($user) {
-                $unansweredQuery->notAnsweredByUser($user->id);
+            // Get total questions count
+            $totalQuestions = $questionsQuery->count();
+            
+            if ($totalQuestions == 0) {
+                return redirect()->back()->with('error', 'Tidak ada soal tersedia untuk kategori ini.');
             }
-            $unansweredQuestions = $unansweredQuery->inRandomOrder()->limit($questionCount)->get();
             
-            $questions = $unansweredQuestions;
+            // Get count of answers by this user in this category
+            $answeredCount = 0;
+            if ($user) {
+                $answeredCount = MedMasteryAnswerDetail::whereHas('answer', function($q) use ($user, $categoryId) {
+                    $q->where('user_id', $user->id);
+                })->whereHas('question', function($q) use ($categoryId) {
+                    $q->where('medmastery_category_id', $categoryId);
+                })->count();
+            }
             
-            // If we don't have enough unanswered questions, fill with random questions
-            if ($questions->count() < $questionCount) {
-                $needed = $questionCount - $questions->count();
-                $existingIds = $questions->pluck('id')->toArray();
-                
-                $additionalQuestions = $questionsQuery->whereNotIn('id', $existingIds)
-                    ->inRandomOrder()
-                    ->limit($needed)
-                    ->get();
-                
-                $questions = $questions->merge($additionalQuestions);
+            // Calculate offset for sequential selection
+            $offset = $answeredCount % $totalQuestions;
+            
+            // Get questions sequentially starting from offset, wrapping around if needed
+            $questions = collect();
+            $remaining = $questionCount;
+            $currentOffset = $offset;
+            
+            while ($remaining > 0) {
+                $take = min($remaining, $totalQuestions - $currentOffset);
+                $batch = $questionsQuery->orderBy('id')->skip($currentOffset)->take($take)->get();
+                $questions = $questions->merge($batch);
+                $remaining -= $take;
+                $currentOffset = 0; // Next batch from beginning
             }
         }
             

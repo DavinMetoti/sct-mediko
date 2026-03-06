@@ -153,23 +153,52 @@
         outline: none;
     }
     
-    .empty-state {
+    .pdf-stat-item {
+        background: #f8f9fa;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
         text-align: center;
-        padding: 4rem 2rem;
-        color: #718096;
+        transition: all 0.2s ease;
+        min-width: 100px;
     }
     
-    .empty-icon {
-        font-size: 4rem;
-        opacity: 0.3;
-        margin-bottom: 1rem;
+    .pdf-stat-item:hover {
+        background: #e9ecef;
+        border-color: #cbd3da;
+        transform: translateY(-1px);
     }
     
-    .empty-title {
+    .pdf-stat-item.pdf-missing {
+        background: #fff3cd;
+        border-color: #ffeaa7;
+        color: #856404;
+    }
+    
+    .pdf-stat-item.pdf-missing:hover {
+        background: #ffeaa7;
+        border-color: #f39c12;
+    }
+    
+    .stat-number {
         font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #4a5568;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-label {
+        font-size: 0.85rem;
+        color: #718096;
+        font-weight: 500;
+    }
+    
+    .pdf-stat-item.pdf-missing .stat-number {
+        color: #856404;
+    }
+    
+    .pdf-stat-item.pdf-missing .stat-label {
+        color: #856404;
     }
     
     .pdf-indicator {
@@ -270,7 +299,39 @@
     
     <!-- Filter Section -->
     <div class="filter-container">
-        <form method="GET" action="{{ route('medmastery-question.index') }}" class="row g-3">
+        <!-- PDF Statistics and Quick Filters -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex gap-3">
+                <div class="pdf-stat-item" onclick="applyPdfFilter('all')" style="cursor: pointer;">
+                    <div class="stat-number">{{ $totalQuestions }}</div>
+                    <div class="stat-label">Total Pertanyaan</div>
+                </div>
+                <div class="pdf-stat-item" onclick="applyPdfFilter('with_pdf')" style="cursor: pointer;">
+                    <div class="stat-number">{{ $withPdfCount }}</div>
+                    <div class="stat-label">Dengan PDF</div>
+                </div>
+                <div class="pdf-stat-item {{ $withoutPdfCount > 0 ? 'pdf-missing' : '' }}" onclick="applyPdfFilter('without_pdf')" style="cursor: pointer;">
+                    <div class="stat-number">{{ $withoutPdfCount }}</div>
+                    <div class="stat-label">Tanpa PDF</div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                @if(request('pdf_filter') === 'without_pdf')
+                    <span class="badge bg-warning text-dark">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Menampilkan pertanyaan tanpa PDF
+                    </span>
+                @elseif(request('pdf_filter') === 'with_pdf')
+                    <span class="badge bg-success">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Menampilkan pertanyaan dengan PDF
+                    </span>
+                @endif
+            </div>
+        </div>
+
+        <form method="GET" action="{{ route('medmastery-question.index') }}" class="row g-3" id="filterForm">
+            <input type="hidden" name="pdf_filter" id="pdfFilterInput" value="{{ request('pdf_filter') }}">
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Tampilkan</label>
                 <select name="visibility" class="form-select">
@@ -491,5 +552,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+
+<script>
+// Function to apply PDF filter
+function applyPdfFilter(filterType) {
+    const pdfFilterInput = document.getElementById('pdfFilterInput');
+    const filterForm = document.getElementById('filterForm');
+    
+    if (filterType === 'all') {
+        pdfFilterInput.value = '';
+    } else {
+        pdfFilterInput.value = filterType;
+    }
+    
+    // Reset to first page when filter changes
+    const pageInput = filterForm.querySelector('input[name="page"]');
+    if (pageInput) {
+        pageInput.remove();
+    }
+    
+    filterForm.submit();
+}
 </script>
 @endsection

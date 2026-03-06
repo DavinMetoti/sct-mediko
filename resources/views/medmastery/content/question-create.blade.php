@@ -398,7 +398,7 @@
 
             <div class="input-group d-flex flex-column">
                 <label for="explanation_pdf">
-                    File PDF Penjelasan (Opsional)
+                    File PDF Penjelasan <span class="required">*</span>
                 </label>
                 <div class="pdf-upload-container">
                     <div class="pdf-preview" id="pdfPreview">
@@ -412,14 +412,15 @@
                            class="form-input-file @error('explanation_pdf') is-invalid @enderror d-none" 
                            id="explanation_pdf" 
                            name="explanation_pdf" 
-                           accept=".pdf">
+                           accept=".pdf"
+                           required>
                     <div class="upload-button">
                         <button type="button" class="btn-upload" onclick="document.getElementById('explanation_pdf').click()">
                             <i class="fas fa-upload me-2"></i>Pilih File PDF
                         </button>
                     </div>
                 </div>
-                <div class="help-text">Upload file PDF tambahan untuk penjelasan yang lebih detail (opsional)</div>
+                <div class="help-text">Upload file PDF untuk penjelasan yang lebih detail</div>
                 @error('explanation_pdf')
                     <div class="invalid-feedback">
                         <i class="fas fa-exclamation-circle"></i>{{ $message }}
