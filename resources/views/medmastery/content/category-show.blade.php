@@ -1002,11 +1002,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const unansweredQuestions = {{ $category->unanswered_questions_count ?? 0 }};
         let defaultOptions = [10, 25, 50];
         
-        // Adjust first option if unanswered questions are less than 10
-        if (mode === 'new' && unansweredQuestions < 10 && unansweredQuestions > 0) {
-            defaultOptions[0] = unansweredQuestions;
-        }
-        
         // Clear existing options
         const container = document.querySelector('.question-count-options');
         container.innerHTML = '';
@@ -1030,19 +1025,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 container.innerHTML = '<div class="text-center text-muted p-3"><i class="fas fa-info-circle me-2"></i>Tidak ada soal yang salah untuk dikerjakan ulang</div>';
             }
         } else {
-            // For new mode, show all default options but disable those exceeding unanswered questions
+            // For new mode, show all default options
             defaultOptions.forEach(count => {
                 if (count <= totalQuestions) {
-                    const disabled = count > unansweredQuestions;
-                    const option = createCountOption(count, 'soal', disabled);
+                    const option = createCountOption(count, 'soal');
                     container.appendChild(option);
                 }
             });
             
             // Add "all" option if totalQuestions < 50
             if (totalQuestions > 0 && totalQuestions < 50) {
-                const disabled = totalQuestions > unansweredQuestions;
-                const option = createCountOption(totalQuestions, 'semua', disabled);
+                const option = createCountOption(totalQuestions, 'semua');
                 container.appendChild(option);
             }
         }
@@ -1063,7 +1056,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function attachCountOptionListeners() {
-        const newCountOptions = document.querySelectorAll('.count-option:not(.disabled)');
+        const newCountOptions = document.querySelectorAll('.count-option');
         newCountOptions.forEach(option => {
             option.addEventListener('click', function() {
                 const count = this.getAttribute('data-count');
