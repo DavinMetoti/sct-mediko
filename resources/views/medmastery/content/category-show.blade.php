@@ -155,12 +155,12 @@
     }
     
     .btn-danger {
-        background: linear-gradient(135deg, #f56565, #e53e3e);
+        background: #f56565;
         color: white;
     }
     
     .btn-danger:hover {
-        background: linear-gradient(135deg, #e53e3e, #c53030);
+        background: #e53e3e;
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(245, 101, 101, 0.3);
         color: white;
@@ -237,7 +237,7 @@
     
     /* User Practice Section Styles */
     .user-practice-section {
-        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        background: #f8fafc;
         border-radius: 16px;
         padding: 2rem;
         margin-bottom: 2rem;
@@ -284,7 +284,7 @@
     }
     
     .practice-form .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: #667eea;
         border: none;
         border-radius: 12px;
         padding: 1rem 2rem;
@@ -295,7 +295,7 @@
     }
     
     .practice-form .btn-primary:hover {
-        background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        background: #5a67d8;
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
     }
@@ -430,7 +430,7 @@
     }
     
     .quiz-mode-btn.active {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: #667eea;
         color: white;
         border-color: #667eea;
         transform: translateY(-3px);
@@ -478,7 +478,7 @@
     }
     
     .quiz-mode-btn[data-mode="wrong"].active {
-        background: linear-gradient(135deg, #f59e0b, #d97706);
+        background: #f59e0b;
         border-color: #f59e0b;
     }
     
@@ -494,7 +494,7 @@
     }
     
     .quiz-mode-btn[data-mode="review"].active {
-        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        background: #8b5cf6;
         border-color: #8b5cf6;
     }
     
@@ -510,7 +510,7 @@
     }
     
     .quiz-mode-btn[data-mode="new"].active {
-        background: linear-gradient(135deg, #10b981, #059669);
+        background: #10b981;
         border-color: #10b981;
     }
     
