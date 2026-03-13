@@ -6,9 +6,10 @@
         max-width: 1400px;
         margin: 0 auto;
         padding: 0 1rem;
+        overflow-x: hidden;
     }
     .category-header-card {
-        background: linear-gradient(135deg, {{ $category->segmentation->color ?? '#6c757d' }}, {{ $category->segmentation->color ?? '#6c757d' }}dd);
+        background: {{ $category->segmentation->color ?? '#6c757d' }};
         border-radius: 20px;
         color: white;
         padding: 2.5rem;
@@ -118,12 +119,12 @@
     }
     
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: #667eea;
         color: white;
     }
     
     .btn-primary:hover {
-        background: linear-gradient(135deg, #764ba2, #667eea);
+        background: #764ba2;
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         color: white;
@@ -142,12 +143,12 @@
     }
     
     .btn-success {
-        background: linear-gradient(135deg, #48bb78, #38a169);
+        background: #48bb78;
         color: white;
     }
     
     .btn-success:hover {
-        background: linear-gradient(135deg, #38a169, #2f855a);
+        background: #38a169;
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
         color: white;
@@ -554,7 +555,7 @@
     }
 </style>
 
-<div class="quiz-container">
+<div class="quiz-container" data-category-id="{{ $category->id }}" data-accessible-active="{{ $category->accessible_active_questions_count ?? 0 }}" data-unanswered="{{ $category->unanswered_questions_count ?? 0 }}" data-wrong="{{ $category->wrong_questions_count ?? 0 }}">
     <!-- Category Header -->
     <div class="category-header-card">
         <div class="d-flex align-items-center flex-wrap">
@@ -721,7 +722,7 @@
                         <!-- User Actions -->
                         @if(($category->accessible_questions_count ?? 0) > 0)
                             <!-- Question Statistics -->
-                            <div class="info-card mb-3">
+                            <div class="mb-3">
                                 <h5 class="info-title">
                                     <i class="fas fa-chart-bar text-info"></i>
                                     Statistik Soal
@@ -942,6 +943,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const wrongModeBtn = document.getElementById('wrongModeBtn');
     const wrongCount = document.getElementById('wrongCount');
     const questionCountSection = document.getElementById('questionCountSection');
+    const container = document.querySelector('.quiz-container');
+    const categoryId = container.dataset.categoryId;
+    const totalQuestions = parseInt(container.dataset.accessibleActive) || 0;
+    const unansweredQuestions = parseInt(container.dataset.unanswered) || 0;
+    const wrongQuestions = parseInt(container.dataset.wrong) || 0;
+    const correctQuestions = totalQuestions - unansweredQuestions - wrongQuestions;
     
     let selectedCount = null;
     let selectedMode = null;
@@ -1004,9 +1011,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function loadWrongQuestionsCount() {
         // AJAX call to get wrong questions count
-        console.log('Loading wrong questions count for category {{ $category->id }}');
+        console.log('Loading wrong questions count for category', categoryId);
         
-        fetch(`/medmastery-quiz/wrong-count/{{ $category->id }}`, {
+        fetch(`/medmastery-quiz/wrong-count/${categoryId}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
@@ -1038,7 +1045,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Optional: Load debug info for troubleshooting
             console.log('Attempting to load debug info...');
-            fetch(`/medmastery-quiz/debug-wrong/{{ $category->id }}`, {
+            fetch(`/medmastery-quiz/debug-wrong/${categoryId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -1083,7 +1090,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 container.innerHTML = '<div class="text-center text-muted p-3"><i class="fas fa-info-circle me-2"></i>Tidak ada soal yang salah untuk dikerjakan ulang</div>';
             }
-        } elseif (mode === 'review') {
+        } else if (mode === 'review') {
             // For review mode, show options based on correct questions count
             if (correctQuestions > 0) {
                 const availableOptions = defaultOptions.filter(count => count <= correctQuestions);
