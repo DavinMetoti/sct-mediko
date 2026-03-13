@@ -455,6 +455,22 @@
         border-color: #f59e0b;
     }
     
+    /* Special styling for review mode button */
+    .quiz-mode-btn[data-mode="review"] {
+        border-color: #8b5cf6;
+    }
+    
+    .quiz-mode-btn[data-mode="review"]:hover {
+        border-color: #7c3aed;
+        background: #f3f4f6;
+        color: #5b21b6;
+    }
+    
+    .quiz-mode-btn[data-mode="review"].active {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        border-color: #8b5cf6;
+    }
+    
     /* Special styling for new mode button */
     .quiz-mode-btn[data-mode="new"] {
         border-color: #10b981;
@@ -687,8 +703,8 @@
                                 <div class="row g-2">
                                     <div class="col-6">
                                         <div class="text-center p-2 bg-light rounded">
-                                            <div class="stat-number text-success">{{ $category->accessible_active_questions_count - ($category->unanswered_questions_count ?? 0) }}</div>
-                                            <div class="stat-label small">Sudah Dikerjakan</div>
+                                            <div class="stat-number text-success">{{ ($category->accessible_active_questions_count ?? 0) - ($category->unanswered_questions_count ?? 0) - ($category->wrong_questions_count ?? 0) }}</div>
+                                            <div class="stat-label small">Dikerjakan dengan Benar</div>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -730,6 +746,23 @@
                                                     Semua soal sudah dikerjakan
                                                 @else
                                                     Latihan dengan soal-soal fresh
+                                                @endif
+                                            </div>
+                                        </button>
+                                        <button type="button" class="btn quiz-mode-btn flex-fill @if((($category->accessible_active_questions_count ?? 0) - ($category->unanswered_questions_count ?? 0) - ($category->wrong_questions_count ?? 0)) == 0) disabled @endif" data-mode="review"
+                                                title="Mengulang soal-soal yang sudah pernah dijawab dengan benar untuk memperkuat pemahaman">
+                                            <div class="mode-icon">
+                                                <i class="fas fa-refresh"></i>
+                                            </div>
+                                            <div class="mode-title">Review Soal</div>
+                                            <div class="mode-subtitle">
+                                                @php
+                                                    $correctCount = ($category->accessible_active_questions_count ?? 0) - ($category->unanswered_questions_count ?? 0) - ($category->wrong_questions_count ?? 0);
+                                                @endphp
+                                                @if($correctCount == 0)
+                                                    Belum ada soal yang benar
+                                                @else
+                                                    {{ $correctCount }} soal siap di-review
                                                 @endif
                                             </div>
                                         </button>
@@ -1000,6 +1033,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateQuestionCountOptions(mode) {
         const totalQuestions = {{ $category->accessible_active_questions_count ?? 0 }};
         const unansweredQuestions = {{ $category->unanswered_questions_count ?? 0 }};
+        const wrongQuestions = {{ $category->wrong_questions_count ?? 0 }};
+        const correctQuestions = totalQuestions - unansweredQuestions - wrongQuestions;
         let defaultOptions = [10, 25, 50];
         
         // Clear existing options
@@ -1023,6 +1058,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 container.innerHTML = '<div class="text-center text-muted p-3"><i class="fas fa-info-circle me-2"></i>Tidak ada soal yang salah untuk dikerjakan ulang</div>';
+            }
+        } elseif (mode === 'review') {
+            // For review mode, show options based on correct questions count
+            if (correctQuestions > 0) {
+                const availableOptions = defaultOptions.filter(count => count <= correctQuestions);
+                
+                availableOptions.forEach(count => {
+                    const option = createCountOption(count, 'soal');
+                    container.appendChild(option);
+                });
+                
+                // Add "all correct" option if different from standard options
+                if (correctQuestions > 0 && correctQuestions <= 50 && !availableOptions.includes(correctQuestions)) {
+                    const option = createCountOption(correctQuestions, 'semua benar');
+                    container.appendChild(option);
+                }
+            } else {
+                container.innerHTML = '<div class="text-center text-muted p-3"><i class="fas fa-info-circle me-2"></i>Tidak ada soal yang sudah dikerjakan dengan benar untuk di-review</div>';
             }
         } else {
             // For new mode, show all default options
@@ -1085,7 +1138,7 @@ document.addEventListener('DOMContentLoaded', function() {
             startButton.classList.remove('btn-secondary');
             startButton.classList.add('btn-primary');
             
-            const modeText = selectedMode === 'wrong' ? 'Kerjakan Ulang' : 'Mulai Quiz';
+            const modeText = selectedMode === 'wrong' ? 'Kerjakan Ulang' : selectedMode === 'review' ? 'Review' : 'Mulai Quiz';
             const buttonText = `${modeText} (${selectedCount} soal)`;
             startButton.innerHTML = `<i class="fas fa-play"></i> ${buttonText}`;
         } else {

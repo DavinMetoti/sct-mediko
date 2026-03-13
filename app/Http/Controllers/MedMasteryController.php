@@ -160,20 +160,21 @@ class MedMasteryController extends Controller
                 ->count();
             $category->unanswered_questions_count = $unansweredQuestionsCount;
             
-            // Get wrong questions count
+            // Get wrong questions count (questions where max score < 1)
             $wrongQuestionsCount = MedMasteryAnswerDetail::join('med_mastery_answers', 'med_mastery_answer_details.med_mastery_answer_id', '=', 'med_mastery_answers.id')
                 ->join('med_mastery_questions', 'med_mastery_answer_details.med_mastery_question_id', '=', 'med_mastery_questions.id')
                 ->where('med_mastery_answers.user_id', $user->id)
                 ->where('med_mastery_answers.med_mastery_category_id', $id)
-                ->where('med_mastery_answer_details.score', '<', 1) // Score kurang dari 1 (salah)
                 ->where('med_mastery_questions.is_active', true) // Only active questions
                 ->where(function($query) use ($user) {
                     // Only include questions that user can access (own questions OR public questions)
                     $query->where('med_mastery_questions.creator_id', $user->id)
                           ->orWhere('med_mastery_questions.is_public', true);
                 })
-                ->distinct()
-                ->count('med_mastery_answer_details.med_mastery_question_id');
+                ->selectRaw('med_mastery_answer_details.med_mastery_question_id, MAX(med_mastery_answer_details.score) as max_score')
+                ->groupBy('med_mastery_answer_details.med_mastery_question_id')
+                ->having('max_score', '<', 1)
+                ->count();
             $category->wrong_questions_count = $wrongQuestionsCount;
             
             Log::info('Category counts', [
@@ -206,7 +207,7 @@ class MedMasteryController extends Controller
 
         $request->validate([
             'question_count' => 'required|numeric|min:1|max:50',
-            'quiz_mode' => 'required|in:new,wrong'
+            'quiz_mode' => 'required|in:new,wrong,review'
         ]);
 
         $category = MedmasteryCategory::findOrFail($categoryId);
@@ -272,6 +273,27 @@ class MedMasteryController extends Controller
             $questions = $questionsQuery->inRandomOrder()
                 ->limit($questionCount)
                 ->get();
+        } elseif ($quizMode === 'review' && $user) {
+            // Get correct question IDs for this user (questions answered correctly)
+            $correctQuestionIds = $this->getCorrectQuestionIds($categoryId, $user->id);
+            
+            if (empty($correctQuestionIds)) {
+                return redirect()->back()->with('error', 'Tidak ada soal yang sudah dikerjakan dengan benar untuk di-review.');
+            }
+            
+            // Get questions from correct IDs with proper visibility filtering
+            $questionsQuery = MedMasteryQuestion::active()
+                ->whereIn('id', $correctQuestionIds);
+            
+            // Apply visibility filter: only show user's own questions OR public questions
+            $questionsQuery->where(function($q) use ($user) {
+                $q->where('creator_id', $user->id)  // User's own questions
+                  ->orWhere('is_public', true);      // OR public questions
+            });
+            
+            $questions = $questionsQuery->inRandomOrder()
+                ->limit($questionCount)
+                ->get();
         } else {
             // Create new questions set with proper visibility filtering
             $questionsQuery = MedMasteryQuestion::active()
@@ -323,9 +345,14 @@ class MedMasteryController extends Controller
         }
             
         if ($questions->isEmpty()) {
-            $errorMessage = $quizMode === 'wrong' 
-                ? 'Tidak ada soal yang salah tersedia untuk kategori ini.'
-                : 'Tidak ada soal tersedia untuk kategori ini.';
+            $errorMessage = '';
+            if ($quizMode === 'wrong') {
+                $errorMessage = 'Tidak ada soal yang salah tersedia untuk kategori ini.';
+            } elseif ($quizMode === 'review') {
+                $errorMessage = 'Tidak ada soal yang sudah dikerjakan dengan benar untuk di-review.';
+            } else {
+                $errorMessage = 'Tidak ada soal tersedia untuk kategori ini.';
+            }
             return redirect()->back()->with('error', $errorMessage);
         }
         
@@ -737,16 +764,17 @@ class MedMasteryController extends Controller
             'category_id' => $categoryId
         ]);
 
-        // Get all answer details for this user and category where score < 1
-        // Use distinct to avoid counting same questions multiple times
+        // Get count of questions where the maximum score is less than 1 (still wrong)
+        // This ensures that if a user has answered a question correctly later, it's not counted as wrong
         $wrongQuestionsCount = MedMasteryAnswerDetail::join('med_mastery_answers', 'med_mastery_answer_details.med_mastery_answer_id', '=', 'med_mastery_answers.id')
             ->join('med_mastery_questions', 'med_mastery_answer_details.med_mastery_question_id', '=', 'med_mastery_questions.id')
             ->where('med_mastery_answers.user_id', $user->id)
             ->where('med_mastery_answers.med_mastery_category_id', $categoryId)
-            ->where('med_mastery_answer_details.score', '<', 1) // Score kurang dari 1 (salah)
             ->where('med_mastery_questions.is_active', true) // Only active questions
-            ->distinct()
-            ->count('med_mastery_answer_details.med_mastery_question_id');
+            ->selectRaw('med_mastery_answer_details.med_mastery_question_id, MAX(med_mastery_answer_details.score) as max_score')
+            ->groupBy('med_mastery_answer_details.med_mastery_question_id')
+            ->having('max_score', '<', 1)
+            ->count();
 
         // Debug: Log the result
         Log::info('Wrong questions count result', [
@@ -773,14 +801,15 @@ class MedMasteryController extends Controller
             ->join('med_mastery_questions', 'med_mastery_answer_details.med_mastery_question_id', '=', 'med_mastery_questions.id')
             ->where('med_mastery_answers.user_id', $userId)
             ->where('med_mastery_answers.med_mastery_category_id', $categoryId)
-            ->where('med_mastery_answer_details.score', '<', 1) // Score kurang dari 1 (salah)
             ->where('med_mastery_questions.is_active', true) // Only active questions
             ->where(function($query) use ($userId) {
                 // Only include questions that user can access (own questions OR public questions)
                 $query->where('med_mastery_questions.creator_id', $userId)
                       ->orWhere('med_mastery_questions.is_public', true);
             })
-            ->distinct()
+            ->selectRaw('med_mastery_answer_details.med_mastery_question_id, MAX(med_mastery_answer_details.score) as max_score')
+            ->groupBy('med_mastery_answer_details.med_mastery_question_id')
+            ->having('max_score', '<', 1)
             ->pluck('med_mastery_answer_details.med_mastery_question_id')
             ->toArray();
 
@@ -793,6 +822,44 @@ class MedMasteryController extends Controller
         ]);
 
         return $wrongQuestionIds;
+    }
+
+    /**
+     * Get correct question IDs for a user in a specific category (questions answered correctly)
+     */
+    private function getCorrectQuestionIds(string $categoryId, int $userId)
+    {
+        // Debug: Log the request
+        Log::info('Getting correct question IDs', [
+            'user_id' => $userId,
+            'category_id' => $categoryId
+        ]);
+
+        $correctQuestionIds = MedMasteryAnswerDetail::join('med_mastery_answers', 'med_mastery_answer_details.med_mastery_answer_id', '=', 'med_mastery_answers.id')
+            ->join('med_mastery_questions', 'med_mastery_answer_details.med_mastery_question_id', '=', 'med_mastery_questions.id')
+            ->where('med_mastery_answers.user_id', $userId)
+            ->where('med_mastery_answers.med_mastery_category_id', $categoryId)
+            ->where('med_mastery_questions.is_active', true) // Only active questions
+            ->where(function($query) use ($userId) {
+                // Only include questions that user can access (own questions OR public questions)
+                $query->where('med_mastery_questions.creator_id', $userId)
+                      ->orWhere('med_mastery_questions.is_public', true);
+            })
+            ->selectRaw('med_mastery_answer_details.med_mastery_question_id, MAX(med_mastery_answer_details.score) as max_score')
+            ->groupBy('med_mastery_answer_details.med_mastery_question_id')
+            ->having('max_score', '>=', 1)
+            ->pluck('med_mastery_answer_details.med_mastery_question_id')
+            ->toArray();
+
+        // Debug: Log the result
+        Log::info('Correct question IDs result', [
+            'question_ids' => $correctQuestionIds,
+            'count' => count($correctQuestionIds),
+            'user_id' => $userId,
+            'category_id' => $categoryId
+        ]);
+
+        return $correctQuestionIds;
     }
 
     /**
@@ -819,24 +886,53 @@ class MedMasteryController extends Controller
             )
             ->get();
 
-        // Get wrong answers (score < 1)
-        $wrongAnswers = $allAnswers->where('score', '<', 1);
+        // Get questions with their max scores
+        $questionMaxScores = $allAnswers->groupBy('med_mastery_question_id')->map(function ($answers) {
+            return [
+                'max_score' => $answers->max('score'),
+                'is_active' => $answers->first()['is_active'],
+                'answers' => $answers
+            ];
+        });
+
+        // Get wrong answers (max score < 1)
+        $wrongAnswers = $questionMaxScores->filter(function ($data) {
+            return $data['max_score'] < 1;
+        });
         
         // Get active wrong answers
-        $activeWrongAnswers = $wrongAnswers->where('is_active', true);
+        $activeWrongAnswers = $wrongAnswers->filter(function ($data) {
+            return $data['is_active'];
+        });
         
         // Get unique question IDs
-        $uniqueWrongQuestionIds = $activeWrongAnswers->pluck('med_mastery_question_id')->unique();
+        $uniqueWrongQuestionIds = $activeWrongAnswers->keys();
 
         return response()->json([
             'user_id' => $user->id,
             'category_id' => $categoryId,
             'total_answers' => $allAnswers->count(),
+            'total_questions_attempted' => $questionMaxScores->count(),
             'wrong_answers' => $wrongAnswers->count(),
             'active_wrong_answers' => $activeWrongAnswers->count(),
             'unique_wrong_questions' => $uniqueWrongQuestionIds->count(),
             'all_answers_sample' => $allAnswers->take(5),
-            'wrong_answers_sample' => $wrongAnswers->take(5),
+            'question_max_scores_sample' => $questionMaxScores->take(5)->map(function ($data, $questionId) {
+                return [
+                    'question_id' => $questionId,
+                    'max_score' => $data['max_score'],
+                    'is_active' => $data['is_active'],
+                    'answers_count' => $data['answers']->count()
+                ];
+            }),
+            'wrong_answers_sample' => $wrongAnswers->take(5)->map(function ($data, $questionId) {
+                return [
+                    'question_id' => $questionId,
+                    'max_score' => $data['max_score'],
+                    'is_active' => $data['is_active'],
+                    'answers_count' => $data['answers']->count()
+                ];
+            }),
             'unique_question_ids' => $uniqueWrongQuestionIds->values()->all()
         ]);
     }
