@@ -950,7 +950,6 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`/medmastery-quiz/wrong-count/{{ $category->id }}`, {
             method: 'GET',
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                 'Accept': 'application/json'
             }
         })
@@ -983,7 +982,6 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`/medmastery-quiz/debug-wrong/{{ $category->id }}`, {
                 method: 'GET',
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json'
                 }
             })
