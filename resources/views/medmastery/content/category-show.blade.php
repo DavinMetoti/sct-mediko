@@ -2,6 +2,11 @@
 
 @section('medmastery-content')
 <style>
+    .quiz-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
     .category-header-card {
         background: linear-gradient(135deg, {{ $category->segmentation->color ?? '#6c757d' }}, {{ $category->segmentation->color ?? '#6c757d' }}dd);
         border-radius: 20px;
@@ -162,8 +167,8 @@
     
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
         margin-bottom: 2rem;
     }
     
@@ -201,10 +206,31 @@
         
         .category-meta {
             justify-content: center;
+            flex-direction: column;
+            gap: 0.5rem;
         }
         
-        .action-buttons {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        .quiz-mode-options {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .quiz-mode-btn {
+            min-height: 80px;
+            padding: 1rem;
+        }
+        
+        .question-count-options {
             justify-content: center;
+        }
+        
+        .count-option {
+            min-width: 70px;
         }
     }
     
@@ -983,7 +1009,6 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`/medmastery-quiz/wrong-count/{{ $category->id }}`, {
             method: 'GET',
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                 'Accept': 'application/json'
             }
         })
@@ -1016,7 +1041,6 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`/medmastery-quiz/debug-wrong/{{ $category->id }}`, {
                 method: 'GET',
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json'
                 }
             })
