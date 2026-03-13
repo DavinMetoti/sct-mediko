@@ -610,7 +610,7 @@
     
     <div class="row">
         <!-- Description -->
-        <div class="col-lg-8">
+        <div class="col-lg-7">
             @if($category->description)
                 <div class="info-card">
                     <h3 class="info-title">
@@ -696,7 +696,7 @@
         </div>
         
         <!-- Sidebar -->
-        <div class="col-lg-4">
+        <div class="col-lg-5">
             <!-- Actions -->
             <div class="info-card">
                 <h3 class="info-title">
