@@ -84,12 +84,36 @@
         font-weight: 500;
     }
     
-    .categories-header {
+    .group-section {
+        margin-bottom: 2rem;
+    }
+    
+    .group-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.5rem;
+        cursor: pointer;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
-        gap: 1rem;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+    }
+    
+    .group-title:hover {
+        color: #667eea;
+    }
+    
+    .group-title i {
+        transition: transform 0.3s ease;
+    }
+    
+    .group-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
     }
     
     .categories-title {
@@ -438,94 +462,109 @@
         </div>
         
         @if($categories->count() > 0)
-            <div class="row g-4">
-                @foreach($categories as $category)
-                    <div class="col-xl-4 col-lg-6 col-md-6">
-                        <div class="category-card" 
-                             style="--category-color: {{ $category->segmentation->color ?? '#6c757d' }}; --category-color-dark: {{ $category->segmentation ? $category->segmentation->color.'dd' : '#6c757ddd' }};"
-                             onclick="window.location.href='{{ route('medmastery.category.show', $category->id) }}'">
-                            
-                            <!-- Category Header with Color -->
-                            <div class="category-header">
-                                <!-- Access Level Indicator -->
-                                <div class="access-indicator">
-                                    @if($category->access === 'private')
-                                        <span class="badge bg-warning text-dark" title="Kategori Pribadi">
-                                            <i class="fas fa-lock"></i> Private
-                                        </span>
-                                    @else
-                                        <span class="badge bg-success" title="Kategori Publik">
-                                            <i class="fas fa-globe"></i> Public
-                                        </span>
-                                    @endif
-                                </div>
-                                
-                                <div class="category-icon-container">
-                                    @if($category->icon)
-                                        <img src="{{ $category->icon }}" 
-                                             alt="{{ $category->name }}" 
-                                             class="category-icon">
-                                    @else
-                                        <i class="fas fa-image" style="color: rgba(255,255,255,0.8); font-size: 1.5rem;"></i>
-                                    @endif
-                                </div>
-                            </div>
-                            
-                            <!-- Category Body -->
-                            <div class="category-body">
-                                <h3 class="category-name">{{ $category->name }}</h3>
-                                
-                                <div class="category-segmentation">
-                                    <i class="fas fa-tag" style="color: {{ $category->segmentation->color ?? '#6c757d' }};"></i>
-                                    {{ $category->segmentation->name ?? 'Tidak ada bidang' }}
-                                </div>
-                                
-                                <!-- Question Statistics -->
-                                <div class="category-stats mt-3">
-                                    <div class="row g-2">
-                                        <div class="col-6">
-                                            <div class="stat-item">
-                                                <div class="stat-icon">
-                                                    <i class="fas fa-question-circle" style="color: {{ $category->segmentation->color ?? '#6c757d' }};"></i>
+            @php
+                $grouped = $categories->groupBy(function($category) {
+                    return $category->segmentation->name == 'anatomi' ? 'Group Preklinik' : 'UKNPDPD';
+                });
+            @endphp
+            
+            @foreach($grouped as $groupName => $groupCategories)
+                <div class="group-section">
+                    <h3 class="group-title" onclick="toggleGroup(this)">
+                        {{ $groupName }}
+                        <i class="fas fa-chevron-down"></i>
+                    </h3>
+                    <div class="group-content">
+                        <div class="row g-4">
+                            @foreach($groupCategories as $category)
+                            <div class="col-xl-4 col-lg-6 col-md-6">
+                                <div class="category-card" 
+                                     style="--category-color: {{ $category->segmentation->color ?? '#6c757d' }}; --category-color-dark: {{ $category->segmentation ? $category->segmentation->color.'dd' : '#6c757ddd' }};"
+                                     onclick="window.location.href='{{ route('medmastery.category.show', $category->id) }}'">
+                                    
+                                    <!-- Category Header with Color -->
+                                    <div class="category-header">
+                                        <!-- Access Level Indicator -->
+                                        <div class="access-indicator">
+                                            @if($category->access === 'private')
+                                                <span class="badge bg-warning text-dark" title="Kategori Pribadi">
+                                                    <i class="fas fa-lock"></i> Private
+                                                </span>
+                                            @else
+                                                <span class="badge bg-success" title="Kategori Publik">
+                                                    <i class="fas fa-globe"></i> Public
+                                                </span>
+                                            @endif
+                                        </div>
+                                        
+                                        <div class="category-icon-container">
+                                            @if($category->icon)
+                                                <img src="{{ $category->icon }}" 
+                                                     alt="{{ $category->name }}" 
+                                                     class="category-icon">
+                                            @else
+                                                <i class="fas fa-image" style="color: rgba(255,255,255,0.8); font-size: 1.5rem;"></i>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Category Body -->
+                                    <div class="category-body">
+                                        <h3 class="category-name">{{ $category->name }}</h3>
+                                        
+                                        <div class="category-segmentation">
+                                            <i class="fas fa-tag" style="color: {{ $category->segmentation->color ?? '#6c757d' }};"></i>
+                                            {{ $category->segmentation->name ?? 'Tidak ada bidang' }}
+                                        </div>
+                                        
+                                        <!-- Question Statistics -->
+                                        <div class="category-stats mt-3">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <div class="stat-item">
+                                                        <div class="stat-icon">
+                                                            <i class="fas fa-question-circle" style="color: {{ $category->segmentation->color ?? '#6c757d' }};"></i>
+                                                        </div>
+                                                        <div class="stat-info">
+                                                            <div class="stat-number-small">{{ $category->questions_count ?? 0 }}</div>
+                                                            <div class="stat-label-small">Total Pertanyaan</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="stat-info">
-                                                    <div class="stat-number-small">{{ $category->questions_count ?? 0 }}</div>
-                                                    <div class="stat-label-small">Total Pertanyaan</div>
+                                                <div class="col-6">
+                                                    <div class="stat-item">
+                                                        <div class="stat-icon">
+                                                            <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                                                        </div>
+                                                        <div class="stat-info">
+                                                            <div class="stat-number-small">{{ $category->active_questions_count ?? 0 }}</div>
+                                                            <div class="stat-label-small">Pertanyaan Aktif</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="stat-item">
-                                                <div class="stat-icon">
-                                                    <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                                                </div>
-                                                <div class="stat-info">
-                                                    <div class="stat-number-small">{{ $category->active_questions_count ?? 0 }}</div>
-                                                    <div class="stat-label-small">Pertanyaan Aktif</div>
-                                                </div>
+                                        
+                                        @if($category->description)
+                                            <p class="category-description mt-3">{{ $category->description }}</p>
+                                        @endif
+                                        
+                                        <div class="category-footer d-flex justify-content-between align-items-center">
+                                            <div class="category-creator">
+                                                <i class="fas fa-user"></i>
+                                                {{ $category->creator->name ?? 'Unknown' }}
+                                            </div>
+                                            <div class="category-date">
+                                                {{ $category->created_at->format('d M Y') }}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                @if($category->description)
-                                    <p class="category-description mt-3">{{ $category->description }}</p>
-                                @endif
-                                
-                                <div class="category-footer d-flex justify-content-between align-items-center">
-                                    <div class="category-creator">
-                                        <i class="fas fa-user"></i>
-                                        {{ $category->creator->name ?? 'Unknown' }}
-                                    </div>
-                                    <div class="category-date">
-                                        {{ $category->created_at->format('d M Y') }}
-                                    </div>
-                                </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         @else
             <!-- Empty State -->
             <div class="empty-state">
@@ -586,6 +625,22 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => ripple.remove(), 600);
         });
     });
+    
+    // Toggle group function
+    window.toggleGroup = function(header) {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('i');
+        
+        if (content.style.maxHeight === '0px' || content.style.maxHeight === '') {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+        } else {
+            content.style.maxHeight = '0px';
+            icon.classList.remove('fa-chevron-up');
+            icon.classList.add('fa-chevron-down');
+        }
+    };
     
     // Search functionality
     const searchInput = document.getElementById('categorySearch');
