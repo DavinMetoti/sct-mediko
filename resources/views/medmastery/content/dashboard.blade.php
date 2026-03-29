@@ -450,7 +450,7 @@
     <!-- Categories Section -->
     <div class="categories-section">
         <div class="categories-header">
-            <h2 class="categories-title">Kategori Medmastery</h2>
+            <h2 class="categories-title">Kategori Medmastery test</h2>
             <div class="search-container">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" 
