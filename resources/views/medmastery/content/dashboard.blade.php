@@ -450,7 +450,7 @@
     <!-- Categories Section -->
     <div class="categories-section">
         <div class="categories-header">
-            <h2 class="categories-title">Kategori Medmastery test</h2>
+            <h2 class="categories-title">Kategori Medmastery</h2>
             <div class="search-container">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" 
@@ -464,8 +464,11 @@
         @if($categories->count() > 0)
             @php
                 $grouped = $categories->groupBy(function($category) {
-                    return $category->segmentation->name == 'anatomi' ? 'Group Preklinik' : 'UKNPDPD';
+                    $segmentationName = strtolower($category->segmentation->name ?? '');
+                    return $segmentationName == 'anatomi' ? 'Group Preklinik' : 'UKNPDPD';
                 });
+                // Debug: uncomment to see grouped data
+                dd($grouped);
             @endphp
             
             @foreach($grouped as $groupName => $groupCategories)
@@ -628,6 +631,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Toggle group function
     window.toggleGroup = function(header) {
+        console.log('Toggle group called');
         const content = header.nextElementSibling;
         const icon = header.querySelector('i');
         
@@ -635,10 +639,12 @@ document.addEventListener('DOMContentLoaded', function() {
             content.style.maxHeight = content.scrollHeight + 'px';
             icon.classList.remove('fa-chevron-down');
             icon.classList.add('fa-chevron-up');
+            console.log('Expanded');
         } else {
             content.style.maxHeight = '0px';
             icon.classList.remove('fa-chevron-up');
             icon.classList.add('fa-chevron-down');
+            console.log('Collapsed');
         }
     };
     
