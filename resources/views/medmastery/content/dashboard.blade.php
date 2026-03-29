@@ -110,6 +110,11 @@
         transition: transform 0.3s ease;
     }
     
+    .toggle-icon {
+        font-weight: bold;
+        color: #667eea;
+    }
+    
     .group-content {
         max-height: 0;
         overflow: hidden;
@@ -465,17 +470,26 @@
             @php
                 $grouped = $categories->groupBy(function($category) {
                     $segmentationName = strtolower($category->segmentation->name ?? '');
-                    return $segmentationName == 'anatomi' ? 'Group Preklinik' : 'UKNPDPD';
+                    return $segmentationName === 'anatomi' ? 'Group Preklinik' : 'UKNPDPD';
                 });
-                // Debug: uncomment to see grouped data
-                dd($grouped);
+
             @endphp
+            
+            <!-- Debug info -->
+            <div style="background: #f0f0f0; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc;">
+                <strong>Debug Info:</strong><br>
+                Total Categories: {{ $categories->count() }}<br>
+                Grouped Keys: {{ implode(', ', array_keys($grouped->toArray())) }}<br>
+                @foreach($grouped as $key => $group)
+                    {{ $key }}: {{ $group->count() }} items<br>
+                @endforeach
+            </div>
             
             @foreach($grouped as $groupName => $groupCategories)
                 <div class="group-section">
                     <h3 class="group-title" onclick="toggleGroup(this)">
                         {{ $groupName }}
-                        <i class="fas fa-chevron-down"></i>
+                        <span class="toggle-icon">[+]</span>
                     </h3>
                     <div class="group-content">
                         <div class="row g-4">
@@ -631,20 +645,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Toggle group function
     window.toggleGroup = function(header) {
-        console.log('Toggle group called');
         const content = header.nextElementSibling;
-        const icon = header.querySelector('i');
+        const icon = header.querySelector('.toggle-icon');
         
         if (content.style.maxHeight === '0px' || content.style.maxHeight === '') {
             content.style.maxHeight = content.scrollHeight + 'px';
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-up');
-            console.log('Expanded');
+            icon.textContent = '[-]';
         } else {
             content.style.maxHeight = '0px';
-            icon.classList.remove('fa-chevron-up');
-            icon.classList.add('fa-chevron-down');
-            console.log('Collapsed');
+            icon.textContent = '[+]';
         }
     };
     
