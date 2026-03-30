@@ -94,9 +94,6 @@
         border-radius: 12px;
         padding: 1rem 1.5rem;
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         transition: all 0.3s ease;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         font-size: 1.1rem;
@@ -109,6 +106,46 @@
         border-color: #667eea;
         box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
         transform: translateY(-2px);
+    }
+    
+    .group-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .group-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .group-icon {
+        color: #667eea;
+        font-size: 1.2rem;
+    }
+    
+    .group-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d3748;
+    }
+    
+    .group-count {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .count-badge {
+        background: #667eea;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        min-width: 24px;
+        text-align: center;
     }
     
     .toggle-icon {
@@ -473,10 +510,18 @@
             
             @foreach($grouped as $groupName => $groupCategories)
                 <div class="group-section mt-4">
-                    <h3 class="group-title" onclick="toggleGroup(this)">
-                        {{ $groupName }}
-                        <span class="toggle-icon">[+]</span>
-                    </h3>
+                    <div class="group-title" onclick="toggleGroup(this)">
+                        <div class="group-header-content">
+                            <div class="group-info">
+                                <i class="fas fa-folder-open group-icon"></i>
+                                <span class="group-name">{{ $groupName }}</span>
+                            </div>
+                            <div class="group-count">
+                                <span class="count-badge">{{ $groupCategories->count() }}</span>
+                                <span class="toggle-icon">[+]</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="group-content">
                         <div class="row g-4">
                             @foreach($groupCategories as $category)

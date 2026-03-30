@@ -7,8 +7,7 @@ use App\Models\MedMasteryQuestion;
 use App\Models\MedMasteryAnswer;
 use App\Models\MedMasteryAnswerDetail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class MedMasteryController extends Controller
 {
@@ -19,40 +18,57 @@ class MedMasteryController extends Controller
     {
         $user = Auth::user();
         
-        $categories = MedmasteryCategory::with(['segmentation', 'creator'])
-            ->withCount(['questions', 'activeQuestions'])
-            ->where(function($query) use ($user) {
-                $query->where('access', 'public');
-                
-                // If user is logged in, also show their private categories
-                if ($user) {
-                    $query->orWhere(function($q) use ($user) {
-                        $q->where('access', 'private')
-                          ->where('created_by', $user->id);
-                    });
-                }
-            })
-            ->whereHas('segmentation', function($query) use ($user) {
-                // If no user is logged in, only show segmentations with no access restrictions
-                if (!$user) {
-                    $query->whereDoesntHave('allowedUsers');
-                } else {
-                    // For logged in users, show segmentations with no restrictions OR where user is specifically allowed
-                    $query->where(function($q) use ($user) {
-                        $q->whereDoesntHave('allowedUsers') // No restrictions - all users can access
-                          ->orWhereHas('allowedUsers', function($allowedQuery) use ($user) {
-                              $allowedQuery->where('users.id', $user->id); // User is specifically allowed
-                          });
-                    });
-                }
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Optimized query with selective fields and efficient joins
+        $categories = MedmasteryCategory::select([
+            'medmastery_categories.id',
+            'medmastery_categories.name',
+            'medmastery_categories.description',
+            'medmastery_categories.access',
+            'medmastery_categories.icon',
+            'medmastery_categories.created_at',
+            'medmastery_categories.created_by',
+            'medmastery_categories.medmastery_segmentation_id'
+        ])
+        ->with([
+            'segmentation:id,name,color',
+            'creator:id,name'
+        ])
+        ->withCount(['questions', 'activeQuestions'])
+        ->where(function($query) use ($user) {
+            $query->where('access', 'public');
             
-        // Get user's quiz count if authenticated
+            // If user is logged in, also show their private categories
+            if ($user) {
+                $query->orWhere(function($q) use ($user) {
+                    $q->where('access', 'private')
+                      ->where('created_by', $user->id);
+                });
+            }
+        })
+        ->whereHas('segmentation', function($query) use ($user) {
+            // If no user is logged in, only show segmentations with no access restrictions
+            if (!$user) {
+                $query->whereDoesntHave('allowedUsers');
+            } else {
+                // For logged in users, show segmentations with no restrictions OR where user is specifically allowed
+                $query->where(function($q) use ($user) {
+                    $q->whereDoesntHave('allowedUsers') // No restrictions - all users can access
+                      ->orWhereHas('allowedUsers', function($allowedQuery) use ($user) {
+                          $allowedQuery->where('users.id', $user->id); // User is specifically allowed
+                      });
+                });
+            }
+        })
+        ->orderBy('created_at', 'desc')
+        ->get();
+            
+        // Get user's quiz count if authenticated (cached for 5 minutes)
         $userQuizCount = 0;
         if ($user) {
-            $userQuizCount = MedMasteryAnswer::where('user_id', $user->id)->count();
+            $cacheKey = 'user_quiz_count_' . $user->id;
+            $userQuizCount = Cache::remember($cacheKey, 300, function () use ($user) {
+                return MedMasteryAnswer::where('user_id', $user->id)->count();
+            });
         }
             
         return view('medmastery.content.dashboard', compact('categories', 'userQuizCount'));
