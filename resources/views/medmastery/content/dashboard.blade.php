@@ -476,7 +476,7 @@
             @endphp
             
             @foreach($grouped as $groupName => $groupCategories)
-                <div class="group-section">
+                <div class="group-section mt-4">
                     <h3 class="group-title" onclick="toggleGroup(this)">
                         {{ $groupName }}
                         <span class="toggle-icon">[+]</span>
