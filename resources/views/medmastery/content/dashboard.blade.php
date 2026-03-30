@@ -427,15 +427,6 @@
                     <div class="stat-label">Total Pertanyaan</div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-number">{{ $categories->sum('active_questions_count') }}</div>
-                    <div class="stat-label">Pertanyaan Aktif</div>
-                </div>
-            </div>
             @if(auth()->check())
             <div class="col-lg-3 col-md-6">
                 <a href="{{ route('medmastery.history') }}" class="text-decoration-none">
