@@ -475,16 +475,6 @@
 
             @endphp
             
-            <!-- Debug info -->
-            <div style="background: #f0f0f0; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc;">
-                <strong>Debug Info:</strong><br>
-                Total Categories: {{ $categories->count() }}<br>
-                Grouped Keys: {{ implode(', ', array_keys($grouped->toArray())) }}<br>
-                @foreach($grouped as $key => $group)
-                    {{ $key }}: {{ $group->count() }} items<br>
-                @endforeach
-            </div>
-            
             @foreach($grouped as $groupName => $groupCategories)
                 <div class="group-section">
                     <h3 class="group-title" onclick="toggleGroup(this)">
