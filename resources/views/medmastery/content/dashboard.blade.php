@@ -89,36 +89,40 @@
     }
     
     .group-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 1rem;
-        border-bottom: 2px solid #e2e8f0;
-        padding-bottom: 0.5rem;
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: space-between;
         transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
     }
     
     .group-title:hover {
-        color: #667eea;
-    }
-    
-    .group-title i {
-        transition: transform 0.3s ease;
+        border-color: #667eea;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
+        transform: translateY(-2px);
     }
     
     .toggle-icon {
         font-weight: bold;
         color: #667eea;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
     }
     
     .group-content {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
+        margin-top: 1rem;
     }
     
     .categories-title {
@@ -379,9 +383,10 @@
         }
         
         .categories-header {
-            flex-direction: column;
+            flex-direction: row;
             gap: 1rem;
             align-items: stretch;
+            justify-content: space-between;
         }
         
         .search-container {
@@ -632,9 +637,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (content.style.maxHeight === '0px' || content.style.maxHeight === '') {
             content.style.maxHeight = content.scrollHeight + 'px';
             icon.textContent = '[-]';
+            icon.style.transform = 'rotate(0deg)';
         } else {
             content.style.maxHeight = '0px';
             icon.textContent = '[+]';
+            icon.style.transform = 'rotate(0deg)';
         }
     };
     
