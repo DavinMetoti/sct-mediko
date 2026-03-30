@@ -21,14 +21,14 @@ class MedMasteryController extends Controller
         
         // Optimized query with selective fields and efficient joins
         $categories = MedmasteryCategory::select([
-            'medmastery_categories.id',
-            'medmastery_categories.name',
-            'medmastery_categories.description',
-            'medmastery_categories.access',
-            'medmastery_categories.icon',
-            'medmastery_categories.created_at',
-            'medmastery_categories.created_by',
-            'medmastery_categories.medmastery_segmentation_id'
+            'medmastery_category.id',
+            'medmastery_category.name',
+            'medmastery_category.description',
+            'medmastery_category.access',
+            'medmastery_category.icon',
+            'medmastery_category.created_at',
+            'medmastery_category.created_by',
+            'medmastery_category.medmastery_segmentation_id'
         ])
         ->with([
             'segmentation:id,name,color',
