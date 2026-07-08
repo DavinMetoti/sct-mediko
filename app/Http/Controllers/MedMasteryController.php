@@ -454,12 +454,22 @@ class MedMasteryController extends Controller
             'all_request_data' => $request->all()
         ]);
         
-        // Filter out empty answers
+        // Get the list of all question IDs in this quiz from the session or request
+        $sessionKey = 'quiz_session_' . $categoryId . '_' . $user->id;
+        $sessionData = session($sessionKey);
+        $questionIds = $sessionData['question_ids'] ?? [];
+        
+        if (empty($questionIds)) {
+            // Fallback: merge keys from answers and self-assessments
+            $questionIds = array_unique(array_merge(array_keys($answers), array_keys($selfAssessments)));
+        }
+        
+        $totalQuestions = count($questionIds);
+        
+        // Filter out empty answers for the json_encode storage block
         $validAnswers = array_filter($answers, function($answer) {
             return !empty(trim($answer));
         });
-        
-        $totalQuestions = count($validAnswers);
         
         // Create main answer record
         $medMasteryAnswer = MedMasteryAnswer::create([
@@ -475,7 +485,8 @@ class MedMasteryController extends Controller
         // Create answer details for each question and calculate scores
         $totalScore = 0;
         
-        foreach ($validAnswers as $questionId => $answerText) {
+        foreach ($questionIds as $questionId) {
+            $answerText = $answers[$questionId] ?? '';
             $selfAssessment = $selfAssessments[$questionId] ?? null;
             
             // Log the self-assessment that was actually received

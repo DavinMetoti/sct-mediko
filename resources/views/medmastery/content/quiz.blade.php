@@ -1427,7 +1427,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Check if question has been answered
-                const inputElement = document.querySelector(`[data-question-id="${questionId}"]`);
+                const inputElement = document.getElementById(`answer_${questionId}`) || document.querySelector(`textarea[name="answers[${questionId}]"]`);
                 const hasAnswer = (answers[questionId] && answers[questionId].trim().length > 0) || 
                                  (inputElement && inputElement.value && inputElement.value.trim().length > 0);
                 
@@ -1503,7 +1503,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // Check both localStorage and actual input value
-                const inputElement = document.querySelector(`[data-question-id="${questionId}"]`);
+                const inputElement = document.getElementById(`answer_${questionId}`) || document.querySelector(`textarea[name="answers[${questionId}]"]`);
                 const hasAnswer = (answers[questionId] && answers[questionId].trim().length > 0) || 
                                  (inputElement && inputElement.value && inputElement.value.trim().length > 0);
                 
@@ -1943,14 +1943,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (progress.answers) {
             Object.keys(progress.answers).forEach(questionId => {
-                const input = document.querySelector(`[data-question-id="${questionId}"]`);
-                const inputByName = document.querySelector(`textarea[name="answers[${questionId}]"]`);
-                const inputById = document.getElementById(`answer_${questionId}`);
-                
-                // Try all possible selectors
-                const targetInput = input || inputByName || inputById;
-                if (targetInput && progress.answers[questionId]) {
-                    targetInput.value = progress.answers[questionId];
+                const textarea = document.getElementById(`answer_${questionId}`) || document.querySelector(`textarea[name="answers[${questionId}]"]`);
+                if (textarea && progress.answers[questionId]) {
+                    textarea.value = progress.answers[questionId];
+                    
+                    // Ensure textarea has form attribute
+                    if (!textarea.form) {
+                        textarea.setAttribute('form', 'quizForm');
+                    }
                 }
             });
         }
@@ -2055,14 +2055,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Also check hidden assessment inputs by ID
-            Object.keys(answersData).forEach(function(questionId) {
-                const assessmentInput = document.getElementById(`assessment_${questionId}`);
-                if (assessmentInput && assessmentInput.value) {
-                    finalFormData.append(`self_assessment[${questionId}]`, assessmentInput.value);
-                }
-            });
-            
             // Do NOT add default self-assessment values - let the backend handle missing assessments
             
             // Clear localStorage
@@ -2163,10 +2155,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const progress = JSON.parse(restoredProgress);
             if (progress.answers) {
                 Object.keys(progress.answers).forEach(questionId => {
-                    const input = document.querySelector(`[data-question-id="${questionId}"]`);
-                    if (input) {
-                        input.value = progress.answers[questionId];
-                        input.dispatchEvent(new Event('input'));
+                    const textarea = document.getElementById(`answer_${questionId}`) || document.querySelector(`textarea[name="answers[${questionId}]"]`);
+                    if (textarea) {
+                        textarea.value = progress.answers[questionId];
+                        textarea.dispatchEvent(new Event('input'));
                     }
                 });
             }
